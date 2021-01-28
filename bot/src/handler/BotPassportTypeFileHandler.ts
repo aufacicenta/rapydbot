@@ -1,7 +1,7 @@
 import { EncryptedPassportElement, Message } from "node-telegram-bot-api";
-import { BotFileHandler } from "./BotFileHandler";
+import { BotEncryptedDataHandler } from "./BotEncryptedDataHandler";
 
-export class BotPassportTypeFileHandler extends BotFileHandler {
+export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
   private static fileNamespace = "passport";
   private static frontSideFileName = `${BotPassportTypeFileHandler.fileNamespace}_front_side`;
   private static selfieFileName = `${BotPassportTypeFileHandler.fileNamespace}_selfie`;

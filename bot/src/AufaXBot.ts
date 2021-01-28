@@ -1,11 +1,9 @@
 import TelegramBotApi from "node-telegram-bot-api";
-import { BotPassportTypeFileHandler } from "./BotPassportTypeFileHandler";
+import { BotPassportTypeFileHandler } from "./handler";
 
 const TOKEN = "1690293681:AAESnPBd2NTUlgx9TWMTDEmg3hyG7uUfFfQ";
 
 export class AufaXBot {
-  static type = "AufaXBot";
-
   public api: TelegramBotApi;
 
   constructor() {
@@ -20,13 +18,10 @@ export class AufaXBot {
         telegramPassportData?.forEach((data) => {
           switch (data.type) {
             case "passport":
-              const botPassportTypeFileHandler = new BotPassportTypeFileHandler(
-                this
-              );
-              botPassportTypeFileHandler.decipherCredentials(
-                msg.passport_data.credentials
-              );
-              botPassportTypeFileHandler.processEncryptedData(data, msg);
+              const handler = new BotPassportTypeFileHandler(this);
+              handler
+                .decipherCredentials(msg.passport_data.credentials)
+                .processEncryptedData(data, msg);
               break;
             case "bank_statement":
               break;

@@ -1,10 +1,10 @@
 import crypto from "crypto";
 import fs from "fs";
 import { EncryptedCredentials, Message } from "node-telegram-bot-api";
-import { AufaXBot } from "./AufaXBot";
-import { DataCredentials, SecureData, StdCredentials } from "./bot/types";
+import { AufaXBot } from "../AufaXBot";
+import { DataCredentials, SecureData, StdCredentials } from "../types";
 
-export class BotFileHandler {
+export class BotEncryptedDataHandler {
   private bot: AufaXBot;
 
   public temporalStoragePath = "./tmp";
