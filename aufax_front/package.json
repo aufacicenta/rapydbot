@@ -1,5 +1,5 @@
 {
-  "name": "aufax_front",
+  "name": "@aufax/webclient",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

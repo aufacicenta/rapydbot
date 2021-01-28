@@ -1,3 +1,6 @@
+import { client } from "@aufax/kyc/client";
+import { GreeterClient } from "@aufax/kyc/server/protos/schema_grpc_pb";
+import { HelloRequest } from "@aufax/kyc/server/protos/schema_pb";
 import { EncryptedPassportElement, Message } from "node-telegram-bot-api";
 import { BotEncryptedDataHandler } from "./BotEncryptedDataHandler";
 
@@ -21,6 +24,21 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
     await this.downloadPassportFile();
     this.decryptPassportData();
     this.decryptPassportFile();
+  }
+
+  publishPassportData() {
+    const request = new HelloRequest();
+
+    request.setName("Godoberto");
+
+    (client as GreeterClient).sayHello(request, (err, response) => {
+      if (Boolean(err)) {
+        console.log(err);
+        return;
+      }
+
+      console.log(`Greetings: ${response.getMessage()}`);
+    });
   }
 
   private async downloadPassportFile() {
@@ -65,6 +83,7 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
       this.encryptedPassportElement.data
     );
 
+    this.publishPassportData();
     // TODO do something with the passport data
   }
 

@@ -1,0 +1,34 @@
+{
+  "name": "@aufax/kyc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "npm run compile && node ./build/index.js",
+    "start:debug": "ts-node-dev --inspect --no-notify --respawn ./src",
+    "clean": "rimraf build",
+    "compile": "tsc",
+    "publish:prepare": "npm run clean && npm run compile"
+  },
+  "directories": {
+    "build": "build"
+  },
+  "dependencies": {
+    "grpc": "^1.24.3",
+    "inversify": "^5.0.1",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@grpc/proto-loader": "^0.5.5",
+    "@types/jest": "^26.0.4",
+    "@types/node": "^14.11.8",
+    "convict": "^6.0.0",
+    "grpc-tools": "^1.9.1",
+    "grpc_tools_node_protoc_ts": "^5.0.0",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.2",
+    "ts-node-dev": "^1.0.0-pre.50",
+    "typescript": "^4.0.3"
+  }
+}

@@ -1,0 +1,10 @@
+.env
+
+dist
+node_modules
+
+yarn-error.log
+.DS_STORE
+
+database/generated
+server/schema/generated
