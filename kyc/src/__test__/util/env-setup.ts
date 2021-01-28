@@ -1,1 +1,3 @@
-console.log(`============ env-setup Loaded ===========`);
+export default () => {
+  console.log(`============ env-setup Loaded ===========`);
+};
