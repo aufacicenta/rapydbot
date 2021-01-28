@@ -1,12 +1,11 @@
-import { AufaXBot } from "../bot";
 import { SecureData } from "../bot/types";
 import { BotFileHandler } from "../BotFileHandler";
+import { container } from "../container";
 import encryptedPassportData from "./mock/passport-data.json";
 
-const bot = new AufaXBot();
-const handler = new BotFileHandler(bot);
-
 describe("BotFileHandler", () => {
+  const handler = container.get<BotFileHandler>(BotFileHandler.type);
+
   test("Decrypt image file", () => {
     const credentials = handler.decryptPassportCredentials<SecureData>(
       {

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "commonjs",
-    "strict": true,
+    "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -13,5 +13,5 @@
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true
   },
-  "exclude": ["node_modules", "build"]
+  "exclude": ["node_modules", "build", "jest.config.js"]
 }

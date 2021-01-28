@@ -1,24 +1,64 @@
 import crypto from "crypto";
 import fs from "fs";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
+import { EncryptedCredentials, Message } from "node-telegram-bot-api";
 import "reflect-metadata";
-import { AufaXBot } from "./bot";
-import { DataCredentials, StdCredentials } from "./bot/types";
+import { AufaXBot } from "./AufaXBot";
+import { DataCredentials, SecureData, StdCredentials } from "./bot/types";
 
 @injectable()
 export class BotFileHandler {
-  private bot: AufaXBot;
+  @inject(AufaXBot.type) private bot: AufaXBot;
+
+  static type = "BotFileHandler";
+
+  public temporalStoragePath = "./tmp";
+
+  protected credentials: SecureData;
 
   constructor(bot: AufaXBot) {
     this.bot = bot;
   }
 
-  async downloadFile(fileID: string, path: string) {
+  decipherCredentials(data: EncryptedCredentials) {
+    this.credentials = this.decryptPassportCredentials<SecureData>(
+      {
+        secret: data.secret,
+        data_hash: data.hash,
+      },
+      data.data
+    );
+  }
+
+  async downloadFile(
+    fileID: string,
+    name: string,
+    msg: Message,
+    onFileNameChange: (filePath: string) => void
+  ) {
     try {
-      await this.bot.api.downloadFile(fileID, path);
+      const dir = this.getUserTemporalStoragePath(msg.chat.username);
+
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+
+      const path = await this.bot.api.downloadFile(fileID, dir);
+      const fileExtension = (/\.[0-9a-z]+$/i.exec(path) as Array<string>)[0];
+      const filePath = `${dir}/${name}${fileExtension}`;
+
+      fs.rename(path, filePath, function (err) {
+        if (err) console.log("ERROR: " + err);
+
+        onFileNameChange(filePath);
+      });
     } catch (error) {
       console.error(error);
     }
+  }
+
+  getUserTemporalStoragePath(username: string): string {
+    return `${this.temporalStoragePath}/${username}`;
   }
 
   decryptPassportCredentials<T>(credentials: DataCredentials, data: string): T {

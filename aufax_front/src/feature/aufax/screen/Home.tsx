@@ -21,7 +21,7 @@ WH4ri8+vif5VYNIacBzT20G9ua35SwF6R3tTAyF9052kXBIGCeiqLRMkD0j4futa
 kwIDAQAB
 -----END PUBLIC KEY-----`,
       nonce: "AAESnPBd2NTUlgx9TWMTDEmg3hyG7uUfFfQ",
-      callback_url: "http://localhost:4000/callback/",
+      callback_url: "http://localhost:4000/callback?amount=123.00",
     };
 
     (window as any).Telegram.Passport.auth(auth_params, (show: any) => {
