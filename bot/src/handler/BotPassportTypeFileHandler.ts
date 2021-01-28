@@ -1,7 +1,6 @@
-import { client } from "@aufax/kyc/client";
-import { GreeterClient } from "@aufax/kyc/server/protos/schema_grpc_pb";
-import { HelloRequest } from "@aufax/kyc/server/protos/schema_pb";
+import { client, ProcessPassportDataRequest } from "@aufax/kyc/client";
 import { EncryptedPassportElement, Message } from "node-telegram-bot-api";
+import { DecryptedPassportData } from "../types";
 import { BotEncryptedDataHandler } from "./BotEncryptedDataHandler";
 
 export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
@@ -26,18 +25,19 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
     this.decryptPassportFile();
   }
 
-  publishPassportData() {
-    const request = new HelloRequest();
+  publishPassportData(data: DecryptedPassportData) {
+    const request = new ProcessPassportDataRequest();
 
-    request.setName("Godoberto");
+    request.setDocumentNo(data.document_no);
+    request.setExpiryDate(data.expiry_date);
 
-    (client as GreeterClient).sayHello(request, (err, response) => {
+    client.processPassportData(request, (err, response) => {
       if (Boolean(err)) {
         console.log(err);
         return;
       }
 
-      console.log(`Greetings: ${response.getMessage()}`);
+      console.log(`ProcessPassportDataRequest: ${response.getOnSuccess()}`);
     });
   }
 
@@ -69,10 +69,7 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
   private decryptPassportData() {
     const credentials = this.credentials;
 
-    const passportData = this.decipherData<{
-      document_no: string;
-      expiry_date: string;
-    }>(
+    const passportData = this.decipherData<DecryptedPassportData>(
       {
         secret: Buffer.from(
           credentials.secure_data.passport.data.secret,
@@ -83,8 +80,7 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
       this.encryptedPassportElement.data
     );
 
-    this.publishPassportData();
-    // TODO do something with the passport data
+    this.publishPassportData(passportData);
   }
 
   private decryptPassportFile() {

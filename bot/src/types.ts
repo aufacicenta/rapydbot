@@ -26,3 +26,8 @@ export type StdCredentials = {
   hash: string;
   secret: Buffer;
 };
+
+export type DecryptedPassportData = {
+  document_no: string;
+  expiry_date: string;
+};

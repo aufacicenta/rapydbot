@@ -1,17 +1,18 @@
 syntax = "proto3";
 
-option objc_class_prefix = "kyc_service";
+option objc_class_prefix = "aufax";
 
-package helloworld;
+package kyc;
 
-service Greeter {
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
+service KYC {
+  rpc ProcessPassportData (ProcessPassportDataRequest) returns (ProcessPassportDataReply) {}
 }
 
-message HelloRequest {
-  string name = 1;
+message ProcessPassportDataRequest {
+  string document_no = 1;
+  string expiry_date = 2;
 }
 
-message HelloReply {
-  string message = 1;
+message ProcessPassportDataReply {
+  bool on_success = 1;
 }

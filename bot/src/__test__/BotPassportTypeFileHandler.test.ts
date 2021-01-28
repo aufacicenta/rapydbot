@@ -6,6 +6,9 @@ describe("BotPassportTypeFileHandler", () => {
   const handler = new BotPassportTypeFileHandler(bot);
 
   test("success: publish passport data", async () => {
-    handler.publishPassportData();
+    handler.publishPassportData({
+      document_no: "abc123",
+      expiry_date: "2021-01-01",
+    });
   });
 });
