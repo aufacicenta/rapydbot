@@ -9,8 +9,9 @@ service KYC {
 }
 
 message ProcessPassportDataRequest {
-  string document_no = 1;
-  string expiry_date = 2;
+  string user_id = 1;
+  string key_id = 2;
+  string base64_encrypted_data = 3;
 }
 
 message ProcessPassportDataReply {

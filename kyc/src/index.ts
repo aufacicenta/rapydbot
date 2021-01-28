@@ -1,16 +1,24 @@
 import grpc from "grpc";
+import database from "./database";
+import { TelegramPassportDAO } from "./database/dao/TelegramPassportDAO";
 import configuration from "./server/config";
 import context from "./server/context";
 import create from "./server/create";
 
-const { address, port } = configuration.get("server");
+(async () => {
+  const driver = await database.connect();
+  context.database = driver;
+  context.dao.TelegramPassportDAO = new TelegramPassportDAO(driver);
 
-const gRPCServer = create(context);
+  const { address, port } = configuration.get("server");
 
-const URL = `${address}:${port}`;
+  const gRPCServer = create(context);
 
-gRPCServer.bind(URL, grpc.ServerCredentials.createInsecure());
+  const URL = `${address}:${port}`;
 
-console.log(`Starting gRPC server on: ${URL}`);
+  gRPCServer.bind(URL, grpc.ServerCredentials.createInsecure());
 
-gRPCServer.start();
+  console.log(`Starting gRPC server on: ${URL}`);
+
+  gRPCServer.start();
+})();

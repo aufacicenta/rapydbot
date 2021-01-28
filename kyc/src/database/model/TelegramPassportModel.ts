@@ -1,15 +1,9 @@
-import { DataTypes, ModelAttributes, ModelOptions } from "sequelize";
+import { DataTypes, Model, ModelOptions } from "sequelize";
 
-export class TelegramPassport {
-  public static table_name = "telegram_passport";
+export class TelegramPassportModel extends Model {
+  public static tableName = "telegram_passport";
 
-  public static config: ModelOptions = {
-    paranoid: true,
-    underscored: true,
-    tableName: TelegramPassport.table_name,
-  };
-
-  public static model: ModelAttributes = {
+  public static rawAttributes = {
     id: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -38,5 +32,11 @@ export class TelegramPassport {
       allowNull: false,
       defaultValue: new Date(),
     },
+  };
+
+  public static config: ModelOptions = {
+    paranoid: true,
+    underscored: true,
+    tableName: TelegramPassportModel.tableName,
   };
 }

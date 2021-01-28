@@ -7,11 +7,14 @@
 import * as jspb from "google-protobuf";
 
 export class ProcessPassportDataRequest extends jspb.Message { 
-    getDocumentNo(): string;
-    setDocumentNo(value: string): ProcessPassportDataRequest;
+    getUserId(): string;
+    setUserId(value: string): ProcessPassportDataRequest;
 
-    getExpiryDate(): string;
-    setExpiryDate(value: string): ProcessPassportDataRequest;
+    getKeyId(): string;
+    setKeyId(value: string): ProcessPassportDataRequest;
+
+    getBase64EncryptedData(): string;
+    setBase64EncryptedData(value: string): ProcessPassportDataRequest;
 
 
     serializeBinary(): Uint8Array;
@@ -26,8 +29,9 @@ export class ProcessPassportDataRequest extends jspb.Message {
 
 export namespace ProcessPassportDataRequest {
     export type AsObject = {
-        documentNo: string,
-        expiryDate: string,
+        userId: string,
+        keyId: string,
+        base64EncryptedData: string,
     }
 }
 

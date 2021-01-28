@@ -8,7 +8,7 @@
     "start": "npm run compile && node ./build/index.js",
     "start:debug": "ts-node-dev --inspect --no-notify --respawn ./src",
     "clean": "rimraf build",
-    "compile": "tsc",
+    "compile": "npm run clean && tsc",
     "publish:prepare": "npm run clean && npm run compile",
     "db": "obremap"
   },

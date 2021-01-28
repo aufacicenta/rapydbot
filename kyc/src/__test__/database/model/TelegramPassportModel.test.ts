@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize/types";
 import { v4 as uuid } from "uuid";
 import database from "../../../database";
-import { TelegramPassport } from "../../../database/model/telegram_passport.model";
+import { TelegramPassportModel } from "../../../database/model/TelegramPassportModel";
 
 let driver: Sequelize;
 
@@ -11,7 +11,7 @@ describe("database:model:telegram_passport", () => {
   });
 
   test("success: insert values to telegram_passport table", async () => {
-    const model = driver.model(TelegramPassport.table_name);
+    const model = driver.model(TelegramPassportModel.tableName);
 
     const result = await model.create({
       user_id: uuid(),

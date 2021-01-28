@@ -88,8 +88,9 @@ proto.kyc.ProcessPassportDataRequest.prototype.toObject = function(opt_includeIn
  */
 proto.kyc.ProcessPassportDataRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    documentNo: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    expiryDate: jspb.Message.getFieldWithDefault(msg, 2, "")
+    userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    keyId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    base64EncryptedData: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -128,11 +129,15 @@ proto.kyc.ProcessPassportDataRequest.deserializeBinaryFromReader = function(msg,
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setDocumentNo(value);
+      msg.setUserId(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setExpiryDate(value);
+      msg.setKeyId(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setBase64EncryptedData(value);
       break;
     default:
       reader.skipField();
@@ -163,17 +168,24 @@ proto.kyc.ProcessPassportDataRequest.prototype.serializeBinary = function() {
  */
 proto.kyc.ProcessPassportDataRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getDocumentNo();
+  f = message.getUserId();
   if (f.length > 0) {
     writer.writeString(
       1,
       f
     );
   }
-  f = message.getExpiryDate();
+  f = message.getKeyId();
   if (f.length > 0) {
     writer.writeString(
       2,
+      f
+    );
+  }
+  f = message.getBase64EncryptedData();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
       f
     );
   }
@@ -181,10 +193,10 @@ proto.kyc.ProcessPassportDataRequest.serializeBinaryToWriter = function(message,
 
 
 /**
- * optional string document_no = 1;
+ * optional string user_id = 1;
  * @return {string}
  */
-proto.kyc.ProcessPassportDataRequest.prototype.getDocumentNo = function() {
+proto.kyc.ProcessPassportDataRequest.prototype.getUserId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -193,16 +205,16 @@ proto.kyc.ProcessPassportDataRequest.prototype.getDocumentNo = function() {
  * @param {string} value
  * @return {!proto.kyc.ProcessPassportDataRequest} returns this
  */
-proto.kyc.ProcessPassportDataRequest.prototype.setDocumentNo = function(value) {
+proto.kyc.ProcessPassportDataRequest.prototype.setUserId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
 /**
- * optional string expiry_date = 2;
+ * optional string key_id = 2;
  * @return {string}
  */
-proto.kyc.ProcessPassportDataRequest.prototype.getExpiryDate = function() {
+proto.kyc.ProcessPassportDataRequest.prototype.getKeyId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -211,8 +223,26 @@ proto.kyc.ProcessPassportDataRequest.prototype.getExpiryDate = function() {
  * @param {string} value
  * @return {!proto.kyc.ProcessPassportDataRequest} returns this
  */
-proto.kyc.ProcessPassportDataRequest.prototype.setExpiryDate = function(value) {
+proto.kyc.ProcessPassportDataRequest.prototype.setKeyId = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string base64_encrypted_data = 3;
+ * @return {string}
+ */
+proto.kyc.ProcessPassportDataRequest.prototype.getBase64EncryptedData = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.kyc.ProcessPassportDataRequest} returns this
+ */
+proto.kyc.ProcessPassportDataRequest.prototype.setBase64EncryptedData = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 

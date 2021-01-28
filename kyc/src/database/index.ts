@@ -1,12 +1,12 @@
 import { Sequelize, SyncOptions } from "sequelize";
-import { TelegramPassport } from "./model/telegram_passport.model";
+import { TelegramPassportModel } from "./model/TelegramPassportModel";
 
 const sequelize = new Sequelize("mysql://root:root@localhost:3306/KYC");
 
 sequelize.define(
-  TelegramPassport.table_name,
-  TelegramPassport.model,
-  TelegramPassport.config
+  TelegramPassportModel.tableName,
+  TelegramPassportModel.rawAttributes,
+  TelegramPassportModel.config
 );
 
 export default {
