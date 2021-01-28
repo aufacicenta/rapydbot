@@ -12,26 +12,17 @@ export class AufaXBot {
 
   listen() {
     this.api.on("message", async (msg) => {
-      const telegramPassportData = msg?.passport_data?.data;
+      const chatId = msg.chat.id;
 
-      if (Boolean(telegramPassportData)) {
-        telegramPassportData?.forEach((data) => {
-          switch (data.type) {
-            case "passport":
-              const handler = new BotPassportTypeFileHandler(this);
-              handler
-                .decipherCredentials(msg.passport_data.credentials)
-                .processEncryptedData(data, msg);
-              break;
-            case "bank_statement":
-              break;
-            default:
-              break;
-          }
-        });
+      if (Boolean(msg.passport_data)) {
+        const handler = new BotPassportTypeFileHandler(this);
+        handler.processEncryptedData(msg);
+        this.api.sendMessage(
+          chatId,
+          "Recibimos tu información y está siendo procesada. Te enviaremos un mensaje con los detalles de tu aprobación dentro de las próximas 24 horas. Tu información está protegida con encriptación MTProto 🔒"
+        );
+        return;
       }
-
-      //   bot.sendMessage(chatId, "Received your message");
     });
   }
 }

@@ -1,5 +1,9 @@
-import { client, ProcessPassportDataRequest } from "@aufax/kyc/client";
+import {
+  client as KYCServiceClient,
+  ProcessPassportDataRequest,
+} from "@aufax/kyc/client";
 import { EncryptedPassportElement, Message } from "node-telegram-bot-api";
+import { v4 as uuid } from "uuid";
 import { DecryptedPassportData } from "../types";
 import { BotEncryptedDataHandler } from "./BotEncryptedDataHandler";
 
@@ -16,22 +20,21 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
     [BotPassportTypeFileHandler.selfieFileName]: "",
   };
 
-  async processEncryptedData(data: EncryptedPassportElement, msg: Message) {
-    this.encryptedPassportElement = data;
+  async processEncryptedData(msg: Message) {
     this.msg = msg;
 
-    await this.downloadPassportFile();
-    this.decryptPassportData();
-    this.decryptPassportFile();
-  }
-
-  publishPassportData(data: DecryptedPassportData) {
     const request = new ProcessPassportDataRequest();
 
-    request.setDocumentNo(data.document_no);
-    request.setExpiryDate(data.expiry_date);
+    const base64_encrypted_data = Buffer.from(
+      JSON.stringify(msg.passport_data),
+      "utf-8"
+    ).toString("base64");
 
-    client.processPassportData(request, (err, response) => {
+    request.setBase64EncryptedData(base64_encrypted_data);
+    request.setKeyId(uuid());
+    request.setUserId(uuid());
+
+    KYCServiceClient.processPassportData(request, (err, response) => {
       if (Boolean(err)) {
         console.log(err);
         return;
@@ -79,8 +82,6 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
       },
       this.encryptedPassportElement.data
     );
-
-    this.publishPassportData(passportData);
   }
 
   private decryptPassportFile() {

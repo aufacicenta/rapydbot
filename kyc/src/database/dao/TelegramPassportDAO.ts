@@ -1,5 +1,4 @@
 import { ModelCtor, Sequelize } from "sequelize";
-import { v4 as uuid } from "uuid";
 import { TelegramPassportModel } from "../model/TelegramPassportModel";
 
 export class TelegramPassportDAO {
@@ -11,17 +10,19 @@ export class TelegramPassportDAO {
     this.model = driver.model(TelegramPassportModel.tableName);
   }
 
-  async createTelegramPassportData(data: {
+  async createTelegramPassportData({
+    user_id,
+    key_id,
+    base64_encrypted_data,
+  }: {
     user_id: string;
     key_id: string;
     base64_encrypted_data: string;
   }): Promise<TelegramPassportModel> {
     const result = await this.model.create({
-      user_id: uuid(),
-      base64_encrypted_data: Buffer.from("some_string", "utf8").toString(
-        "base64"
-      ),
-      key_id: uuid(),
+      user_id,
+      base64_encrypted_data,
+      key_id,
     });
 
     return result;
