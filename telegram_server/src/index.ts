@@ -1,5 +1,4 @@
 import { AufaXBot } from "./AufaXBot";
-import { container } from "./container";
 // import app from "./server";
 
 // const PORT = 4000;
@@ -8,5 +7,9 @@ import { container } from "./container";
 //   console.log(`Listening at http://localhost:${PORT}`);
 
 // });
-const bot = container.get<AufaXBot>(AufaXBot.type);
-bot.init();
+try {
+  const bot = new AufaXBot();
+  bot.init();
+} catch (error) {
+  console.error(error);
+}

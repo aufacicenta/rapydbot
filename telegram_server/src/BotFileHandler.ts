@@ -1,14 +1,12 @@
 import crypto from "crypto";
 import fs from "fs";
-import { inject, injectable } from "inversify";
 import { EncryptedCredentials, Message } from "node-telegram-bot-api";
 import "reflect-metadata";
 import { AufaXBot } from "./AufaXBot";
 import { DataCredentials, SecureData, StdCredentials } from "./bot/types";
 
-@injectable()
 export class BotFileHandler {
-  @inject(AufaXBot.type) private bot: AufaXBot;
+  private bot: AufaXBot;
 
   static type = "BotFileHandler";
 
@@ -20,41 +18,51 @@ export class BotFileHandler {
     this.bot = bot;
   }
 
-  decipherCredentials(data: EncryptedCredentials) {
+  decipherCredentials(encryptedCredentials: EncryptedCredentials) {
     this.credentials = this.decryptPassportCredentials<SecureData>(
       {
-        secret: data.secret,
-        data_hash: data.hash,
+        secret: encryptedCredentials.secret,
+        data_hash: encryptedCredentials.hash,
       },
-      data.data
+      encryptedCredentials.data
     );
+
+    return this;
   }
 
-  async downloadFile(
+  downloadFile(
     fileID: string,
     name: string,
     msg: Message,
     onFileNameChange: (filePath: string) => void
-  ) {
-    try {
-      const dir = this.getUserTemporalStoragePath(msg.chat.username);
+  ): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const dir = this.getUserTemporalStoragePath(msg.chat.username);
 
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir);
+        }
+
+        const path = await this.bot.api.downloadFile(fileID, dir);
+
+        const fileExtension = (/\.[0-9a-z]+$/i.exec(path) as Array<string>)[0];
+        const filePath = `${dir}/${name}${fileExtension}`;
+
+        fs.rename(path, filePath, function (err) {
+          if (err) {
+            console.log("ERROR: " + err);
+            reject();
+          }
+
+          onFileNameChange(filePath);
+          resolve();
+        });
+      } catch (error) {
+        console.error(error);
+        reject(error);
       }
-
-      const path = await this.bot.api.downloadFile(fileID, dir);
-      const fileExtension = (/\.[0-9a-z]+$/i.exec(path) as Array<string>)[0];
-      const filePath = `${dir}/${name}${fileExtension}`;
-
-      fs.rename(path, filePath, function (err) {
-        if (err) console.log("ERROR: " + err);
-
-        onFileNameChange(filePath);
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    });
   }
 
   getUserTemporalStoragePath(username: string): string {

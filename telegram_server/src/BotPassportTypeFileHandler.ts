@@ -1,9 +1,7 @@
-import { injectable } from "inversify";
 import { EncryptedPassportElement, Message } from "node-telegram-bot-api";
 import "reflect-metadata";
 import { BotFileHandler } from "./BotFileHandler";
 
-@injectable()
 export class BotPassportTypeFileHandler extends BotFileHandler {
   static type = "BotPassportTypeFileHandler";
 
@@ -54,16 +52,18 @@ export class BotPassportTypeFileHandler extends BotFileHandler {
   }
 
   private decryptPassportData() {
+    const credentials = this.credentials;
+
     const passportData = this.decipherData<{
       document_no: string;
       expiry_date: string;
     }>(
       {
         secret: Buffer.from(
-          this.credentials.secure_data.passport.data.secret,
+          credentials.secure_data.passport.data.secret,
           "base64"
         ),
-        hash: this.credentials.secure_data.passport.data.data_hash,
+        hash: credentials.secure_data.passport.data.data_hash,
       },
       this.encryptedPassportElement.data
     );
@@ -72,13 +72,15 @@ export class BotPassportTypeFileHandler extends BotFileHandler {
   }
 
   private decryptPassportFile() {
+    const credentials = this.credentials;
+
     this.decipherFile(
       {
         secret: Buffer.from(
-          this.credentials.secure_data.passport.front_side.secret,
+          credentials.secure_data.passport.front_side.secret,
           "base64"
         ),
-        hash: this.credentials.secure_data.passport.front_side.file_hash,
+        hash: credentials.secure_data.passport.front_side.file_hash,
       },
       this.filePathsByFileType[BotPassportTypeFileHandler.frontSideFileName]
     );
@@ -86,10 +88,10 @@ export class BotPassportTypeFileHandler extends BotFileHandler {
     this.decipherFile(
       {
         secret: Buffer.from(
-          this.credentials.secure_data.passport.selfie.secret,
+          credentials.secure_data.passport.selfie.secret,
           "base64"
         ),
-        hash: this.credentials.secure_data.passport.selfie.file_hash,
+        hash: credentials.secure_data.passport.selfie.file_hash,
       },
       this.filePathsByFileType[BotPassportTypeFileHandler.selfieFileName]
     );
