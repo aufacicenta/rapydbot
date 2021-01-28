@@ -12,7 +12,7 @@ export class AufaXBot {
     this.api = new TelegramBotApi(TOKEN, { polling: true });
   }
 
-  init() {
+  listen() {
     this.api.on("message", async (msg) => {
       const telegramPassportData = msg?.passport_data?.data;
 

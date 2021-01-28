@@ -1,10 +1,7 @@
 import { EncryptedPassportElement, Message } from "node-telegram-bot-api";
-import "reflect-metadata";
 import { BotFileHandler } from "./BotFileHandler";
 
 export class BotPassportTypeFileHandler extends BotFileHandler {
-  static type = "BotPassportTypeFileHandler";
-
   private static fileNamespace = "passport";
   private static frontSideFileName = `${BotPassportTypeFileHandler.fileNamespace}_front_side`;
   private static selfieFileName = `${BotPassportTypeFileHandler.fileNamespace}_selfie`;
@@ -96,6 +93,6 @@ export class BotPassportTypeFileHandler extends BotFileHandler {
       this.filePathsByFileType[BotPassportTypeFileHandler.selfieFileName]
     );
 
-    // TODO do something with the passport data
+    // TODO do something with the files
   }
 }
