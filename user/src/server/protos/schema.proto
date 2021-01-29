@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option objc_class_prefix = "aufax";
+
+package user;
+
+service USER {
+  rpc CreateUser (CreateUserRequest) returns (CreateUserReply) {}
+  rpc FindUserByTelegramUserIdOrCreateUser (CreateUserRequest) returns (CreateUserReply) {}
+  rpc ResolveUserIDFromTelegramUserID (ResolveUserIDFromTelegramUserIDRequest) returns (ResolveUserIDFromTelegramUserIDReply) {}
+}
+
+message CreateUserRequest {
+  int32 telegram_user_id = 1;
+}
+
+message CreateUserReply {
+  string id = 1;
+}
+
+message ResolveUserIDFromTelegramUserIDRequest {
+  int32 telegram_user_id = 1;
+}
+
+message ResolveUserIDFromTelegramUserIDReply {
+  string id = 1;
+}
+
+message EmptyReply {}
