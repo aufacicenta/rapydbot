@@ -1,11 +1,19 @@
 import {
-  client as KYCServiceClient,
+  KYC_ClientGenerator,
   ProcessPassportDataRequest,
 } from "@aufax/kyc/client";
+import {
+  CreateUserRequest,
+  ResolveUserIDFromTelegramUserIDRequest,
+  USER_ClientGenerator,
+} from "@aufax/user/client";
 import { EncryptedPassportElement, Message } from "node-telegram-bot-api";
 import { v4 as uuid } from "uuid";
 import { DecryptedPassportData } from "../types";
 import { BotEncryptedDataHandler } from "./BotEncryptedDataHandler";
+
+const KYCServiceClient = new KYC_ClientGenerator("127.0.0.1:30040").create();
+const UserServiceClient = new USER_ClientGenerator("127.0.0.1:30041").create();
 
 export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
   private static fileNamespace = "passport";
@@ -20,27 +28,48 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
     [BotPassportTypeFileHandler.selfieFileName]: "",
   };
 
-  async processEncryptedData(msg: Message) {
-    this.msg = msg;
+  async processEncryptedData(msg: Message): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const kycServiceRequest = new ProcessPassportDataRequest();
+      const createUserRequest = new CreateUserRequest();
+      const resolveUserIDFromTelegramUserIDRequest = new ResolveUserIDFromTelegramUserIDRequest();
 
-    const request = new ProcessPassportDataRequest();
+      createUserRequest.setTelegramUserId(msg.from.id);
 
-    const base64_encrypted_data = Buffer.from(
-      JSON.stringify(msg.passport_data),
-      "utf-8"
-    ).toString("base64");
+      UserServiceClient.findUserByTelegramUserIdOrCreateUser(
+        createUserRequest,
+        (err, response) => {
+          if (Boolean(err)) {
+            reject(err);
+          }
 
-    request.setBase64EncryptedData(base64_encrypted_data);
-    request.setKeyId(uuid());
-    request.setUserId(uuid());
+          const id = response.getId();
 
-    KYCServiceClient.processPassportData(request, (err, response) => {
-      if (Boolean(err)) {
-        console.log(err);
-        return;
-      }
+          const base64_encrypted_data = Buffer.from(
+            JSON.stringify(msg.passport_data),
+            "utf-8"
+          ).toString("base64");
 
-      console.log(`ProcessPassportDataRequest: ${response.getOnSuccess()}`);
+          kycServiceRequest.setUserId(id);
+          kycServiceRequest.setBase64EncryptedData(base64_encrypted_data);
+          kycServiceRequest.setKeyId(uuid()); // TODO create service to manage encryption keys
+
+          KYCServiceClient.processPassportData(
+            kycServiceRequest,
+            (err, response) => {
+              if (Boolean(err)) {
+                reject(err);
+              }
+
+              console.log(
+                `ProcessPassportDataRequest: ${response.getOnSuccess()}`
+              );
+
+              resolve();
+            }
+          );
+        }
+      );
     });
   }
 

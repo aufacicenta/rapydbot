@@ -21,6 +21,7 @@
   },
   "scripts": {
     "start:debug": "ts-node-dev --inspect=9228 --no-notify --respawn ./src",
-    "clean": "rimraf build"
+    "clean": "rimraf build",
+    "test": "jest"
   }
 }

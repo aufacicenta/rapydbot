@@ -1,0 +1,55 @@
+{
+  "message_id": 45,
+  "from": {
+    "id": 639642123,
+    "is_bot": false,
+    "first_name": "Gas!",
+    "username": "svpervnder",
+    "language_code": "en"
+  },
+  "chat": {
+    "id": 639642123,
+    "first_name": "Gas!",
+    "username": "svpervnder",
+    "type": "private"
+  },
+  "date": 1611941169,
+  "passport_data": {
+    "data": [
+      {
+        "type": "passport",
+        "data": "RillMqESWN+yWF9bOoiKBPY72Xa6/vXpVy0ovYUjeWtv66+6gvz4s5O9YRGQwOJ6MaKsDOweTCuJHtc+IQTURMG/EdHHuoiVZ8JARfHMGP9t3bnS4SFCq3P1+t/f2sK1iy4lcp17vgkAud/KNqxuEkWsiccQYzc/bhkCGb+TjsvdvJmWNbcZoha1xuscuwYIN7BB4CZfFfxgAk9I0YpgR1ygd93TqaNRKeKELNi3v2WLroSHBkxlT0khOHI3WMDQoJzJ/JR5frNT9sU1GgAGCQ==",
+        "front_side": {
+          "file_id": "DgADAQAD0AEAAr8WiETjPVQYkPcSqx4E",
+          "file_unique_id": "AwAD0AEAAr8WiEQ",
+          "file_size": 203936,
+          "file_date": 1611680583
+        },
+        "selfie": {
+          "file_id": "DgADAQAD3gEAAsrZiEQbOfvRaDvoNR4E",
+          "file_unique_id": "AwAD3gEAAsrZiEQ",
+          "file_size": 186832,
+          "file_date": 1611680583
+        },
+        "hash": "vaqBkqd+tO8OiPdAmUaXDmPQUCqVi1sN7CMrrNY/GYM="
+      },
+      {
+        "type": "bank_statement",
+        "files": [
+          {
+            "file_id": "DgADAQADygADQBOJRMOid2c6lpY8HgQ",
+            "file_unique_id": "AwADygADQBOJRA",
+            "file_size": 174400,
+            "file_date": 1611680605
+          }
+        ],
+        "hash": "l2y5Wi4oO063VNYeyIRqOzgLx7GaIqyuPDQW74ipKQ4="
+      }
+    ],
+    "credentials": {
+      "data": "bO8ajHi0lp4RU2W0qH803VfbLtEAipgaF/iTHyIcRbf9XmUD1gYKDllz1cWAWk3bgN/osYsCbR8Se2OxcmlMGFzpbb7J8fadNJntH+aPfHmxwKHPguzeS155Jz71DkqgsgDNIPmjvVuvsbS5vrvzvr0/41qj0tnBmor3kzgxSnZVb7BwgjFCwDBYjylyopT66Xr62rokUeHvFbyOKgTFxHFs66ff48A6mtjIgRRb//D0v+tIgvCXLAiGWXkslvU0587McnOh8rvPt2VWi1MxAHxpgiHlNrQ/ch+USEjEwbtgMY210LZgG8IenhSirPIwR1Lic0Jx8jPsuEWIPh019tmOJP1QNK9kszKoSD+fRNdh/598GdHx3TWc66P3tFebp2p8APy9F7qkE30EhGVhRRlQRdskc401uadZlsS5scVI36zGtjmLvMWbfdOCtFxSr9vQCZctspZS/MA/tdLRq8maGUEe7+9vb5LnUYYaZk8LOZKxtDjJL80oD+x8QEWKHY8iEWZ2Ha9zq07r0fp7oEstwSTm9Z3mM8TcFIpZ1/2P8hSv3O3QvyB1IdefP31wAchZgtiHTwWWlW9J0DC1ev3vPOkdC8PJGQFAPmhw9y4ivuXHzIE5izqC93E1bgSi8Cv1L36pwPuXXYQ4anX+VqEXBjK2g5hVnM6P/ht6t54NVZ3jGYtKLU7w1tVPA2X4cNrDFxtetFww0jrUomrpZETw9V7Epx88qd64nylhwdZHiPOBXeSFNX+vOtc+Kkco9vUQLQy1+1KeKGRuO1PjYo4QChD5pXC+gwvbQ/g7w8oRtxSQzSwAesr0AN8je2nnZ2q2S9jLQsh4NErdsIiYx+WpzkLVc0wLaZnVM++3PWsMCqBmHbNuYnk+Hd9dqnlg9BBvcFz7/pOZoydUMsivj5zKZ4L2xW/D30DLcGQzgupZVt1iwSWUJK4HKvpQ0WpYiqE6IPjzlOsaUl0g2JXJ3Q==",
+      "hash": "0QraygsmlXjQaC6ixGufXuaTWFRJQ091ZbfZWM+71gg=",
+      "secret": "BqcaFJzcvgRzypFHTlxJo/NVokXwr1i25zS/tg4TEN3pLipi2xmJN7sh6862yTOwFpJfeYZrSpVoLR/ampErKX15PcL+MwcmIveTyp3Td4fZR/y1w3kITTuiq3nkYcqRGoah6ORGLmYo9/A9X8gETnjBIeN9AvefhJWbdOhK0i7HF0czg/lrQW/CUzqHbjWqz6pX6dc8B7DokjBwKWCRrDowfNdEX7RSDkY4W0iAPM3BnNB0MMee+kZrcoIuRF+e6eTbUU5/hvaLdNro6Ocn7W+w0EKcNYU/JkJ0b6BtPK1qXKP85dD66087wYSV8pnBgy523kz2QXzpu3dN6EQDcg=="
+    }
+  }
+}

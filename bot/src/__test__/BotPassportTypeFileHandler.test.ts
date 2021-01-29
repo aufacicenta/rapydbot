@@ -1,14 +1,13 @@
+import { Message } from "node-telegram-bot-api";
 import { AufaXBot } from "../AufaXBot";
 import { BotPassportTypeFileHandler } from "../handler";
+import telegramMSG from "./mock/telegram-msg.json";
 
 describe("BotPassportTypeFileHandler", () => {
   const bot = new AufaXBot();
   const handler = new BotPassportTypeFileHandler(bot);
 
-  test("success: publish passport data", async () => {
-    handler.publishPassportData({
-      document_no: "abc123",
-      expiry_date: "2021-01-01",
-    });
+  test("success: process encrypted data", async () => {
+    await handler.processEncryptedData(telegramMSG as Message);
   });
 });
