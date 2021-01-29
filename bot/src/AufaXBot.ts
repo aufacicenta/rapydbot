@@ -1,28 +1,38 @@
-import TelegramBotApi from "node-telegram-bot-api";
-import { BotPassportTypeFileHandler } from "./handler";
+import TelegramBotApi, { Message } from "node-telegram-bot-api";
+import { BotLanguageHandler, BotPassportTypeFileHandler } from "./handler";
 
 const TOKEN = "1690293681:AAESnPBd2NTUlgx9TWMTDEmg3hyG7uUfFfQ";
 
 export class AufaXBot {
   public api: TelegramBotApi;
 
+  private languageHandler: BotLanguageHandler;
+
   constructor() {
     this.api = new TelegramBotApi(TOKEN, { polling: true });
+    this.languageHandler = new BotLanguageHandler();
   }
 
   listen() {
+    this.languageHandler.init();
+
+    const botPassportDataTypeFileHandler = new BotPassportTypeFileHandler(this);
+
     this.api.on("message", async (msg) => {
       const chatId = msg.chat.id;
 
       if (Boolean(msg.passport_data)) {
-        const handler = new BotPassportTypeFileHandler(this);
-        handler.processEncryptedData(msg);
-        this.api.sendMessage(
-          chatId,
-          "Recibimos tu información y está siendo procesada. Te enviaremos un mensaje con los detalles de tu aprobación dentro de las próximas 24 horas. Tu información está protegida con encriptación MTProto 🔒"
-        );
+        botPassportDataTypeFileHandler.processEncryptedData(msg);
         return;
       }
     });
+  }
+
+  reply(msg: Message, translationKey: string) {
+    this.api.sendMessage(
+      msg.chat.id,
+      this.languageHandler.getTranslation(msg, translationKey),
+      { parse_mode: "MarkdownV2" }
+    );
   }
 }

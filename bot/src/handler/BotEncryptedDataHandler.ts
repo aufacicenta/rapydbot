@@ -5,7 +5,7 @@ import { AufaXBot } from "../AufaXBot";
 import { DataCredentials, SecureData, StdCredentials } from "../types";
 
 export class BotEncryptedDataHandler {
-  private bot: AufaXBot;
+  protected bot: AufaXBot;
 
   public temporalStoragePath = "./tmp";
 

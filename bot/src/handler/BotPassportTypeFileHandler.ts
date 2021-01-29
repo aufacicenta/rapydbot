@@ -9,6 +9,7 @@ import {
 } from "@aufax/user/client";
 import { EncryptedPassportElement, Message } from "node-telegram-bot-api";
 import { v4 as uuid } from "uuid";
+import { translationKeys } from "../i18n";
 import { DecryptedPassportData } from "../types";
 import { BotEncryptedDataHandler } from "./BotEncryptedDataHandler";
 
@@ -63,6 +64,11 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
 
               console.log(
                 `ProcessPassportDataRequest: ${response.getOnSuccess()}`
+              );
+
+              this.bot.reply(
+                msg,
+                translationKeys.passport_data_process_encrypted_data_success
               );
 
               resolve();
