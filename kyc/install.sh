@@ -24,6 +24,7 @@ yarn run grpc_tools_node_protoc \
 yarn publish:prepare
 
 cp package.json build
+mkdir build/server
 cp -R $PROTO_DEST build/server
 
 cd $ROOT/build

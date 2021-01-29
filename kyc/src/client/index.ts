@@ -2,16 +2,28 @@ export * from "../server/protos/schema_grpc_pb";
 export * from "../server/protos/schema_pb";
 
 import grpc from "grpc";
-import configuration from "../server/config";
 import { KYCClient } from "../server/protos/schema_grpc_pb";
 
-const { address, port } = configuration.get("server");
+export class KYC_ClientGenerator {
+  public url: string;
 
-const URL = `${address}:${port}`;
+  constructor(url: string) {
+    this.setURL(url);
+  }
 
-export const client = new KYCClient(
-  URL,
-  grpc.credentials.createInsecure()
-) as KYCClient;
+  setURL(url: string): KYC_ClientGenerator {
+    this.url = url;
+    return this;
+  }
 
-export default client;
+  create(): KYCClient {
+    const client = new KYCClient(
+      this.url,
+      grpc.credentials.createInsecure()
+    ) as KYCClient;
+
+    return client;
+  }
+}
+
+export default KYC_ClientGenerator;

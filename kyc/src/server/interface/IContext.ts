@@ -1,9 +1,9 @@
 import { Sequelize } from "sequelize/types";
 import { TelegramPassportDAO } from "../../database/dao/TelegramPassportDAO";
-import { IController } from "../../service/controller";
+import { Controller } from "../../service/controller";
 
 export interface IContext {
-  controller: IController;
+  controller: Controller;
   database?: Sequelize;
   dao?: {
     TelegramPassportDAO: TelegramPassportDAO;

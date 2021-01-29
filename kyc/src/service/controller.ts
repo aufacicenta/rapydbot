@@ -7,20 +7,21 @@ import {
   ProcessPassportDataRequest,
 } from "../server/protos/schema_pb";
 
-type GRPC = {
-  call: grpc.ServerUnaryCall<ProcessPassportDataRequest>;
-  callback: grpc.sendUnaryData<ProcessPassportDataReply>;
+type GRPC<Request, Reply> = {
+  call: grpc.ServerUnaryCall<Request>;
+  callback: grpc.sendUnaryData<Reply>;
 };
-
-export interface IController {
-  processPassportData: (grpc: GRPC, context: IContext) => Promise<void>;
-}
-
 @injectable()
-export class Controller implements IController {
+export class Controller {
   public static type: string = "Controller";
 
-  async processPassportData({ call, callback }: GRPC, { dao }: IContext) {
+  async processPassportData(
+    {
+      call,
+      callback,
+    }: GRPC<ProcessPassportDataRequest, ProcessPassportDataReply>,
+    { dao }: IContext
+  ) {
     const base64_encrypted_data = call.request.getBase64EncryptedData();
     const key_id = call.request.getKeyId();
     const user_id = call.request.getUserId();
