@@ -1,0 +1,16 @@
+version: "3"
+services:
+  database:
+    container_name: "kyc_database"
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      # - /home/user/db/mysql/data:/var/lib/mysql
+      - ./:/docker-entrypoint-initdb.d/:ro
+    environment:
+      MYSQL_ROOT_USER: ${MYSQL_ROOT_USER}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}

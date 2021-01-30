@@ -4,7 +4,7 @@ option objc_class_prefix = "aufax";
 
 package user;
 
-service USER {
+service User {
   rpc CreateUser (CreateUserRequest) returns (CreateUserReply) {}
   rpc FindUserByTelegramUserIdOrCreateUser (CreateUserRequest) returns (CreateUserReply) {}
   rpc ResolveUserIDFromTelegramUserID (ResolveUserIDFromTelegramUserIDRequest) returns (ResolveUserIDFromTelegramUserIDReply) {}

@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option objc_class_prefix = "aufax";
+
+package transaction;
+
+service Transaction {
+  rpc GetTransactionBreakdown (GetTransactionBreakdownRequest) returns (GetTransactionBreakdownReply) {}
+}
+
+message GetTransactionBreakdownRequest {
+  string user_id = 1;
+  string from_currency = 2;
+  string to_currency = 3;
+  float amount = 4;
+}
+
+message GetTransactionBreakdownReply {
+  string currency_pair = 1;
+  string price = 2;
+  string exchange_rate = 3;
+  string exchange_rate_result = 4;
+  string fee = 5;
+  string fee_result = 6;
+  string total_result = 7;
+}
+
+message EmptyReply {}
