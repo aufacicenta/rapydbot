@@ -16,9 +16,11 @@ export class BotLanguageHandler {
     });
   }
 
-  getTranslation(msg: Message, translationKey: string) {
+  getTranslation(msg: Message, translationKey: string, args: {} = {}) {
+    const lng = msg.from.language_code;
     return this.languageProcessor(translationKey, {
-      lng: msg.from.language_code,
+      lng,
+      ...args,
     });
   }
 }

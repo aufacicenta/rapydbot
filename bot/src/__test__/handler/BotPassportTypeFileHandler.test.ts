@@ -1,7 +1,7 @@
 import { Message } from "node-telegram-bot-api";
-import { AufaXBot } from "../AufaXBot";
-import { BotPassportTypeFileHandler } from "../handler";
-import telegramMSG from "./mock/telegram-msg.json";
+import { AufaXBot } from "../../AufaXBot";
+import { BotPassportTypeFileHandler } from "../../handler";
+import telegramMSG from "../mock/telegram-msg.json";
 
 describe("BotPassportTypeFileHandler", () => {
   const bot = new AufaXBot();
