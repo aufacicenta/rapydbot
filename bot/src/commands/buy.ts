@@ -10,7 +10,7 @@ export class BuyCommand implements IBotCommand {
     this.bot = bot;
   }
 
-  async onText(msg: Message, match?: RegExpMatchArray) {
+  async onText(msg: Message) {
     const text = msg.text;
 
     const currency = /\bbtc|eth\b/i.exec(text);
@@ -25,7 +25,15 @@ export class BuyCommand implements IBotCommand {
       return this.bot.reply(msg, translationKeys.buy_command_invalid_amount);
     }
 
-    await this.getTransactionBreakdown(msg, currency[0], amount[0]);
+    await this.getSellers(msg, currency[0], amount[0]);
+  }
+
+  getSellers(msg: Message, currency: string, amount: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.bot.reply(msg, translationKeys.buy_command_sellers_list);
+
+      resolve();
+    });
   }
 
   getTransactionBreakdown(
@@ -53,7 +61,7 @@ export class BuyCommand implements IBotCommand {
           },
         },
         {
-          currency_pair: "USD/BTC",
+          price_currency_pair: "USD/BTC",
           price: "USD 33,825.00",
           exchange_rate_amount: "7.5",
           exchange_rate_currency: "USD",

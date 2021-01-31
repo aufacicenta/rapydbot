@@ -8,4 +8,5 @@ export const translationKeys = {
     "buy_command_inline_markup_text_send_tx_id",
   buy_command_inline_markup_text_attach_purchase_bank_note:
     "buy_command_inline_markup_text_attach_purchase_bank_note",
+  buy_command_sellers_list: "buy_command_sellers_list",
 };
