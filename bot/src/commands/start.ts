@@ -9,5 +9,7 @@ export class StartCommand implements IBotCommand {
     this.bot = bot;
   }
 
+  async onReplyFromMessageID(msg: Message, match?: RegExpMatchArray) {}
+
   onText(msg: Message) {}
 }

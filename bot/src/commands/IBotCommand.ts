@@ -5,6 +5,9 @@ export interface IBotCommand {
   onText:
     | ((msg: Message, match?: RegExpMatchArray) => void)
     | ((msg: Message, match?: RegExpMatchArray) => Promise<void>);
+  onReplyFromMessageID:
+    | ((msg: Message, match?: RegExpMatchArray) => void)
+    | ((msg: Message, match?: RegExpMatchArray) => Promise<void>);
 }
 
 interface IBotCommandConstructor {

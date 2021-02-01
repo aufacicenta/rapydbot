@@ -49,9 +49,9 @@ function deserialize_user_ResolveUserIDFromTelegramUserIDRequest(buffer_arg) {
 }
 
 
-var USERService = exports.USERService = {
+var UserService = exports.UserService = {
   createUser: {
-    path: '/user.USER/CreateUser',
+    path: '/user.User/CreateUser',
     requestStream: false,
     responseStream: false,
     requestType: schema_pb.CreateUserRequest,
@@ -62,7 +62,7 @@ var USERService = exports.USERService = {
     responseDeserialize: deserialize_user_CreateUserReply,
   },
   findUserByTelegramUserIdOrCreateUser: {
-    path: '/user.USER/FindUserByTelegramUserIdOrCreateUser',
+    path: '/user.User/FindUserByTelegramUserIdOrCreateUser',
     requestStream: false,
     responseStream: false,
     requestType: schema_pb.CreateUserRequest,
@@ -73,7 +73,7 @@ var USERService = exports.USERService = {
     responseDeserialize: deserialize_user_CreateUserReply,
   },
   resolveUserIDFromTelegramUserID: {
-    path: '/user.USER/ResolveUserIDFromTelegramUserID',
+    path: '/user.User/ResolveUserIDFromTelegramUserID',
     requestStream: false,
     responseStream: false,
     requestType: schema_pb.ResolveUserIDFromTelegramUserIDRequest,
@@ -85,4 +85,4 @@ var USERService = exports.USERService = {
   },
 };
 
-exports.USERClient = grpc.makeGenericClientConstructor(USERService);
+exports.UserClient = grpc.makeGenericClientConstructor(UserService);

@@ -1,20 +1,10 @@
-import {
-  KYC_ClientGenerator,
-  ProcessPassportDataRequest,
-} from "@aufax/kyc/client";
-import {
-  CreateUserRequest,
-  ResolveUserIDFromTelegramUserIDRequest,
-  USER_ClientGenerator,
-} from "@aufax/user/client";
+import { ProcessPassportDataRequest } from "@aufax/kyc/client";
+import { CreateUserRequest } from "@aufax/user/client";
 import { EncryptedPassportElement, Message } from "node-telegram-bot-api";
 import { v4 as uuid } from "uuid";
 import { translationKeys } from "../i18n";
 import { DecryptedPassportData } from "../types";
 import { BotEncryptedDataHandler } from "./BotEncryptedDataHandler";
-
-const KYCServiceClient = new KYC_ClientGenerator("127.0.0.1:30040").create();
-const UserServiceClient = new USER_ClientGenerator("127.0.0.1:30041").create();
 
 export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
   private static fileNamespace = "passport";
@@ -33,11 +23,10 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
     return new Promise((resolve, reject) => {
       const kycServiceRequest = new ProcessPassportDataRequest();
       const createUserRequest = new CreateUserRequest();
-      const resolveUserIDFromTelegramUserIDRequest = new ResolveUserIDFromTelegramUserIDRequest();
 
       createUserRequest.setTelegramUserId(msg.from.id);
 
-      UserServiceClient.findUserByTelegramUserIdOrCreateUser(
+      this.bot.UserServiceClient.findUserByTelegramUserIdOrCreateUser(
         createUserRequest,
         (err, response) => {
           if (Boolean(err)) {
@@ -55,7 +44,7 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
           kycServiceRequest.setBase64EncryptedData(base64_encrypted_data);
           kycServiceRequest.setKeyId(uuid()); // TODO create service to manage encryption keys
 
-          KYCServiceClient.processPassportData(
+          this.bot.KYCServiceClient.processPassportData(
             kycServiceRequest,
             (err, response) => {
               if (Boolean(err)) {

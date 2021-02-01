@@ -6,6 +6,19 @@ package transaction;
 
 service Transaction {
   rpc GetTransactionBreakdown (GetTransactionBreakdownRequest) returns (GetTransactionBreakdownReply) {}
+  rpc CreateTransaction (CreateTransactionRequest) returns (CreateTransactionReply) {}
+}
+
+message CreateTransactionRequest {
+  string user_id = 1;
+  float amount = 4;
+  string from_currency = 2;
+  string to_currency = 3;
+}
+
+message CreateTransactionReply {
+  string transaction_id = 1;
+  string expires_at = 2;
 }
 
 message GetTransactionBreakdownRequest {

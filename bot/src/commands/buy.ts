@@ -10,6 +10,8 @@ export class BuyCommand implements IBotCommand {
     this.bot = bot;
   }
 
+  async onReplyFromMessageID(msg: Message, match?: RegExpMatchArray) {}
+
   async onText(msg: Message) {
     const text = msg.text;
 

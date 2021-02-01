@@ -2,7 +2,7 @@ export * from "../server/protos/schema_grpc_pb";
 export * from "../server/protos/schema_pb";
 
 import grpc from "grpc";
-import { USERClient } from "../server/protos/schema_grpc_pb";
+import { UserClient } from "../server/protos/schema_grpc_pb";
 
 export class USER_ClientGenerator {
   public url: string;
@@ -16,11 +16,11 @@ export class USER_ClientGenerator {
     return this;
   }
 
-  create(): USERClient {
-    const client = new USERClient(
+  create(): UserClient {
+    const client = new UserClient(
       this.url,
       grpc.credentials.createInsecure()
-    ) as USERClient;
+    ) as UserClient;
 
     return client;
   }

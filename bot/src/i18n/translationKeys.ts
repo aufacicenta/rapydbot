@@ -3,6 +3,10 @@ export const translationKeys = {
     "passport_data_process_encrypted_data_success",
   buy_command_invalid_currency: "buy_command_invalid_currency",
   buy_command_invalid_amount: "buy_command_invalid_amount",
+  sell_command_invalid_currency: "sell_command_invalid_currency",
+  sell_command_request_amount: "sell_command_request_amount",
+  sell_command_invalid_amount: "sell_command_invalid_amount",
+  sell_command_create_tx_success: "sell_command_create_tx_success",
   buy_command_tx_breakdown: "buy_command_tx_breakdown",
   buy_command_inline_markup_text_send_tx_id:
     "buy_command_inline_markup_text_send_tx_id",

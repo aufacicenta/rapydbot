@@ -17,6 +17,35 @@ The <u>available currencies</u> are: <u>BTC and ETH</u>.`,
 <strong>/buy [BTC or ETH] [amount]</strong>
 
 Did you forget the <u>amount</u>?`,
+    [translationKeys.sell_command_invalid_currency]: `The /sell command works like this:
+
+<code>/sell [amount] [currency]</code>
+<code>/sell [amount] [from_currency/to_currency]</code>
+
+
+Example:
+
+To sell BTC for any other currency:
+<code>/sell 0.123 BTC</code>
+
+To sell BTC only for USD
+<code>/sell 1 BTC/USD</code>
+
+
+<em>/setlocation to narrow the options where you are selling.</em>.
+
+<em>Type /help to learn more options.</em>.`,
+    [translationKeys.sell_command_invalid_amount]: `The /sell command works like this:
+
+<strong>/sell [amount] [currency]</strong>
+
+Did you forget the <u>amount</u>?`,
+    [translationKeys.sell_command_request_amount]: `Ok. How much?`,
+    [translationKeys.sell_command_create_tx_success]: `Done!
+
+Your offer of {{amount}} {{currency}} will expire {{expires_at}}.
+
+<em>Negotiate under your own risk. aufaxbot limits itself to connecting buyers with sellers.</em>`,
     [translationKeys.buy_command_tx_breakdown]: `Here's your quote:
 
 Price {{price_currency_pair}}

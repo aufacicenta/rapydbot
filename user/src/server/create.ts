@@ -1,11 +1,11 @@
 import grpc from "grpc";
 import { IContext } from "./interface/IContext";
-import { IUSERServer, USERService } from "./protos/schema_grpc_pb";
+import { IUserServer, UserService } from "./protos/schema_grpc_pb";
 
 export default (context: IContext) => {
   const server = new grpc.Server();
 
-  server.addService<IUSERServer>(USERService, {
+  server.addService<IUserServer>(UserService, {
     createUser: (call, callback) =>
       context.controller.createUser({ call, callback }, context),
     resolveUserIDFromTelegramUserID: (call, callback) =>

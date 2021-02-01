@@ -10,40 +10,20 @@ export class TransactionDAO {
     this.model = driver.model(TransactionModel.tableName);
   }
 
-  async createUser({
-    telegram_user_id,
-  }: {
-    telegram_user_id: number;
-  }): Promise<TransactionModel> {
+  async createTransaction(
+    user_id: string,
+    amount: number,
+    from_currency: string,
+    to_currency: string,
+    expires_at: string
+  ) {
     const result = await this.model.create({
-      telegram_user_id,
+      user_id,
+      amount,
+      from_currency,
+      to_currency,
+      expires_at,
     });
-
-    return result;
-  }
-
-  async findUserByTelegramUserIdOrCreateUser({
-    telegram_user_id,
-  }: {
-    telegram_user_id: number;
-  }): Promise<string> {
-    const [model, success] = await this.model.findOrCreate({
-      where: { telegram_user_id },
-    });
-
-    if (!Boolean(model.getDataValue("id"))) {
-      throw new Error("findUserByTelegramUserIdOrCreateUser failed");
-    }
-
-    return await this.resolveUserIDFromTelegramUserID({ telegram_user_id });
-  }
-
-  async resolveUserIDFromTelegramUserID({
-    telegram_user_id,
-  }: {
-    telegram_user_id: number;
-  }): Promise<string> {
-    const result = await this.model.findOne({ where: { telegram_user_id } });
 
     return result.getDataValue("id");
   }

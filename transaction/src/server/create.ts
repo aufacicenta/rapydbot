@@ -9,8 +9,10 @@ export default (context: IContext) => {
   const server = new grpc.Server();
 
   server.addService<ITransactionServer>(TransactionService, {
-    createUser: (call, callback) =>
-      context.controller.createUser({ call, callback }, context),
+    getTransactionBreakdown: (call, callback) =>
+      context.controller.getTransactionBreakdown({ call, callback }, context),
+    createTransaction: (call, callback) =>
+      context.controller.createTransaction({ call, callback }, context),
   });
 
   return server;

@@ -1,8 +1,12 @@
 import { DataTypes, Model, ModelOptions } from "sequelize";
 
 export class TransactionModel extends Model<{
+  user_id: string;
+  amount: number;
+  from_currency: string;
+  expires_at: string;
   id?: string;
-  telegram_user_id: number;
+  to_currency?: string;
 }> {
   public static tableName = "transaction";
 
@@ -17,6 +21,24 @@ export class TransactionModel extends Model<{
       type: DataTypes.UUID,
       allowNull: false,
     },
+    price_id: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
+    from_currency: {
+      type: DataTypes.STRING,
+      length: 3,
+      allowNull: true,
+    },
+    to_currency: {
+      type: DataTypes.STRING,
+      length: 3,
+      allowNull: false,
+    },
+    amount: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -26,6 +48,10 @@ export class TransactionModel extends Model<{
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: new Date(),
+    },
+    expires_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
   };
 
