@@ -3,8 +3,11 @@ import { CreateUserRequest } from "@aufax/user/client";
 import moment from "moment";
 import { Message } from "node-telegram-bot-api";
 import { AufaXBot } from "../AufaXBot";
+import { BotReplyToMessageIdHandler } from "../handler";
 import { translationKeys } from "../i18n";
 import { IBotCommand } from "./IBotCommand";
+import regexp from "./util/regexp";
+import validation from "./util/validation";
 
 export class SellCommand implements IBotCommand {
   private bot: AufaXBot;
@@ -13,7 +16,11 @@ export class SellCommand implements IBotCommand {
     this.bot = bot;
   }
 
-  async onReplyFromMessageID(msg: Message, match?: RegExpMatchArray) {
+  async onReplyFromMessageID(
+    msg: Message,
+    handler: BotReplyToMessageIdHandler,
+    match?: RegExpMatchArray
+  ) {
     const replyToMessageText = msg.reply_to_message.text;
     const text = msg.text;
 
@@ -23,46 +30,97 @@ export class SellCommand implements IBotCommand {
         .getTranslation(msg, translationKeys.sell_command_request_amount)
         .trim()
     ) {
-      // TODO handle amount
-      // TODO move sell commmand regexp utils to shared commands util, it will be used between sell and buy commands
+      const amountAndCurrency = regexp.getAmountAndCurrency(text);
+
+      if (!Boolean(amountAndCurrency)) {
+        handler.selfDestruct();
+        return this.bot.reply(msg, translationKeys.sell_command_invalid_amount);
+      }
+
+      const amount = amountAndCurrency.groups.amount;
+
+      if (!validation.isValidAmount(amount)) {
+        handler.selfDestruct();
+        return this.bot.reply(msg, translationKeys.sell_command_invalid_amount);
+      }
+
+      handler.storage.set("amount", amount);
+
+      return this.bot.replyWithMessageID(
+        msg,
+        translationKeys.sell_command_request_currency,
+        this
+      );
+    }
+
+    if (
+      replyToMessageText.trim() ===
+      this.bot
+        .getTranslation(msg, translationKeys.sell_command_request_currency)
+        .trim()
+    ) {
+      const amount = handler.storage.get("amount");
+      const currency = text.trim();
+
+      if (
+        !validation.isValidAmount(amount) ||
+        !validation.isValidCurrency(currency)
+      ) {
+        handler.selfDestruct();
+        return this.bot.reply(
+          msg,
+          translationKeys.sell_command_invalid_currency
+        );
+      }
+
+      handler.storage.set("currency", currency);
+      handler.selfDestruct();
+
+      // TODO create transaction with amount & currency
+      return this.bot.reply(
+        msg,
+        translationKeys.sell_command_create_tx_success,
+        {},
+        {
+          amount,
+          currency,
+          expires_at: moment().locale(msg.from.language_code).fromNow(),
+        }
+      );
     }
   }
 
   async onText(msg: Message, match?: RegExpMatchArray) {
     const text = msg.text;
 
-    const result = /(?<amount>\d+\.?\d*|\.\d+$)(?<currency>\b.*\b)/i.exec(text);
+    const amountAndCurrency = regexp.getAmountAndCurrency(text);
 
-    if (!Boolean(result)) {
+    if (!Boolean(amountAndCurrency)) {
       return this.bot.replyWithMessageID(
         msg,
         translationKeys.sell_command_request_amount,
-        msg.message_id,
         this
       );
     }
 
-    const amount = result.groups.amount;
+    const amount = amountAndCurrency.groups.amount;
 
-    if (!Boolean(amount) || amount.length === 0) {
+    if (!validation.isValidAmount(amount)) {
       return this.bot.reply(msg, translationKeys.sell_command_invalid_currency);
     }
 
-    const currency = result.groups.currency;
+    const currency = amountAndCurrency.groups.currency;
 
-    if (!Boolean(currency) || currency.length === 0) {
+    if (!validation.isValidCurrency(currency)) {
       return this.bot.reply(msg, translationKeys.sell_command_invalid_currency);
     }
 
-    const isCurrencyPair = /\/{1}/i.test(currency);
-
-    if (!isCurrencyPair) {
+    if (!regexp.isCurrencyPair(currency)) {
       return await this.createTransaction(msg, amount, currency);
     }
 
-    const currency_pair = /(?<from_currency>\w+)\/(?<to_currency>\w+)/i.exec(
-      currency
-    );
+    const currency_pair = regexp.getCurrencyPair(currency);
+
     const from_currency = currency_pair.groups.from_currency;
     const to_currency = currency_pair.groups.to_currency;
 

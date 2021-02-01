@@ -9,7 +9,11 @@ import TelegramBotApi, {
   SendMessageOptions,
 } from "node-telegram-bot-api";
 import { BuyCommand, SellCommand, StartCommand } from "./commands";
-import { BotLanguageHandler, BotPassportTypeFileHandler } from "./handler";
+import {
+  BotLanguageHandler,
+  BotPassportTypeFileHandler,
+  BotReplyToMessageIdHandler,
+} from "./handler";
 
 const TOKEN = "1690293681:AAESnPBd2NTUlgx9TWMTDEmg3hyG7uUfFfQ";
 
@@ -30,7 +34,8 @@ export class AufaXBot {
   private buyCommand: BuyCommand;
   private startCommand: StartCommand;
 
-  private replyToMessageIDMap = new Map<number, Commands>();
+  // TODO should we add a timestamp such that if the reply never gets through, we delete the index after a certain period?
+  public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
   constructor() {
     this.api = new TelegramBotApi(TOKEN, { polling: true });
@@ -61,15 +66,14 @@ export class AufaXBot {
     this.api.on("message", async (msg) => {
       const reply_to_message_id = msg.reply_to_message?.message_id - 1;
       if (Boolean(reply_to_message_id)) {
-        const command = this.replyToMessageIDMap.get(reply_to_message_id);
+        const handler = this.getReplyToMessageIdHandler(msg.chat.id);
+        const command = handler?.command;
 
         if (!Boolean(command)) {
           return;
         }
 
-        this.replyToMessageIDMap.delete(reply_to_message_id);
-
-        return command.onReplyFromMessageID(msg);
+        return command.onReplyFromMessageID(msg, handler);
       }
 
       if (Boolean(msg.passport_data)) {
@@ -105,18 +109,26 @@ export class AufaXBot {
   replyWithMessageID(
     msg: Message,
     translationKey: string,
-    reply_to_message_id: number,
     command: Commands,
+    reply_to_message_id?: number,
     options?: SendMessageOptions,
     args?: {}
   ) {
-    this.replyToMessageIDMap.set(reply_to_message_id, command);
+    const chat_id = msg.chat.id;
+
+    let handler = this.getReplyToMessageIdHandler(chat_id);
+
+    if (!Boolean(handler)) {
+      handler = new BotReplyToMessageIdHandler(this, command);
+      handler.id = chat_id;
+      this.replyToMessageIDMap.set(chat_id, handler);
+    }
 
     this.reply(
       msg,
       translationKey,
       {
-        reply_to_message_id,
+        reply_to_message_id: reply_to_message_id ?? msg.message_id,
         reply_markup: { force_reply: true },
         ...options,
       },
@@ -126,5 +138,9 @@ export class AufaXBot {
 
   getTranslation(msg: Message, translationKey: string, args?: {}) {
     return this.languageHandler.getTranslation(msg, translationKey, args);
+  }
+
+  private getReplyToMessageIdHandler(chat_id: number) {
+    return this.replyToMessageIDMap.get(chat_id);
   }
 }

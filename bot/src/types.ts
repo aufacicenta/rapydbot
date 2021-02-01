@@ -1,3 +1,5 @@
+import { SellCommand } from "./commands";
+
 export type SecureData = {
   nonce: string;
   secure_data: {
@@ -31,3 +33,5 @@ export type DecryptedPassportData = {
   document_no: string;
   expiry_date: string;
 };
+
+export type Commands = SellCommand;
