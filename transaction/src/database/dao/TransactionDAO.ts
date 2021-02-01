@@ -20,8 +20,8 @@ export class TransactionDAO {
     const result = await this.model.create({
       user_id,
       amount,
-      from_currency,
-      to_currency,
+      from_currency: from_currency.toUpperCase(),
+      to_currency: to_currency.toUpperCase(),
       expires_at,
     });
 
