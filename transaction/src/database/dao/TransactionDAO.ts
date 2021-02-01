@@ -12,6 +12,7 @@ export class TransactionDAO {
 
   async createTransaction(
     user_id: string,
+    price_id: string,
     amount: number,
     from_currency: string,
     to_currency: string,
@@ -19,6 +20,7 @@ export class TransactionDAO {
   ) {
     const result = await this.model.create({
       user_id,
+      price_id,
       amount,
       from_currency: from_currency.toUpperCase(),
       to_currency: to_currency.toUpperCase(),

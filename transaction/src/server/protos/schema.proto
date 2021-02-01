@@ -11,9 +11,10 @@ service Transaction {
 
 message CreateTransactionRequest {
   string user_id = 1;
-  float amount = 4;
   string from_currency = 2;
   string to_currency = 3;
+  float amount = 4;
+  string price_id = 5;
 }
 
 message CreateTransactionReply {

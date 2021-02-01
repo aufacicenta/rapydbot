@@ -155,9 +155,10 @@ proto.transaction.CreateTransactionRequest.prototype.toObject = function(opt_inc
 proto.transaction.CreateTransactionRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    amount: jspb.Message.getFloatingPointFieldWithDefault(msg, 4, 0.0),
     fromCurrency: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    toCurrency: jspb.Message.getFieldWithDefault(msg, 3, "")
+    toCurrency: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    amount: jspb.Message.getFloatingPointFieldWithDefault(msg, 4, 0.0),
+    priceId: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -198,10 +199,6 @@ proto.transaction.CreateTransactionRequest.deserializeBinaryFromReader = functio
       var value = /** @type {string} */ (reader.readString());
       msg.setUserId(value);
       break;
-    case 4:
-      var value = /** @type {number} */ (reader.readFloat());
-      msg.setAmount(value);
-      break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
       msg.setFromCurrency(value);
@@ -209,6 +206,14 @@ proto.transaction.CreateTransactionRequest.deserializeBinaryFromReader = functio
     case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setToCurrency(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setAmount(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPriceId(value);
       break;
     default:
       reader.skipField();
@@ -246,13 +251,6 @@ proto.transaction.CreateTransactionRequest.serializeBinaryToWriter = function(me
       f
     );
   }
-  f = message.getAmount();
-  if (f !== 0.0) {
-    writer.writeFloat(
-      4,
-      f
-    );
-  }
   f = message.getFromCurrency();
   if (f.length > 0) {
     writer.writeString(
@@ -264,6 +262,20 @@ proto.transaction.CreateTransactionRequest.serializeBinaryToWriter = function(me
   if (f.length > 0) {
     writer.writeString(
       3,
+      f
+    );
+  }
+  f = message.getAmount();
+  if (f !== 0.0) {
+    writer.writeFloat(
+      4,
+      f
+    );
+  }
+  f = message.getPriceId();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
       f
     );
   }
@@ -285,24 +297,6 @@ proto.transaction.CreateTransactionRequest.prototype.getUserId = function() {
  */
 proto.transaction.CreateTransactionRequest.prototype.setUserId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
-};
-
-
-/**
- * optional float amount = 4;
- * @return {number}
- */
-proto.transaction.CreateTransactionRequest.prototype.getAmount = function() {
-  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 4, 0.0));
-};
-
-
-/**
- * @param {number} value
- * @return {!proto.transaction.CreateTransactionRequest} returns this
- */
-proto.transaction.CreateTransactionRequest.prototype.setAmount = function(value) {
-  return jspb.Message.setProto3FloatField(this, 4, value);
 };
 
 
@@ -339,6 +333,42 @@ proto.transaction.CreateTransactionRequest.prototype.getToCurrency = function() 
  */
 proto.transaction.CreateTransactionRequest.prototype.setToCurrency = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional float amount = 4;
+ * @return {number}
+ */
+proto.transaction.CreateTransactionRequest.prototype.getAmount = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 4, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.transaction.CreateTransactionRequest} returns this
+ */
+proto.transaction.CreateTransactionRequest.prototype.setAmount = function(value) {
+  return jspb.Message.setProto3FloatField(this, 4, value);
+};
+
+
+/**
+ * optional string price_id = 5;
+ * @return {string}
+ */
+proto.transaction.CreateTransactionRequest.prototype.getPriceId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.transaction.CreateTransactionRequest} returns this
+ */
+proto.transaction.CreateTransactionRequest.prototype.setPriceId = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 

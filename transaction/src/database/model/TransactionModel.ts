@@ -2,6 +2,7 @@ import { DataTypes, Model, ModelOptions } from "sequelize";
 
 export class TransactionModel extends Model<{
   user_id: string;
+  price_id: string;
   amount: number;
   from_currency: string;
   expires_at: string;

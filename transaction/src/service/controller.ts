@@ -24,6 +24,7 @@ export class Controller {
     { dao }: IContext
   ) {
     const user_id = call.request.getUserId();
+    const price_id = call.request.getPriceId();
     const amount = call.request.getAmount();
     const from_currency = call.request.getFromCurrency().trim();
     const to_currency = call.request.getToCurrency().trim();
@@ -32,6 +33,7 @@ export class Controller {
 
     const transaction_id = await dao.TransactionDAO.createTransaction(
       user_id,
+      price_id,
       amount,
       from_currency,
       to_currency,

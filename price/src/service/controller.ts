@@ -23,12 +23,15 @@ export class Controller {
       const from_currency = call.request.getFromCurrency().trim();
       const to_currency = call.request.getToCurrency().trim();
 
-      const price = await this.getQuote({ from_currency, to_currency });
+      const { price, convertToSymbol } = await this.getQuote({
+        from_currency,
+        to_currency,
+      });
 
       const price_id = await dao.PriceDAO.createPrice(
         price,
         from_currency,
-        to_currency
+        convertToSymbol
       );
 
       const reply = new GetPriceReply();
@@ -36,7 +39,7 @@ export class Controller {
       reply.setPriceId(price_id);
       reply.setPrice(price);
       reply.setFromCurrency(from_currency);
-      reply.setToCurrency(to_currency);
+      reply.setToCurrency(convertToSymbol);
 
       callback(null, reply);
     } catch (error) {
@@ -51,7 +54,7 @@ export class Controller {
   }: {
     from_currency: string;
     to_currency: string;
-  }): Promise<number> {
+  }): Promise<{ price: number; convertToSymbol: string }> {
     try {
       const params = { symbol: from_currency };
 
@@ -76,7 +79,7 @@ export class Controller {
       const quote =
         response.data[from_currency.toUpperCase()].quote[convertToSymbol].price;
 
-      return quote.toFixed(2);
+      return { price: quote.toFixed(2), convertToSymbol };
     } catch (error) {
       console.error(error);
       throw new InvalidSymbolError();

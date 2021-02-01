@@ -1,3 +1,4 @@
+import { GetPriceRequest } from "@aufax/price/client";
 import { CreateTransactionRequest } from "@aufax/transaction/client";
 import { CreateUserRequest } from "@aufax/user/client";
 import moment from "moment";
@@ -143,41 +144,62 @@ export class SellCommand implements IBotCommand {
 
           const user_id = response.getId();
 
-          const createTransactionRequest = new CreateTransactionRequest();
+          const getPriceRequest = new GetPriceRequest();
 
-          createTransactionRequest.setUserId(user_id);
-          createTransactionRequest.setAmount(Number(amount.trim()));
-          createTransactionRequest.setFromCurrency(from_currency);
-          createTransactionRequest.setToCurrency(to_currency);
+          getPriceRequest.setFromCurrency(from_currency);
+          getPriceRequest.setToCurrency(to_currency);
 
-          this.bot.TransactionServiceClient.createTransaction(
-            createTransactionRequest,
+          this.bot.PriceServiceClient.getPrice(
+            getPriceRequest,
             (err, response) => {
               if (Boolean(err)) {
                 reject(err);
               }
 
-              const transaction_id = response.getTransactionId();
-              const expires_at = response.getExpiresAt();
+              const price_id = response.getPriceId();
+              const price = response.getPrice();
+              const convertToSymbol = response.getToCurrency();
 
-              if (!Boolean(transaction_id)) {
-                reject();
-              }
+              const createTransactionRequest = new CreateTransactionRequest();
 
-              this.bot.reply(
-                msg,
-                translationKeys.sell_command_create_tx_success,
-                {},
-                {
-                  amount,
-                  currency: from_currency,
-                  expires_at: moment(expires_at)
-                    .locale(msg.from.language_code)
-                    .fromNow(),
+              createTransactionRequest.setUserId(user_id);
+              createTransactionRequest.setPriceId(price_id);
+              createTransactionRequest.setAmount(Number(amount.trim()));
+              createTransactionRequest.setFromCurrency(from_currency);
+              createTransactionRequest.setToCurrency(to_currency);
+
+              this.bot.TransactionServiceClient.createTransaction(
+                createTransactionRequest,
+                (err, response) => {
+                  if (Boolean(err)) {
+                    reject(err);
+                  }
+
+                  const transaction_id = response.getTransactionId();
+                  const expires_at = response.getExpiresAt();
+
+                  if (!Boolean(transaction_id)) {
+                    reject();
+                  }
+
+                  this.bot.reply(
+                    msg,
+                    translationKeys.sell_command_create_tx_success,
+                    {},
+                    {
+                      amount,
+                      currency: from_currency,
+                      price: `${convertToSymbol} ${price}`,
+                      price_source: `<a href="https://coinmarketcap.com/">coinmarketcap.com</a>`,
+                      expires_at: moment(expires_at)
+                        .locale(msg.from.language_code)
+                        .fromNow(),
+                    }
+                  );
+
+                  resolve();
                 }
               );
-
-              resolve();
             }
           );
         }

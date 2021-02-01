@@ -48,6 +48,9 @@ Did you forget the <u>amount</u>?`,
 
 Your offer of {{amount}} {{currency}} will expire {{expires_at}}.
 
+Current price: {{price}}
+source: {{price_source}}
+
 <em>Negotiate under your own risk. aufaxbot limits itself to connecting buyers with sellers.</em>`,
     [translationKeys.buy_command_tx_breakdown]: `Here's your quote:
 

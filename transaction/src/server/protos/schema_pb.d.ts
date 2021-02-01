@@ -10,14 +10,17 @@ export class CreateTransactionRequest extends jspb.Message {
     getUserId(): string;
     setUserId(value: string): CreateTransactionRequest;
 
-    getAmount(): number;
-    setAmount(value: number): CreateTransactionRequest;
-
     getFromCurrency(): string;
     setFromCurrency(value: string): CreateTransactionRequest;
 
     getToCurrency(): string;
     setToCurrency(value: string): CreateTransactionRequest;
+
+    getAmount(): number;
+    setAmount(value: number): CreateTransactionRequest;
+
+    getPriceId(): string;
+    setPriceId(value: string): CreateTransactionRequest;
 
 
     serializeBinary(): Uint8Array;
@@ -33,9 +36,10 @@ export class CreateTransactionRequest extends jspb.Message {
 export namespace CreateTransactionRequest {
     export type AsObject = {
         userId: string,
-        amount: number,
         fromCurrency: string,
         toCurrency: string,
+        amount: number,
+        priceId: string,
     }
 }
 

@@ -1,4 +1,5 @@
 import KYC_ClientGenerator, { KYCClient } from "@aufax/kyc/client";
+import Price_ClientGenerator, { PriceClient } from "@aufax/price/client";
 import Transaction_ClientGenerator, {
   TransactionClient,
 } from "@aufax/transaction/client";
@@ -28,6 +29,7 @@ export class AufaXBot {
   public KYCServiceClient: KYCClient;
   public UserServiceClient: UserClient;
   public TransactionServiceClient: TransactionClient;
+  public PriceServiceClient: PriceClient;
 
   private sellCommand: SellCommand;
   private buyCommand: BuyCommand;
@@ -46,6 +48,9 @@ export class AufaXBot {
     ).create();
     this.TransactionServiceClient = new Transaction_ClientGenerator(
       "127.0.0.1:30042"
+    ).create();
+    this.PriceServiceClient = new Price_ClientGenerator(
+      "127.0.0.1:30043"
     ).create();
 
     this.sellCommand = new SellCommand(this);
