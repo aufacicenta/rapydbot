@@ -22,106 +22,83 @@ export class SellCommand implements IBotCommand {
     handler: BotReplyToMessageIdHandler,
     match?: RegExpMatchArray
   ) {
-    const replyToMessageText = msg.reply_to_message.text;
-    const text = msg.text;
+    try {
+      const replyToMessageText = msg.reply_to_message.text;
+      const text = msg.text;
 
-    if (
-      replyToMessageText.trim() ===
-      this.bot
-        .getTranslation(msg, translationKeys.sell_command_request_amount)
-        .trim()
-    ) {
+      if (
+        replyToMessageText.trim() ===
+        this.bot
+          .getTranslation(msg, translationKeys.sell_command_request_amount)
+          .trim()
+      ) {
+        return this.replyToAmountRequest(msg, handler);
+      }
+
+      if (
+        replyToMessageText.trim() ===
+        this.bot
+          .getTranslation(msg, translationKeys.sell_command_request_currency)
+          .trim()
+      ) {
+        return this.replyToCurrencyRequest(msg, handler);
+      }
+
+      // TODO handle empty response
+    } catch (error) {
+      console.error(error);
+      return this.bot.reply(msg, translationKeys.sell_command_create_tx_error);
+    }
+  }
+
+  async onText(msg: Message, match?: RegExpMatchArray) {
+    try {
+      const text = msg.text;
+
       const amountAndCurrency = regexp.getAmountAndCurrency(text);
 
       if (!Boolean(amountAndCurrency)) {
-        handler.selfDestruct();
-        return this.bot.reply(msg, translationKeys.sell_command_invalid_amount);
+        return this.bot.replyWithMessageID(
+          msg,
+          translationKeys.sell_command_request_amount,
+          this
+        );
       }
 
       const amount = amountAndCurrency.groups.amount;
 
       if (!validation.isValidAmount(amount)) {
-        handler.selfDestruct();
-        return this.bot.reply(msg, translationKeys.sell_command_invalid_amount);
-      }
-
-      handler.storage.set("amount", amount);
-
-      return this.bot.replyWithMessageID(
-        msg,
-        translationKeys.sell_command_request_currency,
-        this
-      );
-    }
-
-    if (
-      replyToMessageText.trim() ===
-      this.bot
-        .getTranslation(msg, translationKeys.sell_command_request_currency)
-        .trim()
-    ) {
-      const amount = handler.storage.get("amount");
-      const currency = text.trim();
-
-      if (
-        !validation.isValidAmount(amount) ||
-        !validation.isValidCurrency(currency)
-      ) {
-        handler.selfDestruct();
         return this.bot.reply(
           msg,
           translationKeys.sell_command_invalid_currency
         );
       }
 
-      handler.storage.set("currency", currency);
-      handler.selfDestruct();
+      const currency = amountAndCurrency.groups.currency;
 
-      await this.createTransaction(msg, amount, currency);
+      if (!validation.isValidCurrency(currency)) {
+        return this.bot.replyWithMessageID(
+          msg,
+          translationKeys.sell_command_request_currency,
+          this,
+          { amount }
+        );
+      }
+
+      if (!regexp.isCurrencyPair(currency)) {
+        return await this.createTransaction(msg, amount, currency);
+      }
+
+      const currency_pair = regexp.getCurrencyPair(currency);
+
+      const from_currency = currency_pair.groups.from_currency;
+      const to_currency = currency_pair.groups.to_currency;
+
+      await this.createTransaction(msg, amount, from_currency, to_currency);
+    } catch (error) {
+      console.error(error);
+      return this.bot.reply(msg, translationKeys.sell_command_create_tx_error);
     }
-
-    // TODO handle empty response
-  }
-
-  async onText(msg: Message, match?: RegExpMatchArray) {
-    const text = msg.text;
-
-    const amountAndCurrency = regexp.getAmountAndCurrency(text);
-
-    if (!Boolean(amountAndCurrency)) {
-      return this.bot.replyWithMessageID(
-        msg,
-        translationKeys.sell_command_request_amount,
-        this
-      );
-    }
-
-    const amount = amountAndCurrency.groups.amount;
-
-    if (!validation.isValidAmount(amount)) {
-      return this.bot.reply(msg, translationKeys.sell_command_invalid_currency);
-    }
-
-    const currency = amountAndCurrency.groups.currency;
-
-    if (!validation.isValidCurrency(currency)) {
-      return this.bot.replyWithMessageID(
-        msg,
-        translationKeys.sell_command_request_currency,
-        this
-      );
-    }
-
-    if (!regexp.isCurrencyPair(currency)) {
-      return await this.createTransaction(msg, amount, currency);
-    }
-
-    const currency_pair = regexp.getCurrencyPair(currency);
-
-    const from_currency = currency_pair.groups.from_currency;
-    const to_currency = currency_pair.groups.to_currency;
-
-    await this.createTransaction(msg, amount, from_currency, to_currency);
   }
 
   async createTransaction(
@@ -139,7 +116,7 @@ export class SellCommand implements IBotCommand {
         createUserRequest,
         (err, response) => {
           if (Boolean(err)) {
-            reject(err);
+            return reject(err);
           }
 
           const user_id = response.getId();
@@ -153,7 +130,7 @@ export class SellCommand implements IBotCommand {
             getPriceRequest,
             (err, response) => {
               if (Boolean(err)) {
-                reject(err);
+                return reject(err);
               }
 
               const price_id = response.getPriceId();
@@ -172,25 +149,25 @@ export class SellCommand implements IBotCommand {
                 createTransactionRequest,
                 (err, response) => {
                   if (Boolean(err)) {
-                    reject(err);
+                    return reject(err);
                   }
 
                   const transaction_id = response.getTransactionId();
                   const expires_at = response.getExpiresAt();
 
                   if (!Boolean(transaction_id)) {
-                    reject();
+                    return reject();
                   }
 
                   this.bot.reply(
                     msg,
                     translationKeys.sell_command_create_tx_success,
-                    {},
+                    { disable_web_page_preview: true },
                     {
                       amount,
                       currency: from_currency,
-                      price: `${convertToSymbol} ${price}`,
-                      price_source: `<a href="https://coinmarketcap.com/">coinmarketcap.com</a>`,
+                      price: `${convertToSymbol} ${price.toFixed(2)}`,
+                      price_source: `<a href="https://coinmarketcap.com/">coinmarketcap.com</a>`, // TODO let the user set a pricing source
                       expires_at: moment(expires_at)
                         .locale(msg.from.language_code)
                         .fromNow(),
@@ -205,5 +182,58 @@ export class SellCommand implements IBotCommand {
         }
       );
     });
+  }
+
+  private replyToAmountRequest(
+    msg: Message,
+    handler: BotReplyToMessageIdHandler
+  ) {
+    const text = msg.text;
+
+    const amount = regexp.getAmount(text).groups.amount;
+
+    if (!validation.isValidAmount(amount)) {
+      handler.selfDestruct();
+      return this.bot.reply(msg, translationKeys.sell_command_invalid_amount);
+    }
+
+    handler.storage.set("amount", amount);
+
+    return this.bot.replyWithMessageID(
+      msg,
+      translationKeys.sell_command_request_currency,
+      this
+    );
+  }
+
+  private async replyToCurrencyRequest(
+    msg: Message,
+    handler: BotReplyToMessageIdHandler
+  ) {
+    const text = msg.text;
+
+    const amount = handler.storage.get("amount");
+    const currency = text.trim();
+
+    if (
+      !validation.isValidAmount(amount) ||
+      !validation.isValidCurrency(currency)
+    ) {
+      handler.selfDestruct();
+      return this.bot.reply(msg, translationKeys.sell_command_invalid_currency);
+    }
+
+    handler.selfDestruct();
+
+    if (!regexp.isCurrencyPair(currency)) {
+      return await this.createTransaction(msg, amount, currency);
+    }
+
+    const currency_pair = regexp.getCurrencyPair(currency);
+
+    const from_currency = currency_pair.groups.from_currency;
+    const to_currency = currency_pair.groups.to_currency;
+
+    await this.createTransaction(msg, amount, from_currency, to_currency);
   }
 }

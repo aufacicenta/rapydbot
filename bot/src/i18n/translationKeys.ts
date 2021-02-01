@@ -10,6 +10,7 @@ export const translationKeys = {
   buy_command_request_currency: "buy_command_request_currency",
   sell_command_invalid_amount: "sell_command_invalid_amount",
   sell_command_create_tx_success: "sell_command_create_tx_success",
+  sell_command_create_tx_error: "sell_command_create_tx_error",
   buy_command_tx_breakdown: "buy_command_tx_breakdown",
   buy_command_inline_markup_text_send_tx_id:
     "buy_command_inline_markup_text_send_tx_id",

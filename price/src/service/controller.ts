@@ -74,7 +74,9 @@ export class Controller {
         )
       ).data;
 
-      const convertToSymbol = Boolean(to_currency) ? to_currency : "USD";
+      const convertToSymbol = Boolean(to_currency)
+        ? to_currency.toUpperCase()
+        : "USD";
 
       const quote =
         response.data[from_currency.toUpperCase()].quote[convertToSymbol].price;

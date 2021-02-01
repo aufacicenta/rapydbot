@@ -108,6 +108,7 @@ export class AufaXBot {
     msg: Message,
     translationKey: string,
     command: Commands,
+    handlerData?: Record<string, any>,
     reply_to_message_id?: number,
     options?: SendMessageOptions,
     args?: {}
@@ -120,6 +121,12 @@ export class AufaXBot {
       handler = new BotReplyToMessageIdHandler(this, command);
       handler.id = chat_id;
       this.replyToMessageIDMap.set(chat_id, handler);
+    }
+
+    if (Boolean(handlerData)) {
+      Object.keys(handlerData).forEach((key) => {
+        handler.storage.set(key, handlerData[key]);
+      });
     }
 
     this.reply(

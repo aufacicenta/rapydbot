@@ -44,12 +44,14 @@ Did you forget the <u>amount</u>?`,
     [translationKeys.sell_command_request_currency]: `What currency?`,
     [translationKeys.buy_command_request_amount]: `Ok. How much?`,
     [translationKeys.buy_command_request_currency]: `What currency?`,
-    [translationKeys.sell_command_create_tx_success]: `Done!
+    [translationKeys.sell_command_create_tx_error]: `😖 Something went wrong. Try again?`,
+    [translationKeys.sell_command_create_tx_success]: `Done! 🎉
 
-Your offer of {{amount}} {{currency}} will expire {{expires_at}}.
+Your offer of <u>{{amount}} {{currency}}</u> will expire {{expires_at}}.
 
 Current price: {{price}}
-source: {{price_source}}
+source: {{- price_source}}
+
 
 <em>Negotiate under your own risk. aufaxbot limits itself to connecting buyers with sellers.</em>`,
     [translationKeys.buy_command_tx_breakdown]: `Here's your quote:
