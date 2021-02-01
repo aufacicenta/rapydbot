@@ -1,0 +1,40 @@
+{
+  "name": "@aufax/price",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "npm run compile && node ./build/index.js",
+    "start:debug": "ts-node-dev --inspect=9225 --no-notify --respawn ./src",
+    "clean": "rimraf build",
+    "compile": "npm run clean && tsc",
+    "publish:prepare": "npm run clean && npm run compile",
+    "test": "jest"
+  },
+  "directories": {
+    "build": "build"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "grpc": "^1.24.3",
+    "inversify": "^5.0.1",
+    "moment": "^2.29.1",
+    "mysql2": "^2.2.5",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.5.0"
+  },
+  "devDependencies": {
+    "@grpc/proto-loader": "^0.5.5",
+    "@types/jest": "^26.0.4",
+    "@types/node": "^14.11.8",
+    "@types/sequelize": "^4.28.9",
+    "convict": "^6.0.0",
+    "grpc-tools": "^1.9.1",
+    "grpc_tools_node_protoc_ts": "^5.0.0",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.2",
+    "ts-node-dev": "^1.0.0-pre.50",
+    "typescript": "^4.0.3"
+  }
+}
