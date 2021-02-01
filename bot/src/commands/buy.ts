@@ -3,6 +3,8 @@ import { AufaXBot } from "../AufaXBot";
 import { BotReplyToMessageIdHandler } from "../handler";
 import { translationKeys } from "../i18n";
 import { IBotCommand } from "./IBotCommand";
+import regexp from "./util/regexp";
+import validation from "./util/validation";
 
 export class BuyCommand implements IBotCommand {
   private bot: AufaXBot;
@@ -20,68 +22,38 @@ export class BuyCommand implements IBotCommand {
   async onText(msg: Message) {
     const text = msg.text;
 
-    const currency = /\bbtc|eth\b/i.exec(text);
+    const amountAndCurrency = regexp.getAmountAndCurrency(text);
 
-    if (!Boolean(currency) || currency.length === 0) {
+    if (!Boolean(amountAndCurrency)) {
+      return this.bot.replyWithMessageID(
+        msg,
+        translationKeys.buy_command_request_amount,
+        this
+      );
+    }
+
+    const amount = amountAndCurrency.groups.amount;
+
+    if (!validation.isValidAmount(amount)) {
       return this.bot.reply(msg, translationKeys.buy_command_invalid_currency);
     }
 
-    const amount = /(\d+\.?\d*|\.\d+)$/i.exec(text);
+    const currency = amountAndCurrency.groups.currency;
 
-    if (!Boolean(amount) || amount.length === 0) {
-      return this.bot.reply(msg, translationKeys.buy_command_invalid_amount);
+    if (!validation.isValidCurrency(currency)) {
+      return this.bot.replyWithMessageID(
+        msg,
+        translationKeys.buy_command_request_currency,
+        this
+      );
     }
 
-    await this.getSellers(msg, currency[0], amount[0]);
+    await this.getSellers(msg, amount, currency);
   }
 
-  getSellers(msg: Message, currency: string, amount: string): Promise<void> {
+  getSellers(msg: Message, amount: string, currency: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.bot.reply(msg, translationKeys.buy_command_sellers_list);
-
-      resolve();
-    });
-  }
-
-  getTransactionBreakdown(
-    msg: Message,
-    currency: string,
-    amount: string
-  ): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.bot.reply(
-        msg,
-        translationKeys.buy_command_tx_breakdown,
-        {
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: this.bot.getTranslation(
-                    msg,
-                    translationKeys.buy_command_inline_markup_text_attach_purchase_bank_note
-                  ),
-                  callback_data: `/internal:attach_purchase_bank_note`,
-                },
-              ],
-            ],
-          },
-        },
-        {
-          price_currency_pair: "USD/BTC",
-          price: "USD 33,825.00",
-          exchange_rate_amount: "7.5",
-          exchange_rate_currency: "USD",
-          exchange_rate_result: "GTQ 123.45",
-          fee: "5%",
-          fee_result: "GTQ 10.23",
-          total_result: "GTQ 112.02",
-          bank_name: "BAC, SA",
-          bank_account_number: "40-123456-78",
-          bank_account_type: "MONETARIA",
-          beneficiary: "Apellido, Nombre",
-        }
-      );
 
       resolve();
     });

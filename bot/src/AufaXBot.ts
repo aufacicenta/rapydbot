@@ -14,10 +14,9 @@ import {
   BotPassportTypeFileHandler,
   BotReplyToMessageIdHandler,
 } from "./handler";
+import { Commands } from "./types";
 
 const TOKEN = "1690293681:AAESnPBd2NTUlgx9TWMTDEmg3hyG7uUfFfQ";
-
-type Commands = SellCommand;
 
 export class AufaXBot {
   public api: TelegramBotApi;
@@ -34,7 +33,6 @@ export class AufaXBot {
   private buyCommand: BuyCommand;
   private startCommand: StartCommand;
 
-  // TODO should we add a timestamp such that if the reply never gets through, we delete the index after a certain period?
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
   constructor() {
@@ -51,7 +49,7 @@ export class AufaXBot {
     ).create();
 
     this.sellCommand = new SellCommand(this);
-    // this.buyCommand = new BuyCommand(this);
+    this.buyCommand = new BuyCommand(this);
     // this.startCommand = new StartCommand(this);
   }
 
@@ -81,11 +79,6 @@ export class AufaXBot {
       }
 
       // TODO no answers reply
-    });
-
-    this.api.on("callback_query", async (msg) => {
-      console.log(msg);
-      // TODO this will be called on clicking the "attach purchase bank note" button
     });
 
     this.api.onText(/^\/start/i, (msg, match) => this.startCommand.onText(msg));

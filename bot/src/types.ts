@@ -1,4 +1,4 @@
-import { SellCommand } from "./commands";
+import { BuyCommand, SellCommand } from "./commands";
 
 export type SecureData = {
   nonce: string;
@@ -34,4 +34,4 @@ export type DecryptedPassportData = {
   expiry_date: string;
 };
 
-export type Commands = SellCommand;
+export type Commands = SellCommand | BuyCommand;

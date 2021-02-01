@@ -76,18 +76,10 @@ export class SellCommand implements IBotCommand {
       handler.storage.set("currency", currency);
       handler.selfDestruct();
 
-      // TODO create transaction with amount & currency
-      return this.bot.reply(
-        msg,
-        translationKeys.sell_command_create_tx_success,
-        {},
-        {
-          amount,
-          currency,
-          expires_at: moment().locale(msg.from.language_code).fromNow(),
-        }
-      );
+      await this.createTransaction(msg, amount, currency);
     }
+
+    // TODO handle empty response
   }
 
   async onText(msg: Message, match?: RegExpMatchArray) {
@@ -112,7 +104,11 @@ export class SellCommand implements IBotCommand {
     const currency = amountAndCurrency.groups.currency;
 
     if (!validation.isValidCurrency(currency)) {
-      return this.bot.reply(msg, translationKeys.sell_command_invalid_currency);
+      return this.bot.replyWithMessageID(
+        msg,
+        translationKeys.sell_command_request_currency,
+        this
+      );
     }
 
     if (!regexp.isCurrencyPair(currency)) {
