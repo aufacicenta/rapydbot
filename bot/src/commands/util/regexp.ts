@@ -12,6 +12,6 @@ export default {
     return /\/{1}/i.test(text);
   },
   getCurrencyPair(text: string): RegExpExecArray {
-    return /(?<from_currency>\w+)\/(?<to_currency>\w+)/i.exec(text);
+    return /(?<from_currency>[a-z]+)\/?(?<to_currency>[a-z]+)?/i.exec(text);
   },
 };

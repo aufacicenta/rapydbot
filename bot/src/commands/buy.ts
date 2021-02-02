@@ -60,13 +60,17 @@ export class BuyCommand implements IBotCommand {
       }
 
       const amount = amountRegexArray?.groups?.amount;
-
-      if (!validation.isValidAmount(amount)) {
-        return this.bot.reply(msg, translationKeys.buy_command_invalid_amount);
-      }
-
       const from_currency = currencyPairRegexArray?.groups?.from_currency;
       const to_currency = currencyPairRegexArray?.groups?.to_currency;
+
+      if (!validation.isValidAmount(amount)) {
+        return this.bot.replyWithMessageID(
+          msg,
+          translationKeys.buy_command_request_amount,
+          this,
+          { from_currency, to_currency }
+        );
+      }
 
       if (!validation.isValidCurrency(from_currency)) {
         return this.bot.replyWithMessageID(
@@ -122,13 +126,30 @@ export class BuyCommand implements IBotCommand {
       return this.bot.reply(msg, translationKeys.buy_command_invalid_amount);
     }
 
-    handler.storage.set("amount", amount);
+    const from_currency = handler.storage.get("from_currency");
+    const to_currency = handler.storage.get("to_currency");
 
-    return this.bot.replyWithMessageID(
-      msg,
-      translationKeys.buy_command_request_currency,
-      this
-    );
+    if (
+      !validation.isValidCurrency(from_currency) &&
+      !validation.isValidCurrency(to_currency)
+    ) {
+      handler.storage.set("amount", amount);
+
+      return this.bot.replyWithMessageID(
+        msg,
+        translationKeys.buy_command_request_currency,
+        this
+      );
+    }
+
+    if (
+      validation.isValidCurrency(from_currency) &&
+      !validation.isValidCurrency(to_currency)
+    ) {
+      return await this.getSellOrders(msg, amount, from_currency);
+    }
+
+    await this.getSellOrders(msg, amount, from_currency, to_currency);
   }
 
   private async replyToCurrencyRequest(
