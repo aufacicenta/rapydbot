@@ -7,8 +7,14 @@
 import * as jspb from "google-protobuf";
 
 export class CreateUserRequest extends jspb.Message { 
-    getTelegramUserId(): number;
-    setTelegramUserId(value: number): CreateUserRequest;
+    getTelegramFromUserId(): number;
+    setTelegramFromUserId(value: number): CreateUserRequest;
+
+    getTelegramUsername(): string;
+    setTelegramUsername(value: string): CreateUserRequest;
+
+    getTelegramPrivateChatId(): string;
+    setTelegramPrivateChatId(value: string): CreateUserRequest;
 
 
     serializeBinary(): Uint8Array;
@@ -23,13 +29,27 @@ export class CreateUserRequest extends jspb.Message {
 
 export namespace CreateUserRequest {
     export type AsObject = {
-        telegramUserId: number,
+        telegramFromUserId: number,
+        telegramUsername: string,
+        telegramPrivateChatId: string,
     }
 }
 
 export class CreateUserReply extends jspb.Message { 
     getId(): string;
     setId(value: string): CreateUserReply;
+
+    getTelegramFromUserId(): number;
+    setTelegramFromUserId(value: number): CreateUserReply;
+
+    getTelegramUsername(): string;
+    setTelegramUsername(value: string): CreateUserReply;
+
+    getTelegramPrivateChatId(): number;
+    setTelegramPrivateChatId(value: number): CreateUserReply;
+
+    getTelegramUserId(): string;
+    setTelegramUserId(value: string): CreateUserReply;
 
 
     serializeBinary(): Uint8Array;
@@ -45,48 +65,10 @@ export class CreateUserReply extends jspb.Message {
 export namespace CreateUserReply {
     export type AsObject = {
         id: string,
-    }
-}
-
-export class ResolveUserIDFromTelegramUserIDRequest extends jspb.Message { 
-    getTelegramUserId(): number;
-    setTelegramUserId(value: number): ResolveUserIDFromTelegramUserIDRequest;
-
-
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): ResolveUserIDFromTelegramUserIDRequest.AsObject;
-    static toObject(includeInstance: boolean, msg: ResolveUserIDFromTelegramUserIDRequest): ResolveUserIDFromTelegramUserIDRequest.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: ResolveUserIDFromTelegramUserIDRequest, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): ResolveUserIDFromTelegramUserIDRequest;
-    static deserializeBinaryFromReader(message: ResolveUserIDFromTelegramUserIDRequest, reader: jspb.BinaryReader): ResolveUserIDFromTelegramUserIDRequest;
-}
-
-export namespace ResolveUserIDFromTelegramUserIDRequest {
-    export type AsObject = {
-        telegramUserId: number,
-    }
-}
-
-export class ResolveUserIDFromTelegramUserIDReply extends jspb.Message { 
-    getId(): string;
-    setId(value: string): ResolveUserIDFromTelegramUserIDReply;
-
-
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): ResolveUserIDFromTelegramUserIDReply.AsObject;
-    static toObject(includeInstance: boolean, msg: ResolveUserIDFromTelegramUserIDReply): ResolveUserIDFromTelegramUserIDReply.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: ResolveUserIDFromTelegramUserIDReply, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): ResolveUserIDFromTelegramUserIDReply;
-    static deserializeBinaryFromReader(message: ResolveUserIDFromTelegramUserIDReply, reader: jspb.BinaryReader): ResolveUserIDFromTelegramUserIDReply;
-}
-
-export namespace ResolveUserIDFromTelegramUserIDReply {
-    export type AsObject = {
-        id: string,
+        telegramFromUserId: number,
+        telegramUsername: string,
+        telegramPrivateChatId: number,
+        telegramUserId: string,
     }
 }
 

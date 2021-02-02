@@ -6,13 +6,6 @@ export default (context: IContext) => {
   const server = new grpc.Server();
 
   server.addService<IUserServer>(UserService, {
-    createUser: (call, callback) =>
-      context.controller.createUser({ call, callback }, context),
-    resolveUserIDFromTelegramUserID: (call, callback) =>
-      context.controller.resolveUserIDFromTelegramUserID(
-        { call, callback },
-        context
-      ),
     findUserByTelegramUserIdOrCreateUser: (call, callback) =>
       context.controller.findUserByTelegramUserIdOrCreateUser(
         { call, callback },

@@ -1,5 +1,6 @@
 import mysql from "mysql2/promise";
 import { Sequelize, SyncOptions } from "sequelize";
+import { TelegramUserModel } from "./model/TelegramUserModel";
 import { UserModel } from "./model/UserModel";
 
 const connectionURI = `mysql://root:root@localhost:3306/${process.env.MYSQL_DATABASE}`;
@@ -20,11 +21,25 @@ export default {
 
       const sequelize = new Sequelize(connectionURI);
 
-      sequelize.define(
+      const User = sequelize.define(
         UserModel.tableName,
         UserModel.rawAttributes,
         UserModel.config
       );
+
+      const TelegramUser = sequelize.define(
+        TelegramUserModel.tableName,
+        TelegramUserModel.rawAttributes,
+        TelegramUserModel.config
+      );
+
+      User.hasOne(TelegramUser, {
+        foreignKey: { allowNull: false },
+      });
+
+      TelegramUser.belongsTo(User, {
+        foreignKey: { allowNull: false },
+      });
 
       await sequelize.authenticate();
 
