@@ -11,7 +11,7 @@ service User {
 message CreateUserRequest {
   int32 telegram_from_user_id = 1;
   string telegram_username = 2;
-  string telegram_private_chat_id = 3;
+  int32 telegram_private_chat_id = 3;
 }
 
 message CreateUserReply {

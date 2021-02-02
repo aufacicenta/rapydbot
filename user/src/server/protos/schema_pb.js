@@ -112,7 +112,7 @@ proto.user.CreateUserRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     telegramFromUserId: jspb.Message.getFieldWithDefault(msg, 1, 0),
     telegramUsername: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    telegramPrivateChatId: jspb.Message.getFieldWithDefault(msg, 3, "")
+    telegramPrivateChatId: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
@@ -158,7 +158,7 @@ proto.user.CreateUserRequest.deserializeBinaryFromReader = function(msg, reader)
       msg.setTelegramUsername(value);
       break;
     case 3:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {number} */ (reader.readInt32());
       msg.setTelegramPrivateChatId(value);
       break;
     default:
@@ -205,8 +205,8 @@ proto.user.CreateUserRequest.serializeBinaryToWriter = function(message, writer)
     );
   }
   f = message.getTelegramPrivateChatId();
-  if (f.length > 0) {
-    writer.writeString(
+  if (f !== 0) {
+    writer.writeInt32(
       3,
       f
     );
@@ -251,20 +251,20 @@ proto.user.CreateUserRequest.prototype.setTelegramUsername = function(value) {
 
 
 /**
- * optional string telegram_private_chat_id = 3;
- * @return {string}
+ * optional int32 telegram_private_chat_id = 3;
+ * @return {number}
  */
 proto.user.CreateUserRequest.prototype.getTelegramPrivateChatId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
 /**
- * @param {string} value
+ * @param {number} value
  * @return {!proto.user.CreateUserRequest} returns this
  */
 proto.user.CreateUserRequest.prototype.setTelegramPrivateChatId = function(value) {
-  return jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3IntField(this, 3, value);
 };
 
 

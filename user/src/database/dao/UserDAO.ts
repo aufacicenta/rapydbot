@@ -35,20 +35,27 @@ export class UserDAO {
       await telegram_result.save();
     }
 
-    if (!Boolean(telegram_result.getDataValue("id"))) {
+    const telegram_id = telegram_result.getDataValue("id");
+
+    if (!Boolean(telegram_id)) {
       throw new Error("findUserByTelegramUserIdOrCreateUser failed");
     }
 
     const [user_result] = await this.user.findOrCreate({
-      where: { telegram_id: telegram_result.getDataValue("id") },
+      where: { telegram_id },
     });
 
-    if (!Boolean(user_result.getDataValue("id"))) {
+    const userId = user_result.getDataValue("id");
+
+    if (!Boolean(userId)) {
       throw new Error("findUserByTelegramUserIdOrCreateUser failed");
     }
 
+    telegram_result.set("user_id", userId);
+    await telegram_result.save();
+
     return {
-      userId: user_result.getDataValue("id"),
+      userId,
       telegramUserId: user_result.getDataValue("telegram_id"),
       telegramFromUserId: telegram_result.getDataValue("from_user_id"),
       telegramUsername: telegram_result.getDataValue("username"),

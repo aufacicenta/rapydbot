@@ -13,8 +13,8 @@ export class CreateUserRequest extends jspb.Message {
     getTelegramUsername(): string;
     setTelegramUsername(value: string): CreateUserRequest;
 
-    getTelegramPrivateChatId(): string;
-    setTelegramPrivateChatId(value: string): CreateUserRequest;
+    getTelegramPrivateChatId(): number;
+    setTelegramPrivateChatId(value: number): CreateUserRequest;
 
 
     serializeBinary(): Uint8Array;
@@ -31,7 +31,7 @@ export namespace CreateUserRequest {
     export type AsObject = {
         telegramFromUserId: number,
         telegramUsername: string,
-        telegramPrivateChatId: string,
+        telegramPrivateChatId: number,
     }
 }
 

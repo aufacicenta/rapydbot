@@ -117,7 +117,9 @@ export class SellCommand implements IBotCommand {
     return new Promise((resolve, reject) => {
       const createUserRequest = new CreateUserRequest();
 
-      createUserRequest.setTelegramUserId(msg.from.id);
+      createUserRequest.setTelegramFromUserId(msg.from.id);
+      createUserRequest.setTelegramUsername(msg.from.username);
+      createUserRequest.setTelegramPrivateChatId(msg.chat.id);
 
       this.bot.UserServiceClient.findUserByTelegramUserIdOrCreateUser(
         createUserRequest,
@@ -126,7 +128,7 @@ export class SellCommand implements IBotCommand {
             return reject(err);
           }
 
-          const user_id = response.getId();
+          const user_id = response.getUserId();
 
           const getPriceRequest = new GetPriceRequest();
 

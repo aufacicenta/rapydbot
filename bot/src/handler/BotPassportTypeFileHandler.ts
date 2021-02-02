@@ -24,7 +24,7 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
       const kycServiceRequest = new ProcessPassportDataRequest();
       const createUserRequest = new CreateUserRequest();
 
-      createUserRequest.setTelegramUserId(msg.from.id);
+      createUserRequest.setTelegramFromUserId(msg.from.id);
 
       this.bot.UserServiceClient.findUserByTelegramUserIdOrCreateUser(
         createUserRequest,
@@ -33,14 +33,14 @@ export class BotPassportTypeFileHandler extends BotEncryptedDataHandler {
             reject(err);
           }
 
-          const id = response.getId();
+          const user_id = response.getUserId();
 
           const base64_encrypted_data = Buffer.from(
             JSON.stringify(msg.passport_data),
             "utf-8"
           ).toString("base64");
 
-          kycServiceRequest.setUserId(id);
+          kycServiceRequest.setUserId(user_id);
           kycServiceRequest.setBase64EncryptedData(base64_encrypted_data);
           kycServiceRequest.setKeyId(uuid()); // TODO create service to manage encryption keys
 

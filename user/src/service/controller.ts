@@ -24,6 +24,7 @@ export class Controller {
     const result = await dao.UserDAO.findUserByTelegramUserIdOrCreateUser({
       telegram_from_user_id,
       telegram_username,
+      telegram_private_chat_id,
     });
 
     const reply = new CreateUserReply();
