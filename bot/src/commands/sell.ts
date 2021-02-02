@@ -24,7 +24,6 @@ export class SellCommand implements IBotCommand {
   ) {
     try {
       const replyToMessageText = msg.reply_to_message.text;
-      const text = msg.text;
 
       if (
         replyToMessageText.trim() ===

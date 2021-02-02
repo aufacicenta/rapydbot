@@ -45,6 +45,7 @@ Did you forget the <u>amount</u>?`,
     [translationKeys.buy_command_request_amount]: `Ok. How much?`,
     [translationKeys.buy_command_request_currency]: `What currency?`,
     [translationKeys.sell_command_create_tx_error]: `😖 Something went wrong. Try again?`,
+    [translationKeys.buy_command_get_sell_orders_error]: `😖 Something went wrong. Try again?`,
     [translationKeys.sell_command_create_tx_success]: `Done! 🎉
 
 Your offer of <u>{{amount}} {{currency}}</u> will expire {{expires_at}}.
@@ -87,7 +88,7 @@ Beneficiary
 `,
     [translationKeys.buy_command_inline_markup_text_send_tx_id]: `Send Transaction ID`,
     [translationKeys.buy_command_inline_markup_text_attach_purchase_bank_note]: `Attach Payment Receipt`,
-    [translationKeys.buy_command_sellers_list]: `These users are selling right now:
+    [translationKeys.buy_command_sell_orders]: `These users are selling right now:
 
 @svpervnder
 500.00 USD/BTC at $32,345.00
