@@ -1,3 +1,4 @@
+import { CreateUserRequest } from "@aufax/user/client";
 import { Message } from "node-telegram-bot-api";
 import { AufaXBot } from "../AufaXBot";
 import { BotReplyToMessageIdHandler } from "../handler";
@@ -107,9 +108,27 @@ export class BuyCommand implements IBotCommand {
     to_currency?: string
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.bot.reply(msg, translationKeys.buy_command_sell_orders);
+      const createUserRequest = new CreateUserRequest();
 
-      resolve();
+      createUserRequest.setTelegramFromUserId(msg.from.id);
+      createUserRequest.setTelegramUsername(msg.from.username);
+      createUserRequest.setTelegramPrivateChatId(msg.chat.id);
+
+      this.bot.UserServiceClient.findUserByTelegramUserIdOrCreateUser(
+        createUserRequest,
+        (err, response) => {
+          if (Boolean(err)) {
+            return reject(err);
+          }
+
+          const user_id = response.getUserId();
+
+          const getSellOrdersRequest = new GetSellOrdersRequest();
+
+          this.bot.reply(msg, translationKeys.buy_command_sell_orders);
+          resolve();
+        }
+      );
     });
   }
 

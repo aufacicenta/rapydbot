@@ -1,3 +1,4 @@
+import USER_ClientGenerator, { UserClient } from "@aufax/user/client";
 import grpc from "grpc";
 import { injectable } from "inversify";
 import moment from "moment";
@@ -6,6 +7,8 @@ import { IContext } from "../server/interface/IContext";
 import {
   CreateTransactionReply,
   CreateTransactionRequest,
+  GetSellOrdersReply,
+  GetSellOrdersRequest,
 } from "../server/protos/schema_pb";
 
 type GRPC<Request, Reply> = {
@@ -16,6 +19,14 @@ type GRPC<Request, Reply> = {
 @injectable()
 export class Controller {
   public static type: string = "Controller";
+
+  private UserServiceClient: UserClient;
+
+  constructor() {
+    this.UserServiceClient = new USER_ClientGenerator(
+      "127.0.0.1:30041"
+    ).create();
+  }
 
   public static getExpiresAtSetting() {
     return moment().add(3, "hours").toISOString();
@@ -31,7 +42,7 @@ export class Controller {
     const from_currency = call.request.getFromCurrency().trim();
     const to_currency = call.request.getToCurrency().trim();
 
-    const expires_at = moment().add(3, "hours").toISOString();
+    const expires_at = Controller.getExpiresAtSetting();
 
     const transaction_id = await dao.TransactionDAO.createTransaction(
       user_id,
@@ -48,5 +59,35 @@ export class Controller {
     reply.setExpiresAt(expires_at);
 
     callback(null, reply);
+  }
+
+  async getSellOrders(
+    { call, callback }: GRPC<GetSellOrdersRequest, GetSellOrdersReply>,
+    { dao }: IContext
+  ) {
+    const amount = call.request.getAmount();
+    const from_currency = call.request.getFromCurrency().trim();
+    const to_currency = call.request.getToCurrency().trim();
+
+    const sell_orders = await dao.TransactionDAO.getSellOrders(
+      amount,
+      from_currency,
+      to_currency
+    );
+
+    for (const order of sell_orders) {
+      const reply = new GetSellOrdersReply();
+
+      reply.setAmount(order.getDataValue("amount"));
+      reply.setFromCurrency(order.getDataValue("from_currency"));
+      reply.setToCurrency(order.getDataValue("to_currency"));
+      order.getDataValue("");
+    }
+
+    callback(null, reply);
+  }
+
+  private async getUser(user_id: string) {
+    return this.client;
   }
 }

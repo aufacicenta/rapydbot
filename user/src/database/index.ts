@@ -42,7 +42,6 @@ export default {
       });
 
       await sequelize.authenticate();
-
       await sequelize.sync(options);
 
       console.log("Database Connection success");

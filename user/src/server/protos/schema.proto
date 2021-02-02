@@ -6,6 +6,7 @@ package user;
 
 service User {
   rpc FindUserByTelegramUserIdOrCreateUser (CreateUserRequest) returns (CreateUserReply) {}
+  rpc GetUser (GetUserRequest) returns (GetUserReply) {}
 }
 
 message CreateUserRequest {
@@ -15,6 +16,18 @@ message CreateUserRequest {
 }
 
 message CreateUserReply {
+  string user_id = 1;
+  int32 telegram_from_user_id = 2;
+  string telegram_username = 3;
+  int32 telegram_private_chat_id = 4;
+  string telegram_user_id = 5;
+}
+
+message GetUserRequest {
+  string user_id = 1;
+}
+
+message GetUserReply {
   string user_id = 1;
   int32 telegram_from_user_id = 2;
   string telegram_username = 3;

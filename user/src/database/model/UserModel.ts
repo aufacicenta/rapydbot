@@ -1,10 +1,12 @@
 import { DataTypes, Model, ModelOptions } from "sequelize";
+import { TelegramModel } from "./TelegramModel";
 
 export class UserModel extends Model<{
   id?: string;
   telegram_id: string;
   created_at: Date;
   updated_at: Date;
+  telegram: TelegramModel;
 }> {
   public static tableName = "user";
 

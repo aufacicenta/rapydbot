@@ -6,6 +6,7 @@ package transaction;
 
 service Transaction {
   rpc CreateTransaction (CreateTransactionRequest) returns (CreateTransactionReply) {}
+  rpc GetSellOrders (GetSellOrdersRequest) returns (stream GetSellOrdersReply) {}
 }
 
 message CreateTransactionRequest {
@@ -19,6 +20,20 @@ message CreateTransactionRequest {
 message CreateTransactionReply {
   string transaction_id = 1;
   string expires_at = 2;
+}
+
+message GetSellOrdersRequest {
+  float amount = 1;
+  string from_currency = 2;
+  string to_currency = 3;
+}
+
+message GetSellOrdersReply {
+  float amount = 1;
+  string from_currency = 2;
+  string to_currency = 3;
+  float price = 4;
+  string telegram_username = 5;
 }
 
 message EmptyReply {}

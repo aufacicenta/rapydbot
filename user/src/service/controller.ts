@@ -2,7 +2,12 @@ import grpc from "grpc";
 import { injectable } from "inversify";
 import "reflect-metadata";
 import { IContext } from "../server/interface/IContext";
-import { CreateUserReply, CreateUserRequest } from "../server/protos/schema_pb";
+import {
+  CreateUserReply,
+  CreateUserRequest,
+  GetUserReply,
+  GetUserRequest,
+} from "../server/protos/schema_pb";
 
 type GRPC<Request, Reply> = {
   call: grpc.ServerUnaryCall<Request>;
@@ -25,6 +30,26 @@ export class Controller {
       telegram_from_user_id,
       telegram_username,
       telegram_private_chat_id,
+    });
+
+    const reply = new CreateUserReply();
+
+    reply.setUserId(result.userId);
+    reply.setTelegramFromUserId(result.telegramFromUserId);
+    reply.setTelegramUsername(result.telegramUsername);
+    reply.setTelegramPrivateChatId(result.telegramPrivateChatId);
+
+    callback(null, reply);
+  }
+
+  async getUser(
+    { call, callback }: GRPC<GetUserRequest, GetUserReply>,
+    { dao }: IContext
+  ) {
+    const user_id = call.request.getUserId();
+
+    const result = await dao.UserDAO.getUser({
+      user_id,
     });
 
     const reply = new CreateUserReply();

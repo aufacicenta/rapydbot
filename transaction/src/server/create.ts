@@ -11,6 +11,8 @@ export default (context: IContext) => {
   server.addService<ITransactionServer>(TransactionService, {
     createTransaction: (call, callback) =>
       context.controller.createTransaction({ call, callback }, context),
+    getSellOrders: (call, callback) =>
+      context.controller.getSellOrders({ call, callback }, context),
   });
 
   return server;

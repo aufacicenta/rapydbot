@@ -72,6 +72,64 @@ export namespace CreateUserReply {
     }
 }
 
+export class GetUserRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): GetUserRequest;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetUserRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetUserRequest): GetUserRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetUserRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetUserRequest;
+    static deserializeBinaryFromReader(message: GetUserRequest, reader: jspb.BinaryReader): GetUserRequest;
+}
+
+export namespace GetUserRequest {
+    export type AsObject = {
+        userId: string,
+    }
+}
+
+export class GetUserReply extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): GetUserReply;
+
+    getTelegramFromUserId(): number;
+    setTelegramFromUserId(value: number): GetUserReply;
+
+    getTelegramUsername(): string;
+    setTelegramUsername(value: string): GetUserReply;
+
+    getTelegramPrivateChatId(): number;
+    setTelegramPrivateChatId(value: number): GetUserReply;
+
+    getTelegramUserId(): string;
+    setTelegramUserId(value: string): GetUserReply;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetUserReply.AsObject;
+    static toObject(includeInstance: boolean, msg: GetUserReply): GetUserReply.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetUserReply, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetUserReply;
+    static deserializeBinaryFromReader(message: GetUserReply, reader: jspb.BinaryReader): GetUserReply;
+}
+
+export namespace GetUserReply {
+    export type AsObject = {
+        userId: string,
+        telegramFromUserId: number,
+        telegramUsername: string,
+        telegramPrivateChatId: number,
+        telegramUserId: string,
+    }
+}
+
 export class EmptyReply extends jspb.Message { 
 
     serializeBinary(): Uint8Array;

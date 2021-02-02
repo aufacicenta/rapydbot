@@ -1,5 +1,5 @@
 import { ModelCtor, Sequelize } from "sequelize";
-import { CreateUserReply } from "../../server/protos/schema_pb";
+import { CreateUserReply, GetUserReply } from "../../server/protos/schema_pb";
 import { TelegramModel } from "../model/TelegramModel";
 import { UserModel } from "../model/UserModel";
 
@@ -60,6 +60,58 @@ export class UserDAO {
       telegramFromUserId: telegram_result.getDataValue("from_user_id"),
       telegramUsername: telegram_result.getDataValue("username"),
       telegramPrivateChatId: telegram_result.getDataValue("private_chat_id"),
+    };
+  }
+
+  async getUser({
+    user_id,
+  }: {
+    user_id: string;
+  }): Promise<GetUserReply.AsObject> {
+    const result = await this.user.findOne({
+      where: { id: user_id },
+      include: {
+        model: this.telegram,
+      },
+    });
+
+    if (!Boolean(result)) {
+      throw new Error("getUser failed");
+    }
+
+    return this.getUserReplyObject(result);
+  }
+
+  async getUsers({
+    user_ids,
+  }: {
+    user_ids: Array<string>;
+  }): Promise<Array<GetUserReply.AsObject>> {
+    const result = await this.user.findAll({
+      where: {
+        id: user_ids,
+      },
+      include: {
+        model: this.telegram,
+      },
+    });
+
+    if (!Boolean(result)) {
+      throw new Error("getUsers failed");
+    }
+
+    return result.map((r) => this.getUserReplyObject(r));
+  }
+
+  private getUserReplyObject(user: UserModel): GetUserReply.AsObject {
+    const tg = user.getDataValue("telegram");
+
+    return {
+      userId: user.getDataValue("id"),
+      telegramUserId: user.getDataValue("telegram_id"),
+      telegramFromUserId: tg.getDataValue("from_user_id"),
+      telegramUsername: tg.getDataValue("username"),
+      telegramPrivateChatId: tg.getDataValue("private_chat_id"),
     };
   }
 }

@@ -68,6 +68,72 @@ export namespace CreateTransactionReply {
     }
 }
 
+export class GetSellOrdersRequest extends jspb.Message { 
+    getAmount(): number;
+    setAmount(value: number): GetSellOrdersRequest;
+
+    getFromCurrency(): string;
+    setFromCurrency(value: string): GetSellOrdersRequest;
+
+    getToCurrency(): string;
+    setToCurrency(value: string): GetSellOrdersRequest;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetSellOrdersRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetSellOrdersRequest): GetSellOrdersRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetSellOrdersRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetSellOrdersRequest;
+    static deserializeBinaryFromReader(message: GetSellOrdersRequest, reader: jspb.BinaryReader): GetSellOrdersRequest;
+}
+
+export namespace GetSellOrdersRequest {
+    export type AsObject = {
+        amount: number,
+        fromCurrency: string,
+        toCurrency: string,
+    }
+}
+
+export class GetSellOrdersReply extends jspb.Message { 
+    getAmount(): number;
+    setAmount(value: number): GetSellOrdersReply;
+
+    getFromCurrency(): string;
+    setFromCurrency(value: string): GetSellOrdersReply;
+
+    getToCurrency(): string;
+    setToCurrency(value: string): GetSellOrdersReply;
+
+    getPrice(): number;
+    setPrice(value: number): GetSellOrdersReply;
+
+    getTelegramUsername(): string;
+    setTelegramUsername(value: string): GetSellOrdersReply;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetSellOrdersReply.AsObject;
+    static toObject(includeInstance: boolean, msg: GetSellOrdersReply): GetSellOrdersReply.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetSellOrdersReply, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetSellOrdersReply;
+    static deserializeBinaryFromReader(message: GetSellOrdersReply, reader: jspb.BinaryReader): GetSellOrdersReply;
+}
+
+export namespace GetSellOrdersReply {
+    export type AsObject = {
+        amount: number,
+        fromCurrency: string,
+        toCurrency: string,
+        price: number,
+        telegramUsername: string,
+    }
+}
+
 export class EmptyReply extends jspb.Message { 
 
     serializeBinary(): Uint8Array;

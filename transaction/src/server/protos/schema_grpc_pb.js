@@ -26,6 +26,28 @@ function deserialize_transaction_CreateTransactionRequest(buffer_arg) {
   return schema_pb.CreateTransactionRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_transaction_GetSellOrdersReply(arg) {
+  if (!(arg instanceof schema_pb.GetSellOrdersReply)) {
+    throw new Error('Expected argument of type transaction.GetSellOrdersReply');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_transaction_GetSellOrdersReply(buffer_arg) {
+  return schema_pb.GetSellOrdersReply.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_transaction_GetSellOrdersRequest(arg) {
+  if (!(arg instanceof schema_pb.GetSellOrdersRequest)) {
+    throw new Error('Expected argument of type transaction.GetSellOrdersRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_transaction_GetSellOrdersRequest(buffer_arg) {
+  return schema_pb.GetSellOrdersRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 var TransactionService = exports.TransactionService = {
   createTransaction: {
@@ -38,6 +60,17 @@ var TransactionService = exports.TransactionService = {
     requestDeserialize: deserialize_transaction_CreateTransactionRequest,
     responseSerialize: serialize_transaction_CreateTransactionReply,
     responseDeserialize: deserialize_transaction_CreateTransactionReply,
+  },
+  getSellOrders: {
+    path: '/transaction.Transaction/GetSellOrders',
+    requestStream: false,
+    responseStream: true,
+    requestType: schema_pb.GetSellOrdersRequest,
+    responseType: schema_pb.GetSellOrdersReply,
+    requestSerialize: serialize_transaction_GetSellOrdersRequest,
+    requestDeserialize: deserialize_transaction_GetSellOrdersRequest,
+    responseSerialize: serialize_transaction_GetSellOrdersReply,
+    responseDeserialize: deserialize_transaction_GetSellOrdersReply,
   },
 };
 
