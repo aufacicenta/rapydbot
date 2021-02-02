@@ -4,7 +4,7 @@ import { injectable } from "inversify";
 import "reflect-metadata";
 import { IContext } from "../server/interface/IContext";
 import { GetPriceReply, GetPriceRequest } from "../server/protos/schema_pb";
-import { InvalidSymbolError } from "../service/error";
+import { Price_ServiceErrorCodes } from "../service/error";
 
 type GRPC<Request, Reply> = {
   call: grpc.ServerUnaryCall<Request>;
@@ -84,7 +84,7 @@ export class Controller {
       return { price: quote.toFixed(2), convertToSymbol };
     } catch (error) {
       console.error(error);
-      throw new InvalidSymbolError();
+      throw new Error(Price_ServiceErrorCodes.invalid_symbol);
     }
   }
 }

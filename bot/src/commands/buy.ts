@@ -46,7 +46,7 @@ export class BuyCommand implements IBotCommand {
 
   async onText(msg: Message) {
     try {
-      const text = msg.text.replace(/\/buy /i, "");
+      const text = msg.text.replace(/\/buy\s?/i, "");
 
       const amountRegexArray = regexp.getAmount(text);
       const currencyPairRegexArray = regexp.getCurrencyPair(text);
@@ -146,9 +146,11 @@ export class BuyCommand implements IBotCommand {
       validation.isValidCurrency(from_currency) &&
       !validation.isValidCurrency(to_currency)
     ) {
+      handler.selfDestruct();
       return await this.getSellOrders(msg, amount, from_currency);
     }
 
+    handler.selfDestruct();
     await this.getSellOrders(msg, amount, from_currency, to_currency);
   }
 

@@ -1,4 +1,5 @@
 import { GetPriceRequest } from "@aufax/price/client";
+import { Price_ServiceErrorCodes } from "@aufax/price/service/error";
 import { CreateTransactionRequest } from "@aufax/transaction/client";
 import { CreateUserRequest } from "@aufax/user/client";
 import moment from "moment";
@@ -31,7 +32,7 @@ export class SellCommand implements IBotCommand {
           .getTranslation(msg, translationKeys.sell_command_request_amount)
           .trim()
       ) {
-        return this.replyToAmountRequest(msg, handler);
+        return await this.replyToAmountRequest(msg, handler);
       }
 
       if (
@@ -40,12 +41,19 @@ export class SellCommand implements IBotCommand {
           .getTranslation(msg, translationKeys.sell_command_request_currency)
           .trim()
       ) {
-        return this.replyToCurrencyRequest(msg, handler);
+        return await this.replyToCurrencyRequest(msg, handler);
       }
 
       // TODO handle empty response
     } catch (error) {
       console.error(error);
+      if (error?.message.includes(Price_ServiceErrorCodes.invalid_symbol)) {
+        return this.bot.reply(
+          msg,
+          translationKeys.sell_command_invalid_currency
+        );
+      }
+
       return this.bot.reply(msg, translationKeys.sell_command_create_tx_error);
     }
   }

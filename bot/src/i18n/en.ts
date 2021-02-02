@@ -17,7 +17,9 @@ The <u>available currencies</u> are: <u>BTC and ETH</u>.`,
 <strong>/buy [BTC or ETH] [amount]</strong>
 
 Did you forget the <u>amount</u>?`,
-    [translationKeys.sell_command_invalid_currency]: `The /sell command works like this:
+    [translationKeys.sell_command_invalid_currency]: `😖 This currency is not supported.
+
+The /sell command works like this:
 
 <code>/sell [amount] [currency]</code>
 <code>/sell [amount] [from_currency/to_currency]</code>
@@ -32,7 +34,7 @@ To sell BTC only for USD
 <code>/sell 1 BTC/USD</code>
 
 
-<em>/setlocation to narrow the options where you are selling.</em>.
+<em>/setcountrycode to narrow the options where you are selling.</em>.
 
 <em>Type /help to learn more options.</em>.`,
     [translationKeys.sell_command_invalid_amount]: `The /sell command works like this:
