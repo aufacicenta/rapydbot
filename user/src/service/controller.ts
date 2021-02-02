@@ -18,14 +18,20 @@ export class Controller {
     { dao }: IContext
   ) {
     const telegram_from_user_id = call.request.getTelegramFromUserId();
+    const telegram_username = call.request.getTelegramUsername();
+    const telegram_private_chat_id = call.request.getTelegramPrivateChatId();
 
-    // const id = await dao.UserDAO.findUserByTelegramUserIdOrCreateUser({
-    //   telegram_user_id,
-    // });
+    const result = await dao.UserDAO.findUserByTelegramUserIdOrCreateUser({
+      telegram_from_user_id,
+      telegram_username,
+    });
 
     const reply = new CreateUserReply();
 
-    // reply.setId(id);
+    reply.setUserId(result.userId);
+    reply.setTelegramFromUserId(result.telegramFromUserId);
+    reply.setTelegramUsername(result.telegramUsername);
+    reply.setTelegramPrivateChatId(result.telegramPrivateChatId);
 
     callback(null, reply);
   }

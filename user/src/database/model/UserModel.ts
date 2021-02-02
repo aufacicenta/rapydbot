@@ -2,7 +2,7 @@ import { DataTypes, Model, ModelOptions } from "sequelize";
 
 export class UserModel extends Model<{
   id?: string;
-  telegram_user_id: string;
+  telegram_id: string;
   created_at: Date;
   updated_at: Date;
 }> {
@@ -15,9 +15,9 @@ export class UserModel extends Model<{
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    telegram_user_id: {
+    telegram_id: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       unique: true,
     },
     created_at: {

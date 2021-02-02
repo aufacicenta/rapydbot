@@ -6,7 +6,7 @@ import context from "./server/context";
 import create from "./server/create";
 
 (async () => {
-  const driver = await database.connect({ force: true });
+  const driver = await database.connect();
   context.database = driver;
   context.dao.UserDAO = new UserDAO(driver);
 

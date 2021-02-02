@@ -36,8 +36,8 @@ export namespace CreateUserRequest {
 }
 
 export class CreateUserReply extends jspb.Message { 
-    getId(): string;
-    setId(value: string): CreateUserReply;
+    getUserId(): string;
+    setUserId(value: string): CreateUserReply;
 
     getTelegramFromUserId(): number;
     setTelegramFromUserId(value: number): CreateUserReply;
@@ -64,7 +64,7 @@ export class CreateUserReply extends jspb.Message {
 
 export namespace CreateUserReply {
     export type AsObject = {
-        id: string,
+        userId: string,
         telegramFromUserId: number,
         telegramUsername: string,
         telegramPrivateChatId: number,

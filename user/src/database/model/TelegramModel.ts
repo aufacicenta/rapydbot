@@ -1,13 +1,13 @@
 import { DataTypes, Model, ModelOptions } from "sequelize";
 
-export class TelegramUserModel extends Model<{
+export class TelegramModel extends Model<{
   id?: string;
   user_id: string;
-  telegram_from_user_id: number;
-  telegram_username: string;
-  telegram_private_chat_id: number;
+  from_user_id: number;
+  username: string;
+  private_chat_id: number;
 }> {
-  public static tableName = "telegram_user";
+  public static tableName = "telegram";
 
   public static rawAttributes = {
     id: {
@@ -18,19 +18,19 @@ export class TelegramUserModel extends Model<{
     },
     user_id: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
     },
-    telegram_from_user_id: {
+    from_user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       unique: true,
     },
-    telegram_username: {
+    username: {
       type: DataTypes.TEXT,
       allowNull: false,
       unique: false,
     },
-    telegram_private_chat_id: {
+    private_chat_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
       unique: true,
@@ -50,6 +50,6 @@ export class TelegramUserModel extends Model<{
   public static config: ModelOptions = {
     paranoid: true,
     underscored: true,
-    tableName: TelegramUserModel.tableName,
+    tableName: TelegramModel.tableName,
   };
 }

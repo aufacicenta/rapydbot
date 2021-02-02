@@ -1,48 +1,58 @@
 import { ModelCtor, Sequelize } from "sequelize";
 import { CreateUserReply } from "../../server/protos/schema_pb";
-import { TelegramUserModel } from "../model/TelegramUserModel";
+import { TelegramModel } from "../model/TelegramModel";
 import { UserModel } from "../model/UserModel";
 
 export class UserDAO {
   private driver: Sequelize;
   private user: ModelCtor<UserModel>;
-  private telegram_user: ModelCtor<TelegramUserModel>;
+  private telegram: ModelCtor<TelegramModel>;
 
   constructor(driver: Sequelize) {
     this.driver = driver;
     this.user = driver.model(UserModel.tableName);
-    this.telegram_user = driver.model(TelegramUserModel.tableName);
+    this.telegram = driver.model(TelegramModel.tableName);
   }
 
   async findUserByTelegramUserIdOrCreateUser({
     telegram_from_user_id,
+    telegram_username,
+    telegram_private_chat_id = null,
   }: {
     telegram_from_user_id: number;
+    telegram_username: string;
+    telegram_private_chat_id?: number;
   }): Promise<CreateUserReply.AsObject> {
-    const [telegram_user] = await this.telegram_user.findOrCreate({
-      where: { telegram_from_user_id },
+    const [telegram_result] = await this.telegram.findOrCreate({
+      where: {
+        from_user_id: telegram_from_user_id,
+        username: telegram_username,
+      },
     });
 
-    if (!Boolean(telegram_user.getDataValue("id"))) {
+    if (Boolean(telegram_private_chat_id)) {
+      telegram_result.set("private_chat_id", telegram_private_chat_id);
+      await telegram_result.save();
+    }
+
+    if (!Boolean(telegram_result.getDataValue("id"))) {
       throw new Error("findUserByTelegramUserIdOrCreateUser failed");
     }
 
-    const [user] = await this.user.findOrCreate({
-      where: { telegram_user_id: telegram_user.getDataValue("id") },
+    const [user_result] = await this.user.findOrCreate({
+      where: { telegram_id: telegram_result.getDataValue("id") },
     });
 
-    if (!Boolean(user.getDataValue("id"))) {
+    if (!Boolean(user_result.getDataValue("id"))) {
       throw new Error("findUserByTelegramUserIdOrCreateUser failed");
     }
 
     return {
-      id: user.getDataValue("id"),
-      telegramUserId: user.getDataValue("telegram_user_id"),
-      telegramFromUserId: telegram_user.getDataValue("telegram_from_user_id"),
-      telegramUsername: telegram_user.getDataValue("telegram_username"),
-      telegramPrivateChatId: telegram_user.getDataValue(
-        "telegram_private_chat_id"
-      ),
+      userId: user_result.getDataValue("id"),
+      telegramUserId: user_result.getDataValue("telegram_id"),
+      telegramFromUserId: telegram_result.getDataValue("from_user_id"),
+      telegramUsername: telegram_result.getDataValue("username"),
+      telegramPrivateChatId: telegram_result.getDataValue("private_chat_id"),
     };
   }
 }

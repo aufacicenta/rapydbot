@@ -300,7 +300,7 @@ proto.user.CreateUserReply.prototype.toObject = function(opt_includeInstance) {
  */
 proto.user.CreateUserReply.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     telegramFromUserId: jspb.Message.getFieldWithDefault(msg, 2, 0),
     telegramUsername: jspb.Message.getFieldWithDefault(msg, 3, ""),
     telegramPrivateChatId: jspb.Message.getFieldWithDefault(msg, 4, 0),
@@ -343,7 +343,7 @@ proto.user.CreateUserReply.deserializeBinaryFromReader = function(msg, reader) {
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setUserId(value);
       break;
     case 2:
       var value = /** @type {number} */ (reader.readInt32());
@@ -390,7 +390,7 @@ proto.user.CreateUserReply.prototype.serializeBinary = function() {
  */
 proto.user.CreateUserReply.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getUserId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -429,10 +429,10 @@ proto.user.CreateUserReply.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * optional string id = 1;
+ * optional string user_id = 1;
  * @return {string}
  */
-proto.user.CreateUserReply.prototype.getId = function() {
+proto.user.CreateUserReply.prototype.getUserId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -441,7 +441,7 @@ proto.user.CreateUserReply.prototype.getId = function() {
  * @param {string} value
  * @return {!proto.user.CreateUserReply} returns this
  */
-proto.user.CreateUserReply.prototype.setId = function(value) {
+proto.user.CreateUserReply.prototype.setUserId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
