@@ -28,13 +28,11 @@ export class TransactionModel extends Model<{
     },
     from_currency: {
       type: DataTypes.STRING,
-      length: 3,
-      allowNull: true,
+      allowNull: false,
     },
     to_currency: {
       type: DataTypes.STRING,
-      length: 3,
-      allowNull: false,
+      allowNull: true,
     },
     amount: {
       type: DataTypes.FLOAT,

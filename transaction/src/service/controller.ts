@@ -19,6 +19,10 @@ type GRPC<Request, Reply> = {
 export class Controller {
   public static type: string = "Controller";
 
+  public static getExpiresAtSetting() {
+    return moment().add(3, "hours").toISOString();
+  }
+
   async createTransaction(
     { call, callback }: GRPC<CreateTransactionRequest, CreateTransactionReply>,
     { dao }: IContext
