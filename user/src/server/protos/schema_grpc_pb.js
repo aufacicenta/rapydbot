@@ -48,6 +48,17 @@ function deserialize_user_GetUserRequest(buffer_arg) {
   return schema_pb.GetUserRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_user_GetUsersRequest(arg) {
+  if (!(arg instanceof schema_pb.GetUsersRequest)) {
+    throw new Error('Expected argument of type user.GetUsersRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_user_GetUsersRequest(buffer_arg) {
+  return schema_pb.GetUsersRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 var UserService = exports.UserService = {
   findUserByTelegramUserIdOrCreateUser: {
@@ -69,6 +80,17 @@ var UserService = exports.UserService = {
     responseType: schema_pb.GetUserReply,
     requestSerialize: serialize_user_GetUserRequest,
     requestDeserialize: deserialize_user_GetUserRequest,
+    responseSerialize: serialize_user_GetUserReply,
+    responseDeserialize: deserialize_user_GetUserReply,
+  },
+  getUsers: {
+    path: '/user.User/GetUsers',
+    requestStream: false,
+    responseStream: true,
+    requestType: schema_pb.GetUsersRequest,
+    responseType: schema_pb.GetUserReply,
+    requestSerialize: serialize_user_GetUsersRequest,
+    requestDeserialize: deserialize_user_GetUsersRequest,
     responseSerialize: serialize_user_GetUserReply,
     responseDeserialize: deserialize_user_GetUserReply,
   },

@@ -93,6 +93,29 @@ export namespace GetUserRequest {
     }
 }
 
+export class GetUsersRequest extends jspb.Message { 
+    clearUserIdList(): void;
+    getUserIdList(): Array<string>;
+    setUserIdList(value: Array<string>): GetUsersRequest;
+    addUserId(value: string, index?: number): string;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetUsersRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetUsersRequest): GetUsersRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetUsersRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetUsersRequest;
+    static deserializeBinaryFromReader(message: GetUsersRequest, reader: jspb.BinaryReader): GetUsersRequest;
+}
+
+export namespace GetUsersRequest {
+    export type AsObject = {
+        userIdList: Array<string>,
+    }
+}
+
 export class GetUserReply extends jspb.Message { 
     getUserId(): string;
     setUserId(value: string): GetUserReply;

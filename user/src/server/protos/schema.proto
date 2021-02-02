@@ -7,6 +7,7 @@ package user;
 service User {
   rpc FindUserByTelegramUserIdOrCreateUser (CreateUserRequest) returns (CreateUserReply) {}
   rpc GetUser (GetUserRequest) returns (GetUserReply) {}
+  rpc GetUsers (GetUsersRequest) returns (stream GetUserReply) {}
 }
 
 message CreateUserRequest {
@@ -25,6 +26,10 @@ message CreateUserReply {
 
 message GetUserRequest {
   string user_id = 1;
+}
+
+message GetUsersRequest {
+  repeated string user_id = 1;
 }
 
 message GetUserReply {

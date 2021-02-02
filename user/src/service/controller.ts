@@ -7,11 +7,16 @@ import {
   CreateUserRequest,
   GetUserReply,
   GetUserRequest,
+  GetUsersRequest,
 } from "../server/protos/schema_pb";
 
-type GRPC<Request, Reply> = {
+type GRPCUnaryCall<Request, Reply> = {
   call: grpc.ServerUnaryCall<Request>;
   callback: grpc.sendUnaryData<Reply>;
+};
+
+type gRPCServerStreamingCall<Request, Reply> = {
+  call: grpc.ServerWritableStream<Request>;
 };
 
 @injectable()
@@ -19,7 +24,7 @@ export class Controller {
   public static type: string = "Controller";
 
   async findUserByTelegramUserIdOrCreateUser(
-    { call, callback }: GRPC<CreateUserRequest, CreateUserReply>,
+    { call, callback }: GRPCUnaryCall<CreateUserRequest, CreateUserReply>,
     { dao }: IContext
   ) {
     const telegram_from_user_id = call.request.getTelegramFromUserId();
@@ -43,7 +48,7 @@ export class Controller {
   }
 
   async getUser(
-    { call, callback }: GRPC<GetUserRequest, GetUserReply>,
+    { call, callback }: GRPCUnaryCall<GetUserRequest, GetUserReply>,
     { dao }: IContext
   ) {
     const user_id = call.request.getUserId();
@@ -60,5 +65,32 @@ export class Controller {
     reply.setTelegramPrivateChatId(result.telegramPrivateChatId);
 
     callback(null, reply);
+  }
+
+  async getUsers(
+    { call }: gRPCServerStreamingCall<GetUsersRequest, GetUserReply>,
+    { dao }: IContext
+  ) {
+    const user_ids = call.request.getUserIdList();
+
+    const result = await dao.UserDAO.getUsers({
+      user_ids,
+    });
+
+    for (const user of result) {
+      const reply = new GetUserReply();
+      reply.setUserId(user.userId);
+      reply.setTelegramFromUserId(user.telegramFromUserId);
+      reply.setTelegramUsername(user.telegramUsername);
+      reply.setTelegramPrivateChatId(user.telegramPrivateChatId);
+
+      call.write(reply, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    call.end();
   }
 }

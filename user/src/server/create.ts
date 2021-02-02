@@ -11,6 +11,9 @@ export default (context: IContext) => {
         { call, callback },
         context
       ),
+    getUser: (call, callback) =>
+      context.controller.getUser({ call, callback }, context),
+    getUsers: (call) => context.controller.getUsers({ call }, context),
   });
 
   return server;

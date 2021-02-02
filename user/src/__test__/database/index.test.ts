@@ -1,1 +1,0 @@
-describe("database:model:user", () => {});

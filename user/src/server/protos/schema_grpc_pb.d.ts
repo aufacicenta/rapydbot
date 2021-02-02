@@ -10,6 +10,7 @@ import * as schema_pb from "./schema_pb";
 interface IUserService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
     findUserByTelegramUserIdOrCreateUser: IUserService_IFindUserByTelegramUserIdOrCreateUser;
     getUser: IUserService_IGetUser;
+    getUsers: IUserService_IGetUsers;
 }
 
 interface IUserService_IFindUserByTelegramUserIdOrCreateUser extends grpc.MethodDefinition<schema_pb.CreateUserRequest, schema_pb.CreateUserReply> {
@@ -30,12 +31,22 @@ interface IUserService_IGetUser extends grpc.MethodDefinition<schema_pb.GetUserR
     responseSerialize: grpc.serialize<schema_pb.GetUserReply>;
     responseDeserialize: grpc.deserialize<schema_pb.GetUserReply>;
 }
+interface IUserService_IGetUsers extends grpc.MethodDefinition<schema_pb.GetUsersRequest, schema_pb.GetUserReply> {
+    path: "/user.User/GetUsers";
+    requestStream: false;
+    responseStream: true;
+    requestSerialize: grpc.serialize<schema_pb.GetUsersRequest>;
+    requestDeserialize: grpc.deserialize<schema_pb.GetUsersRequest>;
+    responseSerialize: grpc.serialize<schema_pb.GetUserReply>;
+    responseDeserialize: grpc.deserialize<schema_pb.GetUserReply>;
+}
 
 export const UserService: IUserService;
 
 export interface IUserServer {
     findUserByTelegramUserIdOrCreateUser: grpc.handleUnaryCall<schema_pb.CreateUserRequest, schema_pb.CreateUserReply>;
     getUser: grpc.handleUnaryCall<schema_pb.GetUserRequest, schema_pb.GetUserReply>;
+    getUsers: grpc.handleServerStreamingCall<schema_pb.GetUsersRequest, schema_pb.GetUserReply>;
 }
 
 export interface IUserClient {
@@ -45,6 +56,8 @@ export interface IUserClient {
     getUser(request: schema_pb.GetUserRequest, callback: (error: grpc.ServiceError | null, response: schema_pb.GetUserReply) => void): grpc.ClientUnaryCall;
     getUser(request: schema_pb.GetUserRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: schema_pb.GetUserReply) => void): grpc.ClientUnaryCall;
     getUser(request: schema_pb.GetUserRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: schema_pb.GetUserReply) => void): grpc.ClientUnaryCall;
+    getUsers(request: schema_pb.GetUsersRequest, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<schema_pb.GetUserReply>;
+    getUsers(request: schema_pb.GetUsersRequest, metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<schema_pb.GetUserReply>;
 }
 
 export class UserClient extends grpc.Client implements IUserClient {
@@ -55,4 +68,6 @@ export class UserClient extends grpc.Client implements IUserClient {
     public getUser(request: schema_pb.GetUserRequest, callback: (error: grpc.ServiceError | null, response: schema_pb.GetUserReply) => void): grpc.ClientUnaryCall;
     public getUser(request: schema_pb.GetUserRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: schema_pb.GetUserReply) => void): grpc.ClientUnaryCall;
     public getUser(request: schema_pb.GetUserRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: schema_pb.GetUserReply) => void): grpc.ClientUnaryCall;
+    public getUsers(request: schema_pb.GetUsersRequest, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<schema_pb.GetUserReply>;
+    public getUsers(request: schema_pb.GetUsersRequest, metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<schema_pb.GetUserReply>;
 }

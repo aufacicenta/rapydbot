@@ -10,7 +10,7 @@
     "clean": "rimraf build",
     "compile": "npm run clean && tsc",
     "publish:prepare": "npm run clean && npm run compile",
-    "db": "obremap"
+    "test": "jest"
   },
   "directories": {
     "build": "build"
