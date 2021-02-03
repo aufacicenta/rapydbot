@@ -119,7 +119,10 @@ export class SellCommand implements IBotCommand {
 
       createUserRequest.setTelegramFromUserId(msg.from.id);
       createUserRequest.setTelegramUsername(msg.from.username);
-      createUserRequest.setTelegramPrivateChatId(msg.chat.id);
+
+      if (msg.chat.type === "private") {
+        createUserRequest.setTelegramPrivateChatId(msg.chat.id);
+      }
 
       this.bot.UserServiceClient.findUserByTelegramUserIdOrCreateUser(
         createUserRequest,
