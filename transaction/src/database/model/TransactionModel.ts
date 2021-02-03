@@ -1,6 +1,6 @@
 import { DataTypes, Model, ModelOptions } from "sequelize";
 
-export class TransactionModel extends Model<{
+export type TransactionModelAttributes = {
   user_id: string;
   price_id: string;
   amount: number;
@@ -8,7 +8,9 @@ export class TransactionModel extends Model<{
   expires_at: string;
   id?: string;
   to_currency?: string;
-}> {
+};
+
+export class TransactionModel extends Model<TransactionModelAttributes> {
   public static tableName = "transaction";
 
   public static rawAttributes = {
