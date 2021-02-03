@@ -92,28 +92,8 @@ Beneficiary
     [translationKeys.buy_command_inline_markup_text_attach_purchase_bank_note]: `Attach Payment Receipt`,
     [translationKeys.buy_command_sell_orders]: `These users are selling right now:
 
-@svpervnder
-500.00 USD/BTC at $32,345.00
-<a href="https://example.com/x/user/reviews/telegram_user_id/">2 reviews</a> · Cash, PayPal and <a href="https://example.com/x/user/payment-methods/telegram_user_id">2 more...</a>
-
-@another_user
-485.00 USD/BTC at $32,332.02
-<a href="https://example.com/x/user/reviews/telegram_user_id/">0 reviews</a> · PayPal only
-
-@seller
-510.00 USD/BTC at $32,300.01
-<a href="https://example.com/x/user/reviews/telegram_user_id/">0 reviews</a> · Cash and Bank Transfer only
-
-
+{{sell_orders_formatted}}
 <em>Negotiate under your own risk. aufaxbot limits itself to connecting buyers with sellers.</em>
-
-<em>Use <code>/buy [from_currency_symbol]/[to_currency_symbol] [amount]</code> to get results from users selling in your currency. eg. <code>/buy GTQ/BTC 1000.00</code> to purchase Bitcoin — BTC in Guatemalan Quetzal — GTQ.</em>
-
-<em>/review <code>@user</code> to review each other after each trade!</em>
-
-<em>Reply to this message to fetch more sellers (if any).</em>
-
-<em>Type /help to learn more options.</em>
 `,
   },
 };

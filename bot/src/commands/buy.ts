@@ -1,3 +1,7 @@
+import {
+  GetSellOrdersReply,
+  GetSellOrdersRequest,
+} from "@aufax/transaction/client";
 import { CreateUserRequest } from "@aufax/user/client";
 import { Message } from "node-telegram-bot-api";
 import { AufaXBot } from "../AufaXBot";
@@ -121,15 +125,58 @@ export class BuyCommand implements IBotCommand {
             return reject(err);
           }
 
-          const user_id = response.getUserId();
-
           const getSellOrdersRequest = new GetSellOrdersRequest();
+          getSellOrdersRequest.setAmount(Number(amount));
+          getSellOrdersRequest.setFromCurrency(from_currency);
+          getSellOrdersRequest.setToCurrency(to_currency);
 
-          this.bot.reply(msg, translationKeys.buy_command_sell_orders);
-          resolve();
+          const sell_orders: Array<GetSellOrdersReply.AsObject> = [];
+
+          const call = this.bot.TransactionServiceClient.getSellOrders(
+            getSellOrdersRequest
+          );
+
+          call.on("data", (data: GetSellOrdersReply) => {
+            sell_orders.push(data.toObject());
+          });
+
+          call.on("end", () => {
+            const sell_orders_formatted = this.getSellOrdersFormatted(
+              sell_orders
+            );
+
+            this.bot.reply(
+              msg,
+              translationKeys.buy_command_sell_orders,
+              {},
+              { sell_orders_formatted }
+            );
+
+            resolve();
+          });
         }
       );
     });
+  }
+
+  private getSellOrdersFormatted(
+    orders: Array<GetSellOrdersReply.AsObject>
+  ): string {
+    let result = "";
+    for (const order of orders) {
+      result += this.formatSellOrder(order);
+    }
+
+    return result;
+  }
+
+  private formatSellOrder(order: GetSellOrdersReply.AsObject): string {
+    return `@${order.telegramUsername}
+${order.amount} ${order.fromCurrency}${
+      Boolean(order.toCurrency) ? "/" + order.toCurrency : ""
+    }
+
+`;
   }
 
   private async replyToAmountRequest(

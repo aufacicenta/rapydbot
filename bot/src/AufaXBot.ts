@@ -66,6 +66,10 @@ export class AufaXBot {
   listen() {
     this.api.on("polling_error", console.error);
 
+    this.api.on("inline_query", (msg) => {
+      console.log(msg);
+    });
+
     this.api.on("message", async (msg) => {
       const reply_to_message_id = msg.reply_to_message?.message_id - 1;
       if (Boolean(reply_to_message_id)) {
