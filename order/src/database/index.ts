@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise";
 import { Sequelize, SyncOptions } from "sequelize";
-import { TransactionModel } from "./model/TransactionModel";
+import { OrderModel } from "./model/OrderModel";
 
 const connectionURI = `mysql://root:root@localhost:3306/${process.env.MYSQL_DATABASE}`;
 
@@ -21,9 +21,9 @@ export default {
       const sequelize = new Sequelize(connectionURI);
 
       sequelize.define(
-        TransactionModel.tableName,
-        TransactionModel.rawAttributes,
-        TransactionModel.config
+        OrderModel.tableName,
+        OrderModel.rawAttributes,
+        OrderModel.config
       );
 
       await sequelize.authenticate();

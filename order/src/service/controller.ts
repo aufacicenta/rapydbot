@@ -7,10 +7,7 @@ import grpc from "grpc";
 import { injectable } from "inversify";
 import moment from "moment";
 import "reflect-metadata";
-import {
-  TransactionModel,
-  TransactionModelAttributes,
-} from "../database/model/TransactionModel";
+import { OrderModel, OrderModelAttributes } from "../database/model/OrderModel";
 import { IContext } from "../server/interface/IContext";
 import {
   CreateOrderReply,
@@ -70,7 +67,7 @@ export class Controller {
       callback,
     }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
     { dao }: IContext,
-    type: TransactionModelAttributes["type"]
+    type: OrderModelAttributes["type"]
   ) {
     const user_id = call.request.getUserId();
     const price_id = call.request.getPriceId();
@@ -133,17 +130,15 @@ export class Controller {
   }
 
   private async getUsersMergedWithOrders(
-    sell_orders: TransactionModel[]
-  ): Promise<Array<GetUserReply.AsObject & TransactionModelAttributes>> {
+    sell_orders: OrderModel[]
+  ): Promise<Array<GetUserReply.AsObject & OrderModelAttributes>> {
     const request = new GetUsersRequest();
     request.setUserIdList(sell_orders.map((o) => o.getDataValue("user_id")));
 
     return new Promise((resolve, reject) => {
       const call = this.UserServiceClient.getUsers(request);
 
-      const response: Array<
-        GetUserReply.AsObject & TransactionModelAttributes
-      > = [];
+      const response: Array<GetUserReply.AsObject & OrderModelAttributes> = [];
 
       call.on("data", (data: GetUserReply) => {
         const matching_order = sell_orders.filter(
@@ -152,7 +147,7 @@ export class Controller {
 
         response.push({
           ...data.toObject(),
-          ...(matching_order.toJSON() as TransactionModelAttributes),
+          ...(matching_order.toJSON() as OrderModelAttributes),
         });
       });
 

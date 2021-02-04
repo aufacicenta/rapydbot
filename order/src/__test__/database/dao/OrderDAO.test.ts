@@ -1,15 +1,15 @@
 import { Sequelize } from "sequelize/types";
 import { v4 as uuid } from "uuid";
 import database from "../../../database";
-import { TransactionDAO } from "../../../database/dao/TransactionDAO";
+import { OrderDAO } from "../../../database/dao/OrderDAO";
 import { Controller } from "../../../service/controller";
 
-let driver: Sequelize, dao: TransactionDAO;
+let driver: Sequelize, dao: OrderDAO;
 
 describe("database:dao:transaction", () => {
   beforeEach(async () => {
     driver = await database.connect({ force: true });
-    dao = new TransactionDAO(driver);
+    dao = new OrderDAO(driver);
   });
 
   test("success: get sell orders matching criteria", async () => {

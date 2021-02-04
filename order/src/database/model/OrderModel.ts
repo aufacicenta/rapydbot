@@ -1,6 +1,6 @@
 import { DataTypes, Model, ModelOptions } from "sequelize";
 
-export type TransactionModelAttributes = {
+export type OrderModelAttributes = {
   user_id: string;
   price_id: string;
   amount: number;
@@ -11,8 +11,8 @@ export type TransactionModelAttributes = {
   to_currency?: string;
 };
 
-export class TransactionModel extends Model<TransactionModelAttributes> {
-  public static tableName = "transaction";
+export class OrderModel extends Model<OrderModelAttributes> {
+  public static tableName = "order";
 
   public static rawAttributes = {
     id: {
@@ -65,6 +65,6 @@ export class TransactionModel extends Model<TransactionModelAttributes> {
   public static config: ModelOptions = {
     paranoid: true,
     underscored: true,
-    tableName: TransactionModel.tableName,
+    tableName: OrderModel.tableName,
   };
 }

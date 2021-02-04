@@ -1,5 +1,5 @@
 {
-  "name": "@aufax/transaction",
+  "name": "@aufax/order",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",

@@ -6,7 +6,7 @@ import { Sequelize } from "sequelize/types";
 import { v4 as uuid } from "uuid";
 import Transaction_ClientGenerator, { TransactionClient } from "../../client";
 import database from "../../database";
-import { TransactionDAO } from "../../database/dao/TransactionDAO";
+import { OrderDAO } from "../../database/dao/OrderDAO";
 import configuration from "../../server/config";
 import {
   CreateOrderRequest,
@@ -15,7 +15,7 @@ import {
 } from "../../server/protos/schema_pb";
 
 let driver: Sequelize,
-  dao: TransactionDAO,
+  dao: OrderDAO,
   transactionClient: TransactionClient,
   userClient: UserClient;
 
@@ -24,7 +24,7 @@ const { address, port } = configuration.get("server");
 describe("client", () => {
   beforeAll(async () => {
     driver = await database.connect({ force: true });
-    dao = new TransactionDAO(driver);
+    dao = new OrderDAO(driver);
     transactionClient = new Transaction_ClientGenerator(
       `${address}:${port}`
     ).create();
