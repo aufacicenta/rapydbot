@@ -89,8 +89,12 @@ export class AufaXBot {
     });
 
     this.api.onText(/^\/start/i, (msg, match) => this.startCommand.onText(msg));
-    this.api.onText(/^\/sell/i, (msg, match) => this.sellCommand.onText(msg));
-    this.api.onText(/^\/buy/i, (msg, match) => this.buyCommand.onText(msg));
+    this.api.onText(/^\/[sell|vender]/i, (msg, match) =>
+      this.sellCommand.onText(msg)
+    );
+    this.api.onText(/^\/[buy|comprar]/i, (msg, match) =>
+      this.buyCommand.onText(msg)
+    );
   }
 
   reply(

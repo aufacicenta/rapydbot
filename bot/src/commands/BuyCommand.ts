@@ -53,7 +53,7 @@ export class BuyCommand implements IBotCommand {
 
   async onText(msg: Message) {
     try {
-      const text = msg.text.replace(/\/buy\s?/i, "");
+      const text = msg.text.replace(/^\/(buy|comprar)\s?/i, "");
 
       const amountRegexArray = regexp.getAmount(text);
       const currencyPairRegexArray = regexp.getCurrencyPair(text);
