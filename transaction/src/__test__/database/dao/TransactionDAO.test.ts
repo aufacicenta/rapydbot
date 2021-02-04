@@ -25,14 +25,15 @@ describe("database:dao:transaction", () => {
       const price_id = uuid();
       const expires_at = Controller.getExpiresAtSetting();
 
-      const transaction_id = await dao.createTransaction(
+      const transaction_id = await dao.createOrder({
         user_id,
         price_id,
-        order.amount,
-        order.from_currency,
-        order.to_currency,
-        expires_at
-      );
+        amount: order.amount,
+        from_currency: order.from_currency,
+        to_currency: order.to_currency,
+        expires_at,
+        type: "sell",
+      });
 
       sell_orders[i].id = transaction_id;
       i++;
@@ -55,14 +56,15 @@ describe("database:dao:transaction", () => {
       const price_id = uuid();
       const expires_at = Controller.getExpiresAtSetting();
 
-      const transaction_id = await dao.createTransaction(
+      const transaction_id = await dao.createOrder({
         user_id,
         price_id,
-        order.amount,
-        order.from_currency,
-        order.to_currency,
-        expires_at
-      );
+        amount: order.amount,
+        from_currency: order.from_currency,
+        to_currency: order.to_currency,
+        expires_at,
+        type: "sell",
+      });
 
       sell_orders[i].id = transaction_id;
       i++;

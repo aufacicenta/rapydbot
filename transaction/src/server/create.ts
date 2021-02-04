@@ -9,8 +9,10 @@ export default (context: IContext) => {
   const server = new grpc.Server();
 
   server.addService<ITransactionServer>(TransactionService, {
-    createTransaction: (call, callback) =>
-      context.controller.createTransaction({ call, callback }, context),
+    createSellOrder: (call, callback) =>
+      context.controller.createSellOrder({ call, callback }, context),
+    createBuyOrder: (call, callback) =>
+      context.controller.createBuyOrder({ call, callback }, context),
     getSellOrders: (call) =>
       context.controller.getSellOrders({ call }, context),
   });

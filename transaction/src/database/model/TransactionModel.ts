@@ -6,6 +6,7 @@ export type TransactionModelAttributes = {
   amount: number;
   from_currency: string;
   expires_at: string;
+  type: "sell" | "buy";
   id?: string;
   to_currency?: string;
 };
@@ -27,6 +28,11 @@ export class TransactionModel extends Model<TransactionModelAttributes> {
     price_id: {
       type: DataTypes.UUID,
       allowNull: true,
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      isIn: [["sell", "buy"]],
     },
     from_currency: {
       type: DataTypes.STRING,

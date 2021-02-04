@@ -1,6 +1,6 @@
 import { GetPriceRequest } from "@aufax/price/client";
 import { Price_ServiceErrorCodes } from "@aufax/price/service/error";
-import { CreateTransactionRequest } from "@aufax/transaction/client";
+import { CreateOrderRequest } from "@aufax/transaction/client";
 import { CreateUserRequest } from "@aufax/user/client";
 import moment from "moment";
 import { Message } from "node-telegram-bot-api";
@@ -93,7 +93,7 @@ export class SellCommand implements IBotCommand {
       }
 
       if (!regexp.isCurrencyPair(currency)) {
-        return await this.createTransaction(msg, amount, currency);
+        return await this.createSellOrder(msg, amount, currency);
       }
 
       const currency_pair = regexp.getCurrencyPair(currency);
@@ -101,14 +101,14 @@ export class SellCommand implements IBotCommand {
       const from_currency = currency_pair.groups.from_currency;
       const to_currency = currency_pair.groups.to_currency;
 
-      await this.createTransaction(msg, amount, from_currency, to_currency);
+      await this.createSellOrder(msg, amount, from_currency, to_currency);
     } catch (error) {
       console.error(error);
       return this.bot.reply(msg, translationKeys.sell_command_create_tx_error);
     }
   }
 
-  async createTransaction(
+  async createSellOrder(
     msg: Message,
     amount: string,
     from_currency: string,
@@ -149,7 +149,7 @@ export class SellCommand implements IBotCommand {
               const price = response.getPrice();
               const convertToSymbol = response.getToCurrency();
 
-              const createTransactionRequest = new CreateTransactionRequest();
+              const createTransactionRequest = new CreateOrderRequest();
 
               createTransactionRequest.setUserId(user_id);
               createTransactionRequest.setPriceId(price_id);
@@ -157,7 +157,7 @@ export class SellCommand implements IBotCommand {
               createTransactionRequest.setFromCurrency(from_currency);
               createTransactionRequest.setToCurrency(to_currency);
 
-              this.bot.TransactionServiceClient.createTransaction(
+              this.bot.TransactionServiceClient.createSellOrder(
                 createTransactionRequest,
                 (err, response) => {
                   if (Boolean(err)) {
@@ -238,7 +238,7 @@ export class SellCommand implements IBotCommand {
     handler.selfDestruct();
 
     if (!regexp.isCurrencyPair(currency)) {
-      return await this.createTransaction(msg, amount, currency);
+      return await this.createSellOrder(msg, amount, currency);
     }
 
     const currency_pair = regexp.getCurrencyPair(currency);
@@ -246,6 +246,6 @@ export class SellCommand implements IBotCommand {
     const from_currency = currency_pair.groups.from_currency;
     const to_currency = currency_pair.groups.to_currency;
 
-    await this.createTransaction(msg, amount, from_currency, to_currency);
+    await this.createSellOrder(msg, amount, from_currency, to_currency);
   }
 }

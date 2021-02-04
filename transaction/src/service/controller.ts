@@ -13,8 +13,8 @@ import {
 } from "../database/model/TransactionModel";
 import { IContext } from "../server/interface/IContext";
 import {
-  CreateTransactionReply,
-  CreateTransactionRequest,
+  CreateOrderReply,
+  CreateOrderRequest,
   GetSellOrdersReply,
   GetSellOrdersRequest,
 } from "../server/protos/schema_pb";
@@ -44,12 +44,33 @@ export class Controller {
     return moment().add(3, "hours").toISOString();
   }
 
-  async createTransaction(
+  async createSellOrder(
     {
       call,
       callback,
-    }: gRPCServerUnaryCall<CreateTransactionRequest, CreateTransactionReply>,
-    { dao }: IContext
+    }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
+    context: IContext
+  ) {
+    await this.createOrder({ call, callback }, context, "sell");
+  }
+
+  async createBuyOrder(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
+    context: IContext
+  ) {
+    await this.createOrder({ call, callback }, context, "buy");
+  }
+
+  async createOrder(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
+    { dao }: IContext,
+    type: TransactionModelAttributes["type"]
   ) {
     const user_id = call.request.getUserId();
     const price_id = call.request.getPriceId();
@@ -59,16 +80,17 @@ export class Controller {
 
     const expires_at = Controller.getExpiresAtSetting();
 
-    const transaction_id = await dao.TransactionDAO.createTransaction(
+    const transaction_id = await dao.TransactionDAO.createOrder({
       user_id,
       price_id,
       amount,
       from_currency,
       to_currency,
-      expires_at
-    );
+      expires_at,
+      type,
+    });
 
-    const reply = new CreateTransactionReply();
+    const reply = new CreateOrderReply();
 
     reply.setTransactionId(transaction_id);
     reply.setExpiresAt(expires_at);

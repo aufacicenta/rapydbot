@@ -4,26 +4,26 @@
 var grpc = require('grpc');
 var schema_pb = require('./schema_pb.js');
 
-function serialize_transaction_CreateTransactionReply(arg) {
-  if (!(arg instanceof schema_pb.CreateTransactionReply)) {
-    throw new Error('Expected argument of type transaction.CreateTransactionReply');
+function serialize_transaction_CreateOrderReply(arg) {
+  if (!(arg instanceof schema_pb.CreateOrderReply)) {
+    throw new Error('Expected argument of type transaction.CreateOrderReply');
   }
   return Buffer.from(arg.serializeBinary());
 }
 
-function deserialize_transaction_CreateTransactionReply(buffer_arg) {
-  return schema_pb.CreateTransactionReply.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_transaction_CreateOrderReply(buffer_arg) {
+  return schema_pb.CreateOrderReply.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_transaction_CreateTransactionRequest(arg) {
-  if (!(arg instanceof schema_pb.CreateTransactionRequest)) {
-    throw new Error('Expected argument of type transaction.CreateTransactionRequest');
+function serialize_transaction_CreateOrderRequest(arg) {
+  if (!(arg instanceof schema_pb.CreateOrderRequest)) {
+    throw new Error('Expected argument of type transaction.CreateOrderRequest');
   }
   return Buffer.from(arg.serializeBinary());
 }
 
-function deserialize_transaction_CreateTransactionRequest(buffer_arg) {
-  return schema_pb.CreateTransactionRequest.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_transaction_CreateOrderRequest(buffer_arg) {
+  return schema_pb.CreateOrderRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_transaction_GetSellOrdersReply(arg) {
@@ -50,16 +50,27 @@ function deserialize_transaction_GetSellOrdersRequest(buffer_arg) {
 
 
 var TransactionService = exports.TransactionService = {
-  createTransaction: {
-    path: '/transaction.Transaction/CreateTransaction',
+  createSellOrder: {
+    path: '/transaction.Transaction/CreateSellOrder',
     requestStream: false,
     responseStream: false,
-    requestType: schema_pb.CreateTransactionRequest,
-    responseType: schema_pb.CreateTransactionReply,
-    requestSerialize: serialize_transaction_CreateTransactionRequest,
-    requestDeserialize: deserialize_transaction_CreateTransactionRequest,
-    responseSerialize: serialize_transaction_CreateTransactionReply,
-    responseDeserialize: deserialize_transaction_CreateTransactionReply,
+    requestType: schema_pb.CreateOrderRequest,
+    responseType: schema_pb.CreateOrderReply,
+    requestSerialize: serialize_transaction_CreateOrderRequest,
+    requestDeserialize: deserialize_transaction_CreateOrderRequest,
+    responseSerialize: serialize_transaction_CreateOrderReply,
+    responseDeserialize: deserialize_transaction_CreateOrderReply,
+  },
+  createBuyOrder: {
+    path: '/transaction.Transaction/CreateBuyOrder',
+    requestStream: false,
+    responseStream: false,
+    requestType: schema_pb.CreateOrderRequest,
+    responseType: schema_pb.CreateOrderReply,
+    requestSerialize: serialize_transaction_CreateOrderRequest,
+    requestDeserialize: deserialize_transaction_CreateOrderRequest,
+    responseSerialize: serialize_transaction_CreateOrderReply,
+    responseDeserialize: deserialize_transaction_CreateOrderReply,
   },
   getSellOrders: {
     path: '/transaction.Transaction/GetSellOrders',

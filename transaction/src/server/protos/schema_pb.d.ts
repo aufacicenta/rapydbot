@@ -6,62 +6,66 @@
 
 import * as jspb from "google-protobuf";
 
-export class CreateTransactionRequest extends jspb.Message { 
+export class CreateOrderRequest extends jspb.Message { 
     getUserId(): string;
-    setUserId(value: string): CreateTransactionRequest;
+    setUserId(value: string): CreateOrderRequest;
 
     getFromCurrency(): string;
-    setFromCurrency(value: string): CreateTransactionRequest;
+    setFromCurrency(value: string): CreateOrderRequest;
 
     getToCurrency(): string;
-    setToCurrency(value: string): CreateTransactionRequest;
+    setToCurrency(value: string): CreateOrderRequest;
 
     getAmount(): number;
-    setAmount(value: number): CreateTransactionRequest;
+    setAmount(value: number): CreateOrderRequest;
 
     getPriceId(): string;
-    setPriceId(value: string): CreateTransactionRequest;
+    setPriceId(value: string): CreateOrderRequest;
+
+    getType(): string;
+    setType(value: string): CreateOrderRequest;
 
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): CreateTransactionRequest.AsObject;
-    static toObject(includeInstance: boolean, msg: CreateTransactionRequest): CreateTransactionRequest.AsObject;
+    toObject(includeInstance?: boolean): CreateOrderRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateOrderRequest): CreateOrderRequest.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: CreateTransactionRequest, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): CreateTransactionRequest;
-    static deserializeBinaryFromReader(message: CreateTransactionRequest, reader: jspb.BinaryReader): CreateTransactionRequest;
+    static serializeBinaryToWriter(message: CreateOrderRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateOrderRequest;
+    static deserializeBinaryFromReader(message: CreateOrderRequest, reader: jspb.BinaryReader): CreateOrderRequest;
 }
 
-export namespace CreateTransactionRequest {
+export namespace CreateOrderRequest {
     export type AsObject = {
         userId: string,
         fromCurrency: string,
         toCurrency: string,
         amount: number,
         priceId: string,
+        type: string,
     }
 }
 
-export class CreateTransactionReply extends jspb.Message { 
+export class CreateOrderReply extends jspb.Message { 
     getTransactionId(): string;
-    setTransactionId(value: string): CreateTransactionReply;
+    setTransactionId(value: string): CreateOrderReply;
 
     getExpiresAt(): string;
-    setExpiresAt(value: string): CreateTransactionReply;
+    setExpiresAt(value: string): CreateOrderReply;
 
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): CreateTransactionReply.AsObject;
-    static toObject(includeInstance: boolean, msg: CreateTransactionReply): CreateTransactionReply.AsObject;
+    toObject(includeInstance?: boolean): CreateOrderReply.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateOrderReply): CreateOrderReply.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: CreateTransactionReply, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): CreateTransactionReply;
-    static deserializeBinaryFromReader(message: CreateTransactionReply, reader: jspb.BinaryReader): CreateTransactionReply;
+    static serializeBinaryToWriter(message: CreateOrderReply, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateOrderReply;
+    static deserializeBinaryFromReader(message: CreateOrderReply, reader: jspb.BinaryReader): CreateOrderReply;
 }
 
-export namespace CreateTransactionReply {
+export namespace CreateOrderReply {
     export type AsObject = {
         transactionId: string,
         expiresAt: string,

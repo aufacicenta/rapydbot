@@ -5,19 +5,21 @@ option objc_class_prefix = "aufax";
 package transaction;
 
 service Transaction {
-  rpc CreateTransaction (CreateTransactionRequest) returns (CreateTransactionReply) {}
+  rpc CreateSellOrder (CreateOrderRequest) returns (CreateOrderReply) {}
+  rpc CreateBuyOrder (CreateOrderRequest) returns (CreateOrderReply) {}
   rpc GetSellOrders (GetSellOrdersRequest) returns (stream GetSellOrdersReply) {}
 }
 
-message CreateTransactionRequest {
+message CreateOrderRequest {
   string user_id = 1;
   string from_currency = 2;
   string to_currency = 3;
   float amount = 4;
   string price_id = 5;
+  string type = 6;
 }
 
-message CreateTransactionReply {
+message CreateOrderReply {
   string transaction_id = 1;
   string expires_at = 2;
 }

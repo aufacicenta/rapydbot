@@ -9,7 +9,7 @@ import database from "../../database";
 import { TransactionDAO } from "../../database/dao/TransactionDAO";
 import configuration from "../../server/config";
 import {
-  CreateTransactionRequest,
+  CreateOrderRequest,
   GetSellOrdersReply,
   GetSellOrdersRequest,
 } from "../../server/protos/schema_pb";
@@ -78,9 +78,9 @@ describe("client", () => {
 
     const user_ids = await Promise.all(users.map((user) => createUser(user)));
 
-    const createTransaction = (order): Promise<void> =>
+    const createSellOrder = (order): Promise<void> =>
       new Promise((resolve, reject) => {
-        const createTransactionRequest = new CreateTransactionRequest();
+        const createTransactionRequest = new CreateOrderRequest();
         createTransactionRequest.setAmount(order.amount);
         createTransactionRequest.setFromCurrency(order.from_currency);
         createTransactionRequest.setToCurrency(order.to_currency);
@@ -89,7 +89,7 @@ describe("client", () => {
         const index = Math.floor(Math.random() * user_ids.length) + 1;
         createTransactionRequest.setUserId(user_ids[index]);
 
-        transactionClient.createTransaction(
+        transactionClient.createSellOrder(
           createTransactionRequest,
           (err, response) => {
             if (err) {
@@ -112,7 +112,7 @@ describe("client", () => {
       { id: null, amount: 9, from_currency: "BTC", to_currency: "USD" },
     ];
 
-    await Promise.all(sell_orders.map((order) => createTransaction(order)));
+    await Promise.all(sell_orders.map((order) => createSellOrder(order)));
 
     const amount = 10;
     const from_currency = "BTC";
