@@ -1,4 +1,10 @@
-import { GetSellOrdersReply, GetSellOrdersRequest } from "@aufax/order/client";
+import {
+  CreateOrderRequest,
+  GetSellOrdersReply,
+  GetSellOrdersRequest,
+} from "@aufax/order/client";
+import { GetPriceRequest } from "@aufax/price/client";
+import { Price_ServiceErrorCodes } from "@aufax/price/service/error";
 import { CreateUserRequest } from "@aufax/user/client";
 import { Message } from "node-telegram-bot-api";
 import { AufaXBot } from "../AufaXBot";
@@ -41,8 +47,7 @@ export class BuyCommand implements IBotCommand {
         return this.replyToCurrencyRequest(msg, handler);
       }
     } catch (error) {
-      console.error(error);
-      this.bot.reply(msg, translationKeys.buy_command_get_sell_orders_error);
+      this.handleErrorReply(error, msg);
     }
   }
 
@@ -97,8 +102,7 @@ export class BuyCommand implements IBotCommand {
 
       await this.getSellOrders(msg, amount, from_currency);
     } catch (error) {
-      console.error(error);
-      this.bot.reply(msg, translationKeys.buy_command_get_sell_orders_error);
+      this.handleErrorReply(error, msg);
     }
   }
 
@@ -122,35 +126,82 @@ export class BuyCommand implements IBotCommand {
             return reject(err);
           }
 
-          const getSellOrdersRequest = new GetSellOrdersRequest();
-          getSellOrdersRequest.setAmount(Number(amount));
-          getSellOrdersRequest.setFromCurrency(from_currency);
-          getSellOrdersRequest.setToCurrency(to_currency);
+          const user_id = response.getUserId();
 
-          const sell_orders: Array<GetSellOrdersReply.AsObject> = [];
+          const getPriceRequest = new GetPriceRequest();
 
-          const call = this.bot.OrderServiceClient.getSellOrders(
-            getSellOrdersRequest
+          getPriceRequest.setFromCurrency(from_currency);
+          getPriceRequest.setToCurrency(to_currency);
+
+          this.bot.PriceServiceClient.getPrice(
+            getPriceRequest,
+            (err, response) => {
+              if (Boolean(err)) {
+                return reject(err);
+              }
+
+              const price_id = response.getPriceId();
+              const price = response.getPrice();
+              const convertToSymbol = response.getToCurrency();
+
+              const createTransactionRequest = new CreateOrderRequest();
+
+              createTransactionRequest.setUserId(user_id);
+              createTransactionRequest.setPriceId(price_id);
+              createTransactionRequest.setAmount(Number(amount.trim()));
+              createTransactionRequest.setFromCurrency(from_currency);
+              createTransactionRequest.setToCurrency(to_currency);
+
+              this.bot.OrderServiceClient.createBuyOrder(
+                createTransactionRequest,
+                (err, response) => {
+                  if (Boolean(err)) {
+                    return reject(err);
+                  }
+
+                  const transaction_id = response.getTransactionId();
+
+                  if (!Boolean(transaction_id)) {
+                    return reject();
+                  }
+
+                  const getSellOrdersRequest = new GetSellOrdersRequest();
+                  getSellOrdersRequest.setAmount(Number(amount));
+                  getSellOrdersRequest.setFromCurrency(from_currency);
+                  getSellOrdersRequest.setToCurrency(to_currency);
+
+                  const sell_orders: Array<GetSellOrdersReply.AsObject> = [];
+
+                  const call = this.bot.OrderServiceClient.getSellOrders(
+                    getSellOrdersRequest
+                  );
+
+                  call.on("data", (data: GetSellOrdersReply) => {
+                    sell_orders.push(data.toObject());
+                  });
+
+                  call.on("end", () => {
+                    const sell_orders_formatted = this.getSellOrdersFormatted(
+                      sell_orders
+                    );
+
+                    this.bot.reply(
+                      msg,
+                      translationKeys.buy_command_sell_orders,
+                      { disable_web_page_preview: true },
+                      {
+                        sell_orders_formatted,
+                        price: `${convertToSymbol} ${price.toFixed(2)}`,
+                        price_source: `<a href="https://coinmarketcap.com/">coinmarketcap.com</a>`, // TODO let the user set a pricing source
+                      }
+                    );
+
+                    resolve();
+                  });
+                }
+              );
+            }
           );
-
-          call.on("data", (data: GetSellOrdersReply) => {
-            sell_orders.push(data.toObject());
-          });
-
-          call.on("end", () => {
-            const sell_orders_formatted = this.getSellOrdersFormatted(
-              sell_orders
-            );
-
-            this.bot.reply(
-              msg,
-              translationKeys.buy_command_sell_orders,
-              {},
-              { sell_orders_formatted }
-            );
-
-            resolve();
-          });
         }
       );
     });
@@ -246,5 +297,16 @@ ${order.amount} ${order.fromCurrency}${
     const to_currency = currency_pair?.groups?.to_currency;
 
     await this.getSellOrders(msg, amount, from_currency, to_currency);
+  }
+
+  private handleErrorReply(error: Error, msg: Message) {
+    if (error?.message.includes(Price_ServiceErrorCodes.invalid_symbol)) {
+      return this.bot.reply(msg, translationKeys.buy_command_invalid_currency);
+    }
+
+    return this.bot.reply(
+      msg,
+      translationKeys.buy_command_get_sell_orders_error
+    );
   }
 }

@@ -46,15 +46,7 @@ export class SellCommand implements IBotCommand {
 
       // TODO handle empty response
     } catch (error) {
-      console.error(error);
-      if (error?.message.includes(Price_ServiceErrorCodes.invalid_symbol)) {
-        return this.bot.reply(
-          msg,
-          translationKeys.sell_command_invalid_currency
-        );
-      }
-
-      return this.bot.reply(msg, translationKeys.sell_command_create_tx_error);
+      this.handleErrorReply(error, msg);
     }
   }
 
@@ -103,8 +95,7 @@ export class SellCommand implements IBotCommand {
 
       await this.createSellOrder(msg, amount, from_currency, to_currency);
     } catch (error) {
-      console.error(error);
-      return this.bot.reply(msg, translationKeys.sell_command_create_tx_error);
+      this.handleErrorReply(error, msg);
     }
   }
 
@@ -194,6 +185,14 @@ export class SellCommand implements IBotCommand {
         }
       );
     });
+  }
+
+  private handleErrorReply(error: Error, msg: Message) {
+    if (error?.message.includes(Price_ServiceErrorCodes.invalid_symbol)) {
+      return this.bot.reply(msg, translationKeys.sell_command_invalid_currency);
+    }
+
+    return this.bot.reply(msg, translationKeys.sell_command_create_tx_error);
   }
 
   private replyToAmountRequest(

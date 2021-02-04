@@ -28,9 +28,7 @@ To sell BTC only for USD
 Did you forget the <u>amount</u>?`,
   [translationKeys.sell_command_request_amount]: `Ok. How much?`,
   [translationKeys.sell_command_request_currency]: `What currency?`,
-
   [translationKeys.sell_command_create_tx_error]: `😖 Something went wrong. Try again?`,
-
   [translationKeys.sell_command_create_tx_success]: `Done! 🎉
 
 Your offer of <u>{{amount}} {{currency}}</u> will expire {{expires_at}}.

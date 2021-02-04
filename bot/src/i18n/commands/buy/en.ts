@@ -1,11 +1,26 @@
 import { translationKeys } from "../../translationKeys";
 
 export default {
-  [translationKeys.buy_command_invalid_currency]: `The /buy command works like this:
+  [translationKeys.buy_command_invalid_currency]: `😖 This currency is not supported.
 
-<strong>/buy [BTC or ETH] [amount]</strong>
+The /buy command works like this:
 
-The <u>available currencies</u> are: <u>BTC and ETH</u>.`,
+<code>/buy [amount] [currency]</code>
+<code>/buy [amount] [from_currency/to_currency]</code>
+
+
+Example:
+
+To buy BTC for any other currency:
+<code>/buy 0.123 BTC</code>
+
+To buy BTC only for USD
+<code>/buy 1 BTC/USD</code>
+
+
+<em>/setcountrycode to narrow the options where you are selling.</em>.
+
+<em>Type /help to learn more options.</em>.`,
   [translationKeys.buy_command_invalid_amount]: `The /buy command works like this:
 
 <strong>/buy [BTC or ETH] [amount]</strong>
@@ -17,6 +32,9 @@ Did you forget the <u>amount</u>?`,
   [translationKeys.buy_command_sell_orders]: `These users are selling right now:
 
 {{sell_orders_formatted}}
+Current price: {{price}}
+source: {{- price_source}}
+
 <em>Negotiate under your own risk. aufaxbot limits itself to connecting buyers with sellers.</em>
 `,
 };
