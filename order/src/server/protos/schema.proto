@@ -2,9 +2,9 @@ syntax = "proto3";
 
 option objc_class_prefix = "aufax";
 
-package transaction;
+package order;
 
-service Transaction {
+service Order {
   rpc CreateSellOrder (CreateOrderRequest) returns (CreateOrderReply) {}
   rpc CreateBuyOrder (CreateOrderRequest) returns (CreateOrderReply) {}
   rpc GetSellOrders (GetSellOrdersRequest) returns (stream GetSellOrdersReply) {}

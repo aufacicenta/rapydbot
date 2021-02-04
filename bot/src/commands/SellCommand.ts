@@ -157,7 +157,7 @@ export class SellCommand implements IBotCommand {
               createTransactionRequest.setFromCurrency(from_currency);
               createTransactionRequest.setToCurrency(to_currency);
 
-              this.bot.TransactionServiceClient.createSellOrder(
+              this.bot.OrderServiceClient.createSellOrder(
                 createTransactionRequest,
                 (err, response) => {
                   if (Boolean(err)) {

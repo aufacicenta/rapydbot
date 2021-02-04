@@ -2,7 +2,7 @@ export * from "../server/protos/schema_grpc_pb";
 export * from "../server/protos/schema_pb";
 
 import grpc from "grpc";
-import { TransactionClient } from "../server/protos/schema_grpc_pb";
+import { OrderClient } from "../server/protos/schema_grpc_pb";
 
 export class Order_ClientGenerator {
   public url: string;
@@ -16,11 +16,11 @@ export class Order_ClientGenerator {
     return this;
   }
 
-  create(): TransactionClient {
-    const client = new TransactionClient(
+  create(): OrderClient {
+    const client = new OrderClient(
       this.url,
       grpc.credentials.createInsecure()
-    ) as TransactionClient;
+    ) as OrderClient;
 
     return client;
   }

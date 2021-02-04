@@ -1,7 +1,4 @@
-import {
-  GetSellOrdersReply,
-  GetSellOrdersRequest,
-} from "@aufax/transaction/client";
+import { GetSellOrdersReply, GetSellOrdersRequest } from "@aufax/order/client";
 import { CreateUserRequest } from "@aufax/user/client";
 import { Message } from "node-telegram-bot-api";
 import { AufaXBot } from "../AufaXBot";
@@ -132,7 +129,7 @@ export class BuyCommand implements IBotCommand {
 
           const sell_orders: Array<GetSellOrdersReply.AsObject> = [];
 
-          const call = this.bot.TransactionServiceClient.getSellOrders(
+          const call = this.bot.OrderServiceClient.getSellOrders(
             getSellOrdersRequest
           );
 

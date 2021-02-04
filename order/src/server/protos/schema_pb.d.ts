@@ -1,4 +1,4 @@
-// package: transaction
+// package: order
 // file: schema.proto
 
 /* tslint:disable */

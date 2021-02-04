@@ -1,4 +1,4 @@
-// package: transaction
+// package: order
 // file: schema.proto
 
 /* tslint:disable */
@@ -7,14 +7,14 @@
 import * as grpc from "grpc";
 import * as schema_pb from "./schema_pb";
 
-interface ITransactionService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
-    createSellOrder: ITransactionService_ICreateSellOrder;
-    createBuyOrder: ITransactionService_ICreateBuyOrder;
-    getSellOrders: ITransactionService_IGetSellOrders;
+interface IOrderService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
+    createSellOrder: IOrderService_ICreateSellOrder;
+    createBuyOrder: IOrderService_ICreateBuyOrder;
+    getSellOrders: IOrderService_IGetSellOrders;
 }
 
-interface ITransactionService_ICreateSellOrder extends grpc.MethodDefinition<schema_pb.CreateOrderRequest, schema_pb.CreateOrderReply> {
-    path: "/transaction.Transaction/CreateSellOrder";
+interface IOrderService_ICreateSellOrder extends grpc.MethodDefinition<schema_pb.CreateOrderRequest, schema_pb.CreateOrderReply> {
+    path: "/order.Order/CreateSellOrder";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<schema_pb.CreateOrderRequest>;
@@ -22,8 +22,8 @@ interface ITransactionService_ICreateSellOrder extends grpc.MethodDefinition<sch
     responseSerialize: grpc.serialize<schema_pb.CreateOrderReply>;
     responseDeserialize: grpc.deserialize<schema_pb.CreateOrderReply>;
 }
-interface ITransactionService_ICreateBuyOrder extends grpc.MethodDefinition<schema_pb.CreateOrderRequest, schema_pb.CreateOrderReply> {
-    path: "/transaction.Transaction/CreateBuyOrder";
+interface IOrderService_ICreateBuyOrder extends grpc.MethodDefinition<schema_pb.CreateOrderRequest, schema_pb.CreateOrderReply> {
+    path: "/order.Order/CreateBuyOrder";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<schema_pb.CreateOrderRequest>;
@@ -31,8 +31,8 @@ interface ITransactionService_ICreateBuyOrder extends grpc.MethodDefinition<sche
     responseSerialize: grpc.serialize<schema_pb.CreateOrderReply>;
     responseDeserialize: grpc.deserialize<schema_pb.CreateOrderReply>;
 }
-interface ITransactionService_IGetSellOrders extends grpc.MethodDefinition<schema_pb.GetSellOrdersRequest, schema_pb.GetSellOrdersReply> {
-    path: "/transaction.Transaction/GetSellOrders";
+interface IOrderService_IGetSellOrders extends grpc.MethodDefinition<schema_pb.GetSellOrdersRequest, schema_pb.GetSellOrdersReply> {
+    path: "/order.Order/GetSellOrders";
     requestStream: false;
     responseStream: true;
     requestSerialize: grpc.serialize<schema_pb.GetSellOrdersRequest>;
@@ -41,15 +41,15 @@ interface ITransactionService_IGetSellOrders extends grpc.MethodDefinition<schem
     responseDeserialize: grpc.deserialize<schema_pb.GetSellOrdersReply>;
 }
 
-export const TransactionService: ITransactionService;
+export const OrderService: IOrderService;
 
-export interface ITransactionServer {
+export interface IOrderServer {
     createSellOrder: grpc.handleUnaryCall<schema_pb.CreateOrderRequest, schema_pb.CreateOrderReply>;
     createBuyOrder: grpc.handleUnaryCall<schema_pb.CreateOrderRequest, schema_pb.CreateOrderReply>;
     getSellOrders: grpc.handleServerStreamingCall<schema_pb.GetSellOrdersRequest, schema_pb.GetSellOrdersReply>;
 }
 
-export interface ITransactionClient {
+export interface IOrderClient {
     createSellOrder(request: schema_pb.CreateOrderRequest, callback: (error: grpc.ServiceError | null, response: schema_pb.CreateOrderReply) => void): grpc.ClientUnaryCall;
     createSellOrder(request: schema_pb.CreateOrderRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: schema_pb.CreateOrderReply) => void): grpc.ClientUnaryCall;
     createSellOrder(request: schema_pb.CreateOrderRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: schema_pb.CreateOrderReply) => void): grpc.ClientUnaryCall;
@@ -60,7 +60,7 @@ export interface ITransactionClient {
     getSellOrders(request: schema_pb.GetSellOrdersRequest, metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<schema_pb.GetSellOrdersReply>;
 }
 
-export class TransactionClient extends grpc.Client implements ITransactionClient {
+export class OrderClient extends grpc.Client implements IOrderClient {
     constructor(address: string, credentials: grpc.ChannelCredentials, options?: object);
     public createSellOrder(request: schema_pb.CreateOrderRequest, callback: (error: grpc.ServiceError | null, response: schema_pb.CreateOrderReply) => void): grpc.ClientUnaryCall;
     public createSellOrder(request: schema_pb.CreateOrderRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: schema_pb.CreateOrderReply) => void): grpc.ClientUnaryCall;

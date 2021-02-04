@@ -1,8 +1,6 @@
 import KYC_ClientGenerator, { KYCClient } from "@aufax/kyc/client";
+import Order_ClientGenerator, { OrderClient } from "@aufax/order/client";
 import Price_ClientGenerator, { PriceClient } from "@aufax/price/client";
-import Transaction_ClientGenerator, {
-  TransactionClient,
-} from "@aufax/transaction/client";
 import USER_ClientGenerator, { UserClient } from "@aufax/user/client";
 import { Moment } from "moment";
 import TelegramBotApi, {
@@ -28,7 +26,7 @@ export class AufaXBot {
 
   public KYCServiceClient: KYCClient;
   public UserServiceClient: UserClient;
-  public TransactionServiceClient: TransactionClient;
+  public OrderServiceClient: OrderClient;
   public PriceServiceClient: PriceClient;
 
   private sellCommand: SellCommand;
@@ -46,7 +44,7 @@ export class AufaXBot {
     this.UserServiceClient = new USER_ClientGenerator(
       "127.0.0.1:30041"
     ).create();
-    this.TransactionServiceClient = new Transaction_ClientGenerator(
+    this.OrderServiceClient = new Order_ClientGenerator(
       "127.0.0.1:30042"
     ).create();
     this.PriceServiceClient = new Price_ClientGenerator(

@@ -48,7 +48,7 @@ export class Controller {
     }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
     context: IContext
   ) {
-    await this.createOrder({ call, callback }, context, "sell");
+    this.createOrder({ call, callback }, context, "sell");
   }
 
   async createBuyOrder(
@@ -58,41 +58,7 @@ export class Controller {
     }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
     context: IContext
   ) {
-    await this.createOrder({ call, callback }, context, "buy");
-  }
-
-  async createOrder(
-    {
-      call,
-      callback,
-    }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
-    { dao }: IContext,
-    type: OrderModelAttributes["type"]
-  ) {
-    const user_id = call.request.getUserId();
-    const price_id = call.request.getPriceId();
-    const amount = call.request.getAmount();
-    const from_currency = call.request.getFromCurrency().trim();
-    const to_currency = call.request.getToCurrency().trim();
-
-    const expires_at = Controller.getExpiresAtSetting();
-
-    const transaction_id = await dao.OrderDAO.createOrder({
-      user_id,
-      price_id,
-      amount,
-      from_currency,
-      to_currency,
-      expires_at,
-      type,
-    });
-
-    const reply = new CreateOrderReply();
-
-    reply.setTransactionId(transaction_id);
-    reply.setExpiresAt(expires_at);
-
-    callback(null, reply);
+    this.createOrder({ call, callback }, context, "buy");
   }
 
   async getSellOrders(
@@ -155,5 +121,39 @@ export class Controller {
         resolve(response);
       });
     });
+  }
+
+  private async createOrder(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
+    { dao }: IContext,
+    type: OrderModelAttributes["type"]
+  ) {
+    const user_id = call.request.getUserId();
+    const price_id = call.request.getPriceId();
+    const amount = call.request.getAmount();
+    const from_currency = call.request.getFromCurrency().trim();
+    const to_currency = call.request.getToCurrency().trim();
+
+    const expires_at = Controller.getExpiresAtSetting();
+
+    const transaction_id = await dao.OrderDAO.createOrder({
+      user_id,
+      price_id,
+      amount,
+      from_currency,
+      to_currency,
+      expires_at,
+      type,
+    });
+
+    const reply = new CreateOrderReply();
+
+    reply.setTransactionId(transaction_id);
+    reply.setExpiresAt(expires_at);
+
+    callback(null, reply);
   }
 }
