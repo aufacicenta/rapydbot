@@ -4,14 +4,14 @@ export * from "../server/protos/schema_pb";
 import grpc from "grpc";
 import { TransactionClient } from "../server/protos/schema_grpc_pb";
 
-export class Transaction_ClientGenerator {
+export class Order_ClientGenerator {
   public url: string;
 
   constructor(url: string) {
     this.setURL(url);
   }
 
-  setURL(url: string): Transaction_ClientGenerator {
+  setURL(url: string): Order_ClientGenerator {
     this.url = url;
     return this;
   }
@@ -26,4 +26,4 @@ export class Transaction_ClientGenerator {
   }
 }
 
-export default Transaction_ClientGenerator;
+export default Order_ClientGenerator;

@@ -77,7 +77,7 @@ export class Controller {
 
     const expires_at = Controller.getExpiresAtSetting();
 
-    const transaction_id = await dao.TransactionDAO.createOrder({
+    const transaction_id = await dao.OrderDAO.createOrder({
       user_id,
       price_id,
       amount,
@@ -103,7 +103,7 @@ export class Controller {
     const from_currency = call.request.getFromCurrency().trim();
     const to_currency = call.request.getToCurrency().trim();
 
-    const sell_orders = await dao.TransactionDAO.getSellOrders(
+    const sell_orders = await dao.OrderDAO.getSellOrders(
       amount,
       from_currency,
       to_currency

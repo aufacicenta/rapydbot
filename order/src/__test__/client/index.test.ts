@@ -4,7 +4,7 @@ import USER_ClientGenerator, {
 } from "@aufax/user/client";
 import { Sequelize } from "sequelize/types";
 import { v4 as uuid } from "uuid";
-import Transaction_ClientGenerator, { TransactionClient } from "../../client";
+import Order_ClientGenerator, { TransactionClient } from "../../client";
 import database from "../../database";
 import { OrderDAO } from "../../database/dao/OrderDAO";
 import configuration from "../../server/config";
@@ -25,7 +25,7 @@ describe("client", () => {
   beforeAll(async () => {
     driver = await database.connect({ force: true });
     dao = new OrderDAO(driver);
-    transactionClient = new Transaction_ClientGenerator(
+    transactionClient = new Order_ClientGenerator(
       `${address}:${port}`
     ).create();
     userClient = new USER_ClientGenerator(`127.0.0.1:30041`).create();

@@ -6,6 +6,6 @@ export interface IContext {
   controller: Controller;
   database?: Sequelize;
   dao?: {
-    TransactionDAO: OrderDAO;
+    OrderDAO: OrderDAO;
   };
 }

@@ -1,6 +1,6 @@
+import { CreateOrderRequest } from "@aufax/order/client";
 import { GetPriceRequest } from "@aufax/price/client";
 import { Price_ServiceErrorCodes } from "@aufax/price/service/error";
-import { CreateOrderRequest } from "@aufax/transaction/client";
 import { CreateUserRequest } from "@aufax/user/client";
 import moment from "moment";
 import { Message } from "node-telegram-bot-api";
