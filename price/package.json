@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "npm run compile && node ./build/index.js",
+    "start": "ts-node ./src",
     "start:debug": "ts-node-dev --inspect=9225 --no-notify --respawn ./src",
     "clean": "rimraf build",
     "compile": "npm run clean && tsc",
