@@ -3,10 +3,7 @@ import Order_ClientGenerator, { OrderClient } from "@aufax/order/client";
 import Price_ClientGenerator, { PriceClient } from "@aufax/price/client";
 import USER_ClientGenerator, { UserClient } from "@aufax/user/client";
 import { Moment } from "moment";
-import TelegramBotApi, {
-  Message,
-  SendMessageOptions,
-} from "node-telegram-bot-api";
+import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
 import { BuyCommand, SellCommand, StartCommand } from "./commands";
 import {
   BotLanguageHandler,
@@ -14,8 +11,6 @@ import {
   BotReplyToMessageIdHandler,
 } from "./handler";
 import { Commands } from "./types";
-
-const TOKEN = "1690293681:AAESnPBd2NTUlgx9TWMTDEmg3hyG7uUfFfQ";
 
 export class AufaXBot {
   public api: TelegramBotApi;
@@ -36,20 +31,14 @@ export class AufaXBot {
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
   constructor() {
-    this.api = new TelegramBotApi(TOKEN, { polling: true });
+    this.api = new TelegramBotApi(process.env.BOT_TOKEN, { polling: true });
     this.languageHandler = new BotLanguageHandler();
     this.botPassportDataTypeFileHandler = new BotPassportTypeFileHandler(this);
 
-    this.KYCServiceClient = new KYC_ClientGenerator("127.0.0.1:30040").create();
-    this.UserServiceClient = new USER_ClientGenerator(
-      "127.0.0.1:30041"
-    ).create();
-    this.OrderServiceClient = new Order_ClientGenerator(
-      "127.0.0.1:30042"
-    ).create();
-    this.PriceServiceClient = new Price_ClientGenerator(
-      "127.0.0.1:30043"
-    ).create();
+    this.KYCServiceClient = new KYC_ClientGenerator(process.env.KYC_SERVICE_URL).create();
+    this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
+    this.OrderServiceClient = new Order_ClientGenerator(process.env.ORDER_SERVICE_URL).create();
+    this.PriceServiceClient = new Price_ClientGenerator(process.env.PRICE_SERVICE_URL).create();
 
     this.sellCommand = new SellCommand(this);
     this.buyCommand = new BuyCommand(this);
@@ -89,20 +78,11 @@ export class AufaXBot {
     });
 
     this.api.onText(/^\/start/i, (msg, match) => this.startCommand.onText(msg));
-    this.api.onText(/^\/[sell|vender]/i, (msg, match) =>
-      this.sellCommand.onText(msg)
-    );
-    this.api.onText(/^\/[buy|comprar]/i, (msg, match) =>
-      this.buyCommand.onText(msg)
-    );
+    this.api.onText(/^\/[sell|vender]/i, (msg, match) => this.sellCommand.onText(msg));
+    this.api.onText(/^\/[buy|comprar]/i, (msg, match) => this.buyCommand.onText(msg));
   }
 
-  reply(
-    msg: Message,
-    translationKey: string,
-    options?: SendMessageOptions,
-    args?: {}
-  ) {
+  reply(msg: Message, translationKey: string, options?: SendMessageOptions, args?: {}) {
     this.api.sendMessage(
       msg.chat.id,
       this.languageHandler.getTranslation(msg, translationKey, args),
