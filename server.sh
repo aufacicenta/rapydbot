@@ -28,3 +28,8 @@ add-apt-repository \
    stable"
 
 apt install -y docker-ce docker-ce-cli containerd.io docker-compose
+
+# ZSH
+cd ~
+apt install zsh -y
+yes | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
