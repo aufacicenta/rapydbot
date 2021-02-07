@@ -1,14 +1,14 @@
 #! /usr/bin/bash
 
+# remove interactively line from .bashrc
+
 apt upgrade; apt update;
 
 # NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+source ~/.bashrc
 nvm install v12.8.0
 npm i -g yarn
-
-# remove interactively line from .bashrc
-source ~/.bashrc
 
 apt install -y \
     apt-transport-https \
