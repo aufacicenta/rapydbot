@@ -1,7 +1,7 @@
 import USER_ClientGenerator, {
   GetUserReply,
   GetUsersRequest,
-  UserClient,
+  UserClient
 } from "@aufax/user/client";
 import grpc from "grpc";
 import { injectable } from "inversify";
@@ -13,7 +13,7 @@ import {
   CreateOrderReply,
   CreateOrderRequest,
   GetSellOrdersReply,
-  GetSellOrdersRequest,
+  GetSellOrdersRequest
 } from "../server/protos/schema_pb";
 
 type gRPCServerUnaryCall<Request, Reply> = {
@@ -33,7 +33,7 @@ export class Controller {
 
   constructor() {
     this.UserServiceClient = new USER_ClientGenerator(
-      "127.0.0.1:30041"
+      process.env.USER_SERVICE_CLIENT_URL
     ).create();
   }
 
