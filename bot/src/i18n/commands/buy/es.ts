@@ -32,4 +32,5 @@ Fuente: {{- price_source}}
 
 <em>Negocia bajo tu propio riesgo. Aufa X Bot se milita a conectar compradores con vendedores.</em>
 `,
+  [translationKeys.buy_command_empty_sell_orders]: `No hay usuarios vendiendo esto por el momento. 🤷‍♀️`,
 };

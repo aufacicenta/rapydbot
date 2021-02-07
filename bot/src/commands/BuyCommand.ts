@@ -31,18 +31,14 @@ export class BuyCommand implements IBotCommand {
 
       if (
         replyToMessageText.trim() ===
-        this.bot
-          .getTranslation(msg, translationKeys.buy_command_request_amount)
-          .trim()
+        this.bot.getTranslation(msg, translationKeys.buy_command_request_amount).trim()
       ) {
         return this.replyToAmountRequest(msg, handler);
       }
 
       if (
         replyToMessageText.trim() ===
-        this.bot
-          .getTranslation(msg, translationKeys.buy_command_request_currency)
-          .trim()
+        this.bot.getTranslation(msg, translationKeys.buy_command_request_currency).trim()
       ) {
         return this.replyToCurrencyRequest(msg, handler);
       }
@@ -59,11 +55,7 @@ export class BuyCommand implements IBotCommand {
       const currencyPairRegexArray = regexp.getCurrencyPair(text);
 
       if (!Boolean(amountRegexArray) && !Boolean(currencyPairRegexArray)) {
-        return this.bot.replyWithMessageID(
-          msg,
-          translationKeys.buy_command_request_amount,
-          this
-        );
+        return this.bot.replyWithMessageID(msg, translationKeys.buy_command_request_amount, this);
       }
 
       const amount = amountRegexArray?.groups?.amount;
@@ -88,16 +80,8 @@ export class BuyCommand implements IBotCommand {
         );
       }
 
-      if (
-        validation.isValidCurrency(from_currency) &&
-        validation.isValidCurrency(to_currency)
-      ) {
-        return await this.getSellOrders(
-          msg,
-          amount,
-          from_currency,
-          to_currency
-        );
+      if (validation.isValidCurrency(from_currency) && validation.isValidCurrency(to_currency)) {
+        return await this.getSellOrders(msg, amount, from_currency, to_currency);
       }
 
       await this.getSellOrders(msg, amount, from_currency);
@@ -133,83 +117,80 @@ export class BuyCommand implements IBotCommand {
           getPriceRequest.setFromCurrency(from_currency);
           getPriceRequest.setToCurrency(to_currency);
 
-          this.bot.PriceServiceClient.getPrice(
-            getPriceRequest,
-            (err, response) => {
-              if (Boolean(err)) {
-                return reject(err);
-              }
+          this.bot.PriceServiceClient.getPrice(getPriceRequest, (err, response) => {
+            if (Boolean(err)) {
+              return reject(err);
+            }
 
-              const price_id = response.getPriceId();
-              const price = response.getPrice();
-              const convertToSymbol = response.getToCurrency();
+            const price_id = response.getPriceId();
+            const price = response.getPrice();
+            const convertToSymbol = response.getToCurrency();
 
-              const createTransactionRequest = new CreateOrderRequest();
+            const createTransactionRequest = new CreateOrderRequest();
 
-              createTransactionRequest.setUserId(user_id);
-              createTransactionRequest.setPriceId(price_id);
-              createTransactionRequest.setAmount(Number(amount.trim()));
-              createTransactionRequest.setFromCurrency(from_currency);
-              createTransactionRequest.setToCurrency(to_currency);
+            createTransactionRequest.setUserId(user_id);
+            createTransactionRequest.setPriceId(price_id);
+            createTransactionRequest.setAmount(Number(amount.trim()));
+            createTransactionRequest.setFromCurrency(from_currency);
+            createTransactionRequest.setToCurrency(to_currency);
 
-              this.bot.OrderServiceClient.createBuyOrder(
-                createTransactionRequest,
-                (err, response) => {
-                  if (Boolean(err)) {
-                    return reject(err);
+            this.bot.OrderServiceClient.createBuyOrder(
+              createTransactionRequest,
+              (err, response) => {
+                if (Boolean(err)) {
+                  return reject(err);
+                }
+
+                const transaction_id = response.getTransactionId();
+
+                if (!Boolean(transaction_id)) {
+                  return reject();
+                }
+
+                const getSellOrdersRequest = new GetSellOrdersRequest();
+                getSellOrdersRequest.setAmount(Number(amount));
+                getSellOrdersRequest.setFromCurrency(from_currency);
+                getSellOrdersRequest.setToCurrency(to_currency);
+
+                const sell_orders: Array<GetSellOrdersReply.AsObject> = [];
+
+                const call = this.bot.OrderServiceClient.getSellOrders(getSellOrdersRequest);
+
+                call.on("data", (data: GetSellOrdersReply) => {
+                  sell_orders.push(data.toObject());
+                });
+
+                call.on("end", () => {
+                  if (sell_orders.length <= 0) {
+                    this.bot.reply(msg, translationKeys.buy_command_empty_sell_orders);
+                    resolve();
+                    return;
                   }
 
-                  const transaction_id = response.getTransactionId();
+                  const sell_orders_formatted = this.getSellOrdersFormatted(sell_orders);
 
-                  if (!Boolean(transaction_id)) {
-                    return reject();
-                  }
-
-                  const getSellOrdersRequest = new GetSellOrdersRequest();
-                  getSellOrdersRequest.setAmount(Number(amount));
-                  getSellOrdersRequest.setFromCurrency(from_currency);
-                  getSellOrdersRequest.setToCurrency(to_currency);
-
-                  const sell_orders: Array<GetSellOrdersReply.AsObject> = [];
-
-                  const call = this.bot.OrderServiceClient.getSellOrders(
-                    getSellOrdersRequest
+                  this.bot.reply(
+                    msg,
+                    translationKeys.buy_command_sell_orders,
+                    { disable_web_page_preview: true },
+                    {
+                      sell_orders_formatted,
+                      price: `${convertToSymbol} ${price.toFixed(2)}`,
+                      price_source: `<a href="https://coinmarketcap.com/">coinmarketcap.com</a>`, // TODO let the user set a pricing source
+                    }
                   );
 
-                  call.on("data", (data: GetSellOrdersReply) => {
-                    sell_orders.push(data.toObject());
-                  });
-
-                  call.on("end", () => {
-                    const sell_orders_formatted = this.getSellOrdersFormatted(
-                      sell_orders
-                    );
-
-                    this.bot.reply(
-                      msg,
-                      translationKeys.buy_command_sell_orders,
-                      { disable_web_page_preview: true },
-                      {
-                        sell_orders_formatted,
-                        price: `${convertToSymbol} ${price.toFixed(2)}`,
-                        price_source: `<a href="https://coinmarketcap.com/">coinmarketcap.com</a>`, // TODO let the user set a pricing source
-                      }
-                    );
-
-                    resolve();
-                  });
-                }
-              );
-            }
-          );
+                  resolve();
+                });
+              }
+            );
+          });
         }
       );
     });
   }
 
-  private getSellOrdersFormatted(
-    orders: Array<GetSellOrdersReply.AsObject>
-  ): string {
+  private getSellOrdersFormatted(orders: Array<GetSellOrdersReply.AsObject>): string {
     let result = "";
     for (const order of orders) {
       result += this.formatSellOrder(order);
@@ -220,17 +201,12 @@ export class BuyCommand implements IBotCommand {
 
   private formatSellOrder(order: GetSellOrdersReply.AsObject): string {
     return `@${order.telegramUsername}
-${order.amount} ${order.fromCurrency}${
-      Boolean(order.toCurrency) ? "/" + order.toCurrency : ""
-    }
+${order.amount} ${order.fromCurrency}${Boolean(order.toCurrency) ? "/" + order.toCurrency : ""}
 
 `;
   }
 
-  private async replyToAmountRequest(
-    msg: Message,
-    handler: BotReplyToMessageIdHandler
-  ) {
+  private async replyToAmountRequest(msg: Message, handler: BotReplyToMessageIdHandler) {
     const text = msg.text;
 
     const amount = regexp.getAmount(text)?.groups?.amount;
@@ -243,23 +219,13 @@ ${order.amount} ${order.fromCurrency}${
     const from_currency = handler.storage.get("from_currency");
     const to_currency = handler.storage.get("to_currency");
 
-    if (
-      !validation.isValidCurrency(from_currency) &&
-      !validation.isValidCurrency(to_currency)
-    ) {
+    if (!validation.isValidCurrency(from_currency) && !validation.isValidCurrency(to_currency)) {
       handler.storage.set("amount", amount);
 
-      return this.bot.replyWithMessageID(
-        msg,
-        translationKeys.buy_command_request_currency,
-        this
-      );
+      return this.bot.replyWithMessageID(msg, translationKeys.buy_command_request_currency, this);
     }
 
-    if (
-      validation.isValidCurrency(from_currency) &&
-      !validation.isValidCurrency(to_currency)
-    ) {
+    if (validation.isValidCurrency(from_currency) && !validation.isValidCurrency(to_currency)) {
       handler.selfDestruct();
       return await this.getSellOrders(msg, amount, from_currency);
     }
@@ -268,19 +234,13 @@ ${order.amount} ${order.fromCurrency}${
     await this.getSellOrders(msg, amount, from_currency, to_currency);
   }
 
-  private async replyToCurrencyRequest(
-    msg: Message,
-    handler: BotReplyToMessageIdHandler
-  ) {
+  private async replyToCurrencyRequest(msg: Message, handler: BotReplyToMessageIdHandler) {
     const text = msg.text;
 
     const amount = handler.storage.get("amount");
     const currency = text.trim();
 
-    if (
-      !validation.isValidAmount(amount) ||
-      !validation.isValidCurrency(currency)
-    ) {
+    if (!validation.isValidAmount(amount) || !validation.isValidCurrency(currency)) {
       handler.selfDestruct();
       return this.bot.reply(msg, translationKeys.buy_command_invalid_currency);
     }
@@ -304,9 +264,6 @@ ${order.amount} ${order.fromCurrency}${
       return this.bot.reply(msg, translationKeys.buy_command_invalid_currency);
     }
 
-    return this.bot.reply(
-      msg,
-      translationKeys.buy_command_get_sell_orders_error
-    );
+    return this.bot.reply(msg, translationKeys.buy_command_get_sell_orders_error);
   }
 }
