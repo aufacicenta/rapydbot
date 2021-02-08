@@ -1,9 +1,8 @@
 import USER_ClientGenerator, {
   GetUserReply,
   GetUsersRequest,
-  UserClient,
+  UserClient
 } from "@aufax/user/client";
-import fs from "fs";
 import grpc from "grpc";
 import { injectable } from "inversify";
 import moment from "moment";
@@ -14,7 +13,7 @@ import {
   CreateOrderReply,
   CreateOrderRequest,
   GetSellOrdersReply,
-  GetSellOrdersRequest,
+  GetSellOrdersRequest
 } from "../server/protos/schema_pb";
 
 type gRPCServerUnaryCall<Request, Reply> = {
@@ -33,15 +32,9 @@ export class Controller {
   private UserServiceClient: UserClient;
 
   constructor() {
-    const credentials = {
-      rootCerts: fs.readFileSync(`${process.env.SSL_CERTIFICATES_PATH}/ca.crt`),
-      privateKey: fs.readFileSync(`${process.env.SSL_CERTIFICATES_PATH}/client.key`),
-      certChain: fs.readFileSync(`${process.env.SSL_CERTIFICATES_PATH}/client.crt`),
-    };
-
-    this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_CLIENT_URL).create(
-      credentials
-    );
+    this.UserServiceClient = new USER_ClientGenerator(
+      process.env.USER_SERVICE_CLIENT_URL
+    ).create();
   }
 
   public static getExpiresAtSetting() {
@@ -49,14 +42,20 @@ export class Controller {
   }
 
   async createSellOrder(
-    { call, callback }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
     context: IContext
   ) {
     this.createOrder({ call, callback }, context, "sell");
   }
 
   async createBuyOrder(
-    { call, callback }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
     context: IContext
   ) {
     this.createOrder({ call, callback }, context, "buy");
@@ -70,7 +69,11 @@ export class Controller {
     const from_currency = call.request.getFromCurrency().trim();
     const to_currency = call.request.getToCurrency().trim();
 
-    const sell_orders = await dao.OrderDAO.getSellOrders(amount, from_currency, to_currency);
+    const sell_orders = await dao.OrderDAO.getSellOrders(
+      amount,
+      from_currency,
+      to_currency
+    );
 
     const response = await this.getUsersMergedWithOrders(sell_orders);
 
@@ -121,7 +124,10 @@ export class Controller {
   }
 
   private async createOrder(
-    { call, callback }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<CreateOrderRequest, CreateOrderReply>,
     { dao }: IContext,
     type: OrderModelAttributes["type"]
   ) {

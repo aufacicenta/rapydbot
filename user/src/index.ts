@@ -1,4 +1,3 @@
-import fs from "fs";
 import grpc from "grpc";
 import database from "./database";
 import { UserDAO } from "./database/dao/UserDAO";
@@ -17,18 +16,7 @@ import create from "./server/create";
 
   const URL = `${address}:${port}`;
 
-  const credentials = grpc.ServerCredentials.createSsl(
-    fs.readFileSync(`${process.env.SSL_CERTIFICATES_PATH}/ca.crt`),
-    [
-      {
-        cert_chain: fs.readFileSync(`${process.env.SSL_CERTIFICATES_PATH}/server.crt`),
-        private_key: fs.readFileSync(`${process.env.SSL_CERTIFICATES_PATH}/server.key`),
-      },
-    ],
-    true
-  );
-
-  gRPCServer.bind(URL, credentials);
+  gRPCServer.bind(URL, grpc.ServerCredentials.createInsecure());
 
   console.log(`Starting gRPC server on: ${URL}`);
 
