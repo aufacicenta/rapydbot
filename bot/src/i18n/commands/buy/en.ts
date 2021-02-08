@@ -35,7 +35,7 @@ Did you forget the <u>amount</u>?`,
 Current price: {{price}}
 source: {{- price_source}}
 
-<em>Negotiate under your own risk. aufaxbot limits itself to connecting buyers with sellers.</em>
+<em>Negotiate under your own risk. aufaxbot limits itself to connect buyers with sellers.</em>
 `,
   [translationKeys.buy_command_empty_sell_orders]: `No users are selling this right now. 🤷‍♀️
 
