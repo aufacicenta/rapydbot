@@ -161,8 +161,20 @@ export class BuyCommand implements IBotCommand {
                 });
 
                 call.on("end", () => {
+                  const priceContent = {
+                    price: `${convertToSymbol} ${price.toFixed(2)}`,
+                    price_source: `<a href="https://coinmarketcap.com/?ref=@aufaxbot">coinmarketcap.com</a>`, // TODO let the user set a pricing source
+                  };
+
                   if (sell_orders.length <= 0) {
-                    this.bot.reply(msg, translationKeys.buy_command_empty_sell_orders);
+                    this.bot.reply(
+                      msg,
+                      translationKeys.buy_command_empty_sell_orders,
+                      { disable_web_page_preview: true },
+                      {
+                        ...priceContent,
+                      }
+                    );
                     resolve();
                     return;
                   }
@@ -175,8 +187,7 @@ export class BuyCommand implements IBotCommand {
                     { disable_web_page_preview: true },
                     {
                       sell_orders_formatted,
-                      price: `${convertToSymbol} ${price.toFixed(2)}`,
-                      price_source: `<a href="https://coinmarketcap.com/">coinmarketcap.com</a>`, // TODO let the user set a pricing source
+                      ...priceContent,
                     }
                   );
 
