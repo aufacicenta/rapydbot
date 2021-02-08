@@ -6,6 +6,7 @@ PROTO_DEST=$ROOT/src/server/protos
 echo $PROTO_DEST
 
 source .env
+. .env
 
 yarn
 
