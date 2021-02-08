@@ -1,7 +1,7 @@
 export * from "../server/protos/schema_grpc_pb";
 export * from "../server/protos/schema_pb";
 
-import grpc from "grpc";
+import grpc, { VerifyOptions } from "grpc";
 import { OrderClient } from "../server/protos/schema_grpc_pb";
 
 export class Order_ClientGenerator {
@@ -16,11 +16,22 @@ export class Order_ClientGenerator {
     return this;
   }
 
-  create(): OrderClient {
-    const client = new OrderClient(
-      this.url,
-      grpc.credentials.createInsecure()
-    ) as OrderClient;
+  create(credentials?: {
+    rootCerts?: Buffer;
+    privateKey?: Buffer;
+    certChain?: Buffer;
+    verifyOptions?: VerifyOptions;
+  }): OrderClient {
+    const channelCredentials = Boolean(credentials)
+      ? grpc.credentials.createSsl(
+          credentials.rootCerts,
+          credentials.privateKey,
+          credentials.certChain,
+          credentials.verifyOptions
+        )
+      : grpc.credentials.createInsecure();
+
+    const client = new OrderClient(this.url, channelCredentials);
 
     return client;
   }

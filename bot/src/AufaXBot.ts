@@ -1,7 +1,8 @@
 import KYC_ClientGenerator, { KYCClient } from "@aufax/kyc/client";
 import Order_ClientGenerator, { OrderClient } from "@aufax/order/client";
 import Price_ClientGenerator, { PriceClient } from "@aufax/price/client";
-import USER_ClientGenerator, { UserClient } from "@aufax/user/client";
+import User_ClientGenerator, { UserClient } from "@aufax/user/client";
+import fs from "fs";
 import { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
 import { BuyCommand, SellCommand, StartCommand } from "./commands";
@@ -35,9 +36,19 @@ export class AufaXBot {
     this.languageHandler = new BotLanguageHandler();
     this.botPassportDataTypeFileHandler = new BotPassportTypeFileHandler(this);
 
+    const credentials = {
+      rootCerts: fs.readFileSync(`${process.env.SSL_CERTIFICATES_PATH}/ca.crt`),
+      privateKey: fs.readFileSync(`${process.env.SSL_CERTIFICATES_PATH}/client.key`),
+      certChain: fs.readFileSync(`${process.env.SSL_CERTIFICATES_PATH}/client.crt`),
+    };
+
     this.KYCServiceClient = new KYC_ClientGenerator(process.env.KYC_SERVICE_URL).create();
-    this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
-    this.OrderServiceClient = new Order_ClientGenerator(process.env.ORDER_SERVICE_URL).create();
+    this.UserServiceClient = new User_ClientGenerator(process.env.USER_SERVICE_URL).create(
+      credentials
+    );
+    this.OrderServiceClient = new Order_ClientGenerator(process.env.ORDER_SERVICE_URL).create(
+      credentials
+    );
     this.PriceServiceClient = new Price_ClientGenerator(process.env.PRICE_SERVICE_URL).create();
 
     this.sellCommand = new SellCommand(this);
