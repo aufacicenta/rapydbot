@@ -14,6 +14,10 @@ import { IBotCommand } from "./IBotCommand";
 import regexp from "./util/regexp";
 import validation from "./util/validation";
 
+const amountFormatter = Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 5,
+});
+
 export class BuyCommand implements IBotCommand {
   private bot: AufaXBot;
 
@@ -162,7 +166,7 @@ export class BuyCommand implements IBotCommand {
 
                 call.on("end", () => {
                   const priceContent = {
-                    price: `${convertToSymbol} ${price.toFixed(2)}`,
+                    price: `${convertToSymbol} ${price}`,
                     price_source: `<a href="https://coinmarketcap.com/?ref=@aufaxbot">coinmarketcap.com</a>`, // TODO let the user set a pricing source
                   };
 
@@ -212,7 +216,9 @@ export class BuyCommand implements IBotCommand {
 
   private formatSellOrder(order: GetSellOrdersReply.AsObject): string {
     return `@${order.telegramUsername}
-${order.amount} ${order.fromCurrency}${Boolean(order.toCurrency) ? "/" + order.toCurrency : ""}
+${amountFormatter.format(order.amount)} ${order.fromCurrency}${
+      Boolean(order.toCurrency) ? "/" + order.toCurrency : ""
+    }
 
 `;
   }

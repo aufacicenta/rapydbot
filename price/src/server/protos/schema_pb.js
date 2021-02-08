@@ -271,7 +271,7 @@ proto.price.GetPriceReply.prototype.toObject = function(opt_includeInstance) {
 proto.price.GetPriceReply.toObject = function(includeInstance, msg) {
   var f, obj = {
     priceId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    price: jspb.Message.getFloatingPointFieldWithDefault(msg, 2, 0.0),
+    price: jspb.Message.getFieldWithDefault(msg, 2, ""),
     fromCurrency: jspb.Message.getFieldWithDefault(msg, 3, ""),
     toCurrency: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
@@ -315,7 +315,7 @@ proto.price.GetPriceReply.deserializeBinaryFromReader = function(msg, reader) {
       msg.setPriceId(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readFloat());
+      var value = /** @type {string} */ (reader.readString());
       msg.setPrice(value);
       break;
     case 3:
@@ -363,8 +363,8 @@ proto.price.GetPriceReply.serializeBinaryToWriter = function(message, writer) {
     );
   }
   f = message.getPrice();
-  if (f !== 0.0) {
-    writer.writeFloat(
+  if (f.length > 0) {
+    writer.writeString(
       2,
       f
     );
@@ -405,20 +405,20 @@ proto.price.GetPriceReply.prototype.setPriceId = function(value) {
 
 
 /**
- * optional float price = 2;
- * @return {number}
+ * optional string price = 2;
+ * @return {string}
  */
 proto.price.GetPriceReply.prototype.getPrice = function() {
-  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 2, 0.0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.price.GetPriceReply} returns this
  */
 proto.price.GetPriceReply.prototype.setPrice = function(value) {
-  return jspb.Message.setProto3FloatField(this, 2, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

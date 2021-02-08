@@ -28,18 +28,14 @@ export class SellCommand implements IBotCommand {
 
       if (
         replyToMessageText.trim() ===
-        this.bot
-          .getTranslation(msg, translationKeys.sell_command_request_amount)
-          .trim()
+        this.bot.getTranslation(msg, translationKeys.sell_command_request_amount).trim()
       ) {
         return await this.replyToAmountRequest(msg, handler);
       }
 
       if (
         replyToMessageText.trim() ===
-        this.bot
-          .getTranslation(msg, translationKeys.sell_command_request_currency)
-          .trim()
+        this.bot.getTranslation(msg, translationKeys.sell_command_request_currency).trim()
       ) {
         return await this.replyToCurrencyRequest(msg, handler);
       }
@@ -67,10 +63,7 @@ export class SellCommand implements IBotCommand {
       const amount = amountAndCurrency.groups.amount;
 
       if (!validation.isValidAmount(amount)) {
-        return this.bot.reply(
-          msg,
-          translationKeys.sell_command_invalid_currency
-        );
+        return this.bot.reply(msg, translationKeys.sell_command_invalid_currency);
       }
 
       const currency = amountAndCurrency.groups.currency;
@@ -129,59 +122,54 @@ export class SellCommand implements IBotCommand {
           getPriceRequest.setFromCurrency(from_currency);
           getPriceRequest.setToCurrency(to_currency);
 
-          this.bot.PriceServiceClient.getPrice(
-            getPriceRequest,
-            (err, response) => {
-              if (Boolean(err)) {
-                return reject(err);
-              }
-
-              const price_id = response.getPriceId();
-              const price = response.getPrice();
-              const convertToSymbol = response.getToCurrency();
-
-              const createTransactionRequest = new CreateOrderRequest();
-
-              createTransactionRequest.setUserId(user_id);
-              createTransactionRequest.setPriceId(price_id);
-              createTransactionRequest.setAmount(Number(amount.trim()));
-              createTransactionRequest.setFromCurrency(from_currency);
-              createTransactionRequest.setToCurrency(to_currency);
-
-              this.bot.OrderServiceClient.createSellOrder(
-                createTransactionRequest,
-                (err, response) => {
-                  if (Boolean(err)) {
-                    return reject(err);
-                  }
-
-                  const transaction_id = response.getTransactionId();
-                  const expires_at = response.getExpiresAt();
-
-                  if (!Boolean(transaction_id)) {
-                    return reject();
-                  }
-
-                  this.bot.reply(
-                    msg,
-                    translationKeys.sell_command_create_tx_success,
-                    { disable_web_page_preview: true },
-                    {
-                      amount,
-                      currency: from_currency,
-                      price: `${convertToSymbol} ${price.toFixed(2)}`,
-                      price_source: `<a href="https://coinmarketcap.com/">coinmarketcap.com</a>`, // TODO let the user set a pricing source
-                      expires_at: moment(expires_at)
-                        .locale(msg.from.language_code)
-                        .fromNow(),
-                    }
-                  );
-
-                  resolve();
-                }
-              );
+          this.bot.PriceServiceClient.getPrice(getPriceRequest, (err, response) => {
+            if (Boolean(err)) {
+              return reject(err);
             }
-          );
+
+            const price_id = response.getPriceId();
+            const price = response.getPrice();
+            const convertToSymbol = response.getToCurrency();
+
+            const createTransactionRequest = new CreateOrderRequest();
+
+            createTransactionRequest.setUserId(user_id);
+            createTransactionRequest.setPriceId(price_id);
+            createTransactionRequest.setAmount(Number(amount.trim()));
+            createTransactionRequest.setFromCurrency(from_currency);
+            createTransactionRequest.setToCurrency(to_currency);
+
+            this.bot.OrderServiceClient.createSellOrder(
+              createTransactionRequest,
+              (err, response) => {
+                if (Boolean(err)) {
+                  return reject(err);
+                }
+
+                const transaction_id = response.getTransactionId();
+                const expires_at = response.getExpiresAt();
+
+                if (!Boolean(transaction_id)) {
+                  return reject();
+                }
+
+                this.bot.reply(
+                  msg,
+                  translationKeys.sell_command_create_tx_success,
+                  { disable_web_page_preview: true },
+                  {
+                    amount,
+                    currency: from_currency,
+                    price: `${convertToSymbol} ${price}`,
+                    price_source: `<a href="https://coinmarketcap.com/">coinmarketcap.com</a>`, // TODO let the user set a pricing source
+                    expires_at: moment(expires_at).locale(msg.from.language_code).fromNow(),
+                  }
+                );
+
+                resolve();
+              }
+            );
+          });
         }
       );
     });
@@ -195,10 +183,7 @@ export class SellCommand implements IBotCommand {
     return this.bot.reply(msg, translationKeys.sell_command_create_tx_error);
   }
 
-  private replyToAmountRequest(
-    msg: Message,
-    handler: BotReplyToMessageIdHandler
-  ) {
+  private replyToAmountRequest(msg: Message, handler: BotReplyToMessageIdHandler) {
     const text = msg.text;
 
     const amount = regexp.getAmount(text).groups.amount;
@@ -210,26 +195,16 @@ export class SellCommand implements IBotCommand {
 
     handler.storage.set("amount", amount);
 
-    return this.bot.replyWithMessageID(
-      msg,
-      translationKeys.sell_command_request_currency,
-      this
-    );
+    return this.bot.replyWithMessageID(msg, translationKeys.sell_command_request_currency, this);
   }
 
-  private async replyToCurrencyRequest(
-    msg: Message,
-    handler: BotReplyToMessageIdHandler
-  ) {
+  private async replyToCurrencyRequest(msg: Message, handler: BotReplyToMessageIdHandler) {
     const text = msg.text;
 
     const amount = handler.storage.get("amount");
     const currency = text.trim();
 
-    if (
-      !validation.isValidAmount(amount) ||
-      !validation.isValidCurrency(currency)
-    ) {
+    if (!validation.isValidAmount(amount) || !validation.isValidCurrency(currency)) {
       handler.selfDestruct();
       return this.bot.reply(msg, translationKeys.sell_command_invalid_currency);
     }

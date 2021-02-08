@@ -35,8 +35,8 @@ export class GetPriceReply extends jspb.Message {
     getPriceId(): string;
     setPriceId(value: string): GetPriceReply;
 
-    getPrice(): number;
-    setPrice(value: number): GetPriceReply;
+    getPrice(): string;
+    setPrice(value: string): GetPriceReply;
 
     getFromCurrency(): string;
     setFromCurrency(value: string): GetPriceReply;
@@ -58,7 +58,7 @@ export class GetPriceReply extends jspb.Message {
 export namespace GetPriceReply {
     export type AsObject = {
         priceId: string,
-        price: number,
+        price: string,
         fromCurrency: string,
         toCurrency: string,
     }
