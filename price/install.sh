@@ -5,8 +5,6 @@ PROTO_DEST=$ROOT/src/server/protos
 
 echo $PROTO_DEST
 
-source .env
-
 yarn
 
 yarn run grpc_tools_node_protoc \
