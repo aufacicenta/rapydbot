@@ -42,7 +42,7 @@ export class AufaXBot {
 
     this.sellCommand = new SellCommand(this);
     this.buyCommand = new BuyCommand(this);
-    // this.startCommand = new StartCommand(this);
+    this.startCommand = new StartCommand(this);
   }
 
   async prepare(): Promise<AufaXBot> {
@@ -78,8 +78,8 @@ export class AufaXBot {
     });
 
     this.api.onText(/^\/start/i, (msg, match) => this.startCommand.onText(msg));
-    this.api.onText(/^\/[sell|vender]/i, (msg, match) => this.sellCommand.onText(msg));
-    this.api.onText(/^\/[buy|comprar]/i, (msg, match) => this.buyCommand.onText(msg));
+    this.api.onText(/^\/(sell|vender)/i, (msg, match) => this.sellCommand.onText(msg));
+    this.api.onText(/^\/(buy|comprar)/i, (msg, match) => this.buyCommand.onText(msg));
   }
 
   reply(msg: Message, translationKey: string, options?: SendMessageOptions, args?: {}) {

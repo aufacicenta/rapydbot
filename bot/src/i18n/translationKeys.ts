@@ -17,4 +17,5 @@ export const translationKeys = {
   buy_command_sell_orders: "buy_command_sell_orders",
   buy_command_empty_sell_orders: "buy_command_empty_sell_orders",
   buy_command_get_sell_orders_error: "buy_command_get_sell_orders_error",
+  start_command_intro: "start_command_intro",
 };
