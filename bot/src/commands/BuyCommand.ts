@@ -37,14 +37,14 @@ export class BuyCommand implements IBotCommand {
         replyToMessageText.trim() ===
         this.bot.getTranslation(msg, translationKeys.buy_command_request_amount).trim()
       ) {
-        return this.replyToAmountRequest(msg, handler);
+        return await this.replyToAmountRequest(msg, handler);
       }
 
       if (
         replyToMessageText.trim() ===
         this.bot.getTranslation(msg, translationKeys.buy_command_request_currency).trim()
       ) {
-        return this.replyToCurrencyRequest(msg, handler);
+        return await this.replyToCurrencyRequest(msg, handler);
       }
     } catch (error) {
       this.handleErrorReply(error, msg);
