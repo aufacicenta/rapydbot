@@ -153,6 +153,12 @@ export class SellCommand implements IBotCommand {
                   return reject();
                 }
 
+                let localeExpiresAt = moment(expires_at);
+
+                if (Boolean(msg?.from?.language_code)) {
+                  localeExpiresAt = localeExpiresAt.locale(msg.from.language_code);
+                }
+
                 this.bot.reply(
                   msg,
                   translationKeys.sell_command_create_tx_success,
@@ -162,7 +168,7 @@ export class SellCommand implements IBotCommand {
                     currency: from_currency,
                     price: `${convertToSymbol} ${price}`,
                     price_source: `<a href="https://coinmarketcap.com/">coinmarketcap.com</a>`, // TODO let the user set a pricing source
-                    expires_at: moment(expires_at).locale(msg.from.language_code).fromNow(),
+                    expires_at: localeExpiresAt.fromNow(),
                   }
                 );
 
