@@ -1,6 +1,6 @@
 import { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
-import { StartCommand } from "./commands";
+import { StartCommand, WalletCommand } from "./commands";
 import { BotLanguageHandler, BotReplyToMessageIdHandler } from "./handler";
 import { Commands } from "./types";
 
@@ -11,6 +11,7 @@ export class Bot {
   public languageHandler: BotLanguageHandler;
 
   private startCommand: StartCommand;
+  private walletCommand: WalletCommand;
 
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
@@ -19,6 +20,7 @@ export class Bot {
     this.languageHandler = new BotLanguageHandler();
 
     this.startCommand = new StartCommand(this);
+    this.walletCommand = new WalletCommand(this);
   }
 
   async prepare(): Promise<Bot> {
@@ -50,7 +52,7 @@ export class Bot {
     });
 
     this.api.onText(/^\/start/i, (msg, match) => this.startCommand.onText(msg));
-    // this.api.onText(/^\/(sell|vender)/i, (msg, match) => this.sellCommand.onText(msg));
+    this.api.onText(/^\/(wallet|billetera)/i, (msg, match) => this.walletCommand.onText(msg));
   }
 
   reply(msg: Message, translationKey: string, options?: SendMessageOptions, args?: {}) {

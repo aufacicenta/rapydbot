@@ -22,6 +22,7 @@ export class StartCommand implements IBotCommand {
       this.bot.reply(msg, translationKeys.start_command_intro, {
         disable_web_page_preview: true,
         reply_markup: {
+          resize_keyboard: true,
           keyboard: [
             [
               {
