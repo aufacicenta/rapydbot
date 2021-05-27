@@ -1,31 +1,15 @@
-import KYC_ClientGenerator, { KYCClient } from "@aufax/kyc/client";
-import Order_ClientGenerator, { OrderClient } from "@aufax/order/client";
-import Price_ClientGenerator, { PriceClient } from "@aufax/price/client";
-import USER_ClientGenerator, { UserClient } from "@aufax/user/client";
 import { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
-import { BuyCommand, SellCommand, StartCommand } from "./commands";
-import {
-  BotLanguageHandler,
-  BotPassportTypeFileHandler,
-  BotReplyToMessageIdHandler,
-} from "./handler";
+import { StartCommand } from "./commands";
+import { BotLanguageHandler, BotReplyToMessageIdHandler } from "./handler";
 import { Commands } from "./types";
 
-export class AufaXBot {
+export class Bot {
   public api: TelegramBotApi;
   public moment: Moment;
 
-  private languageHandler: BotLanguageHandler;
-  private botPassportDataTypeFileHandler: BotPassportTypeFileHandler;
+  public languageHandler: BotLanguageHandler;
 
-  public KYCServiceClient: KYCClient;
-  public UserServiceClient: UserClient;
-  public OrderServiceClient: OrderClient;
-  public PriceServiceClient: PriceClient;
-
-  private sellCommand: SellCommand;
-  private buyCommand: BuyCommand;
   private startCommand: StartCommand;
 
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
@@ -33,19 +17,11 @@ export class AufaXBot {
   constructor() {
     this.api = new TelegramBotApi(process.env.BOT_TOKEN, { polling: true });
     this.languageHandler = new BotLanguageHandler();
-    this.botPassportDataTypeFileHandler = new BotPassportTypeFileHandler(this);
 
-    this.KYCServiceClient = new KYC_ClientGenerator(process.env.KYC_SERVICE_URL).create();
-    this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
-    this.OrderServiceClient = new Order_ClientGenerator(process.env.ORDER_SERVICE_URL).create();
-    this.PriceServiceClient = new Price_ClientGenerator(process.env.PRICE_SERVICE_URL).create();
-
-    this.sellCommand = new SellCommand(this);
-    this.buyCommand = new BuyCommand(this);
     this.startCommand = new StartCommand(this);
   }
 
-  async prepare(): Promise<AufaXBot> {
+  async prepare(): Promise<Bot> {
     await this.languageHandler.init();
     return this;
   }
@@ -70,16 +46,11 @@ export class AufaXBot {
         return command.onReplyFromMessageID(msg, handler);
       }
 
-      if (Boolean(msg.passport_data)) {
-        return this.botPassportDataTypeFileHandler.processEncryptedData(msg);
-      }
-
       // TODO no answers reply
     });
 
     this.api.onText(/^\/start/i, (msg, match) => this.startCommand.onText(msg));
-    this.api.onText(/^\/(sell|vender)/i, (msg, match) => this.sellCommand.onText(msg));
-    this.api.onText(/^\/(buy|comprar)/i, (msg, match) => this.buyCommand.onText(msg));
+    // this.api.onText(/^\/(sell|vender)/i, (msg, match) => this.sellCommand.onText(msg));
   }
 
   reply(msg: Message, translationKey: string, options?: SendMessageOptions, args?: {}) {

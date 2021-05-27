@@ -1,42 +1,19 @@
 import { translationKeys } from "../../translationKeys";
 
 export default {
-  [translationKeys.start_command_intro]: `Welcome to the Aufa X Bot experience.
+  [translationKeys.start_command_intro]: `Welcome to the Rapyd Bot experience 🤖
 
-Sell & Buy cryptocurrencies with easy commands:
+/send or /request payments to any Telegram user with your Rapyd e-wallet 💸
 
-
-The /buy command works like this:
-
-<code>/buy [amount] [currency]</code>
-<code>/buy [amount] [from_currency/to_currency]</code>
+To start, create your /wallet or choose from the available commands.
 
 
-Example:
-
-To buy BTC for any other currency:
-<code>/buy 0.123 BTC</code>
-
-To buy BTC only for USD
-<code>/buy 1 BTC/USD</code>
-
----
-
-The /sell command works like this:
-
-<code>/sell [amount] [currency]</code>
-<code>/sell [amount] [from_currency/to_currency]</code>
+<em><a href="https://rapyd.net/">Rapyd</a> is a Payment Solutions that Power Local and Cross-Border Commerce for Any Business.</em>`,
+  [translationKeys.start_command_error]: `🤔 An error ocurred while processing your request.
 
 
-Example:
-
-To sell BTC for any other currency:
-<code>/sell 0.123 BTC</code>
-
-To sell BTC only for USD
-<code>/sell 1 BTC/USD</code>
-
-
-
-<em>Negotiate under your own risk. aufaxbot limits itself to connect buyers with sellers.</em>`,
+  Try again?`,
+  [translationKeys.command_text_wallet]: `/wallet`,
+  [translationKeys.command_text_request]: `/request`,
+  [translationKeys.command_text_send]: `/send`,
 };

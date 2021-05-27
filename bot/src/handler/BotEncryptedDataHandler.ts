@@ -1,17 +1,17 @@
 import crypto from "crypto";
 import fs from "fs";
 import { EncryptedCredentials, Message } from "node-telegram-bot-api";
-import { AufaXBot } from "../AufaXBot";
+import { Bot } from "../Bot";
 import { DataCredentials, SecureData, StdCredentials } from "../types";
 
 export class BotEncryptedDataHandler {
-  protected bot: AufaXBot;
+  protected bot: Bot;
 
   public temporalStoragePath = "./tmp";
 
   protected credentials: SecureData;
 
-  constructor(bot: AufaXBot) {
+  constructor(bot: Bot) {
     this.bot = bot;
   }
 
@@ -76,10 +76,7 @@ export class BotEncryptedDataHandler {
       Buffer.from(credentials.secret as string, "base64")
     );
 
-    return this.decipherData<T>(
-      { secret: decryptedSecret, hash: credentials.data_hash },
-      data
-    );
+    return this.decipherData<T>({ secret: decryptedSecret, hash: credentials.data_hash }, data);
   }
 
   decipherData<T>(credentials: StdCredentials, data: string): T {
@@ -120,21 +117,14 @@ export class BotEncryptedDataHandler {
 
     const keys = hash
       .update(
-        Buffer.concat([
-          credentials.secret as Buffer,
-          Buffer.from(credentials.hash, "base64"),
-        ])
+        Buffer.concat([credentials.secret as Buffer, Buffer.from(credentials.hash, "base64")])
       )
       .digest();
 
     const credentialsKey = keys.slice(0, 32);
     const credentialsIV = keys.slice(32, 32 + 16);
 
-    const credentialsHash = crypto.createDecipheriv(
-      "aes-256-cbc",
-      credentialsKey,
-      credentialsIV
-    );
+    const credentialsHash = crypto.createDecipheriv("aes-256-cbc", credentialsKey, credentialsIV);
 
     credentialsHash.setAutoPadding(false);
 

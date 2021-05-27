@@ -1,4 +1,4 @@
-import { AufaXBot } from "../AufaXBot";
+import { Bot } from "../Bot";
 import { Commands } from "../types";
 
 export class BotReplyToMessageIdHandler {
@@ -6,11 +6,11 @@ export class BotReplyToMessageIdHandler {
   reply_to_message_ids: Array<number> = [];
   command: Commands;
   timestamp: Date;
-  bot: AufaXBot;
+  bot: Bot;
 
   storage: Map<string, any> = new Map();
 
-  constructor(bot: AufaXBot, command: Commands) {
+  constructor(bot: Bot, command: Commands) {
     this.bot = bot;
     this.command = command;
     this.timestamp = new Date();

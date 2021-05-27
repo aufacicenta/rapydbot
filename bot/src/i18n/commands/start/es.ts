@@ -1,38 +1,20 @@
 import { translationKeys } from "../../translationKeys";
 
 export default {
-  [translationKeys.start_command_intro]: `Bienvenido a la experiencia Aufa X Bot.
+  [translationKeys.start_command_intro]: `Bienvenido a la experiencia Rapyd Bot 🤖
 
-El comando /vender funciona así:
+  /envía o /solicita pagos a cualquier usuario de Telegram con to e-wallet the Rapyd 💸
 
-<code>/vender [cantidad] [moneda]</code>
-<code>/vender [cantidad] [moneda_origen/moneda_destino]</code>
-
-
-Ejemplo:
-
-Para vender BTC por cualquier otra moneda:
-<code>/vender 0.123 BTC</code>
-
-Para vender BTC contra USD
-<code>/vender 1 BTC/USD</code>
-
----
-
-El comando /comprar funciona así:
-
-<code>/comprar [cantidad] [moneda]</code>
-<code>/comprar [cantidad] [moneda_origen/moneda_destino]</code>
+  Para comenzar, crea tu /wallet o selecciona de entre los comandos disponibles.
 
 
-Ejemplo:
-
-Para comprar BTC por cualquier otra moneda:
-<code>/comprar 0.123 BTC</code>
-
-Para comprar BTC contra USD
-<code>/comprar 1 BTC/USD</code>
+  <em>La plataforma de <a href="https://rapyd.net/">Rapyd</a> Fintech-as-a-Service facilita la integración de FinTech y decapacidades de pago en cualquier aplicación para escalarla globalmente.</em>
+  `,
+  [translationKeys.start_command_error]: `🤔 Ocurrió un error al procesar tu mensaje.
 
 
-<em>Negocia bajo tu propio riesgo. Aufa X Bot se milita a conectar compradores con vendedores.</em>`,
+  ¿Intenta de nuevo?`,
+  [translationKeys.command_text_wallet]: `/billetera`,
+  [translationKeys.command_text_request]: `/solicitar`,
+  [translationKeys.command_text_send]: `/enviar`,
 };

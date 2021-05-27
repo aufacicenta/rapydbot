@@ -1,5 +1,5 @@
 import { Message } from "node-telegram-bot-api";
-import { AufaXBot } from "../AufaXBot";
+import { Bot } from "../Bot";
 import { BotReplyToMessageIdHandler } from "../handler";
 
 export interface IBotCommand {
@@ -7,11 +7,7 @@ export interface IBotCommand {
     | ((msg: Message, match?: RegExpMatchArray) => void)
     | ((msg: Message, match?: RegExpMatchArray) => Promise<void>);
   onReplyFromMessageID:
-    | ((
-        msg: Message,
-        handler: BotReplyToMessageIdHandler,
-        match?: RegExpMatchArray
-      ) => void)
+    | ((msg: Message, handler: BotReplyToMessageIdHandler, match?: RegExpMatchArray) => void)
     | ((
         msg: Message,
         handler: BotReplyToMessageIdHandler,
@@ -20,5 +16,5 @@ export interface IBotCommand {
 }
 
 interface IBotCommandConstructor {
-  new (bot: AufaXBot);
+  new (bot: Bot);
 }

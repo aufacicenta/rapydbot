@@ -1,8 +1,8 @@
-import { AufaXBot } from "./AufaXBot";
+import { Bot } from "./Bot";
 
 (async () => {
   try {
-    const bot = new AufaXBot();
+    const bot = new Bot();
     (await bot.prepare()).listen();
   } catch (error) {
     console.error(error);

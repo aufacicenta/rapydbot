@@ -1,10 +1,10 @@
 import { Message } from "node-telegram-bot-api";
-import { AufaXBot } from "../../AufaXBot";
+import { Bot } from "../../Bot";
 import { BotPassportTypeFileHandler } from "../../handler";
 import telegramMSG from "../mock/telegram-msg.json";
 
 describe("BotPassportTypeFileHandler", () => {
-  const bot = new AufaXBot();
+  const bot = new Bot();
   const handler = new BotPassportTypeFileHandler(bot);
 
   test("success: process encrypted data", async () => {
