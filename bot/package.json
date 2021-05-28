@@ -1,7 +1,7 @@
 {
-  "name": "@aufax/bot",
+  "name": "@aufacicenta/rapydbot",
   "version": "1.0.0",
-  "description": "Non-custodial digital asset exchange conversational UX",
+  "description": "Non-official Rapyd Payments conversational UX for Telegram",
   "main": "index.js",
   "author": "Gustavo Ibarra <netpoe>",
   "license": "MIT",
