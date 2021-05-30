@@ -1,3 +1,4 @@
+import { CreateUserRequest } from "@rapydbot/user/client";
 import { Message } from "node-telegram-bot-api";
 import { Bot } from "../Bot";
 import { BotReplyToMessageIdHandler } from "../handler";
@@ -17,8 +18,10 @@ export class StartCommand implements IBotCommand {
     match?: RegExpMatchArray
   ) {}
 
-  onText(msg: Message) {
+  async onText(msg: Message) {
     try {
+      await this.findUserByTelegramUserIdOrCreateUser(msg);
+
       this.bot.reply(msg, translationKeys.start_command_intro, {
         disable_web_page_preview: true,
         reply_markup: {
@@ -50,6 +53,32 @@ export class StartCommand implements IBotCommand {
     } catch (error) {
       this.handleErrorReply(error, msg);
     }
+  }
+
+  private async findUserByTelegramUserIdOrCreateUser(msg: Message): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const createUserRequest = new CreateUserRequest();
+
+      createUserRequest.setTelegramFromUserId(msg.from.id);
+      createUserRequest.setTelegramUsername(msg.from.username);
+
+      if (msg.chat.type === "private") {
+        createUserRequest.setTelegramPrivateChatId(msg.chat.id);
+      }
+
+      this.bot.UserServiceClient.findUserByTelegramUserIdOrCreateUser(
+        createUserRequest,
+        (err, response) => {
+          if (Boolean(err)) {
+            return reject(err);
+          }
+
+          const user_id = response.getUserId();
+          resolve();
+          // @TODO create a wallet right away?
+        }
+      );
+    });
   }
 
   private handleErrorReply(error: Error, msg: Message) {
