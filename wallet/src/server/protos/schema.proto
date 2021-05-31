@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option objc_class_prefix = "aufax";
+
+package wallet;
+
+service Wallet {
+  rpc CreateWallet (CreateWalletRequest) returns (CreateWalletResponse) {}
+}
+
+message CreateWalletRequest {
+  string telegram_from_user_id = 1;  
+  string rapyd_e_wallet_reference = 3;
+  string wallet_type = 4;
+}
+
+message CreateWalletResponse {
+  string wallet_id = 1;
+  string user_id = 2;  
+}
