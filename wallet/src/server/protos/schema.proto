@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option objc_class_prefix = "rapydbot";
+
+package wallet;
+
+service Wallet {
+  rpc CreateWallet (CreateWalletRequest) returns (CreateWalletReply) {}
+}
+
+message CreateWalletRequest {
+  string user_id = 1;
+}
+
+message CreateWalletReply {
+  string rapyd_e_wallet_address = 1;
+}
+
+message EmptyReply {}
