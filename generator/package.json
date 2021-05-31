@@ -1,0 +1,22 @@
+{
+  "name": "@aufacicenta/microservice-generator",
+  "version": "1.0.7",
+  "license": "MIT",
+  "main": "cli.js",
+  "scripts": {
+    "clean": "rimraf build",
+    "compile": "tsc",
+    "publish:prepare": "npm run clean && npm run compile && sh postcompile.sh",
+    "test": "jest"
+  },
+  "bin": {
+    "msgen": "./cli.js"
+  },
+  "preferGlobal": true,
+  "dependencies": {
+    "plop": "^2.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.3"
+  }
+}

@@ -1,0 +1,18 @@
+import { ModelCtor, Sequelize } from "sequelize";
+import { {{pascalCase name}}Model } from "../model/{{pascalCase name}}Model";
+
+export class {{pascalCase name}}DAO {
+  private driver: Sequelize;
+  private model: ModelCtor<{{pascalCase name}}Model>;
+
+  constructor(driver: Sequelize) {
+    this.driver = driver;
+    this.model = driver.model({{pascalCase name}}Model.tableName);
+  }
+
+  async create{{pascalCase name}}(args: {}) {
+    const result = await this.model.create({});
+
+    return result.getDataValue("id");
+  }
+}

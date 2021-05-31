@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option objc_class_prefix = "aufax";
+
+package {{camelCase name}};
+
+service {{pascalCase name}} {
+  rpc Get{{pascalCase name}} (Get{{pascalCase name}}Request) returns (Get{{pascalCase name}}Reply) {}
+}
+
+message Get{{pascalCase name}}Request {
+  string id = 1;
+}
+
+message Get{{pascalCase name}}Reply {
+  string id = 1;
+}
+
+message EmptyReply {}

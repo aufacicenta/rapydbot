@@ -1,0 +1,14 @@
+import grpc from "grpc";
+import { IContext } from "./interface/IContext";
+import { I{{pascalCase name}}Server, {{pascalCase name}}Service } from "./protos/schema_grpc_pb";
+
+export default (context: IContext) => {
+const server = new grpc.Server();
+
+server.addService<I{{pascalCase name}}Server>({{pascalCase name}}Service, {
+  get{{pascalCase name}}: (call, callback) =>
+  context.controller.get{{pascalCase name}}({ call, callback }, context),
+  });
+
+  return server;
+  };
