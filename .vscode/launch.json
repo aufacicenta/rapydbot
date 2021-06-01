@@ -8,10 +8,7 @@
       "cwd": "${workspaceRoot}/bot/src",
       "trace": true,
       "port": 9228,
-      "skipFiles": [
-        "${workspaceRoot}/node_modules/**/*",
-        "<node_internals>/**/*.js"
-      ]
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]
     },
     {
       "type": "node",
@@ -20,10 +17,7 @@
       "cwd": "${workspaceRoot}/user/src",
       "trace": true,
       "port": 9226,
-      "skipFiles": [
-        "${workspaceRoot}/node_modules/**/*",
-        "<node_internals>/**/*.js"
-      ]
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]
     },
     {
       "type": "node",
@@ -32,10 +26,7 @@
       "cwd": "${workspaceRoot}/order/src",
       "trace": true,
       "port": 9227,
-      "skipFiles": [
-        "${workspaceRoot}/node_modules/**/*",
-        "<node_internals>/**/*.js"
-      ]
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]
     },
     {
       "type": "node",
@@ -44,10 +35,7 @@
       "cwd": "${workspaceRoot}/price/src",
       "trace": true,
       "port": 9225,
-      "skipFiles": [
-        "${workspaceRoot}/node_modules/**/*",
-        "<node_internals>/**/*.js"
-      ]
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]
     },
     {
       "type": "node",
@@ -92,12 +80,12 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "ORDER: Jest Current File",
-      "program": "${workspaceFolder}/order/node_modules/.bin/jest",
-      "cwd": "${workspaceFolder}/order",
+      "name": "WALLET: Jest Current File",
+      "program": "${workspaceFolder}/wallet/node_modules/.bin/jest",
+      "cwd": "${workspaceFolder}/wallet",
       "args": [
         "--config",
-        "${workspaceFolder}/order/jest.config.js",
+        "${workspaceFolder}/wallet/jest.config.js",
         "--verbose",
         "--runInBand",
         "${fileBasenameNoExtension}"
@@ -106,7 +94,7 @@
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true,
       "windows": {
-        "program": "${workspaceFolder}/order/node_modules/jest/bin/jest"
+        "program": "${workspaceFolder}/wallet/node_modules/jest/bin/jest"
       }
     },
     {

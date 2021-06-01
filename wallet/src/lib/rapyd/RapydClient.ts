@@ -1,153 +1,184 @@
 import axios from "axios";
-import * as Crypto from "crypto-js";
-import moment from "moment";
-import {
-  HttpMethods,
-  IRapydClient,
-  IRapydRequestParams,
-  RequestSignature,
-} from "./types";
+import crypto from "crypto";
+import generateSalt from "../crypto/generateSalt";
+import { HttpMethods, IRapydRequestParams, RequestSignature } from "./types";
 
-class RapydClient implements IRapydClient {
-  post<T>({ path, body }: IRapydRequestParams<T>): Promise<T> {
+const {
+  RAPYD_BASE_URL,
+  RAPYD_ACCESS_KEY: accessKey,
+  RAPYD_SECRET_KEY: secretKey,
+} = process.env;
+
+class RapydClient {
+  post<T = Response, B = Body>({
+    path,
+    body,
+  }: IRapydRequestParams<B>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
-      const { BASE_URL, SALT_QTY, ACCESS_KEY, SECRET_KEY } = process.env;
-
       const method = HttpMethods.POST;
-      const salt = Crypto.lib.WordArray.random(Number(SALT_QTY)).toString();
-      const completeUrl = `${BASE_URL}${path}`;
+      const salt = generateSalt();
+      const completeUrl = `${RAPYD_BASE_URL}${path}`;
+      const timestamp = this.getTimestamp();
+      const idempotency = this.getIdempotency();
 
       const signature = this.generateRequestSignature({
         method,
         path,
         salt,
-        accessKey: ACCESS_KEY,
-        secretKey: SECRET_KEY,
+        accessKey,
+        secretKey,
         body,
+        timestamp,
       });
 
       const requestConfig = this.buildRequestConfig({
-        accessKey: ACCESS_KEY,
+        accessKey,
         salt,
         signature,
+        timestamp,
+        idempotency,
       });
 
       axios
         .post(completeUrl, body, requestConfig)
         .then((response) => {
-          const { data } = response;
+          const { data } = response.data;
           resolve(data as T);
         })
         .catch((err) => reject(err));
     });
   }
 
-  get<T>({ path, body }: IRapydRequestParams<T>): Promise<T> {
+  get<T = Response, B = Body>({
+    path,
+    body,
+  }: IRapydRequestParams<B>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
-      const { BASE_URL, SALT_QTY, ACCESS_KEY, SECRET_KEY } = process.env;
-
       const method = HttpMethods.GET;
-      const salt = Crypto.lib.WordArray.random(Number(SALT_QTY)).toString();
-      const completeUrl = `${BASE_URL}${path}`;
+      const salt = generateSalt();
+      const completeUrl = `${RAPYD_BASE_URL}${path}`;
+      const timestamp = this.getTimestamp();
+      const idempotency = this.getIdempotency();
 
       const signature = this.generateRequestSignature({
         method,
         path,
         salt,
-        accessKey: ACCESS_KEY,
-        secretKey: SECRET_KEY,
+        accessKey,
+        secretKey,
         body,
+        timestamp,
       });
 
       const requestConfig = this.buildRequestConfig({
-        accessKey: ACCESS_KEY,
+        accessKey,
         salt,
         signature,
+        timestamp,
+        idempotency,
       });
 
       axios
         .get(completeUrl, requestConfig)
         .then((response) => {
-          const { data } = response;
-          resolve(data);
+          const { data } = response.data;
+          resolve(data as T);
         })
         .catch((err) => reject(err));
     });
   }
 
-  put<T>({ path, body }: IRapydRequestParams<T>): Promise<T> {
+  put<T = Response, B = Body>({
+    path,
+    body,
+  }: IRapydRequestParams<B>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
-      const { BASE_URL, SALT_QTY, ACCESS_KEY, SECRET_KEY } = process.env;
-
       const method = HttpMethods.PUT;
-      const salt = Crypto.lib.WordArray.random(Number(SALT_QTY)).toString();
-      const completeUrl = `${BASE_URL}${path}`;
+      const salt = generateSalt();
+      const completeUrl = `${RAPYD_BASE_URL}${path}`;
+      const timestamp = this.getTimestamp();
+      const idempotency = this.getIdempotency();
 
       const signature = this.generateRequestSignature({
         method,
         path,
         salt,
-        accessKey: ACCESS_KEY,
-        secretKey: SECRET_KEY,
+        accessKey,
+        secretKey,
         body,
+        timestamp,
       });
 
       const requestConfig = this.buildRequestConfig({
-        accessKey: ACCESS_KEY,
+        accessKey,
         salt,
         signature,
+        timestamp,
+        idempotency,
       });
 
       axios
         .put(completeUrl, body, requestConfig)
         .then((response) => {
-          const { data } = response;
-          resolve(data);
+          const { data } = response.data;
+          resolve(data as T);
         })
         .catch((err) => reject(err));
     });
   }
 
-  delete<T>({ path, body }: IRapydRequestParams<T>): Promise<T> {
+  delete<T = Response, B = Body>({
+    path,
+    body,
+  }: IRapydRequestParams<B>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
-      const { BASE_URL, SALT_QTY, ACCESS_KEY, SECRET_KEY } = process.env;
-
       const method = HttpMethods.DELETE;
-      const salt = Crypto.lib.WordArray.random(Number(SALT_QTY)).toString();
-      const completeUrl = `${BASE_URL}${path}`;
+      const salt = generateSalt();
+      const completeUrl = `${RAPYD_BASE_URL}${path}`;
+      const timestamp = this.getTimestamp();
+      const idempotency = this.getIdempotency();
 
       const signature = this.generateRequestSignature({
         method,
         path,
         salt,
-        accessKey: ACCESS_KEY,
-        secretKey: SECRET_KEY,
+        accessKey,
+        secretKey,
         body,
+        timestamp,
       });
 
       const requestConfig = this.buildRequestConfig({
-        accessKey: ACCESS_KEY,
+        accessKey,
         salt,
         signature,
+        timestamp,
+        idempotency,
       });
 
       axios
         .delete(completeUrl, requestConfig)
         .then((response) => {
-          const { data } = response;
-          resolve(data);
+          const { data } = response.data;
+          resolve(data as T);
         })
         .catch((err) => reject(err));
     });
   }
 
-  private buildRequestConfig({ accessKey, salt, signature }) {
-    const timestamp = moment().unix();
+  private buildRequestConfig({
+    accessKey,
+    salt,
+    signature,
+    idempotency,
+    timestamp,
+  }) {
     const requestConfig = {
       headers: {
         salt,
         signature,
         timestamp,
+        idempotency,
         access_key: accessKey,
         "Content-Type": "application/json",
       },
@@ -168,17 +199,25 @@ class RapydClient implements IRapydClient {
     accessKey,
     secretKey,
     body,
+    timestamp,
   }: RequestSignature) {
-    const timestamp = moment().unix();
-    const toSign = `${method}${path}${salt}${timestamp}${accessKey}${secretKey}${body}`;
+    const toSign = `${method.toLowerCase()}${path}${salt}${timestamp}${accessKey}${secretKey}${JSON.stringify(
+      body
+    )}`;
 
-    const hash = Crypto.HmacSHA256(toSign, secretKey);
-    const signature = Crypto.enc.Hex.stringify(hash);
+    const hash = crypto.createHmac("sha256", secretKey);
+    hash.update(toSign);
+    const signature = Buffer.from(hash.digest("hex")).toString("base64");
 
-    const signatureFormatted = Crypto.enc.Utf8.parse(signature);
-    const requestSignature = Crypto.enc.Base64.stringify(signatureFormatted);
+    return signature;
+  }
 
-    return requestSignature;
+  private getTimestamp() {
+    return Math.round(new Date().getTime() / 1000);
+  }
+
+  private getIdempotency() {
+    return new Date().getTime().toString();
   }
 }
 

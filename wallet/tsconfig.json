@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",
+    "moduleResolution": "node",
     "module": "commonjs",
     "allowJs": true,
     "sourceMap": true,
@@ -9,12 +10,15 @@
     "strict": true,
     "noImplicitAny": false,
     "strictNullChecks": false,
-    "typeRoots": ["node_modules/@types"],
+    "types": ["jest", "node"],
     "esModuleInterop": true,
     "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["./src/client", "./src/service/error.ts"],
-  "exclude": ["node_modules", "build", "jest.config.js"]
+  "include": [
+    "./src/client",
+    "./src/service/error.ts",
+    "./src/__test__/**/*.ts"
+  ]
 }
