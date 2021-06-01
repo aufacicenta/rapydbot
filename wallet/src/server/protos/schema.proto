@@ -13,7 +13,7 @@ message CreateWalletRequest {
 }
 
 message CreateWalletReply {
-  string rapyd_e_wallet_address = 1;
+  string rapyd_ewallet_address = 1;
 }
 
 message EmptyReply {}

@@ -1,6 +1,6 @@
 export interface IRapydRequestParams<B> {
   path: string;
-  body: B;
+  body?: B;
 }
 
 export interface RequestSignature {

@@ -22,11 +22,31 @@
     {
       "type": "node",
       "request": "attach",
-      "name": "ORDER: Attach by Process ID",
-      "cwd": "${workspaceRoot}/order/src",
+      "name": "WALLET: Attach by Process ID",
+      "cwd": "${workspaceRoot}/wallet/src",
       "trace": true,
-      "port": 9227,
+      "port": 9225,
       "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "WALLET: Jest Current File",
+      "program": "${workspaceFolder}/wallet/node_modules/.bin/jest",
+      "cwd": "${workspaceFolder}/wallet",
+      "args": [
+        "--config",
+        "${workspaceFolder}/wallet/jest.config.js",
+        "--verbose",
+        "--runInBand",
+        "${fileBasenameNoExtension}"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/wallet/node_modules/jest/bin/jest"
+      }
     },
     {
       "type": "node",
@@ -77,26 +97,7 @@
         "program": "${workspaceFolder}/user/node_modules/jest/bin/jest"
       }
     },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "WALLET: Jest Current File",
-      "program": "${workspaceFolder}/wallet/node_modules/.bin/jest",
-      "cwd": "${workspaceFolder}/wallet",
-      "args": [
-        "--config",
-        "${workspaceFolder}/wallet/jest.config.js",
-        "--verbose",
-        "--runInBand",
-        "${fileBasenameNoExtension}"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/wallet/node_modules/jest/bin/jest"
-      }
-    },
+
     {
       "type": "node",
       "request": "launch",

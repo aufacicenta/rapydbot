@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "moduleResolution": "node",
     "module": "commonjs",
     "allowJs": true,
     "sourceMap": true,
@@ -10,7 +9,7 @@
     "strict": true,
     "noImplicitAny": false,
     "strictNullChecks": false,
-    "types": ["jest", "node"],
+    "typeRoots": ["node_modules/@types"],
     "esModuleInterop": true,
     "declaration": true,
     "experimentalDecorators": true,

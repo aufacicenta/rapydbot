@@ -27,8 +27,8 @@ export namespace CreateWalletRequest {
 }
 
 export class CreateWalletReply extends jspb.Message { 
-    getRapydEWalletAddress(): string;
-    setRapydEWalletAddress(value: string): CreateWalletReply;
+    getRapydEwalletAddress(): string;
+    setRapydEwalletAddress(value: string): CreateWalletReply;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): CreateWalletReply.AsObject;
@@ -42,7 +42,7 @@ export class CreateWalletReply extends jspb.Message {
 
 export namespace CreateWalletReply {
     export type AsObject = {
-        rapydEWalletAddress: string,
+        rapydEwalletAddress: string,
     }
 }
 

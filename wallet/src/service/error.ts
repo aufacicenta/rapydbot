@@ -1,3 +1,5 @@
 export const WalletServiceErrorCodes = {
-    error_code: "error_code",
+  rapyd_ewallet_exists_for_user_id: "rapyd_ewallet_exists_for_user_id",
+  ERROR_CREATE_USER_EWALLET_REFERENCE_ID_ALREADY_EXISTS:
+    "ERROR_CREATE_USER_EWALLET_REFERENCE_ID_ALREADY_EXISTS",
 };

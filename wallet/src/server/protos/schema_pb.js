@@ -243,7 +243,7 @@ proto.wallet.CreateWalletReply.prototype.toObject = function(opt_includeInstance
  */
 proto.wallet.CreateWalletReply.toObject = function(includeInstance, msg) {
   var f, obj = {
-    rapydEWalletAddress: jspb.Message.getFieldWithDefault(msg, 1, "")
+    rapydEwalletAddress: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -282,7 +282,7 @@ proto.wallet.CreateWalletReply.deserializeBinaryFromReader = function(msg, reade
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setRapydEWalletAddress(value);
+      msg.setRapydEwalletAddress(value);
       break;
     default:
       reader.skipField();
@@ -313,7 +313,7 @@ proto.wallet.CreateWalletReply.prototype.serializeBinary = function() {
  */
 proto.wallet.CreateWalletReply.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getRapydEWalletAddress();
+  f = message.getRapydEwalletAddress();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -324,10 +324,10 @@ proto.wallet.CreateWalletReply.serializeBinaryToWriter = function(message, write
 
 
 /**
- * optional string rapyd_e_wallet_address = 1;
+ * optional string rapyd_ewallet_address = 1;
  * @return {string}
  */
-proto.wallet.CreateWalletReply.prototype.getRapydEWalletAddress = function() {
+proto.wallet.CreateWalletReply.prototype.getRapydEwalletAddress = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -336,7 +336,7 @@ proto.wallet.CreateWalletReply.prototype.getRapydEWalletAddress = function() {
  * @param {string} value
  * @return {!proto.wallet.CreateWalletReply} returns this
  */
-proto.wallet.CreateWalletReply.prototype.setRapydEWalletAddress = function(value) {
+proto.wallet.CreateWalletReply.prototype.setRapydEwalletAddress = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 

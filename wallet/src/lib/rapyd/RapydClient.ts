@@ -49,10 +49,7 @@ class RapydClient {
     });
   }
 
-  get<T = Response, B = Body>({
-    path,
-    body,
-  }: IRapydRequestParams<B>): Promise<T> {
+  get<T = Response>({ path }: IRapydRequestParams<any>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       const method = HttpMethods.GET;
       const salt = generateSalt();
@@ -66,7 +63,7 @@ class RapydClient {
         salt,
         accessKey,
         secretKey,
-        body,
+        body: "",
         timestamp,
       });
 
