@@ -9,7 +9,7 @@ import {
 } from "./types";
 
 class RapydClient implements IRapydClient {
-  post<T>({ path, body }: IRapydRequestParams<T>): Promise<T> {
+  post<T>({ path, body }: IRapydRequestParams): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       const { BASE_URL, SALT_QTY, ACCESS_KEY, SECRET_KEY } = process.env;
 
@@ -42,7 +42,7 @@ class RapydClient implements IRapydClient {
     });
   }
 
-  get<T>({ path, body }: IRapydRequestParams<T>): Promise<T> {
+  get<T>({ path, body }: IRapydRequestParams): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       const { BASE_URL, SALT_QTY, ACCESS_KEY, SECRET_KEY } = process.env;
 
@@ -75,7 +75,7 @@ class RapydClient implements IRapydClient {
     });
   }
 
-  put<T>({ path, body }: IRapydRequestParams<T>): Promise<T> {
+  put<T>({ path, body }: IRapydRequestParams): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       const { BASE_URL, SALT_QTY, ACCESS_KEY, SECRET_KEY } = process.env;
 
@@ -108,7 +108,7 @@ class RapydClient implements IRapydClient {
     });
   }
 
-  delete<T>({ path, body }: IRapydRequestParams<T>): Promise<T> {
+  delete<T>({ path, body }: IRapydRequestParams): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       const { BASE_URL, SALT_QTY, ACCESS_KEY, SECRET_KEY } = process.env;
 

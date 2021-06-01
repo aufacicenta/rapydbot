@@ -1,13 +1,13 @@
-export interface IRapydRequestParams<T> {
+export interface IRapydRequestParams {
   path: string;
-  body: T;
+  body: any;
 }
 
 export interface IRapydClient {
-  get<T>(params: IRapydRequestParams<T>): Promise<T>;
-  post<T>(params: IRapydRequestParams<T>): Promise<T>;
-  put<T>(params: IRapydRequestParams<T>): Promise<T>;
-  delete<T>(params: IRapydRequestParams<T>): Promise<T>;
+  get<T>(params: IRapydRequestParams): Promise<T>;
+  post<T>(params: IRapydRequestParams): Promise<T>;
+  put<T>(params: IRapydRequestParams): Promise<T>;
+  delete<T>(params: IRapydRequestParams): Promise<T>;
 }
 
 export interface RequestSignature {
