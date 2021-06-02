@@ -7,6 +7,8 @@ package wallet;
 service Wallet {
   rpc CreateWallet (CreateWalletRequest) returns (CreateWalletReply) {}
   rpc TopUpWallet (TopUpWalletRequest) returns (TopUpWalletReply) {}
+  rpc TransferFromWallet (TransferFromWalletRequest) returns (TransferFromWalletReply) {}
+  rpc SetTransferFromWalletResponse (SetTransferFromWalletResponseRequest) returns (SetTransferFromWalletResponseReply) {}
 }
 
 message CreateWalletRequest {
@@ -26,6 +28,32 @@ message TopUpWalletRequest {
 
 message TopUpWalletReply {
   string checkout_page_url = 1;
+}
+
+message TransferFromWalletRequest {
+  string sender_user_id = 1;
+  string recipient_user_id = 2;
+  string currency = 3;
+  float amount = 4;
+}
+
+message TransferFromWalletReply {
+  string pending_transaction_id = 1;
+  string sender_user_id = 2;
+  string recipient_user_id = 3;
+}
+
+message SetTransferFromWalletResponseRequest {
+  string pending_transaction_id = 1;
+  string sender_user_id = 2;
+  string recipient_user_id = 3;
+  string response_status = 4;
+}
+
+message SetTransferFromWalletResponseReply {
+  float amount = 1;
+  string currency = 2;
+  string sender_user_id = 3;
 }
 
 message EmptyReply {}

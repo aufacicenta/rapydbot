@@ -45,7 +45,9 @@ class RapydClient {
           const { data } = response.data;
           resolve(data as T);
         })
-        .catch((err) => reject(err));
+        .catch((err) => {
+          reject(err);
+        });
     });
   }
 
@@ -80,7 +82,9 @@ class RapydClient {
           const { data } = response.data;
           resolve(data as T);
         })
-        .catch((err) => reject(err));
+        .catch((err) => {
+          reject(err);
+        });
     });
   }
 

@@ -10,6 +10,13 @@ export default (context: IContext) => {
       context.controller.createWallet({ call, callback }, context),
     topUpWallet: (call, callback) =>
       context.controller.topUpWallet({ call, callback }, context),
+    transferFromWallet: (call, callback) =>
+      context.controller.transferFromWallet({ call, callback }, context),
+    setTransferFromWalletResponse: (call, callback) =>
+      context.controller.setTransferFromWalletResponse(
+        { call, callback },
+        context
+      ),
   });
 
   return server;

@@ -48,6 +48,33 @@ export type CheckoutObjectResponse = {
   redirect_url: string;
 };
 
+export type TransferFundsBetweenWalletsResponse = {
+  id: string;
+  status: string;
+  destination_ewallet_id: string;
+  source_ewallet_id: string;
+};
+
+export type SetTransferFromWalletResponse = {
+  id: string;
+  source_transaction_id: string;
+  status: string;
+  destination_ewallet_id: string;
+  source_ewallet_id: string;
+  destination_transaction_id: string;
+};
+
+export type GetDetailsOfWalletTransactionResponse = {
+  id: string;
+  amount: number;
+  currency: string;
+  ewallet_id: string;
+  status: string;
+  action_data: {
+    paid: boolean;
+  };
+};
+
 export type CreateWalletParams = {
   ewallet_reference_id: string;
 };
@@ -57,4 +84,16 @@ export type CreateCheckoutPageParams = {
   currency: string;
   ewallet: string;
   amount: number;
+};
+
+export type TransferFundsBetweenWalletsParams = {
+  source_ewallet: string;
+  destination_ewallet: string;
+  currency: string;
+  amount: number;
+};
+
+export type SetTransferFromWalletParams = {
+  id: string;
+  status: string;
 };

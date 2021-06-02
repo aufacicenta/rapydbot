@@ -26,6 +26,28 @@ function deserialize_wallet_CreateWalletRequest(buffer_arg) {
   return schema_pb.CreateWalletRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_wallet_SetTransferFromWalletResponseReply(arg) {
+  if (!(arg instanceof schema_pb.SetTransferFromWalletResponseReply)) {
+    throw new Error('Expected argument of type wallet.SetTransferFromWalletResponseReply');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_wallet_SetTransferFromWalletResponseReply(buffer_arg) {
+  return schema_pb.SetTransferFromWalletResponseReply.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_wallet_SetTransferFromWalletResponseRequest(arg) {
+  if (!(arg instanceof schema_pb.SetTransferFromWalletResponseRequest)) {
+    throw new Error('Expected argument of type wallet.SetTransferFromWalletResponseRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_wallet_SetTransferFromWalletResponseRequest(buffer_arg) {
+  return schema_pb.SetTransferFromWalletResponseRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_wallet_TopUpWalletReply(arg) {
   if (!(arg instanceof schema_pb.TopUpWalletReply)) {
     throw new Error('Expected argument of type wallet.TopUpWalletReply');
@@ -46,6 +68,28 @@ function serialize_wallet_TopUpWalletRequest(arg) {
 
 function deserialize_wallet_TopUpWalletRequest(buffer_arg) {
   return schema_pb.TopUpWalletRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_wallet_TransferFromWalletReply(arg) {
+  if (!(arg instanceof schema_pb.TransferFromWalletReply)) {
+    throw new Error('Expected argument of type wallet.TransferFromWalletReply');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_wallet_TransferFromWalletReply(buffer_arg) {
+  return schema_pb.TransferFromWalletReply.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_wallet_TransferFromWalletRequest(arg) {
+  if (!(arg instanceof schema_pb.TransferFromWalletRequest)) {
+    throw new Error('Expected argument of type wallet.TransferFromWalletRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_wallet_TransferFromWalletRequest(buffer_arg) {
+  return schema_pb.TransferFromWalletRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 
@@ -71,6 +115,28 @@ var WalletService = exports.WalletService = {
     requestDeserialize: deserialize_wallet_TopUpWalletRequest,
     responseSerialize: serialize_wallet_TopUpWalletReply,
     responseDeserialize: deserialize_wallet_TopUpWalletReply,
+  },
+  transferFromWallet: {
+    path: '/wallet.Wallet/TransferFromWallet',
+    requestStream: false,
+    responseStream: false,
+    requestType: schema_pb.TransferFromWalletRequest,
+    responseType: schema_pb.TransferFromWalletReply,
+    requestSerialize: serialize_wallet_TransferFromWalletRequest,
+    requestDeserialize: deserialize_wallet_TransferFromWalletRequest,
+    responseSerialize: serialize_wallet_TransferFromWalletReply,
+    responseDeserialize: deserialize_wallet_TransferFromWalletReply,
+  },
+  setTransferFromWalletResponse: {
+    path: '/wallet.Wallet/SetTransferFromWalletResponse',
+    requestStream: false,
+    responseStream: false,
+    requestType: schema_pb.SetTransferFromWalletResponseRequest,
+    responseType: schema_pb.SetTransferFromWalletResponseReply,
+    requestSerialize: serialize_wallet_SetTransferFromWalletResponseRequest,
+    requestDeserialize: deserialize_wallet_SetTransferFromWalletResponseRequest,
+    responseSerialize: serialize_wallet_SetTransferFromWalletResponseReply,
+    responseDeserialize: deserialize_wallet_SetTransferFromWalletResponseReply,
   },
 };
 

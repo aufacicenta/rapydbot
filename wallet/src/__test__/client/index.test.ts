@@ -1,7 +1,11 @@
 import { Sequelize } from "sequelize";
 import WalletClientGenerator, {
   CreateWalletRequest,
+  SetTransferFromWalletResponseReply,
+  SetTransferFromWalletResponseRequest,
   TopUpWalletRequest,
+  TransferFromWalletReply,
+  TransferFromWalletRequest,
   WalletClient,
 } from "../../client";
 import database from "../../database";
@@ -16,7 +20,7 @@ let driver: Sequelize,
   rapydClient: RapydClient;
 
 describe("controller", () => {
-  const users = Array(1).fill(getRandomUsername());
+  const users = [getRandomUsername(), getRandomUsername()];
 
   beforeAll(async () => {
     driver = await database.connect({ force: true });
@@ -91,36 +95,94 @@ describe("controller", () => {
         });
       });
 
-    const checkout_page_urls = await Promise.all(
-      users.map((userId) =>
-        topUpWallet({ userId, country: "MX", currency: "MXN", amount: 123.56 })
-      )
+    const url = await topUpWallet({
+      userId: users[0],
+      country: "MX",
+      currency: "MXN",
+      amount: 1000.0,
+    });
+
+    expect(url).toBeTruthy(); // PAUSE the debugger here to get the URL and top up wallet manually
+  });
+
+  test("success: transfers an amount from a Rapyd ewallet balance to another Rapyd ewallet", async () => {
+    const requestCurrency = "MXN";
+    const requestAmount = 500.0;
+
+    const transferFromWallet = ({
+      senderUserId,
+      recipientUserId,
+      currency,
+      amount,
+    }: TransferFromWalletRequest.AsObject): Promise<TransferFromWalletReply.AsObject> =>
+      new Promise((resolve) => {
+        const request = new TransferFromWalletRequest();
+
+        request.setCurrency(currency);
+        request.setAmount(amount);
+        request.setSenderUserId(senderUserId);
+        request.setRecipientUserId(recipientUserId);
+
+        walletClient.transferFromWallet(request, (error, reply) => {
+          if (error) {
+            throw error;
+          }
+
+          resolve({
+            pendingTransactionId: reply.getPendingTransactionId(),
+            senderUserId: reply.getSenderUserId(),
+            recipientUserId: reply.getRecipientUserId(),
+          });
+        });
+      });
+
+    const { pendingTransactionId, senderUserId, recipientUserId } =
+      await transferFromWallet({
+        senderUserId: users[0],
+        recipientUserId: users[1],
+        currency: requestCurrency,
+        amount: requestAmount,
+      });
+
+    const setTransferFromWalletResponse = ({
+      senderUserId,
+      recipientUserId,
+      responseStatus,
+      pendingTransactionId,
+    }: SetTransferFromWalletResponseRequest.AsObject): Promise<SetTransferFromWalletResponseReply.AsObject> =>
+      new Promise((resolve) => {
+        const request = new SetTransferFromWalletResponseRequest();
+
+        request.setSenderUserId(senderUserId);
+        request.setRecipientUserId(recipientUserId);
+        request.setPendingTransactionId(pendingTransactionId);
+        request.setResponseStatus(responseStatus);
+
+        walletClient.setTransferFromWalletResponse(request, (error, reply) => {
+          if (error) {
+            throw error;
+          }
+
+          resolve({
+            amount: reply.getAmount(),
+            currency: reply.getCurrency(),
+            senderUserId: reply.getSenderUserId(),
+          });
+        });
+      });
+
+    const setTransferFromWalletResponseReply =
+      await setTransferFromWalletResponse({
+        senderUserId,
+        recipientUserId,
+        responseStatus: "accept",
+        pendingTransactionId,
+      });
+
+    expect(setTransferFromWalletResponseReply.amount).toEqual(requestAmount);
+    expect(setTransferFromWalletResponseReply.currency).toEqual(
+      requestCurrency
     );
-
-    for (const url of checkout_page_urls) {
-      expect(url).toBeTruthy();
-    }
-
-    // Check if changing the currency in a subsequent call to the same wallet works
-    const checkout_page_urls2 = await Promise.all(
-      users.map((userId) =>
-        topUpWallet({ userId, country: "US", currency: "USD", amount: 100.0 })
-      )
-    );
-
-    for (const url of checkout_page_urls2) {
-      expect(url).toBeTruthy();
-    }
-
-    // Check if changing the currency in a subsequent call to the same wallet works
-    const checkout_page_urls3 = await Promise.all(
-      users.map((userId) =>
-        topUpWallet({ userId, country: "MX", currency: "USD", amount: 100.0 })
-      )
-    );
-
-    for (const url of checkout_page_urls3) {
-      expect(url).toBeTruthy();
-    }
+    expect(setTransferFromWalletResponseReply.senderUserId).toEqual(users[0]);
   });
 });

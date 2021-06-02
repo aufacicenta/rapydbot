@@ -1,1 +1,3 @@
-export default () => `tg_username_id_${Math.floor(Math.random() * 10000) + 1}`;
+import generateSalt from "../../lib/crypto/generateSalt";
+
+export default () => `tg_username_id_${generateSalt()}`;
