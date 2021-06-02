@@ -65,12 +65,22 @@ describe("controller", () => {
   test("success: creates a Rapyd checkout page to top up a Rapyd ewallet address", async () => {
     const request = new TopUpWalletRequest();
 
-    const topUpWallet = (userId: string): Promise<string> =>
+    const topUpWallet = ({
+      userId,
+      currency,
+      country,
+      amount,
+    }: {
+      userId: string;
+      country: string;
+      currency: string;
+      amount: number;
+    }): Promise<string> =>
       new Promise((resolve) => {
         request.setUserId(userId);
-        request.setCountry("MX");
-        request.setCurrency("MXN");
-        request.setAmount(123.25);
+        request.setCountry(country);
+        request.setCurrency(currency);
+        request.setAmount(amount);
 
         walletClient.topUpWallet(request, (error, reply) => {
           if (error) {
@@ -81,9 +91,35 @@ describe("controller", () => {
         });
       });
 
-    const checkout_page_urls = await Promise.all(users.map(topUpWallet));
+    const checkout_page_urls = await Promise.all(
+      users.map((userId) =>
+        topUpWallet({ userId, country: "MX", currency: "MXN", amount: 123.56 })
+      )
+    );
 
     for (const url of checkout_page_urls) {
+      expect(url).toBeTruthy();
+    }
+
+    // Check if changing the currency in a subsequent call to the same wallet works
+    const checkout_page_urls2 = await Promise.all(
+      users.map((userId) =>
+        topUpWallet({ userId, country: "US", currency: "USD", amount: 100.0 })
+      )
+    );
+
+    for (const url of checkout_page_urls2) {
+      expect(url).toBeTruthy();
+    }
+
+    // Check if changing the currency in a subsequent call to the same wallet works
+    const checkout_page_urls3 = await Promise.all(
+      users.map((userId) =>
+        topUpWallet({ userId, country: "MX", currency: "USD", amount: 100.0 })
+      )
+    );
+
+    for (const url of checkout_page_urls3) {
       expect(url).toBeTruthy();
     }
   });

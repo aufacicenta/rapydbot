@@ -50,6 +50,28 @@
     },
     {
       "type": "node",
+      "request": "launch",
+      "name": "WALLET: Jest Current Selected Test In File",
+      "program": "${workspaceFolder}/wallet/node_modules/.bin/jest",
+      "cwd": "${workspaceFolder}/wallet",
+      "args": [
+        "--config",
+        "${workspaceFolder}/wallet/package.json",
+        "--verbose",
+        "--runInBand",
+        "${fileBasenameNoExtension}",
+        "-t",
+        "${selectedText}"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/wallet/node_modules/jest/bin/jest"
+      }
+    }
+    {
+      "type": "node",
       "request": "attach",
       "name": "PRICE: Attach by Process ID",
       "cwd": "${workspaceRoot}/price/src",
@@ -138,27 +160,6 @@
         "program": "${workspaceFolder}/price/node_modules/jest/bin/jest"
       }
     },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "PRICE: Jest Current Selected Test In File",
-      "program": "${workspaceFolder}/price/node_modules/.bin/jest",
-      "cwd": "${workspaceFolder}/price",
-      "args": [
-        "--config",
-        "${workspaceFolder}/price/package.json",
-        "--verbose",
-        "--runInBand",
-        "${fileBasenameNoExtension}",
-        "-t",
-        "${selectedText}"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/price/node_modules/jest/bin/jest"
-      }
-    }
+
   ]
 }
