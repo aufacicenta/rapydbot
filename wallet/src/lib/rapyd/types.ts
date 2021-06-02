@@ -41,6 +41,20 @@ export type WalletObjectResponse = {
   };
 };
 
+export type CheckoutObjectResponse = {
+  country: string;
+  currency: string;
+  amount: number;
+  redirect_url: string;
+};
+
 export type CreateWalletParams = {
   ewallet_reference_id: string;
+};
+
+export type CreateCheckoutPageParams = {
+  country: string;
+  currency: string;
+  ewallet: string;
+  amount: number;
 };

@@ -34,6 +34,20 @@ export class WalletDAO {
     return !Boolean(result) ? null : result.getDataValue("id");
   }
 
+  async getRapydWalletAddressByUserId({
+    user_id,
+  }: Pick<WalletModelAttributes, "user_id">) {
+    const result = await this.model.findOne({
+      where: {
+        user_id,
+      },
+    });
+
+    return !Boolean(result)
+      ? null
+      : result.getDataValue("rapyd_ewallet_address");
+  }
+
   async getUserIdByRapydEwalletAddress({
     rapyd_ewallet_address,
   }: Pick<WalletModelAttributes, "rapyd_ewallet_address">) {

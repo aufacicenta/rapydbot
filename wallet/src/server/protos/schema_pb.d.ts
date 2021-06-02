@@ -46,6 +46,55 @@ export namespace CreateWalletReply {
     }
 }
 
+export class TopUpWalletRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): TopUpWalletRequest;
+    getCountry(): string;
+    setCountry(value: string): TopUpWalletRequest;
+    getCurrency(): string;
+    setCurrency(value: string): TopUpWalletRequest;
+    getAmount(): number;
+    setAmount(value: number): TopUpWalletRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): TopUpWalletRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: TopUpWalletRequest): TopUpWalletRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: TopUpWalletRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): TopUpWalletRequest;
+    static deserializeBinaryFromReader(message: TopUpWalletRequest, reader: jspb.BinaryReader): TopUpWalletRequest;
+}
+
+export namespace TopUpWalletRequest {
+    export type AsObject = {
+        userId: string,
+        country: string,
+        currency: string,
+        amount: number,
+    }
+}
+
+export class TopUpWalletReply extends jspb.Message { 
+    getCheckoutPageUrl(): string;
+    setCheckoutPageUrl(value: string): TopUpWalletReply;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): TopUpWalletReply.AsObject;
+    static toObject(includeInstance: boolean, msg: TopUpWalletReply): TopUpWalletReply.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: TopUpWalletReply, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): TopUpWalletReply;
+    static deserializeBinaryFromReader(message: TopUpWalletReply, reader: jspb.BinaryReader): TopUpWalletReply;
+}
+
+export namespace TopUpWalletReply {
+    export type AsObject = {
+        checkoutPageUrl: string,
+    }
+}
+
 export class EmptyReply extends jspb.Message { 
 
     serializeBinary(): Uint8Array;

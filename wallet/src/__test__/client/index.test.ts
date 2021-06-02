@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import WalletClientGenerator, {
   CreateWalletRequest,
+  TopUpWalletRequest,
   WalletClient,
 } from "../../client";
 import database from "../../database";
@@ -15,6 +16,8 @@ let driver: Sequelize,
   rapydClient: RapydClient;
 
 describe("controller", () => {
+  const users = Array(1).fill(getRandomUsername());
+
   beforeAll(async () => {
     driver = await database.connect({ force: true });
     dao = new WalletDAO(driver);
@@ -25,8 +28,6 @@ describe("controller", () => {
   });
 
   test("success: creates a real Rapyd wallet per user and stores it in the database and in Rapyd", async () => {
-    const users = Array(1).fill(getRandomUsername());
-
     const request = new CreateWalletRequest();
 
     const createWallet = (userId: string): Promise<string> =>
@@ -58,6 +59,32 @@ describe("controller", () => {
 
       expect(id).toEqual(rapyd_ewallet_address);
       expect(ewallet_reference_id).toEqual(userId);
+    }
+  });
+
+  test("success: creates a Rapyd checkout page to top up a Rapyd ewallet address", async () => {
+    const request = new TopUpWalletRequest();
+
+    const topUpWallet = (userId: string): Promise<string> =>
+      new Promise((resolve) => {
+        request.setUserId(userId);
+        request.setCountry("MX");
+        request.setCurrency("MXN");
+        request.setAmount(123.25);
+
+        walletClient.topUpWallet(request, (error, reply) => {
+          if (error) {
+            throw error;
+          }
+
+          resolve(reply.getCheckoutPageUrl());
+        });
+      });
+
+    const checkout_page_urls = await Promise.all(users.map(topUpWallet));
+
+    for (const url of checkout_page_urls) {
+      expect(url).toBeTruthy();
     }
   });
 });

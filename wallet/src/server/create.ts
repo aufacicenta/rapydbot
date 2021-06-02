@@ -8,6 +8,8 @@ export default (context: IContext) => {
   server.addService<IWalletServer>(WalletService, {
     createWallet: (call, callback) =>
       context.controller.createWallet({ call, callback }, context),
+    topUpWallet: (call, callback) =>
+      context.controller.topUpWallet({ call, callback }, context),
   });
 
   return server;

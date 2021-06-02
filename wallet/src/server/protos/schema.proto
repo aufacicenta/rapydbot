@@ -6,6 +6,7 @@ package wallet;
 
 service Wallet {
   rpc CreateWallet (CreateWalletRequest) returns (CreateWalletReply) {}
+  rpc TopUpWallet (TopUpWalletRequest) returns (TopUpWalletReply) {}
 }
 
 message CreateWalletRequest {
@@ -14,6 +15,17 @@ message CreateWalletRequest {
 
 message CreateWalletReply {
   string rapyd_ewallet_address = 1;
+}
+
+message TopUpWalletRequest {
+  string user_id = 1;
+  string country = 2;
+  string currency = 3;
+  float amount = 4;
+}
+
+message TopUpWalletReply {
+  string checkout_page_url = 1;
 }
 
 message EmptyReply {}
