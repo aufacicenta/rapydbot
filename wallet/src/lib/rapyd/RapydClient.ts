@@ -63,7 +63,6 @@ class RapydClient {
         salt,
         accessKey,
         secretKey,
-        body: "",
         timestamp,
       });
 
@@ -195,12 +194,12 @@ class RapydClient {
     salt,
     accessKey,
     secretKey,
-    body,
     timestamp,
+    body,
   }: RequestSignature) {
-    const toSign = `${method.toLowerCase()}${path}${salt}${timestamp}${accessKey}${secretKey}${JSON.stringify(
-      body
-    )}`;
+    const toSign = `${method.toLowerCase()}${path}${salt}${timestamp}${accessKey}${secretKey}${
+      Boolean(body) ? JSON.stringify(body) : ""
+    }`;
 
     const hash = crypto.createHmac("sha256", secretKey);
     hash.update(toSign);

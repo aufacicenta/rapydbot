@@ -9,8 +9,8 @@ export interface RequestSignature {
   salt: string;
   accessKey: string;
   secretKey: string;
-  body: any;
   timestamp: number;
+  body?: any;
 }
 
 export enum HttpMethods {
