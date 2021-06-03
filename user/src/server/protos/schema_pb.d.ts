@@ -153,6 +153,48 @@ export namespace GetUserReply {
     }
 }
 
+export class FindUserByTelegramUserIdRequest extends jspb.Message { 
+    getTelegramFromUserId(): number;
+    setTelegramFromUserId(value: number): FindUserByTelegramUserIdRequest;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): FindUserByTelegramUserIdRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: FindUserByTelegramUserIdRequest): FindUserByTelegramUserIdRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: FindUserByTelegramUserIdRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): FindUserByTelegramUserIdRequest;
+    static deserializeBinaryFromReader(message: FindUserByTelegramUserIdRequest, reader: jspb.BinaryReader): FindUserByTelegramUserIdRequest;
+}
+
+export namespace FindUserByTelegramUserIdRequest {
+    export type AsObject = {
+        telegramFromUserId: number,
+    }
+}
+
+export class FindUserByTelegramUserIdReply extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): FindUserByTelegramUserIdReply;
+
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): FindUserByTelegramUserIdReply.AsObject;
+    static toObject(includeInstance: boolean, msg: FindUserByTelegramUserIdReply): FindUserByTelegramUserIdReply.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: FindUserByTelegramUserIdReply, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): FindUserByTelegramUserIdReply;
+    static deserializeBinaryFromReader(message: FindUserByTelegramUserIdReply, reader: jspb.BinaryReader): FindUserByTelegramUserIdReply;
+}
+
+export namespace FindUserByTelegramUserIdReply {
+    export type AsObject = {
+        userId: string,
+    }
+}
+
 export class EmptyReply extends jspb.Message { 
 
     serializeBinary(): Uint8Array;

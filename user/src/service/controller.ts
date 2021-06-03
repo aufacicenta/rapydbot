@@ -8,6 +8,8 @@ import {
   GetUserReply,
   GetUserRequest,
   GetUsersRequest,
+  FindUserByTelegramUserIdRequest,
+  FindUserByTelegramUserIdReply,
 } from "../server/protos/schema_pb";
 
 type GRPCUnaryCall<Request, Reply> = {
@@ -92,5 +94,28 @@ export class Controller {
     }
 
     call.end();
+  }
+
+  async findUserByTelegramUserId(
+    {
+      call,
+      callback,
+    }: GRPCUnaryCall<
+      FindUserByTelegramUserIdRequest,
+      FindUserByTelegramUserIdReply
+    >,
+    { dao }: IContext
+  ) {
+    const telegram_from_user_id = call.request.getTelegramFromUserId();
+
+    const result = await dao.UserDAO.findUserByTelegramUserId({
+      telegram_from_user_id,
+    });
+
+    const reply = new FindUserByTelegramUserIdReply();
+
+    reply.setUserId(result.userId);
+
+    callback(null, reply);
   }
 }

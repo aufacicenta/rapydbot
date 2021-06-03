@@ -1,6 +1,10 @@
 import USER_ClientGenerator, { UserClient } from "@rapydbot/user/client";
+import WALLET_ClientGenerator, { WalletClient } from "@rapydbot/wallet/client";
 import { Moment } from "moment";
-import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
+import TelegramBotApi, {
+  Message,
+  SendMessageOptions,
+} from "node-telegram-bot-api";
 import { StartCommand, WalletCommand } from "./commands";
 import { BotLanguageHandler, BotReplyToMessageIdHandler } from "./handler";
 import { Commands } from "./types";
@@ -15,6 +19,7 @@ export class Bot {
   private walletCommand: WalletCommand;
 
   public UserServiceClient: UserClient;
+  public WalletServiceClient: WalletClient;
 
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
@@ -25,7 +30,12 @@ export class Bot {
     this.startCommand = new StartCommand(this);
     this.walletCommand = new WalletCommand(this);
 
-    this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
+    this.UserServiceClient = new USER_ClientGenerator(
+      process.env.USER_SERVICE_URL
+    ).create();
+    this.WalletServiceClient = new WALLET_ClientGenerator(
+      process.env.WALLET_SERVICE_URL
+    ).create();
   }
 
   async prepare(): Promise<Bot> {
@@ -57,10 +67,17 @@ export class Bot {
     });
 
     this.api.onText(/^\/start/i, (msg, match) => this.startCommand.onText(msg));
-    this.api.onText(/^\/(wallet|billetera)/i, (msg, match) => this.walletCommand.onText(msg));
+    this.api.onText(/^\/(wallet|billetera)/i, (msg, match) =>
+      this.walletCommand.onText(msg)
+    );
   }
 
-  reply(msg: Message, translationKey: string, options?: SendMessageOptions, args?: {}) {
+  reply(
+    msg: Message,
+    translationKey: string,
+    options?: SendMessageOptions,
+    args?: {}
+  ) {
     this.api.sendMessage(
       msg.chat.id,
       this.languageHandler.getTranslation(msg, translationKey, args),

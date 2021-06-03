@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+##! /usr/bin/bash
 
 ROOT=`pwd`
 PROTO_DEST=$ROOT/src/server/protos

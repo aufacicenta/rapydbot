@@ -1,3 +1,5 @@
+import { CreateWalletRequest } from "@rapydbot/wallet/client";
+import { FindUserByTelegramUserIdRequest } from "@rapydbot/user/client";
 import { Message } from "node-telegram-bot-api";
 import { Bot } from "../Bot";
 import { BotReplyToMessageIdHandler } from "../handler";
@@ -35,10 +37,11 @@ export class WalletCommand implements IBotCommand {
     }
   }
 
-  private handleCreateOption(msg: Message) {
+  private async handleCreateOption(msg: Message) {
     // @TODO create a Rapyd e_wallet for the user and link the wallet address to the user ID
     // @TODO create a checkout page for the user. Can it be created without a specified amount?
     // @TODO if the user already has a wallet, should they create another one?
+    const eWalletAddress = await this.createWallet(msg);
     try {
       this.bot.replyWithMessageID(
         msg,
@@ -65,7 +68,10 @@ export class WalletCommand implements IBotCommand {
           checkout_page_url: `https://sandboxcheckout.rapyd.net/?token=checkout_730765f5b6f816a832111150be267d70`,
         }
       );
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      console.log(eWalletAddress);
+    }
   }
 
   private handleEmptyOptionMessage(msg: Message) {
@@ -96,5 +102,46 @@ export class WalletCommand implements IBotCommand {
 
   private handleErrorReply(error: Error, msg: Message) {
     return this.bot.reply(msg, translationKeys.start_command_error);
+  }
+
+  private async createWallet(msg: Message): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getUserId(msg)
+        .then((userId) => {
+          const createWalletRequest = new CreateWalletRequest();
+          createWalletRequest.setUserId(userId);
+
+          this.bot.WalletServiceClient.createWallet(
+            createWalletRequest,
+            (error, reply) => {
+              if (Boolean(error)) throw error;
+
+              const eWalletAddress = reply.getRapydEwalletAddress();
+              resolve(eWalletAddress);
+            }
+          );
+        })
+        .catch((error) => reject(error));
+    });
+  }
+
+  private async getUserId(msg: Message): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const findUserRequestByTelegram = new FindUserByTelegramUserIdRequest();
+
+      findUserRequestByTelegram.setTelegramFromUserId(msg.from.id);
+
+      this.bot.UserServiceClient.findUserByTelegramUserId(
+        findUserRequestByTelegram,
+        (err, reply) => {
+          if (Boolean(err)) {
+            return reject(err);
+          }
+
+          const user_id = reply.getUserId();
+          resolve(user_id);
+        }
+      );
+    });
   }
 }

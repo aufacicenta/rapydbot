@@ -26,6 +26,28 @@ function deserialize_user_CreateUserRequest(buffer_arg) {
   return schema_pb.CreateUserRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_user_FindUserByTelegramUserIdReply(arg) {
+  if (!(arg instanceof schema_pb.FindUserByTelegramUserIdReply)) {
+    throw new Error('Expected argument of type user.FindUserByTelegramUserIdReply');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_user_FindUserByTelegramUserIdReply(buffer_arg) {
+  return schema_pb.FindUserByTelegramUserIdReply.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_user_FindUserByTelegramUserIdRequest(arg) {
+  if (!(arg instanceof schema_pb.FindUserByTelegramUserIdRequest)) {
+    throw new Error('Expected argument of type user.FindUserByTelegramUserIdRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_user_FindUserByTelegramUserIdRequest(buffer_arg) {
+  return schema_pb.FindUserByTelegramUserIdRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_user_GetUserReply(arg) {
   if (!(arg instanceof schema_pb.GetUserReply)) {
     throw new Error('Expected argument of type user.GetUserReply');
@@ -93,6 +115,17 @@ var UserService = exports.UserService = {
     requestDeserialize: deserialize_user_GetUsersRequest,
     responseSerialize: serialize_user_GetUserReply,
     responseDeserialize: deserialize_user_GetUserReply,
+  },
+  findUserByTelegramUserId: {
+    path: '/user.User/FindUserByTelegramUserId',
+    requestStream: false,
+    responseStream: false,
+    requestType: schema_pb.FindUserByTelegramUserIdRequest,
+    responseType: schema_pb.FindUserByTelegramUserIdReply,
+    requestSerialize: serialize_user_FindUserByTelegramUserIdRequest,
+    requestDeserialize: deserialize_user_FindUserByTelegramUserIdRequest,
+    responseSerialize: serialize_user_FindUserByTelegramUserIdReply,
+    responseDeserialize: deserialize_user_FindUserByTelegramUserIdReply,
   },
 };
 

@@ -11,6 +11,7 @@ interface IUserService extends grpc.ServiceDefinition<grpc.UntypedServiceImpleme
     findUserByTelegramUserIdOrCreateUser: IUserService_IFindUserByTelegramUserIdOrCreateUser;
     getUser: IUserService_IGetUser;
     getUsers: IUserService_IGetUsers;
+    findUserByTelegramUserId: IUserService_IFindUserByTelegramUserId;
 }
 
 interface IUserService_IFindUserByTelegramUserIdOrCreateUser extends grpc.MethodDefinition<schema_pb.CreateUserRequest, schema_pb.CreateUserReply> {
@@ -40,6 +41,15 @@ interface IUserService_IGetUsers extends grpc.MethodDefinition<schema_pb.GetUser
     responseSerialize: grpc.serialize<schema_pb.GetUserReply>;
     responseDeserialize: grpc.deserialize<schema_pb.GetUserReply>;
 }
+interface IUserService_IFindUserByTelegramUserId extends grpc.MethodDefinition<schema_pb.FindUserByTelegramUserIdRequest, schema_pb.FindUserByTelegramUserIdReply> {
+    path: "/user.User/FindUserByTelegramUserId";
+    requestStream: false;
+    responseStream: false;
+    requestSerialize: grpc.serialize<schema_pb.FindUserByTelegramUserIdRequest>;
+    requestDeserialize: grpc.deserialize<schema_pb.FindUserByTelegramUserIdRequest>;
+    responseSerialize: grpc.serialize<schema_pb.FindUserByTelegramUserIdReply>;
+    responseDeserialize: grpc.deserialize<schema_pb.FindUserByTelegramUserIdReply>;
+}
 
 export const UserService: IUserService;
 
@@ -47,6 +57,7 @@ export interface IUserServer {
     findUserByTelegramUserIdOrCreateUser: grpc.handleUnaryCall<schema_pb.CreateUserRequest, schema_pb.CreateUserReply>;
     getUser: grpc.handleUnaryCall<schema_pb.GetUserRequest, schema_pb.GetUserReply>;
     getUsers: grpc.handleServerStreamingCall<schema_pb.GetUsersRequest, schema_pb.GetUserReply>;
+    findUserByTelegramUserId: grpc.handleUnaryCall<schema_pb.FindUserByTelegramUserIdRequest, schema_pb.FindUserByTelegramUserIdReply>;
 }
 
 export interface IUserClient {
@@ -58,6 +69,9 @@ export interface IUserClient {
     getUser(request: schema_pb.GetUserRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: schema_pb.GetUserReply) => void): grpc.ClientUnaryCall;
     getUsers(request: schema_pb.GetUsersRequest, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<schema_pb.GetUserReply>;
     getUsers(request: schema_pb.GetUsersRequest, metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<schema_pb.GetUserReply>;
+    findUserByTelegramUserId(request: schema_pb.FindUserByTelegramUserIdRequest, callback: (error: grpc.ServiceError | null, response: schema_pb.FindUserByTelegramUserIdReply) => void): grpc.ClientUnaryCall;
+    findUserByTelegramUserId(request: schema_pb.FindUserByTelegramUserIdRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: schema_pb.FindUserByTelegramUserIdReply) => void): grpc.ClientUnaryCall;
+    findUserByTelegramUserId(request: schema_pb.FindUserByTelegramUserIdRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: schema_pb.FindUserByTelegramUserIdReply) => void): grpc.ClientUnaryCall;
 }
 
 export class UserClient extends grpc.Client implements IUserClient {
@@ -70,4 +84,7 @@ export class UserClient extends grpc.Client implements IUserClient {
     public getUser(request: schema_pb.GetUserRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: schema_pb.GetUserReply) => void): grpc.ClientUnaryCall;
     public getUsers(request: schema_pb.GetUsersRequest, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<schema_pb.GetUserReply>;
     public getUsers(request: schema_pb.GetUsersRequest, metadata?: grpc.Metadata, options?: Partial<grpc.CallOptions>): grpc.ClientReadableStream<schema_pb.GetUserReply>;
+    public findUserByTelegramUserId(request: schema_pb.FindUserByTelegramUserIdRequest, callback: (error: grpc.ServiceError | null, response: schema_pb.FindUserByTelegramUserIdReply) => void): grpc.ClientUnaryCall;
+    public findUserByTelegramUserId(request: schema_pb.FindUserByTelegramUserIdRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: schema_pb.FindUserByTelegramUserIdReply) => void): grpc.ClientUnaryCall;
+    public findUserByTelegramUserId(request: schema_pb.FindUserByTelegramUserIdRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: schema_pb.FindUserByTelegramUserIdReply) => void): grpc.ClientUnaryCall;
 }
