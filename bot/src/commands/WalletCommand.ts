@@ -38,11 +38,11 @@ export class WalletCommand implements IBotCommand {
   }
 
   private async handleCreateOption(msg: Message) {
-    // @TODO create a Rapyd e_wallet for the user and link the wallet address to the user ID
     // @TODO create a checkout page for the user. Can it be created without a specified amount?
     // @TODO if the user already has a wallet, should they create another one?
-    const eWalletAddress = await this.createWallet(msg);
     try {
+      const eWalletAddress = await this.createWallet(msg);
+
       this.bot.replyWithMessageID(
         msg,
         translationKeys.wallet_command_option_create,
@@ -52,26 +52,31 @@ export class WalletCommand implements IBotCommand {
         {
           disable_web_page_preview: true,
           reply_markup: {
-            inline_keyboard: [
+            keyboard: [
               [
                 {
-                  text: "Top Up Wallet",
-                  url: `https://sandboxcheckout.rapyd.net/?token=checkout_730765f5b6f816a832111150be267d70`,
+                  text: this.bot.languageHandler.getTranslation(
+                    msg,
+                    translationKeys.wallet_command_option_text_top_up
+                  ),
+                },
+                {
+                  text: this.bot.languageHandler.getTranslation(
+                    msg,
+                    translationKeys.wallet_command_option_text_help
+                  ),
                 },
               ],
             ],
           },
         },
         {
-          e_wallet_address: "ewallet_123",
-          username: msg.chat.username,
-          checkout_page_url: `https://sandboxcheckout.rapyd.net/?token=checkout_730765f5b6f816a832111150be267d70`,
+          e_wallet_address: eWalletAddress,
+          username:
+            msg.chat.username ?? `${msg.chat.first_name} ${msg.chat.last_name}`,
         }
       );
-    } catch (error) {
-    } finally {
-      console.log(eWalletAddress);
-    }
+    } catch (error) {}
   }
 
   private handleEmptyOptionMessage(msg: Message) {

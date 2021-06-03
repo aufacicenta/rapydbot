@@ -9,5 +9,7 @@ export const translationKeys = {
   wallet_command_empty_option: "wallet_command_empty_option",
   wallet_command_option_text_create: "wallet_command_option_text_create",
   wallet_command_option_text_balance: "wallet_command_option_text_balance",
+  wallet_command_option_text_top_up: "wallet_command_option_text_top_up",
+  wallet_command_option_text_help: "wallet_command_option_text_help",
   wallet_command_option_create: "wallet_command_option_create",
 };
