@@ -6,5 +6,5 @@ node_modules
 yarn-error.log
 .DS_STORE
 
-database/generated
-server/schema/generated
+src/server/protos/*
+!src/server/protos/*.proto
