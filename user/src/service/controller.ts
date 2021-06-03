@@ -5,6 +5,8 @@ import { IContext } from "../server/interface/IContext";
 import {
   CreateUserReply,
   CreateUserRequest,
+  FindUserByTelegramUserIdReply,
+  FindUserByTelegramUserIdRequest,
   GetUserReply,
   GetUserRequest,
   GetUsersRequest,
@@ -92,5 +94,25 @@ export class Controller {
     }
 
     call.end();
+  }
+
+  async findUserByTelegramUserId(
+    {
+      call,
+      callback,
+    }: GRPCUnaryCall<FindUserByTelegramUserIdRequest, FindUserByTelegramUserIdReply>,
+    { dao }: IContext
+  ) {
+    const telegram_from_user_id = call.request.getTelegramFromUserId();
+
+    const result = await dao.UserDAO.findUserByTelegramUserId({
+      telegram_from_user_id,
+    });
+
+    const reply = new FindUserByTelegramUserIdReply();
+
+    reply.setUserId(result.userId);
+
+    callback(null, reply);
   }
 }

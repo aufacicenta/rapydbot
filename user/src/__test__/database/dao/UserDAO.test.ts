@@ -106,4 +106,22 @@ describe("database:dao:user", () => {
 
     expect(get_users_result.length).toEqual(2);
   });
+
+  test("success findUserByTelegramUserId", async () => {
+    const telegram_username = "samsepiol";
+    const telegram_from_user_id = 18904064;
+
+    const user_result = await dao.findUserByTelegramUserIdOrCreateUser({
+      telegram_from_user_id,
+      telegram_username,
+    });
+
+    const tg_user_id = user_result.telegramFromUserId;
+
+    const user_id = await dao.findUserByTelegramUserId({
+      telegram_from_user_id: tg_user_id,
+    });
+
+    expect(user_id.userId).toEqual(user_result.userId);
+  });
 });

@@ -14,6 +14,8 @@ export default (context: IContext) => {
     getUser: (call, callback) =>
       context.controller.getUser({ call, callback }, context),
     getUsers: (call) => context.controller.getUsers({ call }, context),
+    findUserByTelegramUserId: (call, callback) =>
+      context.controller.findUserByTelegramUserId({ call, callback }, context),
   });
 
   return server;

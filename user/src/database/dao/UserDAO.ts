@@ -1,5 +1,9 @@
 import { ModelCtor, Sequelize } from "sequelize";
-import { CreateUserReply, GetUserReply } from "../../server/protos/schema_pb";
+import {
+  CreateUserReply,
+  GetUserReply,
+  FindUserByTelegramUserIdReply,
+} from "../../server/protos/schema_pb";
 import { TelegramModel } from "../model/TelegramModel";
 import { UserModel } from "../model/UserModel";
 
@@ -60,6 +64,34 @@ export class UserDAO {
       telegramFromUserId: telegram_result.getDataValue("from_user_id"),
       telegramUsername: telegram_result.getDataValue("username"),
       telegramPrivateChatId: telegram_result.getDataValue("private_chat_id"),
+    };
+  }
+
+  async findUserByTelegramUserId({
+    telegram_from_user_id,
+  }: {
+    telegram_from_user_id: number;
+  }): Promise<FindUserByTelegramUserIdReply.AsObject> {
+    const telegram_result = await this.telegram.findOne({
+      where: {
+        from_user_id: telegram_from_user_id,
+      },
+    });
+
+    const telegram_id = telegram_result.getDataValue("id");
+
+    if (!Boolean(telegram_id)) {
+      throw new Error("findUserByTelegramUserIdOrCreateUser failed");
+    }
+
+    const userId = telegram_result.getDataValue("user_id");
+
+    if (!Boolean(userId)) {
+      throw new Error("findUserByTelegramUserIdOrCreateUser failed");
+    }
+
+    return {
+      userId,
     };
   }
 

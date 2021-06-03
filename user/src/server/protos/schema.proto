@@ -8,6 +8,7 @@ service User {
   rpc FindUserByTelegramUserIdOrCreateUser (CreateUserRequest) returns (CreateUserReply) {}
   rpc GetUser (GetUserRequest) returns (GetUserReply) {}
   rpc GetUsers (GetUsersRequest) returns (stream GetUserReply) {}
+  rpc FindUserByTelegramUserId (FindUserByTelegramUserIdRequest) returns (FindUserByTelegramUserIdReply) {}
 }
 
 message CreateUserRequest {
@@ -38,6 +39,14 @@ message GetUserReply {
   string telegram_username = 3;
   int32 telegram_private_chat_id = 4;
   string telegram_user_id = 5;
+}
+
+message FindUserByTelegramUserIdRequest {
+  int32 telegram_from_user_id = 1;
+}
+
+message FindUserByTelegramUserIdReply {
+  string user_id = 1;
 }
 
 message EmptyReply {}

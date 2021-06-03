@@ -1,4 +1,5 @@
 import USER_ClientGenerator, { UserClient } from "@rapydbot/user/client";
+import WALLET_ClientGenerator, { WalletClient } from "@rapydbot/wallet/client";
 import { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
 import { StartCommand, WalletCommand } from "./commands";
@@ -15,6 +16,7 @@ export class Bot {
   private walletCommand: WalletCommand;
 
   public UserServiceClient: UserClient;
+  public WalletServiceClient: WalletClient;
 
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
@@ -26,6 +28,9 @@ export class Bot {
     this.walletCommand = new WalletCommand(this);
 
     this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
+    this.WalletServiceClient = new WALLET_ClientGenerator(
+      process.env.WALLET_SERVICE_URL
+    ).create();
   }
 
   async prepare(): Promise<Bot> {
