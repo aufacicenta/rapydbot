@@ -1,0 +1,80 @@
+{
+  "responses": {
+    "success": {
+      "status": {
+        "error_code": "",
+        "status": "SUCCESS",
+        "message": "",
+        "response_code": "",
+        "operation_id": "bbb1c497-15b3-4e6c-a3ed-8f61cd725568"
+      },
+      "data": {
+        "phone_number": null,
+        "email": null,
+        "first_name": "John",
+        "last_name": "Doe",
+        "id": "ewallet_9e2ad940e7b24e78701021cdc7d91fa4",
+        "status": "ACT",
+        "accounts": [],
+        "verification_status": "not verified",
+        "type": "person",
+        "metadata": {
+          "merchant_defined": true
+        },
+        "ewallet_reference_id": "John-Doe-02152020",
+        "category": null,
+        "contacts": {
+          "data": [
+            {
+              "id": "cont_1b31ad3c1b2d6571e5fe54f97e19233c",
+              "first_name": "John",
+              "last_name": "Doe",
+              "middle_name": "",
+              "second_last_name": "",
+              "gender": "not_applicable",
+              "marital_status": "not_applicable",
+              "house_type": "",
+              "contact_type": "personal",
+              "phone_number": "+14155551311",
+              "email": "johndoe@rapyd.net",
+              "identification_type": "PA",
+              "identification_number": "1234567890",
+              "date_of_birth": "2000-11-22",
+              "country": "US",
+              "nationality": "FR",
+              "address": {
+                "id": "address_a90c7dd7636ccadc6c20a74640a4a99c",
+                "name": "John Doe",
+                "line_1": "123 Main Street",
+                "line_2": "",
+                "line_3": "",
+                "city": "Anytown",
+                "state": "NY",
+                "country": "US",
+                "zip": "12345",
+                "phone_number": "+14155551111",
+                "metadata": {},
+                "canton": "",
+                "district": "",
+                "created_at": 1608018306
+              },
+              "ewallet": "ewallet_9e2ad940e7b24e78701021cdc7d91fa4",
+              "created_at": 1608018306,
+              "metadata": {
+                "merchant_defined": true
+              },
+              "business_details": null,
+              "compliance_profile": 0,
+              "verification_status": "not verified",
+              "send_notifications": false,
+              "mothers_name": "Jane Smith"
+            }
+          ],
+          "has_more": false,
+          "total_count": 1,
+          "url": "/v1/ewallets/ewallet_9e2ad940e7b24e78701021cdc7d91fa4/contacts"
+        }
+      }
+    }
+  }
+}

@@ -12,6 +12,7 @@
     "typeRoots": ["node_modules/@types"],
     "esModuleInterop": true,
     "declaration": true,
+    "resolveJsonModule": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
