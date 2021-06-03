@@ -8,10 +8,7 @@
       "cwd": "${workspaceRoot}/bot/src",
       "trace": true,
       "port": 9228,
-      "skipFiles": [
-        "${workspaceRoot}/node_modules/**/*",
-        "<node_internals>/**/*.js"
-      ]
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]
     },
     {
       "type": "node",
@@ -20,23 +17,59 @@
       "cwd": "${workspaceRoot}/user/src",
       "trace": true,
       "port": 9226,
-      "skipFiles": [
-        "${workspaceRoot}/node_modules/**/*",
-        "<node_internals>/**/*.js"
-      ]
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]
     },
     {
       "type": "node",
       "request": "attach",
-      "name": "ORDER: Attach by Process ID",
-      "cwd": "${workspaceRoot}/order/src",
+      "name": "WALLET: Attach by Process ID",
+      "cwd": "${workspaceRoot}/wallet/src",
       "trace": true,
-      "port": 9227,
-      "skipFiles": [
-        "${workspaceRoot}/node_modules/**/*",
-        "<node_internals>/**/*.js"
-      ]
+      "port": 9225,
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "WALLET: Jest Current File",
+      "program": "${workspaceFolder}/wallet/node_modules/.bin/jest",
+      "cwd": "${workspaceFolder}/wallet",
+      "args": [
+        "--config",
+        "${workspaceFolder}/wallet/jest.config.js",
+        "--verbose",
+        "--runInBand",
+        "${fileBasenameNoExtension}"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/wallet/node_modules/jest/bin/jest"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "WALLET: Jest Current Selected Test In File",
+      "program": "${workspaceFolder}/wallet/node_modules/.bin/jest",
+      "cwd": "${workspaceFolder}/wallet",
+      "args": [
+        "--config",
+        "${workspaceFolder}/wallet/package.json",
+        "--verbose",
+        "--runInBand",
+        "${fileBasenameNoExtension}",
+        "-t",
+        "${selectedText}"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "windows": {
+        "program": "${workspaceFolder}/wallet/node_modules/jest/bin/jest"
+      }
+    }
     {
       "type": "node",
       "request": "attach",
@@ -44,10 +77,7 @@
       "cwd": "${workspaceRoot}/price/src",
       "trace": true,
       "port": 9225,
-      "skipFiles": [
-        "${workspaceRoot}/node_modules/**/*",
-        "<node_internals>/**/*.js"
-      ]
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]
     },
     {
       "type": "node",
@@ -89,26 +119,7 @@
         "program": "${workspaceFolder}/user/node_modules/jest/bin/jest"
       }
     },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "ORDER: Jest Current File",
-      "program": "${workspaceFolder}/order/node_modules/.bin/jest",
-      "cwd": "${workspaceFolder}/order",
-      "args": [
-        "--config",
-        "${workspaceFolder}/order/jest.config.js",
-        "--verbose",
-        "--runInBand",
-        "${fileBasenameNoExtension}"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/order/node_modules/jest/bin/jest"
-      }
-    },
+
     {
       "type": "node",
       "request": "launch",
@@ -149,27 +160,6 @@
         "program": "${workspaceFolder}/price/node_modules/jest/bin/jest"
       }
     },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "PRICE: Jest Current Selected Test In File",
-      "program": "${workspaceFolder}/price/node_modules/.bin/jest",
-      "cwd": "${workspaceFolder}/price",
-      "args": [
-        "--config",
-        "${workspaceFolder}/price/package.json",
-        "--verbose",
-        "--runInBand",
-        "${fileBasenameNoExtension}",
-        "-t",
-        "${selectedText}"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/price/node_modules/jest/bin/jest"
-      }
-    }
+
   ]
 }

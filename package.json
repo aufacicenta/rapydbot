@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@aufacicenta/microservice-generator": "^1.0.7"
+  }
+}
