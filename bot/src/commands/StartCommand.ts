@@ -20,7 +20,6 @@ export class StartCommand implements IBotCommand {
 
   async onText(msg: Message) {
     try {
-      console.log(msg);
       await this.findUserByTelegramUserIdOrCreateUser(msg);
 
       this.bot.reply(msg, translationKeys.start_command_intro, {
@@ -56,9 +55,7 @@ export class StartCommand implements IBotCommand {
     }
   }
 
-  private async findUserByTelegramUserIdOrCreateUser(
-    msg: Message
-  ): Promise<void> {
+  private async findUserByTelegramUserIdOrCreateUser(msg: Message): Promise<void> {
     return new Promise((resolve, reject) => {
       const createUserRequest = new CreateUserRequest();
 

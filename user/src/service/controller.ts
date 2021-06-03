@@ -5,11 +5,11 @@ import { IContext } from "../server/interface/IContext";
 import {
   CreateUserReply,
   CreateUserRequest,
+  FindUserByTelegramUserIdReply,
+  FindUserByTelegramUserIdRequest,
   GetUserReply,
   GetUserRequest,
   GetUsersRequest,
-  FindUserByTelegramUserIdRequest,
-  FindUserByTelegramUserIdReply,
 } from "../server/protos/schema_pb";
 
 type GRPCUnaryCall<Request, Reply> = {
@@ -100,10 +100,7 @@ export class Controller {
     {
       call,
       callback,
-    }: GRPCUnaryCall<
-      FindUserByTelegramUserIdRequest,
-      FindUserByTelegramUserIdReply
-    >,
+    }: GRPCUnaryCall<FindUserByTelegramUserIdRequest, FindUserByTelegramUserIdReply>,
     { dao }: IContext
   ) {
     const telegram_from_user_id = call.request.getTelegramFromUserId();

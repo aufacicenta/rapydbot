@@ -12,4 +12,7 @@ export const translationKeys = {
   wallet_command_option_text_top_up: "wallet_command_option_text_top_up",
   wallet_command_option_text_help: "wallet_command_option_text_help",
   wallet_command_option_create: "wallet_command_option_create",
+  wallet_command_button_text_top_up: "wallet_command_button_text_top_up",
+  wallet_command_error_rapyd_ewallet_exists_for_user_id:
+    "wallet_command_error_rapyd_ewallet_exists_for_user_id",
 };

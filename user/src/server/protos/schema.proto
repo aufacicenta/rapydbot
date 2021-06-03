@@ -41,11 +41,11 @@ message GetUserReply {
   string telegram_user_id = 5;
 }
 
-message FindTelegramInfoRequest {
+message FindUserByTelegramUserIdRequest {
   int32 telegram_from_user_id = 1;
 }
 
-message FindUserByTelegramUserId {
+message FindUserByTelegramUserIdReply {
   string user_id = 1;
 }
 

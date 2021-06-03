@@ -15,6 +15,5 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["./src/client"],
-  "exclude": ["node_modules", "build", "jest.config.js"]
+  "include": ["./src/client", "./src/service/error.ts", "./src/__test__/**/*.ts"]
 }
