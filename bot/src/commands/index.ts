@@ -1,3 +1,3 @@
 export * from "./CreateWalletCommand";
 export * from "./StartCommand";
-export * from "./WalletCommand";
+export * from "./TopUpCommand";

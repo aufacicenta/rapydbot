@@ -39,7 +39,7 @@ export class CreateWalletCommand implements IBotCommand {
 
     this.bot.replyWithMessageID(
       msg,
-      translationKeys.wallet_command_option_create,
+      translationKeys.createwallet_command_reply,
       this,
       {},
       null,
@@ -52,13 +52,13 @@ export class CreateWalletCommand implements IBotCommand {
               {
                 text: this.bot.languageHandler.getTranslation(
                   msg,
-                  translationKeys.wallet_command_option_text_top_up
+                  translationKeys.command_text_topup
                 ),
               },
               {
                 text: this.bot.languageHandler.getTranslation(
                   msg,
-                  translationKeys.wallet_command_option_text_help
+                  translationKeys.command_text_balance
                 ),
               },
             ],
@@ -76,7 +76,7 @@ export class CreateWalletCommand implements IBotCommand {
     if (error?.message.includes(WalletServiceErrorCodes.rapyd_ewallet_exists_for_user_id)) {
       return this.bot.reply(
         msg,
-        translationKeys.wallet_command_error_rapyd_ewallet_exists_for_user_id
+        translationKeys.createwallet_command_error_rapyd_ewallet_exists_for_user_id
       );
     }
 

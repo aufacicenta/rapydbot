@@ -14,7 +14,9 @@ export default {
 
 
   ¿Intenta de nuevo?`,
-  [translationKeys.command_text_wallet]: `/billetera`,
   [translationKeys.command_text_request]: `/solicitar`,
+  [translationKeys.command_text_createwallet]: `/crearbilletera`,
   [translationKeys.command_text_send]: `/enviar`,
+  [translationKeys.command_text_topup]: `/recargar`,
+  [translationKeys.command_text_balance]: `/saldo`,
 };

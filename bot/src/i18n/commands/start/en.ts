@@ -13,7 +13,9 @@ To start, create your /wallet or choose from the available commands.
 
 
   Try again?`,
-  [translationKeys.command_text_wallet]: `/wallet`,
   [translationKeys.command_text_request]: `/request`,
+  [translationKeys.command_text_createwallet]: `/createwallet`,
   [translationKeys.command_text_send]: `/send`,
+  [translationKeys.command_text_topup]: `/topup`,
+  [translationKeys.command_text_balance]: `/balance`,
 };

@@ -26,24 +26,19 @@ export class StartCommand implements IBotCommand {
         disable_web_page_preview: true,
         reply_markup: {
           resize_keyboard: true,
+          one_time_keyboard: true,
           keyboard: [
             [
               {
                 text: this.bot.languageHandler.getTranslation(
                   msg,
-                  translationKeys.command_text_wallet
+                  translationKeys.command_text_createwallet
                 ),
               },
               {
                 text: this.bot.languageHandler.getTranslation(
                   msg,
-                  translationKeys.command_text_request
-                ),
-              },
-              {
-                text: this.bot.languageHandler.getTranslation(
-                  msg,
-                  translationKeys.command_text_send
+                  translationKeys.command_text_topup
                 ),
               },
             ],
