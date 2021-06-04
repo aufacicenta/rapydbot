@@ -17,6 +17,8 @@ export default (context: IContext) => {
         { call, callback },
         context
       ),
+    getWalletBalance: (call, callback) =>
+      context.controller.getWalletBalance({ call, callback }, context),
   });
 
   return server;

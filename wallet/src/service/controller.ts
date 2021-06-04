@@ -12,6 +12,7 @@ import {
   TransferFundsBetweenWalletsParams,
   TransferFundsBetweenWalletsResponse,
   WalletObjectResponse,
+  GetWalletBalanceResponse,
 } from "../lib/rapyd/types";
 import { IContext } from "../server/interface/IContext";
 import {
@@ -23,6 +24,8 @@ import {
   TopUpWalletRequest,
   TransferFromWalletReply,
   TransferFromWalletRequest,
+  GetWalletBalanceReply,
+  GetWalletBalanceRequest,
 } from "../server/protos/schema_pb";
 import { WalletServiceErrorCodes } from "../service/error";
 
@@ -251,6 +254,70 @@ export class Controller {
       reply.setAmount(wallet_transaction_amount);
       reply.setCurrency(wallet_transaction_currency);
       reply.setSenderUserId(sender_user_id);
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async getWalletBalance(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<GetWalletBalanceRequest, GetWalletBalanceReply>,
+    { dao }: IContext
+  ) {
+    try {
+      const user_id = call.request.getUserId();
+      const wallet = await dao.WalletDAO.getWalletEstablishedCurrency({
+        user_id,
+      });
+
+      if (!Boolean(wallet.ewallet_address)) {
+        throw new Error(
+          WalletServiceErrorCodes.rapyd_ewallet_does_not_exist_for_user_id
+        );
+      }
+
+      if (!Boolean(wallet.ewallet_established_currency)) {
+        throw new Error(
+          WalletServiceErrorCodes.rapyd_ewallet_does_not_have_an_established_currency
+        );
+      }
+
+      const ewallet_address = wallet.ewallet_address;
+      const ewallet_currency = wallet.ewallet_established_currency;
+
+      const balances = await this.rapydClient.get<
+        Array<GetWalletBalanceResponse>
+      >({
+        path: `/v1/user/${ewallet_address}/accounts`,
+      });
+
+      if (!Boolean(balances.length)) {
+        throw new Error(
+          WalletServiceErrorCodes.rapyd_ewallet_does_not_have_balances
+        );
+      }
+
+      const balanceByEstablishedCurrency = balances
+        .filter(({ currency }) => currency === ewallet_currency)
+        .shift();
+
+      if (!Boolean(balanceByEstablishedCurrency)) {
+        throw new Error(
+          WalletServiceErrorCodes.rapyd_ewallet_does_not_have_balance_for_currency
+        );
+      }
+
+      const reply = new GetWalletBalanceReply();
+
+      reply.setBalance(balanceByEstablishedCurrency.balance);
+      reply.setCurrency(balanceByEstablishedCurrency.currency);
+      reply.setOnHoldBalance(balanceByEstablishedCurrency.on_hold_balance);
+      reply.setReceivedBalance(balanceByEstablishedCurrency.received_balance);
+      reply.setReserveBalance(balanceByEstablishedCurrency.reserve_balance);
 
       callback(null, reply);
     } catch (error) {
