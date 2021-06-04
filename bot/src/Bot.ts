@@ -2,7 +2,7 @@ import USER_ClientGenerator, { UserClient } from "@rapydbot/user/client";
 import WALLET_ClientGenerator, { WalletClient } from "@rapydbot/wallet/client";
 import { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
-import { StartCommand, WalletCommand } from "./commands";
+import { CreateWalletCommand, StartCommand, TopUpCommand } from "./commands";
 import { BotLanguageHandler, BotReplyToMessageIdHandler } from "./handler";
 import { Commands } from "./types";
 
@@ -13,7 +13,8 @@ export class Bot {
   public languageHandler: BotLanguageHandler;
 
   private startCommand: StartCommand;
-  private walletCommand: WalletCommand;
+  private createWalletCommand: CreateWalletCommand;
+  private topUpCommand: TopUpCommand;
 
   public UserServiceClient: UserClient;
   public WalletServiceClient: WalletClient;
@@ -25,7 +26,8 @@ export class Bot {
     this.languageHandler = new BotLanguageHandler();
 
     this.startCommand = new StartCommand(this);
-    this.walletCommand = new WalletCommand(this);
+    this.createWalletCommand = new CreateWalletCommand(this);
+    this.topUpCommand = new TopUpCommand(this);
 
     this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
     this.WalletServiceClient = new WALLET_ClientGenerator(
@@ -58,11 +60,26 @@ export class Bot {
         return command.onReplyFromMessageID(msg, handler);
       }
 
+      const handler = this.getReplyToMessageIdHandler(msg.chat.id);
+      if (Boolean(handler) && handler.storage.get("previousText")) {
+        const command = handler?.command;
+
+        if (!Boolean(command)) {
+          return;
+        }
+
+        this.clearCommandHandler(msg.chat.id);
+        return command.onReplyFromMessageID(msg, handler);
+      }
+
       // TODO no answers reply
     });
 
     this.api.onText(/^\/start/i, (msg, match) => this.startCommand.onText(msg));
-    this.api.onText(/^\/(wallet|billetera)/i, (msg, match) => this.walletCommand.onText(msg));
+    this.api.onText(/^\/(createwallet|crearbilletera)/i, (msg, match) =>
+      this.createWalletCommand.onText(msg)
+    );
+    this.api.onText(/^\/(topup|recargar)/i, (msg, match) => this.topUpCommand.onText(msg));
   }
 
   reply(msg: Message, translationKey: string, options?: SendMessageOptions, args?: {}) {
@@ -116,5 +133,9 @@ export class Bot {
 
   private getReplyToMessageIdHandler(chat_id: number) {
     return this.replyToMessageIDMap.get(chat_id);
+  }
+
+  private clearCommandHandler(chat_id: number) {
+    return this.replyToMessageIDMap.delete(chat_id);
   }
 }

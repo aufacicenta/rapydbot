@@ -1,3 +1,3 @@
-import { StartCommand, WalletCommand } from "./commands";
+import { CreateWalletCommand, StartCommand, TopUpCommand } from "./commands";
 
-export type Commands = StartCommand | WalletCommand;
+export type Commands = StartCommand | CreateWalletCommand | TopUpCommand;
