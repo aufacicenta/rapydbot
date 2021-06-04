@@ -11,9 +11,7 @@ describe("Rapyd API HTTP Client", () => {
 
   rapydClient["generateRequestSignature"] = jest
     .fn()
-    .mockImplementation(
-      (method, path, salt, accessKey, secretKey, body) => "falseSignature"
-    ) as any;
+    .mockImplementation(() => "falseSignature") as any;
 
   it("Should return a successful response for creating a new wallet", async () => {
     const createWalletSuccessResponse = CreateWalletReponses.responses.success;
@@ -25,13 +23,14 @@ describe("Rapyd API HTTP Client", () => {
 
     const requestBody = CreateWalletRequest.requests.createWallet;
     const responseData = await rapydClient.post<
-      typeof createWalletSuccessResponse
+      typeof createWalletSuccessResponse.data,
+      typeof requestBody
     >({
       path: "/v1/wallet",
       body: { ...requestBody },
     });
 
-    expect(responseData.status.status).toBe("SUCCESS");
-    expect(responseData.data.id).not.toBe(null);
+    expect(responseData.status).toBe("ACT");
+    expect(responseData.id).not.toBe(null);
   });
 });
