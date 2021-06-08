@@ -7,33 +7,33 @@ import {
   CreateCheckoutPageParams,
   CreateWalletParams,
   GetDetailsOfWalletTransactionResponse,
+  GetWalletBalanceResponse,
   SetTransferFromWalletParams,
   SetTransferFromWalletResponse,
   TransferFundsBetweenWalletsParams,
   TransferFundsBetweenWalletsResponse,
   WalletObjectResponse,
-  GetWalletBalanceResponse,
 } from "../lib/rapyd/types";
 import { IContext } from "../server/interface/IContext";
 import {
   CreateWalletReply,
   CreateWalletRequest,
+  GetWalletBalanceReply,
+  GetWalletBalanceRequest,
+  GetWalletCountryReply,
+  GetWalletCountryRequest,
+  GetWalletCurrencyReply,
+  GetWalletCurrencyRequest,
   SetTransferFromWalletResponseReply,
   SetTransferFromWalletResponseRequest,
+  SetWalletCountryReply,
+  SetWalletCountryRequest,
+  SetWalletCurrencyReply,
+  SetWalletCurrencyRequest,
   TopUpWalletReply,
   TopUpWalletRequest,
   TransferFromWalletReply,
   TransferFromWalletRequest,
-  GetWalletBalanceReply,
-  GetWalletBalanceRequest,
-  SetWalletCurrencyRequest,
-  SetWalletCurrencyReply,
-  GetWalletEstablishedCurrencyRequest,
-  GetWalletEstablishedCurrencyReply,
-  GetWalletEstablishedCountryRequest,
-  GetWalletEstablishedCountryReply,
-  SetWalletCountryRequest,
-  SetWalletCountryReply,
 } from "../server/protos/schema_pb";
 import { WalletServiceErrorCodes } from "../service/error";
 
@@ -106,8 +106,8 @@ export class Controller {
   ) {
     try {
       const user_id = call.request.getUserId();
-      const country = call.request.getCountry();
-      const currency = call.request.getCurrency();
+      const country = call.request.getCountryCode();
+      const currency = call.request.getCurrencyCode();
       const amount = call.request.getAmount();
 
       const rapyd_ewallet_address =
@@ -154,7 +154,7 @@ export class Controller {
     try {
       const sender_user_id = call.request.getSenderUserId();
       const amount = call.request.getAmount();
-      const currency = call.request.getCurrency();
+      const currency = call.request.getCurrencyCode();
       const recipient_user_id = call.request.getRecipientUserId();
 
       const sender_rapyd_ewallet_address =
@@ -260,7 +260,7 @@ export class Controller {
       const reply = new SetTransferFromWalletResponseReply();
 
       reply.setAmount(wallet_transaction_amount);
-      reply.setCurrency(wallet_transaction_currency);
+      reply.setCurrencyCode(wallet_transaction_currency);
       reply.setSenderUserId(sender_user_id);
 
       callback(null, reply);
@@ -278,7 +278,7 @@ export class Controller {
   ) {
     try {
       const user_id = call.request.getUserId();
-      const wallet = await dao.WalletDAO.getWalletEstablishedCurrency({
+      const wallet = await dao.WalletDAO.getWalletCurrencyCode({
         user_id,
       });
 
@@ -322,7 +322,7 @@ export class Controller {
       const reply = new GetWalletBalanceReply();
 
       reply.setBalance(balanceBySelectedCurrency.balance);
-      reply.setCurrency(balanceBySelectedCurrency.currency);
+      reply.setCurrencyCode(balanceBySelectedCurrency.currency);
       reply.setOnHoldBalance(balanceBySelectedCurrency.on_hold_balance);
       reply.setReceivedBalance(balanceBySelectedCurrency.received_balance);
       reply.setReserveBalance(balanceBySelectedCurrency.reserve_balance);
@@ -357,7 +357,7 @@ export class Controller {
       const established_currency = await dao.WalletDAO.setWalletDefaultCurrency(
         {
           id: wallet_id,
-          rapyd_ewallet_currency,
+          rapyd_ewallet_currency_code: rapyd_ewallet_currency,
         }
       );
 
@@ -369,7 +369,7 @@ export class Controller {
 
       const reply = new SetWalletCurrencyReply();
 
-      reply.setEstablishedCurrency(established_currency);
+      reply.setCurrencyCode(established_currency);
 
       callback(null, reply);
     } catch (error) {
@@ -377,20 +377,17 @@ export class Controller {
     }
   }
 
-  async getWalletEstablishedCurrency(
+  async getWalletCurrency(
     {
       call,
       callback,
-    }: gRPCServerUnaryCall<
-      GetWalletEstablishedCurrencyRequest,
-      GetWalletEstablishedCurrencyReply
-    >,
+    }: gRPCServerUnaryCall<GetWalletCurrencyRequest, GetWalletCurrencyReply>,
     { dao }: IContext
   ) {
     try {
       const user_id = call.request.getUserId();
 
-      const wallet = await dao.WalletDAO.getWalletEstablishedCurrency({
+      const wallet = await dao.WalletDAO.getWalletCurrencyCode({
         user_id,
       });
 
@@ -400,9 +397,9 @@ export class Controller {
         );
       }
 
-      const reply = new GetWalletEstablishedCurrencyReply();
+      const reply = new GetWalletCurrencyReply();
 
-      reply.setEstablishedCurrency(wallet.ewallet_established_currency);
+      reply.setCurrencyCode(wallet.ewallet_established_currency);
 
       callback(null, reply);
     } catch (error) {
@@ -433,7 +430,7 @@ export class Controller {
 
       const established_country = await dao.WalletDAO.setWalletDefaultCountry({
         id: wallet_id,
-        rapyd_ewallet_country,
+        rapyd_ewallet_country_code: rapyd_ewallet_country,
       });
 
       if (!Boolean(established_country)) {
@@ -444,7 +441,7 @@ export class Controller {
 
       const reply = new SetWalletCountryReply();
 
-      reply.setEstablishedCountry(established_country);
+      reply.setCountryCode(established_country);
 
       callback(null, reply);
     } catch (error) {
@@ -452,20 +449,17 @@ export class Controller {
     }
   }
 
-  async getWalletEstablishedCountry(
+  async getWalletCountry(
     {
       call,
       callback,
-    }: gRPCServerUnaryCall<
-      GetWalletEstablishedCountryRequest,
-      GetWalletEstablishedCountryReply
-    >,
+    }: gRPCServerUnaryCall<GetWalletCountryRequest, GetWalletCountryReply>,
     { dao }: IContext
   ) {
     try {
       const user_id = call.request.getUserId();
 
-      const wallet = await dao.WalletDAO.getWalletEstablishedCountry({
+      const wallet = await dao.WalletDAO.getWalletCountryCode({
         user_id,
       });
 
@@ -475,9 +469,9 @@ export class Controller {
         );
       }
 
-      const reply = new GetWalletEstablishedCountryReply();
+      const reply = new GetWalletCountryReply();
 
-      reply.setEstablishedCountry(wallet.ewallet_established_country);
+      reply.setCountryCode(wallet.ewallet_established_country);
 
       callback(null, reply);
     } catch (error) {

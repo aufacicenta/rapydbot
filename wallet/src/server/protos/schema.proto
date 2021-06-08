@@ -12,8 +12,8 @@ service Wallet {
   rpc GetWalletBalance (GetWalletBalanceRequest) returns (GetWalletBalanceReply) {}
   rpc SetWalletCurrency (SetWalletCurrencyRequest) returns (SetWalletCurrencyReply) {}
   rpc SetWalletCountry (SetWalletCountryRequest) returns (SetWalletCountryReply) {}
-  rpc GetWalletEstablishedCurrency (GetWalletEstablishedCurrencyRequest) returns (GetWalletEstablishedCurrencyReply) {}
-  rpc GetWalletEstablishedCountry (GetWalletEstablishedCountryRequest) returns (GetWalletEstablishedCountryReply) {}
+  rpc GetWalletCurrency (GetWalletCurrencyRequest) returns (GetWalletCurrencyReply) {}
+  rpc GetWalletCountry (GetWalletCountryRequest) returns (GetWalletCountryReply) {}
 }
 
 message CreateWalletRequest {
@@ -26,8 +26,8 @@ message CreateWalletReply {
 
 message TopUpWalletRequest {
   string user_id = 1;
-  string country = 2;
-  string currency = 3;
+  string country_code = 2;
+  string currency_code = 3;
   float amount = 4;
 }
 
@@ -38,7 +38,7 @@ message TopUpWalletReply {
 message TransferFromWalletRequest {
   string sender_user_id = 1;
   string recipient_user_id = 2;
-  string currency = 3;
+  string currency_code = 3;
   float amount = 4;
 }
 
@@ -57,7 +57,7 @@ message SetTransferFromWalletResponseRequest {
 
 message SetTransferFromWalletResponseReply {
   float amount = 1;
-  string currency = 2;
+  string currency_code = 2;
   string sender_user_id = 3;
 }
 
@@ -67,15 +67,15 @@ message SetWalletCurrencyRequest {
 }
 
 message SetWalletCurrencyReply {
-  string established_currency = 1;
+  string currency_code = 1;
 }
 
-message GetWalletEstablishedCurrencyRequest {
+message GetWalletCurrencyRequest {
   string user_id = 1;
 }
 
-message GetWalletEstablishedCurrencyReply {
-  string established_currency = 1;
+message GetWalletCurrencyReply {
+  string currency_code = 1;
 }
 
 message SetWalletCountryRequest {
@@ -84,24 +84,24 @@ message SetWalletCountryRequest {
 }
 
 message SetWalletCountryReply {
-  string established_country = 1;
+  string country_code = 1;
 }
 
-message GetWalletEstablishedCountryRequest {
+message GetWalletCountryRequest {
   string user_id = 1;
 }
 
-message GetWalletEstablishedCountryReply {
-  string established_country = 1;
+message GetWalletCountryReply {
+  string country_code = 1;
 }
 
 message GetWalletBalanceRequest {
   string user_id = 1;
-  string currency_code = 2;  
+  string currency_code = 2;
 }
 
 message GetWalletBalanceReply {
-  string currency = 1;
+  string currency_code = 1;
   float balance = 2;
   float received_balance = 3;
   float on_hold_balance = 4;

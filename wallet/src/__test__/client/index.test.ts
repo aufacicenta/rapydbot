@@ -82,8 +82,8 @@ describe("controller", () => {
     }): Promise<string> =>
       new Promise((resolve) => {
         request.setUserId(userId);
-        request.setCountry(country);
-        request.setCurrency(currency);
+        request.setCountryCode(country);
+        request.setCurrencyCode(currency);
         request.setAmount(amount);
 
         walletClient.topUpWallet(request, (error, reply) => {
@@ -112,13 +112,13 @@ describe("controller", () => {
     const transferFromWallet = ({
       senderUserId,
       recipientUserId,
-      currency,
+      currencyCode,
       amount,
     }: TransferFromWalletRequest.AsObject): Promise<TransferFromWalletReply.AsObject> =>
       new Promise((resolve) => {
         const request = new TransferFromWalletRequest();
 
-        request.setCurrency(currency);
+        request.setCurrencyCode(currencyCode);
         request.setAmount(amount);
         request.setSenderUserId(senderUserId);
         request.setRecipientUserId(recipientUserId);
@@ -140,7 +140,7 @@ describe("controller", () => {
       await transferFromWallet({
         senderUserId: users[0],
         recipientUserId: users[1],
-        currency: requestCurrency,
+        currencyCode: requestCurrency,
         amount: requestAmount,
       });
 
@@ -165,7 +165,7 @@ describe("controller", () => {
 
           resolve({
             amount: reply.getAmount(),
-            currency: reply.getCurrency(),
+            currencyCode: reply.getCurrencyCode(),
             senderUserId: reply.getSenderUserId(),
           });
         });
@@ -180,7 +180,7 @@ describe("controller", () => {
       });
 
     expect(setTransferFromWalletResponseReply.amount).toEqual(requestAmount);
-    expect(setTransferFromWalletResponseReply.currency).toEqual(
+    expect(setTransferFromWalletResponseReply.currencyCode).toEqual(
       requestCurrency
     );
     expect(setTransferFromWalletResponseReply.senderUserId).toEqual(users[0]);
