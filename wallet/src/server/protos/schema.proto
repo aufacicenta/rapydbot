@@ -14,6 +14,8 @@ service Wallet {
   rpc SetWalletCountry (SetWalletCountryRequest) returns (SetWalletCountryReply) {}
   rpc GetWalletEstablishedCurrency (GetWalletEstablishedCurrencyRequest) returns (GetWalletEstablishedCurrencyReply) {}
   rpc GetWalletEstablishedCountry (GetWalletEstablishedCountryRequest) returns (GetWalletEstablishedCountryReply) {}
+  rpc GetCurrencies (EmptyRequest) returns (stream GetCurrenciesReply) {}
+  rpc GetCountries (EmptyRequest) returns (stream GetCountriesReply) {}
 }
 
 message CreateWalletRequest {
@@ -107,5 +109,32 @@ message GetWalletBalanceReply {
   float on_hold_balance = 4;
   float reserve_balance = 5;
 }
+
+message GetCurrenciesReply {
+  repeated Currency currencies = 1;
+}
+
+message Currency {
+  string code = 1;
+  string name = 2;
+  string symbol = 3;
+  int32 numeric_code = 4;
+  int32 digits_after_decimal_separator = 5;
+}
+
+message GetCountriesReply {
+  repeated Country countries = 2;
+}
+
+message Country {
+  string id = 1;
+  string currency_code = 2;
+  string iso_alpha2 = 3;
+  string iso_alpha4 = 4;
+  string name = 5;
+  string phone_code = 6;
+}
+
+message EmptyRequest {}
 
 message EmptyReply {}
