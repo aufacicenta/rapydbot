@@ -10,10 +10,10 @@ service Wallet {
   rpc TransferFromWallet (TransferFromWalletRequest) returns (TransferFromWalletReply) {}
   rpc SetTransferFromWalletResponse (SetTransferFromWalletResponseRequest) returns (SetTransferFromWalletResponseReply) {}
   rpc GetWalletBalance (GetWalletBalanceRequest) returns (GetWalletBalanceReply) {}
-  rpc SetWalletCurrency (SetWalletCurrencyRequest) returns (SetWalletCurrencyReply) {}
-  rpc SetWalletCountry (SetWalletCountryRequest) returns (SetWalletCountryReply) {}
-  rpc GetWalletCurrency (GetWalletCurrencyRequest) returns (GetWalletCurrencyReply) {}
-  rpc GetWalletCountry (GetWalletCountryRequest) returns (GetWalletCountryReply) {}
+  rpc SetWalletCurrencyCode (SetWalletCurrencyCodeRequest) returns (SetWalletCurrencyCodeReply) {}
+  rpc SetWalletCountryCode (SetWalletCountryCodeRequest) returns (SetWalletCountryCodeReply) {}
+  rpc GetWalletCurrencyCode (GetWalletCurrencyCodeRequest) returns (GetWalletCurrencyCodeReply) {}
+  rpc GetWalletCountryCode (GetWalletCountryCodeRequest) returns (GetWalletCountryCodeReply) {}
 }
 
 message CreateWalletRequest {
@@ -61,37 +61,37 @@ message SetTransferFromWalletResponseReply {
   string sender_user_id = 3;
 }
 
-message SetWalletCurrencyRequest {
+message SetWalletCurrencyCodeRequest {
   string default_currency = 1;
   string user_id = 2;
 }
 
-message SetWalletCurrencyReply {
+message SetWalletCurrencyCodeReply {
   string currency_code = 1;
 }
 
-message GetWalletCurrencyRequest {
+message GetWalletCurrencyCodeRequest {
   string user_id = 1;
 }
 
-message GetWalletCurrencyReply {
+message GetWalletCurrencyCodeReply {
   string currency_code = 1;
 }
 
-message SetWalletCountryRequest {
+message SetWalletCountryCodeRequest {
   string default_country = 1;
   string user_id = 2;
 }
 
-message SetWalletCountryReply {
+message SetWalletCountryCodeReply {
   string country_code = 1;
 }
 
-message GetWalletCountryRequest {
+message GetWalletCountryCodeRequest {
   string user_id = 1;
 }
 
-message GetWalletCountryReply {
+message GetWalletCountryCodeReply {
   string country_code = 1;
 }
 

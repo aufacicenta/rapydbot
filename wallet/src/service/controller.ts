@@ -20,16 +20,16 @@ import {
   CreateWalletRequest,
   GetWalletBalanceReply,
   GetWalletBalanceRequest,
-  GetWalletCountryReply,
-  GetWalletCountryRequest,
-  GetWalletCurrencyReply,
-  GetWalletCurrencyRequest,
+  GetWalletCountryCodeReply,
+  GetWalletCountryCodeRequest,
+  GetWalletCurrencyCodeReply,
+  GetWalletCurrencyCodeRequest,
   SetTransferFromWalletResponseReply,
   SetTransferFromWalletResponseRequest,
-  SetWalletCountryReply,
-  SetWalletCountryRequest,
-  SetWalletCurrencyReply,
-  SetWalletCurrencyRequest,
+  SetWalletCountryCodeReply,
+  SetWalletCountryCodeRequest,
+  SetWalletCurrencyCodeReply,
+  SetWalletCurrencyCodeRequest,
   TopUpWalletReply,
   TopUpWalletRequest,
   TransferFromWalletReply,
@@ -333,11 +333,14 @@ export class Controller {
     }
   }
 
-  async setWalletCurrency(
+  async setWalletCurrencyCode(
     {
       call,
       callback,
-    }: gRPCServerUnaryCall<SetWalletCurrencyRequest, SetWalletCurrencyReply>,
+    }: gRPCServerUnaryCall<
+      SetWalletCurrencyCodeRequest,
+      SetWalletCurrencyCodeReply
+    >,
     { dao }: IContext
   ) {
     try {
@@ -367,7 +370,7 @@ export class Controller {
         );
       }
 
-      const reply = new SetWalletCurrencyReply();
+      const reply = new SetWalletCurrencyCodeReply();
 
       reply.setCurrencyCode(established_currency);
 
@@ -377,11 +380,14 @@ export class Controller {
     }
   }
 
-  async getWalletCurrency(
+  async getWalletCurrencyCode(
     {
       call,
       callback,
-    }: gRPCServerUnaryCall<GetWalletCurrencyRequest, GetWalletCurrencyReply>,
+    }: gRPCServerUnaryCall<
+      GetWalletCurrencyCodeRequest,
+      GetWalletCurrencyCodeReply
+    >,
     { dao }: IContext
   ) {
     try {
@@ -397,7 +403,7 @@ export class Controller {
         );
       }
 
-      const reply = new GetWalletCurrencyReply();
+      const reply = new GetWalletCurrencyCodeReply();
 
       reply.setCurrencyCode(wallet.ewallet_established_currency);
 
@@ -407,11 +413,14 @@ export class Controller {
     }
   }
 
-  async setWalletCountry(
+  async setWalletCountryCode(
     {
       call,
       callback,
-    }: gRPCServerUnaryCall<SetWalletCountryRequest, SetWalletCountryReply>,
+    }: gRPCServerUnaryCall<
+      SetWalletCountryCodeRequest,
+      SetWalletCountryCodeReply
+    >,
     { dao }: IContext
   ) {
     try {
@@ -439,7 +448,7 @@ export class Controller {
         );
       }
 
-      const reply = new SetWalletCountryReply();
+      const reply = new SetWalletCountryCodeReply();
 
       reply.setCountryCode(established_country);
 
@@ -449,11 +458,14 @@ export class Controller {
     }
   }
 
-  async getWalletCountry(
+  async getWalletCountryCode(
     {
       call,
       callback,
-    }: gRPCServerUnaryCall<GetWalletCountryRequest, GetWalletCountryReply>,
+    }: gRPCServerUnaryCall<
+      GetWalletCountryCodeRequest,
+      GetWalletCountryCodeReply
+    >,
     { dao }: IContext
   ) {
     try {
@@ -469,7 +481,7 @@ export class Controller {
         );
       }
 
-      const reply = new GetWalletCountryReply();
+      const reply = new GetWalletCountryCodeReply();
 
       reply.setCountryCode(wallet.ewallet_established_country);
 
