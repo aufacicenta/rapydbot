@@ -75,6 +75,14 @@ export type GetDetailsOfWalletTransactionResponse = {
   };
 };
 
+export type GetWalletBalanceResponse = {
+  currency: string;
+  balance: number;
+  received_balance: number;
+  on_hold_balance: number;
+  reserve_balance: number;
+};
+
 export type CreateWalletParams = {
   ewallet_reference_id: string;
 };

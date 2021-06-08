@@ -9,6 +9,11 @@ service Wallet {
   rpc TopUpWallet (TopUpWalletRequest) returns (TopUpWalletReply) {}
   rpc TransferFromWallet (TransferFromWalletRequest) returns (TransferFromWalletReply) {}
   rpc SetTransferFromWalletResponse (SetTransferFromWalletResponseRequest) returns (SetTransferFromWalletResponseReply) {}
+  rpc GetWalletBalance (GetWalletBalanceRequest) returns (GetWalletBalanceReply) {}
+  rpc SetWalletCurrencyCode (SetWalletCurrencyCodeRequest) returns (SetWalletCurrencyCodeReply) {}
+  rpc SetWalletCountryCode (SetWalletCountryCodeRequest) returns (SetWalletCountryCodeReply) {}
+  rpc GetWalletCurrencyCode (GetWalletCurrencyCodeRequest) returns (GetWalletCurrencyCodeReply) {}
+  rpc GetWalletCountryCode (GetWalletCountryCodeRequest) returns (GetWalletCountryCodeReply) {}
 }
 
 message CreateWalletRequest {
@@ -21,9 +26,7 @@ message CreateWalletReply {
 
 message TopUpWalletRequest {
   string user_id = 1;
-  string country = 2;
-  string currency = 3;
-  float amount = 4;
+  float amount = 2;
 }
 
 message TopUpWalletReply {
@@ -33,8 +36,7 @@ message TopUpWalletReply {
 message TransferFromWalletRequest {
   string sender_user_id = 1;
   string recipient_user_id = 2;
-  string currency = 3;
-  float amount = 4;
+  float amount = 3;
 }
 
 message TransferFromWalletReply {
@@ -52,8 +54,55 @@ message SetTransferFromWalletResponseRequest {
 
 message SetTransferFromWalletResponseReply {
   float amount = 1;
-  string currency = 2;
+  string currency_code = 2;
   string sender_user_id = 3;
+}
+
+message SetWalletCurrencyCodeRequest {
+  string currency_code = 1;
+  string user_id = 2;
+}
+
+message SetWalletCurrencyCodeReply {
+  string currency_code = 1;
+}
+
+message GetWalletCurrencyCodeRequest {
+  string user_id = 1;
+}
+
+message GetWalletCurrencyCodeReply {
+  string currency_code = 1;
+}
+
+message SetWalletCountryCodeRequest {
+  string country_code = 1;
+  string user_id = 2;
+}
+
+message SetWalletCountryCodeReply {
+  string country_code = 1;
+}
+
+message GetWalletCountryCodeRequest {
+  string user_id = 1;
+}
+
+message GetWalletCountryCodeReply {
+  string country_code = 1;
+}
+
+message GetWalletBalanceRequest {
+  string user_id = 1;
+  string currency_code = 2;
+}
+
+message GetWalletBalanceReply {
+  string currency_code = 1;
+  float balance = 2;
+  float received_balance = 3;
+  float on_hold_balance = 4;
+  float reserve_balance = 5;
 }
 
 message EmptyReply {}

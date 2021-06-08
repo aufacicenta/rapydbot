@@ -4,6 +4,8 @@ export type WalletModelAttributes = {
   id?: string;
   user_id: string;
   rapyd_ewallet_address: string;
+  rapyd_ewallet_currency_code?: string;
+  rapyd_ewallet_country_code?: string;
 };
 
 export class WalletModel extends Model<WalletModelAttributes> {
@@ -23,6 +25,12 @@ export class WalletModel extends Model<WalletModelAttributes> {
     rapyd_ewallet_address: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    rapyd_ewallet_currency_code: {
+      type: DataTypes.STRING,
+    },
+    rapyd_ewallet_country_code: {
+      type: DataTypes.STRING,
     },
     created_at: {
       type: DataTypes.DATE,
