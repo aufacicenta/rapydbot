@@ -42,10 +42,6 @@ type gRPCServerUnaryCall<Request, Reply> = {
   callback: grpc.sendUnaryData<Reply>;
 };
 
-type gRPCServerWritableStream<Request> = {
-  call: grpc.ServerWritableStream<Request>;
-};
-
 @injectable()
 export class Controller {
   public static type: string = "Controller";
@@ -106,8 +102,6 @@ export class Controller {
   ) {
     try {
       const user_id = call.request.getUserId();
-      const country = call.request.getCountryCode();
-      const currency = call.request.getCurrencyCode();
       const amount = call.request.getAmount();
 
       const rapyd_ewallet_address =
@@ -121,14 +115,21 @@ export class Controller {
         );
       }
 
+      const country_code = await dao.WalletDAO.getWalletCountryCode({
+        user_id,
+      });
+      const currency_code = await dao.WalletDAO.getWalletCurrencyCode({
+        user_id,
+      });
+
       const { redirect_url: checkout_page_url } = await this.rapydClient.post<
         CheckoutObjectResponse,
         CreateCheckoutPageParams
       >({
         path: "/v1/checkout",
         body: {
-          country,
-          currency,
+          country: country_code,
+          currency: currency_code,
           amount,
           ewallet: rapyd_ewallet_address,
         },
@@ -154,7 +155,6 @@ export class Controller {
     try {
       const sender_user_id = call.request.getSenderUserId();
       const amount = call.request.getAmount();
-      const currency = call.request.getCurrencyCode();
       const recipient_user_id = call.request.getRecipientUserId();
 
       const sender_rapyd_ewallet_address =
@@ -179,19 +179,24 @@ export class Controller {
         );
       }
 
-      const { id: pending_transaction_id, status } =
-        await this.rapydClient.post<
-          TransferFundsBetweenWalletsResponse,
-          TransferFundsBetweenWalletsParams
-        >({
-          path: "/v1/account/transfer",
-          body: {
-            currency,
-            amount,
-            source_ewallet: sender_rapyd_ewallet_address,
-            destination_ewallet: recipient_rapyd_ewallet_address,
-          },
-        });
+      const currency_code = await dao.WalletDAO.getWalletCurrencyCode({
+        user_id: sender_user_id,
+      });
+
+      // @TODO reply with an error if the recipient hasn't set a default currency_code yet
+
+      const { id: pending_transaction_id } = await this.rapydClient.post<
+        TransferFundsBetweenWalletsResponse,
+        TransferFundsBetweenWalletsParams
+      >({
+        path: "/v1/account/transfer",
+        body: {
+          currency: currency_code,
+          amount,
+          source_ewallet: sender_rapyd_ewallet_address,
+          destination_ewallet: recipient_rapyd_ewallet_address,
+        },
+      });
 
       const reply = new TransferFromWalletReply();
 
@@ -278,29 +283,29 @@ export class Controller {
   ) {
     try {
       const user_id = call.request.getUserId();
-      const wallet = await dao.WalletDAO.getWalletCurrencyCode({
-        user_id,
-      });
+      const rapyd_ewallet_address =
+        await dao.WalletDAO.getRapydWalletAddressByUserId({ user_id });
 
-      if (!Boolean(wallet.ewallet_address)) {
+      if (!Boolean(rapyd_ewallet_address)) {
         throw new Error(
           WalletServiceErrorCodes.rapyd_ewallet_does_not_exist_for_user_id
         );
       }
 
-      if (!Boolean(wallet.ewallet_established_currency)) {
+      const currency_code = await dao.WalletDAO.getWalletCurrencyCode({
+        user_id,
+      });
+
+      if (!Boolean(currency_code)) {
         throw new Error(
           WalletServiceErrorCodes.rapyd_ewallet_does_not_have_an_established_currency
         );
       }
 
-      const ewallet_address = wallet.ewallet_address;
-      const ewallet_currency = wallet.ewallet_established_currency;
-
       const balances = await this.rapydClient.get<
         Array<GetWalletBalanceResponse>
       >({
-        path: `/v1/user/${ewallet_address}/accounts`,
+        path: `/v1/user/${rapyd_ewallet_address}/accounts`,
       });
 
       if (!Boolean(balances.length)) {
@@ -310,7 +315,7 @@ export class Controller {
       }
 
       const balanceBySelectedCurrency = balances
-        .filter(({ currency }) => currency === ewallet_currency)
+        .filter(({ currency }) => currency === currency_code)
         .shift();
 
       if (!Boolean(balanceBySelectedCurrency)) {
@@ -345,7 +350,7 @@ export class Controller {
   ) {
     try {
       const user_id = call.request.getUserId();
-      const rapyd_ewallet_currency = call.request.getDefaultCurrency();
+      const rapyd_ewallet_currency_code = call.request.getCurrencyCode();
 
       const wallet_id = await dao.WalletDAO.getWalletIdByUserId({
         user_id,
@@ -357,14 +362,12 @@ export class Controller {
         );
       }
 
-      const established_currency = await dao.WalletDAO.setWalletDefaultCurrency(
-        {
-          id: wallet_id,
-          rapyd_ewallet_currency_code: rapyd_ewallet_currency,
-        }
-      );
+      const currency_code = await dao.WalletDAO.setWalletCurrencyCode({
+        id: wallet_id,
+        rapyd_ewallet_currency_code,
+      });
 
-      if (!Boolean(established_currency)) {
+      if (!Boolean(currency_code)) {
         throw new Error(
           WalletServiceErrorCodes.ERROR_CANNOT_SET_USER_EWALLET_DEFAULT_CURRENCY
         );
@@ -372,7 +375,7 @@ export class Controller {
 
       const reply = new SetWalletCurrencyCodeReply();
 
-      reply.setCurrencyCode(established_currency);
+      reply.setCurrencyCode(currency_code);
 
       callback(null, reply);
     } catch (error) {
@@ -392,20 +395,22 @@ export class Controller {
   ) {
     try {
       const user_id = call.request.getUserId();
+      const rapyd_ewallet_address =
+        await dao.WalletDAO.getRapydWalletAddressByUserId({ user_id });
 
-      const wallet = await dao.WalletDAO.getWalletCurrencyCode({
-        user_id,
-      });
-
-      if (!Boolean(wallet.ewallet_established_currency)) {
+      if (!Boolean(rapyd_ewallet_address)) {
         throw new Error(
           WalletServiceErrorCodes.ERROR_CANNOT_GET_USER_EWALLET_ESTABLISHED_CURRENCY
         );
       }
 
+      const currency_code = await dao.WalletDAO.getWalletCurrencyCode({
+        user_id,
+      });
+
       const reply = new GetWalletCurrencyCodeReply();
 
-      reply.setCurrencyCode(wallet.ewallet_established_currency);
+      reply.setCurrencyCode(currency_code);
 
       callback(null, reply);
     } catch (error) {
@@ -425,7 +430,7 @@ export class Controller {
   ) {
     try {
       const user_id = call.request.getUserId();
-      const rapyd_ewallet_country = call.request.getDefaultCountry();
+      const rapyd_ewallet_country_code = call.request.getCountryCode();
 
       const wallet_id = await dao.WalletDAO.getWalletIdByUserId({
         user_id,
@@ -437,12 +442,12 @@ export class Controller {
         );
       }
 
-      const established_country = await dao.WalletDAO.setWalletDefaultCountry({
+      const country_code = await dao.WalletDAO.setWalletCountryCode({
         id: wallet_id,
-        rapyd_ewallet_country_code: rapyd_ewallet_country,
+        rapyd_ewallet_country_code,
       });
 
-      if (!Boolean(established_country)) {
+      if (!Boolean(country_code)) {
         throw new Error(
           WalletServiceErrorCodes.ERROR_CANNOT_SET_USER_EWALLET_DEFAULT_COUNTRY
         );
@@ -450,7 +455,7 @@ export class Controller {
 
       const reply = new SetWalletCountryCodeReply();
 
-      reply.setCountryCode(established_country);
+      reply.setCountryCode(country_code);
 
       callback(null, reply);
     } catch (error) {
@@ -470,12 +475,11 @@ export class Controller {
   ) {
     try {
       const user_id = call.request.getUserId();
-
-      const wallet = await dao.WalletDAO.getWalletCountryCode({
+      const country_code = await dao.WalletDAO.getWalletCountryCode({
         user_id,
       });
 
-      if (!Boolean(wallet.ewallet_established_country)) {
+      if (!Boolean(country_code)) {
         throw new Error(
           WalletServiceErrorCodes.ERROR_CANNOT_GET_USER_EWALLET_ESTABLISHED_COUNTRY
         );
@@ -483,7 +487,7 @@ export class Controller {
 
       const reply = new GetWalletCountryCodeReply();
 
-      reply.setCountryCode(wallet.ewallet_established_country);
+      reply.setCountryCode(country_code);
 
       callback(null, reply);
     } catch (error) {

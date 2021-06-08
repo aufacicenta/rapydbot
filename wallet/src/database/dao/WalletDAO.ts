@@ -60,7 +60,7 @@ export class WalletDAO {
     return !Boolean(result) ? null : result.getDataValue("user_id");
   }
 
-  async setWalletDefaultCurrency({
+  async setWalletCurrencyCode({
     id,
     rapyd_ewallet_currency_code: rapyd_ewallet_currency,
   }: Pick<WalletModelAttributes, "rapyd_ewallet_currency_code" | "id">) {
@@ -85,15 +85,10 @@ export class WalletDAO {
 
     return !Boolean(wallet)
       ? null
-      : {
-          ewallet_address: wallet.getDataValue("rapyd_ewallet_address"),
-          ewallet_established_currency: wallet.getDataValue(
-            "rapyd_ewallet_currency_code"
-          ),
-        };
+      : wallet.getDataValue("rapyd_ewallet_currency_code");
   }
 
-  async setWalletDefaultCountry({
+  async setWalletCountryCode({
     id,
     rapyd_ewallet_country_code: rapyd_ewallet_country,
   }: Pick<WalletModelAttributes, "rapyd_ewallet_country_code" | "id">) {
@@ -118,11 +113,6 @@ export class WalletDAO {
 
     return !Boolean(wallet)
       ? null
-      : {
-          ewallet_address: wallet.getDataValue("rapyd_ewallet_address"),
-          ewallet_established_country: wallet.getDataValue(
-            "rapyd_ewallet_country_code"
-          ),
-        };
+      : wallet.getDataValue("rapyd_ewallet_country_code");
   }
 }

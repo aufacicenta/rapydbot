@@ -26,9 +26,7 @@ message CreateWalletReply {
 
 message TopUpWalletRequest {
   string user_id = 1;
-  string country_code = 2;
-  string currency_code = 3;
-  float amount = 4;
+  float amount = 2;
 }
 
 message TopUpWalletReply {
@@ -38,8 +36,7 @@ message TopUpWalletReply {
 message TransferFromWalletRequest {
   string sender_user_id = 1;
   string recipient_user_id = 2;
-  string currency_code = 3;
-  float amount = 4;
+  float amount = 3;
 }
 
 message TransferFromWalletReply {
@@ -62,7 +59,7 @@ message SetTransferFromWalletResponseReply {
 }
 
 message SetWalletCurrencyCodeRequest {
-  string default_currency = 1;
+  string currency_code = 1;
   string user_id = 2;
 }
 
@@ -79,7 +76,7 @@ message GetWalletCurrencyCodeReply {
 }
 
 message SetWalletCountryCodeRequest {
-  string default_country = 1;
+  string country_code = 1;
   string user_id = 2;
 }
 
