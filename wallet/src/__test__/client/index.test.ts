@@ -3,6 +3,8 @@ import WalletClientGenerator, {
   CreateWalletRequest,
   SetTransferFromWalletResponseReply,
   SetTransferFromWalletResponseRequest,
+  SetWalletCountryCodeRequest,
+  SetWalletCurrencyCodeRequest,
   TopUpWalletRequest,
   TransferFromWalletReply,
   TransferFromWalletRequest,
@@ -21,6 +23,7 @@ let driver: Sequelize,
 
 describe("controller", () => {
   const users = [getRandomUsername(), getRandomUsername()];
+  const [sender, recipient] = users;
 
   beforeAll(async () => {
     driver = await database.connect({ force: true });
@@ -66,24 +69,88 @@ describe("controller", () => {
     }
   });
 
+  test("success: sets a default country and currency code", async () => {
+    const setDefaultCurrencyCode = ({
+      userId,
+      currencyCode,
+    }: SetWalletCurrencyCodeRequest.AsObject): Promise<string> =>
+      new Promise((resolve) => {
+        const request = new SetWalletCurrencyCodeRequest();
+        request.setUserId(userId);
+        request.setCurrencyCode(currencyCode);
+
+        walletClient.setWalletCurrencyCode(request, (error, reply) => {
+          if (error) {
+            throw error;
+          }
+
+          resolve(reply.getCurrencyCode());
+        });
+      });
+
+    const setDefaultCountryCode = ({
+      userId,
+      countryCode,
+    }: SetWalletCountryCodeRequest.AsObject): Promise<string> =>
+      new Promise((resolve) => {
+        const request = new SetWalletCountryCodeRequest();
+        request.setUserId(userId);
+        request.setCountryCode(countryCode);
+
+        walletClient.setWalletCountryCode(request, (error, reply) => {
+          if (error) {
+            throw error;
+          }
+
+          resolve(reply.getCountryCode());
+        });
+      });
+
+    const sender_currency_code = "MXN";
+    const sender_country_code = "MX";
+
+    const sender_currency_code_response = await setDefaultCurrencyCode({
+      userId: sender,
+      currencyCode: sender_currency_code,
+    });
+
+    const sender_country_code_response = await setDefaultCountryCode({
+      userId: sender,
+      countryCode: sender_country_code,
+    });
+
+    expect(sender_currency_code_response).toEqual(sender_currency_code);
+    expect(sender_country_code_response).toEqual(sender_country_code);
+
+    const recipient_currency_code = "USD";
+    const recipient_country_code = "US";
+
+    const recipient_currency_code_response = await setDefaultCurrencyCode({
+      userId: recipient,
+      currencyCode: recipient_currency_code,
+    });
+
+    const recipient_country_code_response = await setDefaultCountryCode({
+      userId: recipient,
+      countryCode: recipient_country_code,
+    });
+
+    expect(recipient_currency_code_response).toEqual(recipient_currency_code);
+    expect(recipient_country_code_response).toEqual(recipient_country_code);
+  });
+
   test("success: creates a Rapyd checkout page to top up a Rapyd ewallet address", async () => {
     const request = new TopUpWalletRequest();
 
     const topUpWallet = ({
       userId,
-      currency,
-      country,
       amount,
     }: {
       userId: string;
-      country: string;
-      currency: string;
       amount: number;
     }): Promise<string> =>
       new Promise((resolve) => {
         request.setUserId(userId);
-        request.setCountryCode(country);
-        request.setCurrencyCode(currency);
         request.setAmount(amount);
 
         walletClient.topUpWallet(request, (error, reply) => {
@@ -96,9 +163,7 @@ describe("controller", () => {
       });
 
     const url = await topUpWallet({
-      userId: users[0],
-      country: "MX",
-      currency: "MXN",
+      userId: sender,
       amount: 1000.0,
     });
 
@@ -112,13 +177,11 @@ describe("controller", () => {
     const transferFromWallet = ({
       senderUserId,
       recipientUserId,
-      currencyCode,
       amount,
     }: TransferFromWalletRequest.AsObject): Promise<TransferFromWalletReply.AsObject> =>
       new Promise((resolve) => {
         const request = new TransferFromWalletRequest();
 
-        request.setCurrencyCode(currencyCode);
         request.setAmount(amount);
         request.setSenderUserId(senderUserId);
         request.setRecipientUserId(recipientUserId);
@@ -138,9 +201,8 @@ describe("controller", () => {
 
     const { pendingTransactionId, senderUserId, recipientUserId } =
       await transferFromWallet({
-        senderUserId: users[0],
-        recipientUserId: users[1],
-        currencyCode: requestCurrency,
+        senderUserId: sender,
+        recipientUserId: recipient,
         amount: requestAmount,
       });
 
@@ -183,6 +245,6 @@ describe("controller", () => {
     expect(setTransferFromWalletResponseReply.currencyCode).toEqual(
       requestCurrency
     );
-    expect(setTransferFromWalletResponseReply.senderUserId).toEqual(users[0]);
+    expect(setTransferFromWalletResponseReply.senderUserId).toEqual(sender);
   });
 });

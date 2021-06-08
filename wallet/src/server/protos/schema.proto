@@ -14,8 +14,6 @@ service Wallet {
   rpc SetWalletCountryCode (SetWalletCountryCodeRequest) returns (SetWalletCountryCodeReply) {}
   rpc GetWalletCurrencyCode (GetWalletCurrencyCodeRequest) returns (GetWalletCurrencyCodeReply) {}
   rpc GetWalletCountryCode (GetWalletCountryCodeRequest) returns (GetWalletCountryCodeReply) {}
-  rpc GetCurrencies (EmptyRequest) returns (stream GetCurrenciesReply) {}
-  rpc GetCountries (EmptyRequest) returns (stream GetCountriesReply) {}
 }
 
 message CreateWalletRequest {
@@ -28,9 +26,7 @@ message CreateWalletReply {
 
 message TopUpWalletRequest {
   string user_id = 1;
-  string country_code = 2;
-  string currency_code = 3;
-  float amount = 4;
+  float amount = 2;
 }
 
 message TopUpWalletReply {
@@ -40,8 +36,7 @@ message TopUpWalletReply {
 message TransferFromWalletRequest {
   string sender_user_id = 1;
   string recipient_user_id = 2;
-  string currency_code = 3;
-  float amount = 4;
+  float amount = 3;
 }
 
 message TransferFromWalletReply {
@@ -64,7 +59,7 @@ message SetTransferFromWalletResponseReply {
 }
 
 message SetWalletCurrencyCodeRequest {
-  string default_currency = 1;
+  string currency_code = 1;
   string user_id = 2;
 }
 
@@ -81,7 +76,7 @@ message GetWalletCurrencyCodeReply {
 }
 
 message SetWalletCountryCodeRequest {
-  string default_country = 1;
+  string country_code = 1;
   string user_id = 2;
 }
 
@@ -109,32 +104,5 @@ message GetWalletBalanceReply {
   float on_hold_balance = 4;
   float reserve_balance = 5;
 }
-
-message GetCurrenciesReply {
-  repeated Currency currencies = 1;
-}
-
-message Currency {
-  string code = 1;
-  string name = 2;
-  string symbol = 3;
-  int32 numeric_code = 4;
-  int32 digits_after_decimal_separator = 5;
-}
-
-message GetCountriesReply {
-  repeated Country countries = 1;
-}
-
-message Country {
-  string id = 1;
-  string currency_code = 2;
-  string iso_alpha2 = 3;
-  string iso_alpha4 = 4;
-  string name = 5;
-  string phone_code = 6;
-}
-
-message EmptyRequest {}
 
 message EmptyReply {}
