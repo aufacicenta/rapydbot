@@ -19,20 +19,14 @@ export default (context: IContext) => {
       ),
     getWalletBalance: (call, callback) =>
       context.controller.getWalletBalance({ call, callback }, context),
-    setWalletCurrency: (call, callback) =>
-      context.controller.setWalletCurrency({ call, callback }, context),
-    getWalletEstablishedCurrency: (call, callback) =>
-      context.controller.getWalletEstablishedCurrency(
-        { call, callback },
-        context
-      ),
-    setWalletCountry: (call, callback) =>
-      context.controller.setWalletCountry({ call, callback }, context),
-    getWalletEstablishedCountry: (call, callback) =>
-      context.controller.getWalletEstablishedCountry(
-        { call, callback },
-        context
-      ),
+    setWalletCurrencyCode: (call, callback) =>
+      context.controller.setWalletCurrencyCode({ call, callback }, context),
+    getWalletCurrencyCode: (call, callback) =>
+      context.controller.getWalletCurrencyCode({ call, callback }, context),
+    setWalletCountryCode: (call, callback) =>
+      context.controller.setWalletCountryCode({ call, callback }, context),
+    getWalletCountryCode: (call, callback) =>
+      context.controller.getWalletCountryCode({ call, callback }, context),
   });
 
   return server;

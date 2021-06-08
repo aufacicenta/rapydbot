@@ -62,23 +62,23 @@ export class WalletDAO {
 
   async setWalletDefaultCurrency({
     id,
-    rapyd_ewallet_currency,
-  }: Pick<WalletModelAttributes, "rapyd_ewallet_currency" | "id">) {
-    const walletToUpdate = await this.model.findOne({ where: { id } });
-    const wallet_id = walletToUpdate.getDataValue("id");
+    rapyd_ewallet_currency_code: rapyd_ewallet_currency,
+  }: Pick<WalletModelAttributes, "rapyd_ewallet_currency_code" | "id">) {
+    const record = await this.model.findOne({ where: { id } });
+    const wallet_id = record.getDataValue("id");
 
     if (!Boolean(wallet_id)) {
       return null;
     }
 
-    walletToUpdate.set("rapyd_ewallet_currency", rapyd_ewallet_currency);
+    record.set("rapyd_ewallet_currency_code", rapyd_ewallet_currency);
 
-    await walletToUpdate.save();
+    await record.save();
 
     return rapyd_ewallet_currency;
   }
 
-  async getWalletEstablishedCurrency({
+  async getWalletCurrencyCode({
     user_id,
   }: Pick<WalletModelAttributes, "user_id">) {
     const wallet = await this.model.findOne({ where: { user_id } });
@@ -88,15 +88,15 @@ export class WalletDAO {
       : {
           ewallet_address: wallet.getDataValue("rapyd_ewallet_address"),
           ewallet_established_currency: wallet.getDataValue(
-            "rapyd_ewallet_currency"
+            "rapyd_ewallet_currency_code"
           ),
         };
   }
 
   async setWalletDefaultCountry({
     id,
-    rapyd_ewallet_country,
-  }: Pick<WalletModelAttributes, "rapyd_ewallet_country" | "id">) {
+    rapyd_ewallet_country_code: rapyd_ewallet_country,
+  }: Pick<WalletModelAttributes, "rapyd_ewallet_country_code" | "id">) {
     const walletToUpdate = await this.model.findOne({ where: { id } });
     const wallet_id = walletToUpdate.getDataValue("id");
 
@@ -104,14 +104,14 @@ export class WalletDAO {
       return null;
     }
 
-    walletToUpdate.set("rapyd_ewallet_country", rapyd_ewallet_country);
+    walletToUpdate.set("rapyd_ewallet_country_code", rapyd_ewallet_country);
 
     await walletToUpdate.save();
 
     return rapyd_ewallet_country;
   }
 
-  async getWalletEstablishedCountry({
+  async getWalletCountryCode({
     user_id,
   }: Pick<WalletModelAttributes, "user_id">) {
     const wallet = await this.model.findOne({ where: { user_id } });
@@ -121,7 +121,7 @@ export class WalletDAO {
       : {
           ewallet_address: wallet.getDataValue("rapyd_ewallet_address"),
           ewallet_established_country: wallet.getDataValue(
-            "rapyd_ewallet_country"
+            "rapyd_ewallet_country_code"
           ),
         };
   }
