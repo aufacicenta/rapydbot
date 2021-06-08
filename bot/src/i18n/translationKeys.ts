@@ -7,6 +7,8 @@ export const translationKeys = {
   command_text_send: "command_text_send",
   command_text_topup: "command_text_topup",
   command_text_balance: "command_text_balance",
+  command_text_set_country: "command_text_set_country",
+  command_text_set_currency: "command_text_set_currency",
 
   createwallet_command_reply: "createwallet_command_reply",
   createwallet_command_error_rapyd_ewallet_exists_for_user_id:
