@@ -63,6 +63,7 @@ message SetTransferFromWalletResponseReply {
 
 message SetWalletCurrencyRequest {
   string default_currency = 1;
+  string user_id = 2;
 }
 
 message SetWalletCurrencyReply {
@@ -79,6 +80,7 @@ message GetWalletEstablishedCurrencyReply {
 
 message SetWalletCountryRequest {
   string default_country = 1;
+  string user_id = 2;
 }
 
 message SetWalletCountryReply {

@@ -19,6 +19,20 @@ export default (context: IContext) => {
       ),
     getWalletBalance: (call, callback) =>
       context.controller.getWalletBalance({ call, callback }, context),
+    setWalletCurrency: (call, callback) =>
+      context.controller.setWalletCurrency({ call, callback }, context),
+    getWalletEstablishedCurrency: (call, callback) =>
+      context.controller.getWalletEstablishedCurrency(
+        { call, callback },
+        context
+      ),
+    setWalletCountry: (call, callback) =>
+      context.controller.setWalletCountry({ call, callback }, context),
+    getWalletEstablishedCountry: (call, callback) =>
+      context.controller.getWalletEstablishedCountry(
+        { call, callback },
+        context
+      ),
   });
 
   return server;

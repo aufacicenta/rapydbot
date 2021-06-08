@@ -61,10 +61,10 @@ export class WalletDAO {
   }
 
   async setWalletDefaultCurrency({
-    user_id,
+    id,
     rapyd_ewallet_currency,
-  }: Pick<WalletModelAttributes, "rapyd_ewallet_currency" | "user_id">) {
-    const walletToUpdate = await this.model.findOne({ where: { user_id } });
+  }: Pick<WalletModelAttributes, "rapyd_ewallet_currency" | "id">) {
+    const walletToUpdate = await this.model.findOne({ where: { id } });
     const wallet_id = walletToUpdate.getDataValue("id");
 
     if (!Boolean(wallet_id)) {
@@ -94,10 +94,10 @@ export class WalletDAO {
   }
 
   async setWalletDefaultCountry({
-    user_id,
+    id,
     rapyd_ewallet_country,
-  }: Pick<WalletModelAttributes, "rapyd_ewallet_country" | "user_id">) {
-    const walletToUpdate = await this.model.findOne({ where: { user_id } });
+  }: Pick<WalletModelAttributes, "rapyd_ewallet_country" | "id">) {
+    const walletToUpdate = await this.model.findOne({ where: { id } });
     const wallet_id = walletToUpdate.getDataValue("id");
 
     if (!Boolean(wallet_id)) {
@@ -120,7 +120,7 @@ export class WalletDAO {
       ? null
       : {
           ewallet_address: wallet.getDataValue("rapyd_ewallet_address"),
-          ewallet_established_currency: wallet.getDataValue(
+          ewallet_established_country: wallet.getDataValue(
             "rapyd_ewallet_country"
           ),
         };

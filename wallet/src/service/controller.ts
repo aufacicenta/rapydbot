@@ -26,6 +26,14 @@ import {
   TransferFromWalletRequest,
   GetWalletBalanceReply,
   GetWalletBalanceRequest,
+  SetWalletCurrencyRequest,
+  SetWalletCurrencyReply,
+  GetWalletEstablishedCurrencyRequest,
+  GetWalletEstablishedCurrencyReply,
+  GetWalletEstablishedCountryRequest,
+  GetWalletEstablishedCountryReply,
+  SetWalletCountryRequest,
+  SetWalletCountryReply,
 } from "../server/protos/schema_pb";
 import { WalletServiceErrorCodes } from "../service/error";
 
@@ -301,11 +309,11 @@ export class Controller {
         );
       }
 
-      const balanceByEstablishedCurrency = balances
+      const balanceBySelectedCurrency = balances
         .filter(({ currency }) => currency === ewallet_currency)
         .shift();
 
-      if (!Boolean(balanceByEstablishedCurrency)) {
+      if (!Boolean(balanceBySelectedCurrency)) {
         throw new Error(
           WalletServiceErrorCodes.rapyd_ewallet_does_not_have_balance_for_currency
         );
@@ -313,11 +321,163 @@ export class Controller {
 
       const reply = new GetWalletBalanceReply();
 
-      reply.setBalance(balanceByEstablishedCurrency.balance);
-      reply.setCurrency(balanceByEstablishedCurrency.currency);
-      reply.setOnHoldBalance(balanceByEstablishedCurrency.on_hold_balance);
-      reply.setReceivedBalance(balanceByEstablishedCurrency.received_balance);
-      reply.setReserveBalance(balanceByEstablishedCurrency.reserve_balance);
+      reply.setBalance(balanceBySelectedCurrency.balance);
+      reply.setCurrency(balanceBySelectedCurrency.currency);
+      reply.setOnHoldBalance(balanceBySelectedCurrency.on_hold_balance);
+      reply.setReceivedBalance(balanceBySelectedCurrency.received_balance);
+      reply.setReserveBalance(balanceBySelectedCurrency.reserve_balance);
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async setWalletCurrency(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<SetWalletCurrencyRequest, SetWalletCurrencyReply>,
+    { dao }: IContext
+  ) {
+    try {
+      const user_id = call.request.getUserId();
+      const rapyd_ewallet_currency = call.request.getDefaultCurrency();
+
+      const wallet_id = await dao.WalletDAO.getWalletIdByUserId({
+        user_id,
+      });
+
+      if (!Boolean(wallet_id)) {
+        throw new Error(
+          WalletServiceErrorCodes.rapyd_ewallet_does_not_exist_for_user_id
+        );
+      }
+
+      const established_currency = await dao.WalletDAO.setWalletDefaultCurrency(
+        {
+          id: wallet_id,
+          rapyd_ewallet_currency,
+        }
+      );
+
+      if (!Boolean(established_currency)) {
+        throw new Error(
+          WalletServiceErrorCodes.ERROR_CANNOT_SET_USER_EWALLET_DEFAULT_CURRENCY
+        );
+      }
+
+      const reply = new SetWalletCurrencyReply();
+
+      reply.setEstablishedCurrency(established_currency);
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async getWalletEstablishedCurrency(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<
+      GetWalletEstablishedCurrencyRequest,
+      GetWalletEstablishedCurrencyReply
+    >,
+    { dao }: IContext
+  ) {
+    try {
+      const user_id = call.request.getUserId();
+
+      const wallet = await dao.WalletDAO.getWalletEstablishedCurrency({
+        user_id,
+      });
+
+      if (!Boolean(wallet.ewallet_established_currency)) {
+        throw new Error(
+          WalletServiceErrorCodes.ERROR_CANNOT_GET_USER_EWALLET_ESTABLISHED_CURRENCY
+        );
+      }
+
+      const reply = new GetWalletEstablishedCurrencyReply();
+
+      reply.setEstablishedCurrency(wallet.ewallet_established_currency);
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async setWalletCountry(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<SetWalletCountryRequest, SetWalletCountryReply>,
+    { dao }: IContext
+  ) {
+    try {
+      const user_id = call.request.getUserId();
+      const rapyd_ewallet_country = call.request.getDefaultCountry();
+
+      const wallet_id = await dao.WalletDAO.getWalletIdByUserId({
+        user_id,
+      });
+
+      if (!Boolean(wallet_id)) {
+        throw new Error(
+          WalletServiceErrorCodes.rapyd_ewallet_does_not_exist_for_user_id
+        );
+      }
+
+      const established_country = await dao.WalletDAO.setWalletDefaultCountry({
+        id: wallet_id,
+        rapyd_ewallet_country,
+      });
+
+      if (!Boolean(established_country)) {
+        throw new Error(
+          WalletServiceErrorCodes.ERROR_CANNOT_SET_USER_EWALLET_DEFAULT_COUNTRY
+        );
+      }
+
+      const reply = new SetWalletCountryReply();
+
+      reply.setEstablishedCountry(established_country);
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async getWalletEstablishedCountry(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<
+      GetWalletEstablishedCountryRequest,
+      GetWalletEstablishedCountryReply
+    >,
+    { dao }: IContext
+  ) {
+    try {
+      const user_id = call.request.getUserId();
+
+      const wallet = await dao.WalletDAO.getWalletEstablishedCountry({
+        user_id,
+      });
+
+      if (!Boolean(wallet.ewallet_established_country)) {
+        throw new Error(
+          WalletServiceErrorCodes.ERROR_CANNOT_GET_USER_EWALLET_ESTABLISHED_COUNTRY
+        );
+      }
+
+      const reply = new GetWalletEstablishedCountryReply();
+
+      reply.setEstablishedCountry(wallet.ewallet_established_country);
 
       callback(null, reply);
     } catch (error) {
