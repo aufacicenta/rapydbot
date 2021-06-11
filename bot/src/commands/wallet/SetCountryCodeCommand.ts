@@ -35,6 +35,11 @@ export class SetCountryCodeCommand implements IBotCommand {
     return new Promise((resolve, reject) => {});
   }
 
+  /**
+   * @TODO
+   * Move this code into a new class
+   *
+   */
   private async getUserId(msg: Message): Promise<string> {
     return new Promise((resolve, reject) => {
       const findUserRequestByTelegram = new FindUserByTelegramUserIdRequest();
