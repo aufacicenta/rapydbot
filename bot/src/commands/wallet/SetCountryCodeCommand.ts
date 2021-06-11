@@ -33,29 +33,4 @@ export class SetCountryCodeCommand implements IBotCommand {
   private async setWalletCountryCode(msg: Message): Promise<string> {
     return new Promise((resolve, reject) => {});
   }
-
-  /**
-   * @TODO
-   * Move this code into a new class
-   *
-   */
-  private async getUserId(msg: Message): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const findUserRequestByTelegram = new FindUserByTelegramUserIdRequest();
-
-      findUserRequestByTelegram.setTelegramFromUserId(msg.from.id);
-
-      this.bot.UserServiceClient.findUserByTelegramUserId(
-        findUserRequestByTelegram,
-        (error, reply) => {
-          if (Boolean(error)) {
-            return reject(error);
-          }
-
-          const user_id = reply.getUserId();
-          resolve(user_id);
-        }
-      );
-    });
-  }
 }
