@@ -1,4 +1,3 @@
-import { FindUserByTelegramUserIdRequest } from "@rapydbot/user/client";
 import { CreateWalletRequest } from "@rapydbot/wallet/client";
 import { WalletServiceErrorCodes } from "@rapydbot/wallet/service/error";
 import { Message } from "node-telegram-bot-api";
@@ -6,6 +5,7 @@ import { Bot } from "../Bot";
 import { BotReplyToMessageIdHandler } from "../handler";
 import { translationKeys } from "../i18n";
 import { IBotCommand } from "./IBotCommand";
+import getUserId from "./util/getUserId";
 
 export class CreateWalletCommand implements IBotCommand {
   private bot: Bot;
@@ -85,7 +85,7 @@ export class CreateWalletCommand implements IBotCommand {
 
   private async createWallet(msg: Message): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.getUserId(msg)
+      getUserId(msg, this.bot.UserServiceClient)
         .then((userId) => {
           const createWalletRequest = new CreateWalletRequest();
           createWalletRequest.setUserId(userId);
@@ -100,26 +100,6 @@ export class CreateWalletCommand implements IBotCommand {
           });
         })
         .catch((error) => reject(error));
-    });
-  }
-
-  private async getUserId(msg: Message): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const findUserRequestByTelegram = new FindUserByTelegramUserIdRequest();
-
-      findUserRequestByTelegram.setTelegramFromUserId(msg.from.id);
-
-      this.bot.UserServiceClient.findUserByTelegramUserId(
-        findUserRequestByTelegram,
-        (error, reply) => {
-          if (Boolean(error)) {
-            return reject(error);
-          }
-
-          const user_id = reply.getUserId();
-          resolve(user_id);
-        }
-      );
     });
   }
 }

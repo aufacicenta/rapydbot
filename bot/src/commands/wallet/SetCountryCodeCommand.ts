@@ -1,10 +1,9 @@
-import { SetWalletCountryCodeRequest } from "@rapydbot/wallet/client";
-import { FindUserByTelegramUserIdRequest } from "@rapydbot/user/client";
 import { Message } from "node-telegram-bot-api";
 import { Bot } from "../../Bot";
 import { BotReplyToMessageIdHandler } from "../../handler";
 import { translationKeys } from "../../i18n";
 import { IBotCommand } from "../IBotCommand";
+import { FindUserByTelegramUserIdRequest } from "../../../../user/build/client";
 
 export class SetCountryCodeCommand implements IBotCommand {
   private bot: Bot;

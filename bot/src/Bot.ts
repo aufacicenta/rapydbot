@@ -1,15 +1,9 @@
 import USER_ClientGenerator, { UserClient } from "@rapydbot/user/client";
 import WALLET_ClientGenerator, { WalletClient } from "@rapydbot/wallet/client";
 import { Moment } from "moment";
-import TelegramBotApi, {
-  Message,
-  SendMessageOptions,
-} from "node-telegram-bot-api";
+import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
 import { CreateWalletCommand, StartCommand, TopUpCommand } from "./commands";
-import {
-  SetCountryCodeCommand,
-  SetCurrencyCodeCommand,
-} from "./commands/wallet";
+import { SetCountryCodeCommand, SetCurrencyCodeCommand } from "./commands/wallet";
 import { BotLanguageHandler, BotReplyToMessageIdHandler } from "./handler";
 import { Commands } from "./types";
 
@@ -40,9 +34,7 @@ export class Bot {
     this.setCountryCodeCommand = new SetCountryCodeCommand(this);
     this.setCurrencyCodeCommand = new SetCurrencyCodeCommand(this);
 
-    this.UserServiceClient = new USER_ClientGenerator(
-      process.env.USER_SERVICE_URL
-    ).create();
+    this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
     this.WalletServiceClient = new WALLET_ClientGenerator(
       process.env.WALLET_SERVICE_URL
     ).create();
@@ -92,9 +84,7 @@ export class Bot {
     this.api.onText(/^\/(createwallet|crearbilletera)/i, (msg, match) =>
       this.createWalletCommand.onText(msg)
     );
-    this.api.onText(/^\/(topup|recargar)/i, (msg, match) =>
-      this.topUpCommand.onText(msg)
-    );
+    this.api.onText(/^\/(topup|recargar)/i, (msg, match) => this.topUpCommand.onText(msg));
     this.api.onText(/^\/(setcountry|fijarpais)/, (msg, match) =>
       this.setCountryCodeCommand.onText(msg)
     );
@@ -103,12 +93,7 @@ export class Bot {
     );
   }
 
-  reply(
-    msg: Message,
-    translationKey: string,
-    options?: SendMessageOptions,
-    args?: {}
-  ) {
+  reply(msg: Message, translationKey: string, options?: SendMessageOptions, args?: {}) {
     this.api.sendMessage(
       msg.chat.id,
       this.languageHandler.getTranslation(msg, translationKey, args),
