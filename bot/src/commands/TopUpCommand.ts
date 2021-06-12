@@ -3,6 +3,7 @@ import { Bot } from "../Bot";
 import { BotReplyToMessageIdHandler } from "../handler";
 import { translationKeys } from "../i18n";
 import { IBotCommand } from "./IBotCommand";
+import { getCountryButtons } from "./util/countries";
 
 export class TopUpCommand implements IBotCommand {
   private bot: Bot;
@@ -25,7 +26,7 @@ export class TopUpCommand implements IBotCommand {
 
   async onText(msg: Message) {
     try {
-      // await this.handleCommand(msg);
+      const countryButtons = getCountryButtons();
 
       this.bot.replyWithMessageID(
         msg,
@@ -40,16 +41,7 @@ export class TopUpCommand implements IBotCommand {
           reply_markup: {
             resize_keyboard: true,
             one_time_keyboard: true,
-            keyboard: [
-              [
-                {
-                  text: "Mexico",
-                },
-                {
-                  text: "United States",
-                },
-              ],
-            ],
+            keyboard: [...countryButtons],
           },
         }
       );

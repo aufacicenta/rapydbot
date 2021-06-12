@@ -1,8 +1,11 @@
 import { Message } from "node-telegram-bot-api";
+import { SetWalletCurrencyCodeRequest } from "../../../../wallet/build/client";
 import { Bot } from "../../Bot";
 import { BotReplyToMessageIdHandler } from "../../handler";
 import { translationKeys } from "../../i18n";
 import { IBotCommand } from "../IBotCommand";
+import { getCurrencyButtons } from "../util/currencies";
+import getUserId from "../util/getUserId";
 
 export class SetCurrencyCodeCommand implements IBotCommand {
   private bot: Bot;
@@ -18,8 +21,16 @@ export class SetCurrencyCodeCommand implements IBotCommand {
   ) {}
 
   async onText(msg: Message) {
+    const currencyButtons = getCurrencyButtons();
     try {
-      this.bot.reply(msg, translationKeys.command_text_set_currency, {});
+      this.bot.reply(msg, translationKeys.command_text_set_currency, {
+        disable_web_page_preview: true,
+        reply_markup: {
+          resize_keyboard: true,
+          one_time_keyboard: true,
+          keyboard: [...currencyButtons],
+        },
+      });
     } catch (error) {
       this.handleErrorReply(error, msg);
     }
@@ -30,6 +41,27 @@ export class SetCurrencyCodeCommand implements IBotCommand {
   }
 
   private async setWalletCurrencyCode(msg: Message): Promise<string> {
-    return new Promise((resolve, reject) => {});
+    return new Promise((resolve, reject) => {
+      getUserId(msg, this.bot.UserServiceClient)
+        .then((userId) => {
+          const setWalletCurrencyCodeRequest =
+            new SetWalletCurrencyCodeRequest();
+          setWalletCurrencyCodeRequest.setUserId(userId);
+          setWalletCurrencyCodeRequest.setCurrencyCode(msg.text);
+
+          this.bot.WalletServiceClient.setWalletCurrencyCode(
+            setWalletCurrencyCodeRequest,
+            (error, reply) => {
+              if (Boolean(error)) {
+                return reject(error);
+              }
+
+              const currencyCode = reply.getCurrencyCode();
+              resolve(currencyCode);
+            }
+          );
+        })
+        .catch((error) => reject(error));
+    });
   }
 }
