@@ -23,13 +23,3 @@ export function getCurrencyButtons() {
 
   return currencyButtons;
 }
-
-export function getCountryCodeWithoutFlag({
-  countryCode,
-}: {
-  countryCode: string;
-}): string | null {
-  const countryCodeWithoutFlag = countryCode.split(" ").shift();
-
-  return Boolean(countryCodeWithoutFlag) ? countryCodeWithoutFlag : null;
-}

@@ -22,7 +22,7 @@ export class SetCurrencyCodeCommand implements IBotCommand {
 
   async onText(msg: Message) {
     try {
-      this.bot.reply(msg, translationKeys.command_text_set_currency, {
+      this.bot.reply(msg, translationKeys.setcurrency_command_reply, {
         disable_web_page_preview: true,
         reply_markup: {
           resize_keyboard: true,

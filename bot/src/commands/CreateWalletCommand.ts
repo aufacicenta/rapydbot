@@ -41,7 +41,7 @@ export class CreateWalletCommand implements IBotCommand {
       msg,
       translationKeys.createwallet_command_reply,
       this,
-      {},
+      null,
       null,
       {
         disable_web_page_preview: true,

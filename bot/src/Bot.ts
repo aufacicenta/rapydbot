@@ -4,7 +4,11 @@ import { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
 import { CreateWalletCommand, StartCommand, TopUpCommand } from "./commands";
 import { SetCountryCodeCommand, SetCurrencyCodeCommand } from "./commands/wallet";
-import { BotLanguageHandler, BotReplyToMessageIdHandler } from "./handler";
+import {
+  BotLanguageHandler,
+  BotReplyToMessageIdHandler,
+  BotReplyToMessageIdHandlerStorageKeys,
+} from "./handler";
 import { Commands } from "./types";
 
 export class Bot {
@@ -105,7 +109,7 @@ export class Bot {
     msg: Message,
     translationKey: string,
     command: Commands,
-    handlerData?: Record<string, any>,
+    handlerData?: Record<keyof BotReplyToMessageIdHandlerStorageKeys, any>,
     reply_to_message_id?: number,
     options?: SendMessageOptions,
     args?: {}
@@ -121,7 +125,7 @@ export class Bot {
     }
 
     if (Boolean(handlerData)) {
-      Object.keys(handlerData).forEach((key) => {
+      Object.keys(handlerData).forEach((key: keyof BotReplyToMessageIdHandlerStorageKeys) => {
         handler.storage.set(key, handlerData[key]);
       });
     }

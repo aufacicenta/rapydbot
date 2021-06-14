@@ -23,20 +23,13 @@ export function getCountryButtons() {
   return countryButtons;
 }
 
-export function getCountryCodeFromName({
-  countryName,
-}: {
-  countryName: string;
-}): string | null {
+export function getCountryFromName(countryName: string): typeof Countries[number] | null {
   const countryByName = Countries.filter(({ name }) => {
     const countryNameWhithoutFlag = countryName.split(" ").shift();
-
     return countryNameWhithoutFlag === name;
   }).shift();
 
   if (!Boolean(countryByName)) return null;
 
-  const { iso_alpha2: countryCode } = countryByName;
-
-  return countryCode;
+  return countryByName;
 }
