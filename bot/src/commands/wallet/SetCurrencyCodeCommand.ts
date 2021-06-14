@@ -21,14 +21,13 @@ export class SetCurrencyCodeCommand implements IBotCommand {
   ) {}
 
   async onText(msg: Message) {
-    const currencyButtons = getCurrencyButtons();
     try {
       this.bot.reply(msg, translationKeys.command_text_set_currency, {
         disable_web_page_preview: true,
         reply_markup: {
           resize_keyboard: true,
           one_time_keyboard: true,
-          keyboard: [...currencyButtons],
+          keyboard: getCurrencyButtons(),
         },
       });
     } catch (error) {
@@ -44,8 +43,7 @@ export class SetCurrencyCodeCommand implements IBotCommand {
     return new Promise((resolve, reject) => {
       getUserId(msg, this.bot.UserServiceClient)
         .then((userId) => {
-          const setWalletCurrencyCodeRequest =
-            new SetWalletCurrencyCodeRequest();
+          const setWalletCurrencyCodeRequest = new SetWalletCurrencyCodeRequest();
           setWalletCurrencyCodeRequest.setUserId(userId);
           setWalletCurrencyCodeRequest.setCurrencyCode(msg.text);
 

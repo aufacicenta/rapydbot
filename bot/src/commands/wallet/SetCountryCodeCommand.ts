@@ -1,11 +1,11 @@
 import { Message } from "node-telegram-bot-api";
+import { SetWalletCountryCodeRequest } from "../../../../wallet/build/client";
 import { Bot } from "../../Bot";
 import { BotReplyToMessageIdHandler } from "../../handler";
 import { translationKeys } from "../../i18n";
 import { IBotCommand } from "../IBotCommand";
-import getUserId from "../util/getUserId";
-import { SetWalletCountryCodeRequest } from "../../../../wallet/build/client";
 import { getCountryButtons } from "../util/countries";
+import getUserId from "../util/getUserId";
 
 export class SetCountryCodeCommand implements IBotCommand {
   private bot: Bot;
@@ -21,15 +21,13 @@ export class SetCountryCodeCommand implements IBotCommand {
   ) {}
 
   async onText(msg: Message) {
-    const countryButtons = getCountryButtons();
-
     try {
       this.bot.reply(msg, translationKeys.command_text_set_country, {
         disable_web_page_preview: true,
         reply_markup: {
           resize_keyboard: true,
           one_time_keyboard: true,
-          keyboard: [...countryButtons],
+          keyboard: getCountryButtons(),
         },
       });
     } catch (error) {
