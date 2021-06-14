@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "ts-node ./src",
-    "start:debug": "ts-node-dev --inspect=$PORT --no-notify --respawn ./src",
+    "start:debug": "ts-node-dev --inspect=9226 --no-notify --respawn ./src",
     "clean": "rimraf build",
     "compile": "npm run clean && tsc",
     "publish:prepare": "npm run clean && npm run compile",
