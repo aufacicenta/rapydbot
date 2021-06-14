@@ -84,7 +84,7 @@ export class Bot {
     this.api.onText(/^\/(createwallet|crearbilletera)/i, (msg, match) =>
       this.createWalletCommand.onText(msg)
     );
-    this.api.onText(/^\/(topup|recargar)/i, (msg, match) => this.topUpCommand.onText(msg));
+    this.api.onText(/^\/(topup|recarga)/i, (msg, match) => this.topUpCommand.onText(msg));
     this.api.onText(/^\/(setcountry|fijarpais)/, (msg, match) =>
       this.setCountryCodeCommand.onText(msg)
     );

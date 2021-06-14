@@ -76,7 +76,10 @@ export class CreateWalletCommand implements IBotCommand {
     if (error?.message.includes(WalletServiceErrorCodes.rapyd_ewallet_exists_for_user_id)) {
       return this.bot.reply(
         msg,
-        translationKeys.createwallet_command_error_rapyd_ewallet_exists_for_user_id
+        translationKeys.createwallet_command_error_rapyd_ewallet_exists_for_user_id,
+        {
+          disable_web_page_preview: true,
+        }
       );
     }
 

@@ -35,12 +35,6 @@ export class StartCommand implements IBotCommand {
                   translationKeys.command_text_createwallet
                 ),
               },
-              {
-                text: this.bot.languageHandler.getTranslation(
-                  msg,
-                  translationKeys.command_text_topup
-                ),
-              },
             ],
           ],
         },
