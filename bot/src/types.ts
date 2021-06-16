@@ -1,5 +1,10 @@
-import { CreateWalletCommand, StartCommand, TopUpCommand } from "./commands";
-import { SetCountryCodeCommand, SetCurrencyCodeCommand } from "./commands/wallet";
+import { StartCommand } from "./commands";
+import {
+  CreateWalletCommand,
+  SetCountryCodeCommand,
+  SetCurrencyCodeCommand,
+  TopUpCommand,
+} from "./commands/wallet";
 
 export type Commands =
   | StartCommand

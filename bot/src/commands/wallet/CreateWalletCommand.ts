@@ -1,11 +1,11 @@
 import { CreateWalletRequest } from "@rapydbot/wallet/client";
 import { WalletServiceErrorCodes } from "@rapydbot/wallet/service/error";
 import { Message } from "node-telegram-bot-api";
-import { Bot } from "../Bot";
-import { BotReplyToMessageIdHandler } from "../handler";
-import { translationKeys } from "../i18n";
-import { IBotCommand } from "./IBotCommand";
-import getUserId from "./util/getUserId";
+import { Bot } from "../../Bot";
+import { BotReplyToMessageIdHandler } from "../../handler";
+import { translationKeys } from "../../i18n";
+import { IBotCommand } from "../IBotCommand";
+import getUserId from "../util/getUserId";
 
 export class CreateWalletCommand implements IBotCommand {
   private bot: Bot;

@@ -2,8 +2,13 @@ import USER_ClientGenerator, { UserClient } from "@rapydbot/user/client";
 import WALLET_ClientGenerator, { WalletClient } from "@rapydbot/wallet/client";
 import { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
-import { CreateWalletCommand, StartCommand, TopUpCommand } from "./commands";
-import { SetCountryCodeCommand, SetCurrencyCodeCommand } from "./commands/wallet";
+import { StartCommand } from "./commands";
+import {
+  CreateWalletCommand,
+  SetCountryCodeCommand,
+  SetCurrencyCodeCommand,
+  TopUpCommand,
+} from "./commands/wallet";
 import {
   BotLanguageHandler,
   BotReplyToMessageIdHandler,
