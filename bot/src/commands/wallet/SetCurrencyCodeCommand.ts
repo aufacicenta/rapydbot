@@ -21,6 +21,7 @@ export class SetCurrencyCodeCommand implements IBotCommand {
   ) {
     try {
       const previousText = handler.storage.get("previousText");
+      console.log(previousText)
       if (previousText && previousText === "/setcurrency") {
         await this.handleCurrencyChangeReply(msg);
       }

@@ -3,6 +3,7 @@ import setcountry_command_en from "./commands/setcountry/en";
 import setcurrency_command_en from "./commands/setcurrency/en";
 import start_command_en from "./commands/start/en";
 import topup_command_en from "./commands/topup/en";
+import balance_command_en from "./commands/balance/en";
 
 export const en = {
   translation: {
@@ -11,5 +12,6 @@ export const en = {
     ...topup_command_en,
     ...setcurrency_command_en,
     ...setcountry_command_en,
+    ...balance_command_en,
   },
 };

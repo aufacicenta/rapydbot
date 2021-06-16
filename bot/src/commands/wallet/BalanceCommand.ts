@@ -23,7 +23,7 @@ export class BalanceCommand implements IBotCommand {
 
   async onText(msg: Message) {
     try {
-      this.handleBalanceReply(msg);
+      await this.handleBalanceReply(msg);
     } catch (error) {
       this.handleErrorReply(error, msg);
     }
