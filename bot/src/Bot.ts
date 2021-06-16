@@ -4,6 +4,7 @@ import { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
 import { StartCommand } from "./commands";
 import {
+  BalanceCommand,
   CreateWalletCommand,
   SetCountryCodeCommand,
   SetCurrencyCodeCommand,
@@ -27,6 +28,7 @@ export class Bot {
   private topUpCommand: TopUpCommand;
   private setCountryCodeCommand: SetCountryCodeCommand;
   private setCurrencyCodeCommand: SetCurrencyCodeCommand;
+  public balanceCommand: BalanceCommand;
 
   public UserServiceClient: UserClient;
   public WalletServiceClient: WalletClient;
@@ -42,6 +44,7 @@ export class Bot {
     this.topUpCommand = new TopUpCommand(this);
     this.setCountryCodeCommand = new SetCountryCodeCommand(this);
     this.setCurrencyCodeCommand = new SetCurrencyCodeCommand(this);
+    this.balanceCommand = new BalanceCommand(this);
 
     this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
     this.WalletServiceClient = new WALLET_ClientGenerator(

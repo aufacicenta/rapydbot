@@ -1,4 +1,3 @@
-import { GetWalletCountryCodeRequest } from "@rapydbot/wallet/client";
 import { Message } from "node-telegram-bot-api";
 import { Bot } from "../../Bot";
 import { BotReplyToMessageIdHandler } from "../../handler";
@@ -46,6 +45,16 @@ export class BalanceCommand implements IBotCommand {
     } catch (error) {
       this.handleErrorReply(error, msg);
     }
+  }
+
+  public async replyToPaymentCompleteWebhook({
+    chatId,
+    userId,
+  }: {
+    chatId: string;
+    userId: string;
+  }) {
+    // @TODO get balance and reply to the corresponding user. Arguments will come from the webhook called from TopUpCommand checkout page
   }
 
   private handleErrorReply(error: Error, msg: Message) {
