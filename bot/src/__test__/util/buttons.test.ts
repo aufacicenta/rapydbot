@@ -14,6 +14,7 @@ describe("Button Utilities", () => {
 
     expect(buttonGroups.length).toBe(4);
     expect(buttonGroups[0].length).toBe(2);
+    expect(buttonGroups[0][0]).not.toBe(undefined);
   });
 
   test("Button Utilities: Generate Button Odd Groups", () => {
@@ -28,6 +29,7 @@ describe("Button Utilities", () => {
     expect(buttonGroups.length).toBe(4);
     expect(buttonGroups[0].length).toBe(3);
     expect(buttonGroups[lastButtonGroupIndex].length).toBe(1);
+    expect(buttonGroups[lastButtonGroupIndex][0]).not.toBe(undefined);
   });
 
   test("Button Utilities: Generate Flag Emojis", () => {
