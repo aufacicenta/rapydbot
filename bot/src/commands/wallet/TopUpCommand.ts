@@ -1,9 +1,9 @@
 import { Message } from "node-telegram-bot-api";
-import { Bot } from "../Bot";
-import { BotReplyToMessageIdHandler } from "../handler";
-import { translationKeys } from "../i18n";
-import { IBotCommand } from "./IBotCommand";
-import { getCountryButtons } from "./util/countries";
+import { Bot } from "../../Bot";
+import { BotReplyToMessageIdHandler } from "../../handler";
+import { translationKeys } from "../../i18n";
+import { IBotCommand } from "../IBotCommand";
+import { getCountryButtons } from "../util/countries";
 
 export class TopUpCommand implements IBotCommand {
   private bot: Bot;
