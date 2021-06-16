@@ -15,4 +15,12 @@ export const translationKeys = {
   topup_command_country_reply: "topup_command_country_reply",
   topup_command_currency_reply: "topup_command_currency_reply",
   topup_command_amount_reply: "topup_command_amount_reply",
+
+  setcountry_command_reply: "setcountry_command_reply",
+  setcountry_command_on_country_select_reply:
+    "setcountry_command_on_country_select_reply",
+
+  setcurrency_command_reply: "setcurrency_command_reply",
+  setcurrency_command_on_currency_change_reply:
+    "setcurrency_command_on_currency_change_reply",
 };

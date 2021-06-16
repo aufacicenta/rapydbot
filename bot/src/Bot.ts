@@ -3,7 +3,12 @@ import WALLET_ClientGenerator, { WalletClient } from "@rapydbot/wallet/client";
 import { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
 import { CreateWalletCommand, StartCommand, TopUpCommand } from "./commands";
-import { BotLanguageHandler, BotReplyToMessageIdHandler } from "./handler";
+import { SetCountryCodeCommand, SetCurrencyCodeCommand } from "./commands/wallet";
+import {
+  BotLanguageHandler,
+  BotReplyToMessageIdHandler,
+  BotReplyToMessageIdHandlerStorageKeys,
+} from "./handler";
 import { Commands } from "./types";
 
 export class Bot {
@@ -15,6 +20,8 @@ export class Bot {
   private startCommand: StartCommand;
   private createWalletCommand: CreateWalletCommand;
   private topUpCommand: TopUpCommand;
+  private setCountryCodeCommand: SetCountryCodeCommand;
+  private setCurrencyCodeCommand: SetCurrencyCodeCommand;
 
   public UserServiceClient: UserClient;
   public WalletServiceClient: WalletClient;
@@ -28,6 +35,8 @@ export class Bot {
     this.startCommand = new StartCommand(this);
     this.createWalletCommand = new CreateWalletCommand(this);
     this.topUpCommand = new TopUpCommand(this);
+    this.setCountryCodeCommand = new SetCountryCodeCommand(this);
+    this.setCurrencyCodeCommand = new SetCurrencyCodeCommand(this);
 
     this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
     this.WalletServiceClient = new WALLET_ClientGenerator(
@@ -79,7 +88,13 @@ export class Bot {
     this.api.onText(/^\/(createwallet|crearbilletera)/i, (msg, match) =>
       this.createWalletCommand.onText(msg)
     );
-    this.api.onText(/^\/(topup|recargar)/i, (msg, match) => this.topUpCommand.onText(msg));
+    this.api.onText(/^\/(topup|recarga)/i, (msg, match) => this.topUpCommand.onText(msg));
+    this.api.onText(/^\/(setcountry|fijarpais)/, (msg, match) =>
+      this.setCountryCodeCommand.onText(msg)
+    );
+    this.api.onText(/^\/(setcurrency|fijarmoneda)/, (msg, match) =>
+      this.setCurrencyCodeCommand.onText(msg)
+    );
   }
 
   reply(msg: Message, translationKey: string, options?: SendMessageOptions, args?: {}) {
@@ -94,7 +109,7 @@ export class Bot {
     msg: Message,
     translationKey: string,
     command: Commands,
-    handlerData?: Record<string, any>,
+    handlerData?: Record<keyof BotReplyToMessageIdHandlerStorageKeys, any>,
     reply_to_message_id?: number,
     options?: SendMessageOptions,
     args?: {}
@@ -110,7 +125,7 @@ export class Bot {
     }
 
     if (Boolean(handlerData)) {
-      Object.keys(handlerData).forEach((key) => {
+      Object.keys(handlerData).forEach((key: keyof BotReplyToMessageIdHandlerStorageKeys) => {
         handler.storage.set(key, handlerData[key]);
       });
     }

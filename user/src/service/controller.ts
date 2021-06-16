@@ -29,44 +29,52 @@ export class Controller {
     { call, callback }: GRPCUnaryCall<CreateUserRequest, CreateUserReply>,
     { dao }: IContext
   ) {
-    const telegram_from_user_id = call.request.getTelegramFromUserId();
-    const telegram_username = call.request.getTelegramUsername();
-    const telegram_private_chat_id = call.request.getTelegramPrivateChatId();
+    try {
+      const telegram_from_user_id = call.request.getTelegramFromUserId();
+      const telegram_username = call.request.getTelegramUsername();
+      const telegram_private_chat_id = call.request.getTelegramPrivateChatId();
 
-    const result = await dao.UserDAO.findUserByTelegramUserIdOrCreateUser({
-      telegram_from_user_id,
-      telegram_username,
-      telegram_private_chat_id,
-    });
+      const result = await dao.UserDAO.findUserByTelegramUserIdOrCreateUser({
+        telegram_from_user_id,
+        telegram_username,
+        telegram_private_chat_id,
+      });
 
-    const reply = new CreateUserReply();
+      const reply = new CreateUserReply();
 
-    reply.setUserId(result.userId);
-    reply.setTelegramFromUserId(result.telegramFromUserId);
-    reply.setTelegramUsername(result.telegramUsername);
-    reply.setTelegramPrivateChatId(result.telegramPrivateChatId);
+      reply.setUserId(result.userId);
+      reply.setTelegramFromUserId(result.telegramFromUserId);
+      reply.setTelegramUsername(result.telegramUsername);
+      reply.setTelegramPrivateChatId(result.telegramPrivateChatId);
 
-    callback(null, reply);
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
   }
 
   async getUser(
     { call, callback }: GRPCUnaryCall<GetUserRequest, GetUserReply>,
     { dao }: IContext
   ) {
-    const user_id = call.request.getUserId();
+    try {
+      const user_id = call.request.getUserId();
 
-    const result = await dao.UserDAO.getUser({
-      user_id,
-    });
+      const result = await dao.UserDAO.getUser({
+        user_id,
+      });
 
-    const reply = new CreateUserReply();
+      const reply = new CreateUserReply();
 
-    reply.setUserId(result.userId);
-    reply.setTelegramFromUserId(result.telegramFromUserId);
-    reply.setTelegramUsername(result.telegramUsername);
-    reply.setTelegramPrivateChatId(result.telegramPrivateChatId);
+      reply.setUserId(result.userId);
+      reply.setTelegramFromUserId(result.telegramFromUserId);
+      reply.setTelegramUsername(result.telegramUsername);
+      reply.setTelegramPrivateChatId(result.telegramPrivateChatId);
 
-    callback(null, reply);
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
   }
 
   async getUsers(
@@ -103,16 +111,20 @@ export class Controller {
     }: GRPCUnaryCall<FindUserByTelegramUserIdRequest, FindUserByTelegramUserIdReply>,
     { dao }: IContext
   ) {
-    const telegram_from_user_id = call.request.getTelegramFromUserId();
+    try {
+      const telegram_from_user_id = call.request.getTelegramFromUserId();
 
-    const result = await dao.UserDAO.findUserByTelegramUserId({
-      telegram_from_user_id,
-    });
+      const result = await dao.UserDAO.findUserByTelegramUserId({
+        telegram_from_user_id,
+      });
 
-    const reply = new FindUserByTelegramUserIdReply();
+      const reply = new FindUserByTelegramUserIdReply();
 
-    reply.setUserId(result.userId);
+      reply.setUserId(result.userId);
 
-    callback(null, reply);
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
   }
 }

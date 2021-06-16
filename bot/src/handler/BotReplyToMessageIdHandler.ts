@@ -1,6 +1,10 @@
 import { Bot } from "../Bot";
 import { Commands } from "../types";
 
+export type BotReplyToMessageIdHandlerStorageKeys = {
+  previousText: string;
+};
+
 export class BotReplyToMessageIdHandler {
   id: number;
   reply_to_message_ids: Array<number> = [];
@@ -8,7 +12,7 @@ export class BotReplyToMessageIdHandler {
   timestamp: Date;
   bot: Bot;
 
-  storage: Map<string, any> = new Map();
+  storage: Map<keyof BotReplyToMessageIdHandlerStorageKeys, any> = new Map();
 
   constructor(bot: Bot, command: Commands) {
     this.bot = bot;
