@@ -28,7 +28,7 @@ export class Bot {
   private topUpCommand: TopUpCommand;
   private setCountryCodeCommand: SetCountryCodeCommand;
   private setCurrencyCodeCommand: SetCurrencyCodeCommand;
-  private balanceCommand: BalanceCommand;
+  public balanceCommand: BalanceCommand;
 
   public UserServiceClient: UserClient;
   public WalletServiceClient: WalletClient;

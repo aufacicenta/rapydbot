@@ -12,17 +12,16 @@ export const translationKeys = {
   createwallet_command_error_rapyd_ewallet_exists_for_user_id:
     "createwalletwallet_command_error_rapyd_ewallet_exists_for_user_id",
 
-  topup_command_country_reply: "topup_command_country_reply",
-  topup_command_currency_reply: "topup_command_currency_reply",
-  topup_command_amount_reply: "topup_command_amount_reply",
+  topup_command_amount_reply: "topup_command_reply",
+  topup_command_checkout_page_button_text: "topup_command_checkout_page_button_text",
+  topup_command_invalid_amount_reply: "topup_command_invalid_amount_reply",
+  topup_command_checkout_page_reply: "topup_command_checkout_page_reply",
 
   setcountry_command_reply: "setcountry_command_reply",
-  setcountry_command_on_country_select_reply:
-    "setcountry_command_on_country_select_reply",
+  setcountry_command_on_country_select_reply: "setcountry_command_on_country_select_reply",
 
   setcurrency_command_reply: "setcurrency_command_reply",
-  setcurrency_command_on_currency_change_reply:
-    "setcurrency_command_on_currency_change_reply",
+  setcurrency_command_on_currency_change_reply: "setcurrency_command_on_currency_change_reply",
 
   walletbalance_command_error_ewallet_does_not_have_balances:
     "walletbalance_command_error_ewallet_does_not_have_balances",
