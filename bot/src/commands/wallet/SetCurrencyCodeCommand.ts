@@ -4,7 +4,7 @@ import { Bot } from "../../Bot";
 import { BotReplyToMessageIdHandler } from "../../handler";
 import { translationKeys } from "../../i18n";
 import { IBotCommand } from "../IBotCommand";
-import { getCurrencyButtons } from "../util/currencies";
+import { getCurrencyButtons, getCurrencyCode } from "../util/currencies";
 import getUserId from "../util/getUserId";
 
 export class SetCurrencyCodeCommand implements IBotCommand {
@@ -18,7 +18,16 @@ export class SetCurrencyCodeCommand implements IBotCommand {
     msg: Message,
     handler: BotReplyToMessageIdHandler,
     match?: RegExpMatchArray
-  ) {}
+  ) {
+    try {
+      const previousText = handler.storage.get("previousText");
+      if (previousText && previousText === "/setcurrency") {
+        await this.handleCurrencyChangeReply(msg);
+      }
+    } catch (error) {
+      this.handleErrorReply(error, msg);
+    }
+  }
 
   async onText(msg: Message) {
     try {
@@ -39,27 +48,47 @@ export class SetCurrencyCodeCommand implements IBotCommand {
     return this.bot.reply(msg, translationKeys.start_command_error);
   }
 
-  private async setWalletCurrencyCode(msg: Message): Promise<string> {
+  private async handleCurrencyChangeReply(msg: Message) {
+    const newCurrency = getCurrencyCode(msg.text);
+    const userId = await getUserId(msg, this.bot.UserServiceClient);
+
+    const currencyCode = await this.setWalletCurrencyCode(msg, {
+      userId,
+      currencyCode: newCurrency,
+    });
+
+    this.bot.reply(
+      msg,
+      translationKeys.setcurrency_command_on_currency_change_reply,
+      {
+        disable_web_page_preview: true,
+      },
+      {
+        currencyCode,
+      }
+    );
+  }
+
+  private async setWalletCurrencyCode(
+    msg: Message,
+    { userId, currencyCode }: { userId: string; currencyCode: string }
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
-      getUserId(msg, this.bot.UserServiceClient)
-        .then((userId) => {
-          const setWalletCurrencyCodeRequest = new SetWalletCurrencyCodeRequest();
-          setWalletCurrencyCodeRequest.setUserId(userId);
-          setWalletCurrencyCodeRequest.setCurrencyCode(msg.text);
+      const request = new SetWalletCurrencyCodeRequest();
+      request.setUserId(userId);
+      request.setCurrencyCode(currencyCode);
 
-          this.bot.WalletServiceClient.setWalletCurrencyCode(
-            setWalletCurrencyCodeRequest,
-            (error, reply) => {
-              if (Boolean(error)) {
-                return reject(error);
-              }
+      this.bot.WalletServiceClient.setWalletCurrencyCode(
+        request,
+        (error, reply) => {
+          if (Boolean(error)) {
+            return reject(error);
+          }
 
-              const currencyCode = reply.getCurrencyCode();
-              resolve(currencyCode);
-            }
-          );
-        })
-        .catch((error) => reject(error));
+          const currencyCode = reply.getCurrencyCode();
+          resolve(currencyCode);
+        }
+      );
     });
   }
 }

@@ -23,3 +23,9 @@ export function getCurrencyButtons() {
 
   return currencyButtons;
 }
+
+export function getCurrencyCode(rawCurrencyCode: string): string | null {
+  const currencyNameWhithoutFlag = rawCurrencyCode.split(" ").shift();
+
+  return !Boolean(currencyNameWhithoutFlag) ? null : currencyNameWhithoutFlag;
+}
