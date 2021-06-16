@@ -23,4 +23,7 @@ export const translationKeys = {
   setcurrency_command_reply: "setcurrency_command_reply",
   setcurrency_command_on_currency_change_reply:
     "setcurrency_command_on_currency_change_reply",
+
+  walletbalance_command_error_ewallet_does_not_have_balances:
+    "walletbalance_command_error_ewallet_does_not_have_balances",
 };

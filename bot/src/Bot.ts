@@ -3,7 +3,7 @@ import WALLET_ClientGenerator, { WalletClient } from "@rapydbot/wallet/client";
 import { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
 import { CreateWalletCommand, StartCommand, TopUpCommand } from "./commands";
-import { SetCountryCodeCommand, SetCurrencyCodeCommand } from "./commands/wallet";
+import { SetCountryCodeCommand, SetCurrencyCodeCommand, BalanceCommand } from "./commands/wallet";
 import {
   BotLanguageHandler,
   BotReplyToMessageIdHandler,
@@ -22,6 +22,7 @@ export class Bot {
   private topUpCommand: TopUpCommand;
   private setCountryCodeCommand: SetCountryCodeCommand;
   private setCurrencyCodeCommand: SetCurrencyCodeCommand;
+  private balanceCommand: BalanceCommand;
 
   public UserServiceClient: UserClient;
   public WalletServiceClient: WalletClient;
@@ -37,7 +38,8 @@ export class Bot {
     this.topUpCommand = new TopUpCommand(this);
     this.setCountryCodeCommand = new SetCountryCodeCommand(this);
     this.setCurrencyCodeCommand = new SetCurrencyCodeCommand(this);
-
+    this.balanceCommand = new BalanceCommand(this);
+    
     this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
     this.WalletServiceClient = new WALLET_ClientGenerator(
       process.env.WALLET_SERVICE_URL
@@ -92,9 +94,10 @@ export class Bot {
     this.api.onText(/^\/(setcountry|fijarpais)/, (msg, match) =>
       this.setCountryCodeCommand.onText(msg)
     );
-    this.api.onText(/^\/(setcurrency|fijarmoneda)/, (msg, match) =>
+    this.api.onText(/^\/(setcurrency|fijarmoneda)/i, (msg, match) =>
       this.setCurrencyCodeCommand.onText(msg)
     );
+    this.api.onText(/^\/balance/i, (msg, match) => this.balanceCommand.onText(msg));
   }
 
   reply(msg: Message, translationKey: string, options?: SendMessageOptions, args?: {}) {
