@@ -1,6 +1,6 @@
 import USER_ClientGenerator, { UserClient } from "@rapydbot/user/client";
 import WALLET_ClientGenerator, { WalletClient } from "@rapydbot/wallet/client";
-import { Moment } from "moment";
+import moment, { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
 import { StartCommand } from "./commands";
 import {
@@ -45,6 +45,7 @@ export class Bot {
     this.setCountryCodeCommand = new SetCountryCodeCommand(this);
     this.setCurrencyCodeCommand = new SetCurrencyCodeCommand(this);
     this.balanceCommand = new BalanceCommand(this);
+    this.moment = moment();
 
     this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
     this.WalletServiceClient = new WALLET_ClientGenerator(
