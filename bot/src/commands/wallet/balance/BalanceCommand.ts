@@ -30,23 +30,25 @@ export class BalanceCommand implements IBotCommand {
   }
 
   private async handleBalanceReply(msg: Message) {
-    const currentDate = this.bot.moment.format("YYYY-MM-DD HH:mm");
     const balance = await this.getWalletBalance(msg);
 
     this.bot.reply(msg, translationKeys.command_text_balance, null, {
-      currentDate,
+      currentDate: this.getBalanceDate(),
       ...balance,
     });
   }
 
   public async replyToPaymentCompleteWebhook({ msg, userId }: { msg: string; userId: string }) {
-    const currentDate = this.bot.moment.format("YYYY-MM-DD HH:mm");
     const balance = await this.getBalance(userId);
 
     this.bot.reply(JSON.parse(msg), translationKeys.command_text_balance, null, {
-      currentDate,
+      currentDate: this.getBalanceDate(),
       ...balance,
     });
+  }
+
+  private getBalanceDate(): string {
+    return this.bot.moment.format("MMM DD, YYYY");
   }
 
   private handleErrorReply(error: Error, msg: Message) {
