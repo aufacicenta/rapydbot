@@ -75,6 +75,7 @@ export class Bot {
           return;
         }
 
+        this.clearCommandHandler(msg.chat.id);
         return command.onReplyFromMessageID(msg, handler);
       }
 

@@ -2,7 +2,7 @@ import { translationKeys } from "../../translationKeys";
 
 export default {
   [translationKeys.command_text_balance]: `
-Your balance in {{currencyCode}} as of {{currentDate}}:
+Your Rapyd e-wallet balance in {{currencyCode}} as of {{currentDate}}:
 
 Current Balance: {{currentBalance}}
 On Hold:         {{onHoldBalance}}
