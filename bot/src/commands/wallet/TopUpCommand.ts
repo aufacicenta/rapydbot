@@ -93,6 +93,7 @@ export class TopUpCommand implements IBotCommand {
           const request = new TopUpWalletRequest();
           request.setUserId(userId);
           request.setAmount(amount);
+          request.setMsg(JSON.stringify(msg));
 
           this.bot.WalletServiceClient.topUpWallet(request, (error, reply) => {
             if (Boolean(error)) {

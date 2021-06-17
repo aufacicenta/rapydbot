@@ -27,6 +27,7 @@ message CreateWalletReply {
 message TopUpWalletRequest {
   string user_id = 1;
   float amount = 2;
+  string msg = 3;
 }
 
 message TopUpWalletReply {

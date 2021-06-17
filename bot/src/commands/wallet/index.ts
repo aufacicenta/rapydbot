@@ -1,4 +1,4 @@
-export * from "./BalanceCommand";
+export * from "./balance/BalanceCommand";
 export * from "./CreateWalletCommand";
 export * from "./SetCountryCodeCommand";
 export * from "./SetCurrencyCodeCommand";

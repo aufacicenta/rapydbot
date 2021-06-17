@@ -17,9 +17,7 @@ import server from "./webhooks/server";
       console.log(body);
 
       if (body && body.type && body.type === "PAYMENT_COMPLETED") {
-        await bot.balanceCommand.replyToPaymentCompleteWebhook(
-          body.data.payment_method_data.metadata
-        );
+        await bot.balanceCommand.replyToPaymentCompleteWebhook(body.data.metadata);
       }
 
       res.sendStatus(200);

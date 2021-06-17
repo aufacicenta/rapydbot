@@ -92,6 +92,10 @@ export type CreateCheckoutPageParams = {
   currency: string;
   ewallet: string;
   amount: number;
+  metadata: {
+    userId: string;
+    msg: string;
+  };
 };
 
 export type TransferFundsBetweenWalletsParams = {
