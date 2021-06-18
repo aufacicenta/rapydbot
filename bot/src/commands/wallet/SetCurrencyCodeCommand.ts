@@ -20,7 +20,7 @@ export class SetCurrencyCodeCommand implements IBotCommand {
     match?: RegExpMatchArray
   ) {
     try {
-      const previousText = handler.storage.get("previousText");
+      const previousText = handler.storage.get("previousText");      
       if (previousText && previousText === "/setcurrency") {
         await this.handleCurrencyChangeReply(msg);
       }
@@ -31,14 +31,23 @@ export class SetCurrencyCodeCommand implements IBotCommand {
 
   async onText(msg: Message) {
     try {
-      this.bot.reply(msg, translationKeys.setcurrency_command_reply, {
-        disable_web_page_preview: true,
-        reply_markup: {
-          resize_keyboard: true,
-          one_time_keyboard: true,
-          keyboard: getCurrencyButtons(),
+      this.bot.replyWithMessageID(
+        msg,
+        translationKeys.setcountry_command_reply,
+        this,
+        {
+          previousText: "/setcurrency",
         },
-      });
+        null,
+        {
+          disable_web_page_preview: true,
+          reply_markup: {
+            resize_keyboard: true,
+            one_time_keyboard: true,
+            keyboard: getCurrencyButtons(),
+          },
+        }
+      );
     } catch (error) {
       this.handleErrorReply(error, msg);
     }

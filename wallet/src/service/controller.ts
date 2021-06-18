@@ -122,6 +122,8 @@ export class Controller {
         user_id,
       });
 
+      const msg = call.request.getMsg();
+
       const { redirect_url: checkout_page_url } = await this.rapydClient.post<
         CheckoutObjectResponse,
         CreateCheckoutPageParams
@@ -132,6 +134,10 @@ export class Controller {
           currency: currency_code,
           amount,
           ewallet: rapyd_ewallet_address,
+          metadata: {
+            userId: user_id,
+            msg,
+          },
         },
       });
 

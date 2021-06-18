@@ -152,6 +152,7 @@ describe("controller", () => {
       new Promise((resolve) => {
         request.setUserId(userId);
         request.setAmount(amount);
+        request.setMsg("{}");
 
         walletClient.topUpWallet(request, (error, reply) => {
           if (error) {
