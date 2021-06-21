@@ -196,16 +196,21 @@ describe("controller", () => {
             pendingTransactionId: reply.getPendingTransactionId(),
             senderUserId: reply.getSenderUserId(),
             recipientUserId: reply.getRecipientUserId(),
+            currencyCode: reply.getCurrencyCode(),
           });
         });
       });
 
-    const { pendingTransactionId, senderUserId, recipientUserId } =
-      await transferFromWallet({
-        senderUserId: sender,
-        recipientUserId: recipient,
-        amount: requestAmount,
-      });
+    const {
+      pendingTransactionId,
+      senderUserId,
+      recipientUserId,
+      currencyCode,
+    } = await transferFromWallet({
+      senderUserId: sender,
+      recipientUserId: recipient,
+      amount: requestAmount,
+    });
 
     const setTransferFromWalletResponse = ({
       senderUserId,
@@ -244,7 +249,7 @@ describe("controller", () => {
 
     expect(setTransferFromWalletResponseReply.amount).toEqual(requestAmount);
     expect(setTransferFromWalletResponseReply.currencyCode).toEqual(
-      requestCurrency
+      currencyCode
     );
     expect(setTransferFromWalletResponseReply.senderUserId).toEqual(sender);
   });

@@ -7,7 +7,9 @@ export default {
 Done!
 
 Your transaction of {{amount}} {{currencyCode}} to @{{username}} is being processed.
-I'll let you know when it's done.
+@{{username}} needs to accept the transaction to be completed.
+
+Transaction ID: {{pendingTransactionId}}
 
 
 <em>Your transactions are secured by <a href="https://www.rapyd.net/platform/protect/">Rapyd Protect</a>.</em>
@@ -16,5 +18,13 @@ I'll let you know when it's done.
 <em>{{amount}}</em> is not a valid amount.
 
 Try again?
+`,
+  [translationKeys.transfer_command_reply_username_not_found_error]: `
+@{{username}} does not have a Rapyd e-wallet.
+
+Tell your friends to create one with /createwallet and try again.
+
+
+<em>Your transactions are secured by <a href="https://www.rapyd.net/platform/protect/">Rapyd Protect</a>.</em>
 `,
 };

@@ -7,15 +7,13 @@ export default (context: IContext) => {
 
   server.addService<IUserServer>(UserService, {
     findUserByTelegramUserIdOrCreateUser: (call, callback) =>
-      context.controller.findUserByTelegramUserIdOrCreateUser(
-        { call, callback },
-        context
-      ),
-    getUser: (call, callback) =>
-      context.controller.getUser({ call, callback }, context),
+      context.controller.findUserByTelegramUserIdOrCreateUser({ call, callback }, context),
+    getUser: (call, callback) => context.controller.getUser({ call, callback }, context),
     getUsers: (call) => context.controller.getUsers({ call }, context),
     findUserByTelegramUserId: (call, callback) =>
       context.controller.findUserByTelegramUserId({ call, callback }, context),
+    getUserIdByTelegramUsername: (call, callback) =>
+      context.controller.getUserIdByTelegramUsername({ call, callback }, context),
   });
 
   return server;

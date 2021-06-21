@@ -44,6 +44,7 @@ message TransferFromWalletReply {
   string pending_transaction_id = 1;
   string sender_user_id = 2;
   string recipient_user_id = 3;
+  string currency_code = 4;
 }
 
 message SetTransferFromWalletResponseRequest {

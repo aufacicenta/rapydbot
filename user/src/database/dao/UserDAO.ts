@@ -1,10 +1,12 @@
 import { ModelCtor, Sequelize } from "sequelize";
 import {
   CreateUserReply,
-  GetUserReply,
   FindUserByTelegramUserIdReply,
+  GetUserIdByTelegramUsernameReply,
+  GetUserReply,
 } from "../../server/protos/schema_pb";
-import { TelegramModel } from "../model/TelegramModel";
+import { UserServiceErrorCodes } from "../../service/error";
+import { TelegramModel, TelegramModelArgs } from "../model/TelegramModel";
 import { UserModel } from "../model/UserModel";
 
 export class UserDAO {
@@ -95,11 +97,31 @@ export class UserDAO {
     };
   }
 
-  async getUser({
-    user_id,
-  }: {
-    user_id: string;
-  }): Promise<GetUserReply.AsObject> {
+  async findUserByTelegramUsername({
+    username,
+  }: Pick<TelegramModelArgs, "username">): Promise<GetUserIdByTelegramUsernameReply.AsObject> {
+    const telegram_result = await this.telegram.findOne({
+      where: {
+        username,
+      },
+    });
+
+    if (!Boolean(telegram_result)) {
+      throw new Error(UserServiceErrorCodes.telegram_username_not_found);
+    }
+
+    const userId = telegram_result.getDataValue("user_id");
+
+    if (!Boolean(userId)) {
+      throw new Error(UserServiceErrorCodes.telegram_username_not_found);
+    }
+
+    return {
+      userId,
+    };
+  }
+
+  async getUser({ user_id }: { user_id: string }): Promise<GetUserReply.AsObject> {
     const result = await this.user.findOne({
       where: { id: user_id },
       include: {

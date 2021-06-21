@@ -209,6 +209,7 @@ export class Controller {
       reply.setPendingTransactionId(pending_transaction_id);
       reply.setSenderUserId(sender_user_id);
       reply.setRecipientUserId(recipient_user_id);
+      reply.setCurrencyCode(currency_code);
 
       callback(null, reply);
     } catch (error) {

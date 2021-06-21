@@ -7,6 +7,8 @@ import {
   CreateUserRequest,
   FindUserByTelegramUserIdReply,
   FindUserByTelegramUserIdRequest,
+  GetUserIdByTelegramUsernameReply,
+  GetUserIdByTelegramUsernameRequest,
   GetUserReply,
   GetUserRequest,
   GetUsersRequest,
@@ -119,6 +121,30 @@ export class Controller {
       });
 
       const reply = new FindUserByTelegramUserIdReply();
+
+      reply.setUserId(result.userId);
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async getUserIdByTelegramUsername(
+    {
+      call,
+      callback,
+    }: GRPCUnaryCall<GetUserIdByTelegramUsernameRequest, GetUserIdByTelegramUsernameReply>,
+    { dao }: IContext
+  ) {
+    try {
+      const username = call.request.getTelegramUsername();
+
+      const result = await dao.UserDAO.findUserByTelegramUsername({
+        username,
+      });
+
+      const reply = new GetUserIdByTelegramUsernameReply();
 
       reply.setUserId(result.userId);
 

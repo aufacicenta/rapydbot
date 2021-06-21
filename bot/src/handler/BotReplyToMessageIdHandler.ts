@@ -5,6 +5,7 @@ export type BotReplyToMessageIdHandlerStorageKeys = {
   previousText?: string;
   username?: string;
   amount?: string;
+  recipientUserId?: string;
 };
 
 export class BotReplyToMessageIdHandler {

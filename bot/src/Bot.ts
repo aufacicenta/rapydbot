@@ -103,7 +103,7 @@ export class Bot {
     this.api.sendMessage(
       msg.chat.id,
       this.languageHandler.getTranslation(msg, translationKey, args),
-      { parse_mode: "HTML", ...options }
+      { parse_mode: "HTML", disable_web_page_preview: true, ...options }
     );
   }
 
@@ -152,7 +152,7 @@ export class Bot {
     return this.replyToMessageIDMap.delete(chat_id);
   }
 
-  private getReplyToMessageIdHandler(chat_id: number) {
+  public getReplyToMessageIdHandler(chat_id: number) {
     return this.replyToMessageIDMap.get(chat_id);
   }
 }
