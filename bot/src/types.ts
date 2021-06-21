@@ -4,6 +4,7 @@ import {
   SetCountryCodeCommand,
   SetCurrencyCodeCommand,
   TopUpCommand,
+  TransferCommand,
 } from "./commands/wallet";
 
 export type Commands =
@@ -11,4 +12,5 @@ export type Commands =
   | CreateWalletCommand
   | TopUpCommand
   | SetCountryCodeCommand
-  | SetCurrencyCodeCommand;
+  | SetCurrencyCodeCommand
+  | TransferCommand;

@@ -9,12 +9,14 @@ import {
   SetCountryCodeCommand,
   SetCurrencyCodeCommand,
   TopUpCommand,
+  TransferCommand,
 } from "./commands/wallet";
 import {
   BotLanguageHandler,
   BotReplyToMessageIdHandler,
   BotReplyToMessageIdHandlerStorageKeys,
 } from "./handler";
+import { translationKeys } from "./i18n";
 import { Commands } from "./types";
 
 export class Bot {
@@ -29,6 +31,7 @@ export class Bot {
   private setCountryCodeCommand: SetCountryCodeCommand;
   private setCurrencyCodeCommand: SetCurrencyCodeCommand;
   public balanceCommand: BalanceCommand;
+  public transferCommand: TransferCommand;
 
   public UserServiceClient: UserClient;
   public WalletServiceClient: WalletClient;
@@ -45,6 +48,8 @@ export class Bot {
     this.setCountryCodeCommand = new SetCountryCodeCommand(this);
     this.setCurrencyCodeCommand = new SetCurrencyCodeCommand(this);
     this.balanceCommand = new BalanceCommand(this);
+    this.transferCommand = new TransferCommand(this);
+
     this.moment = moment();
 
     this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
@@ -75,23 +80,8 @@ export class Bot {
           return;
         }
 
-        this.clearCommandHandler(msg.chat.id);
         return command.onReplyFromMessageID(msg, handler);
       }
-
-      const handler = this.getReplyToMessageIdHandler(msg.chat.id);
-      if (Boolean(handler) && handler.storage.get("previousText")) {
-        const command = handler?.command;
-
-        if (!Boolean(command)) {
-          return;
-        }
-
-        this.clearCommandHandler(msg.chat.id);
-        return command.onReplyFromMessageID(msg, handler);
-      }
-
-      // TODO no answers reply
     });
 
     this.api.onText(/^\/start/i, (msg, match) => this.startCommand.onText(msg));
@@ -106,9 +96,10 @@ export class Bot {
       this.setCurrencyCodeCommand.onText(msg)
     );
     this.api.onText(/^\/balance/i, (msg, match) => this.balanceCommand.onText(msg));
+    this.api.onText(/^\/(transfer|enviar)/i, (msg, match) => this.transferCommand.onText(msg));
   }
 
-  reply(msg: Message, translationKey: string, options?: SendMessageOptions, args?: {}) {
+  reply(msg: Message, translationKey: translationKeys, options?: SendMessageOptions, args?: {}) {
     this.api.sendMessage(
       msg.chat.id,
       this.languageHandler.getTranslation(msg, translationKey, args),
@@ -118,9 +109,9 @@ export class Bot {
 
   replyWithMessageID(
     msg: Message,
-    translationKey: string,
+    translationKey: translationKeys,
     command: Commands,
-    handlerData?: Record<keyof BotReplyToMessageIdHandlerStorageKeys, any>,
+    handlerData?: Record<string, any>,
     reply_to_message_id?: number,
     options?: SendMessageOptions,
     args?: {}
@@ -153,15 +144,15 @@ export class Bot {
     );
   }
 
-  getTranslation(msg: Message, translationKey: string, args?: {}) {
+  getTranslation(msg: Message, translationKey: translationKeys, args?: {}) {
     return this.languageHandler.getTranslation(msg, translationKey, args);
+  }
+
+  public clearCommandHandler(chat_id: number) {
+    return this.replyToMessageIDMap.delete(chat_id);
   }
 
   private getReplyToMessageIdHandler(chat_id: number) {
     return this.replyToMessageIDMap.get(chat_id);
-  }
-
-  private clearCommandHandler(chat_id: number) {
-    return this.replyToMessageIDMap.delete(chat_id);
   }
 }
