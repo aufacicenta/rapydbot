@@ -7,7 +7,7 @@ import { Bot } from "../../Bot";
 import { BotReplyToMessageIdHandler } from "../../handler";
 import { translationKeys } from "../../i18n";
 import { IBotCommand } from "../IBotCommand";
-import { getCountryButtons, getCountryFromName } from "../util/countries";
+import { getCountryButtons, getCountryFromName } from "../util/buttons/countries";
 import getUserId from "../util/getUserId";
 
 export class SetCountryCodeCommand implements IBotCommand {
