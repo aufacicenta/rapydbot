@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option objc_class_prefix = "aufax";
+
+package withdraw;
+
+service Withdraw {
+  rpc GetWithdraw (GetWithdrawRequest) returns (GetWithdrawReply) {}
+}
+
+message GetWithdrawRequest {
+  string id = 1;
+}
+
+message GetWithdrawReply {
+  string id = 1;
+}
+
+message EmptyReply {}
