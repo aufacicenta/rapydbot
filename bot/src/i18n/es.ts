@@ -4,6 +4,7 @@ import setcurrency_command_es from "./commands/setcurrency/es";
 import start_command_es from "./commands/start/es";
 import topup_command_es from "./commands/topup/es";
 import balance_command_es from "./commands/balance/es";
+import help_command_es from "./commands/help/es"
 
 export const es = {
   translation: {
@@ -13,5 +14,6 @@ export const es = {
     ...setcurrency_command_es,
     ...setcountry_command_es,
     ...balance_command_es,
+    ...help_command_es,
   },
 };
