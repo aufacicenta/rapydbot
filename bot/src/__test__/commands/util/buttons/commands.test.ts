@@ -1,12 +1,19 @@
 import { getCommandButtons } from "../../../../commands/util/buttons/commands";
-import { getCommandButtonsTranslation } from "../../../util";
 
 describe("Command Buttons Utility", () => {
   test("Command Buttons: Get Command Buttons", () => {
-    const commandButtonsString = getCommandButtonsTranslation({
-      language: "es",
+    const commandButtons = getCommandButtons({
+      commandButtonsString: `
+        [
+          {"text":"/createwallet"},
+          {"text":"/topup"},
+          {"text":"/balance"},
+          {"text":"/send"},
+          {"text":"/withdraw"},
+          {"text":"/setcountry"},
+          {"text":"/setcurrency"}
+      ]`,
     });
-    const commandButtons = getCommandButtons({ commandButtonsString });
 
     expect(commandButtons).not.toBeUndefined();
     expect(commandButtons.length).not.toBeUndefined();
