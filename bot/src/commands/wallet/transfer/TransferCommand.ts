@@ -160,6 +160,7 @@ export class TransferCommand implements IBotCommand {
           request.setSenderUserId(senderUserId);
           request.setRecipientUserId(recipientUserId);
           request.setAmount(amount);
+          request.setMsg(JSON.stringify(msg));
 
           this.bot.WalletServiceClient.transferFromWallet(request, (error, reply) => {
             if (Boolean(error)) {

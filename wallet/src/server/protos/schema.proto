@@ -38,6 +38,7 @@ message TransferFromWalletRequest {
   string sender_user_id = 1;
   string recipient_user_id = 2;
   float amount = 3;
+  string msg = 4;
 }
 
 message TransferFromWalletReply {

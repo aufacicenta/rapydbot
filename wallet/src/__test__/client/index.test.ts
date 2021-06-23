@@ -179,6 +179,7 @@ describe("controller", () => {
       senderUserId,
       recipientUserId,
       amount,
+      msg,
     }: TransferFromWalletRequest.AsObject): Promise<TransferFromWalletReply.AsObject> =>
       new Promise((resolve) => {
         const request = new TransferFromWalletRequest();
@@ -186,6 +187,7 @@ describe("controller", () => {
         request.setAmount(amount);
         request.setSenderUserId(senderUserId);
         request.setRecipientUserId(recipientUserId);
+        request.setMsg(msg);
 
         walletClient.transferFromWallet(request, (error, reply) => {
           if (error) {
@@ -210,6 +212,7 @@ describe("controller", () => {
       senderUserId: sender,
       recipientUserId: recipient,
       amount: requestAmount,
+      msg: "{}",
     });
 
     const setTransferFromWalletResponse = ({

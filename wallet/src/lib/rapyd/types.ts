@@ -103,6 +103,11 @@ export type TransferFundsBetweenWalletsParams = {
   destination_ewallet: string;
   currency: string;
   amount: number;
+  metadata: {
+    senderUserId: string;
+    recipientUserId: string;
+    msg: string;
+  };
 };
 
 export type SetTransferFromWalletParams = {

@@ -191,6 +191,8 @@ export class Controller {
 
       // @TODO reply with an error if the recipient hasn't set a default currency_code yet
 
+      const msg = call.request.getMsg();
+
       const { id: pending_transaction_id } = await this.rapydClient.post<
         TransferFundsBetweenWalletsResponse,
         TransferFundsBetweenWalletsParams
@@ -201,6 +203,11 @@ export class Controller {
           amount,
           source_ewallet: sender_rapyd_ewallet_address,
           destination_ewallet: recipient_rapyd_ewallet_address,
+          metadata: {
+            senderUserId: sender_user_id,
+            recipientUserId: recipient_user_id,
+            msg,
+          },
         },
       });
 
