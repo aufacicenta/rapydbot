@@ -4,7 +4,7 @@ import { Bot } from "../../Bot";
 import { BotReplyToMessageIdHandler } from "../../handler";
 import { translationKeys } from "../../i18n";
 import { IBotCommand } from "../IBotCommand";
-import { getCurrencyButtons, getCurrencyCode } from "../util/currencies";
+import { getCurrencyButtons, getCurrencyCode } from "../util/buttons/currencies";
 import getUserId from "../util/getUserId";
 
 export class SetCurrencyCodeCommand implements IBotCommand {

@@ -1,6 +1,9 @@
 import { KeyboardButton } from "node-telegram-bot-api";
-import Countries from "../../lib/data/countries.json";
-import { generateButtonGroups, generateCountryFlagEmoji } from "./buttons";
+import Countries from "../../../lib/data/countries.json";
+import {
+  generateButtonGroups,
+  generateCountryFlagEmoji,
+} from "./button-groups";
 
 export function getCurrencyButtons() {
   const currencyButtonsInfo = Countries.map((countryInfo) => {
