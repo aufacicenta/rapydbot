@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bot-deployment
+  labels:
+    app: bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bot
+  template:
+    metadata:
+      labels:
+        app: bot
+    spec:
+      serviceAccountName: nginx-deployment-sa
+      volumes:
+        - name: api-secret
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "aws-secret-application"
+      containers:
+      - name: bot
+        image: 111975705704.dkr.ecr.us-east-2.amazonaws.com/rapydbot/bot:latest
+        volumeMounts:
+        - name: api-secret
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+

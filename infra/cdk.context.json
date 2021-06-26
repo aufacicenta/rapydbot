@@ -1,0 +1,8 @@
+{
+  "availability-zones:account=111975705704:region=us-east-2": [
+    "us-east-2a",
+    "us-east-2b",
+    "us-east-2c"
+  ],
+  "ami:account=111975705704:filters.image-type.0=machine:filters.name.0=amzn-ami-vpc-nat-*:filters.state.0=available:owners.0=amazon:region=us-east-2": "ami-0a920970878472c32"
+}

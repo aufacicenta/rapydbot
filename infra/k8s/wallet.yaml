@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wallet-deployment
+  labels:
+    app: wallet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wallet
+  template:
+    metadata:
+      labels:
+        app: wallet
+    spec:
+      serviceAccountName: nginx-deployment-sa
+      volumes:
+        - name: api-secret
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "aws-secret-application"
+      containers:
+      - name: wallet
+        image: 111975705704.dkr.ecr.us-east-2.amazonaws.com/rapydbot/wallet:latest
+        ports:
+        - containerPort: 30042
+        volumeMounts:
+        - name: api-secret
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wallet-service
+spec:
+  selector:
+    app: wallet
+  type: ClusterIP
+  ports:
+    - port: 30042
+      targetPort: 30042

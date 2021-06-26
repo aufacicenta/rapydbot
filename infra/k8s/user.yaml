@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-deployment
+  labels:
+    app: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      serviceAccountName: nginx-deployment-sa
+      volumes:
+        - name: api-secret
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "aws-secret-application"
+      containers:
+      - name: user
+        image: 111975705704.dkr.ecr.us-east-2.amazonaws.com/rapydbot/user:latest
+        ports:
+        - containerPort: 30041
+        volumeMounts:
+        - name: api-secret
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user
+  type: ClusterIP
+  ports:
+    - port: 30041
+      targetPort: 30041
