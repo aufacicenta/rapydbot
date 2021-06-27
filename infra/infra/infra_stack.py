@@ -20,7 +20,7 @@ class InfraStack(cdk.Stack):
         ####################
         # Load ENV VARS
         ####################
-
+        
         p_secret_arn = os.getenv("SECRET_ARN", "")
 
         if p_secret_arn == "":
@@ -78,19 +78,24 @@ class InfraStack(cdk.Stack):
         # MYSQL Cluster
         ####################
         
-        # Read creds
-        dbCreds = sm.Secret.from_secret_arn(self, "dbCreds", p_secret_arn)
+        # Read Secret
+        secret_rapyd = sm.Secret.from_secret_arn(self, "dbCreds", p_secret_arn)
+
+        # DB Security group
+        sg_aurora = ec2.SecurityGroup(self, 'sgAurora', vpc=vpc, security_group_name= "AuroraMysql")
+        sg_aurora.add_ingress_rule(cluster.cluster_security_group, ec2.Port.tcp(3306))
 
         # Create cluster
         dbCluster = rds.DatabaseCluster(self, "database",
                                         engine=rds.DatabaseClusterEngine.aurora_mysql(version=rds.AuroraMysqlEngineVersion.VER_2_09_2),
-                                        credentials=rds.Credentials.from_secret(dbCreds),
+                                        credentials=rds.Credentials.from_secret(secret_rapyd),
                                         cluster_identifier="db-cluster",
                                         instances=1,
                                         instance_props=rds.InstanceProps(
                                             vpc=vpc,
                                             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE),
-                                            instance_type=ec2.InstanceType("t3.small")
+                                            instance_type=ec2.InstanceType("t3.small"),
+                                            security_groups=[sg_aurora]
                                         ))
 
         ####################
@@ -103,11 +108,11 @@ class InfraStack(cdk.Stack):
                                             zone_name="rapydbot.local")
 
         # DB Write Record
-        route53.CnameRecord(self, 'dbWriteRecord',
-                            domain_name=dbCluster.cluster_endpoint.hostname,
-                            record_name='db',
-                            zone=zone_pv,
-                            ttl=core.Duration.minutes(1))
+        db_record = route53.CnameRecord(self, 'dbWriteRecord',
+                                        domain_name=dbCluster.cluster_endpoint.hostname,
+                                        record_name='db',
+                                        zone=zone_pv,
+                                        ttl=core.Duration.minutes(1))
 
         # DB Read Record
         route53.CnameRecord(self, 'dbReadRecord',
@@ -119,5 +124,58 @@ class InfraStack(cdk.Stack):
         ####################
         # Deploy APP
         ####################
+        
+        #################
+        # Secret Resource
 
-        # Create Secret Resource
+        # Read manifest
+        document = open('k8s/secreto.yaml', 'r')
+        manifest = yaml.safe_load_all(document).__next__()
+
+        # Set secreat
+        manifest['spec']['parameters']['objects'] = '- objectName: "' + secret_rapyd.secret_name + '"\n  objectType: "secretsmanager"\n'
+
+        # Create Resorce
+        secret_r = cluster.add_manifest('customSecretR', manifest)
+
+        ############################
+        # Create Wallet Microservice
+
+        # Read manifest
+        document = open('k8s/wallet.yaml', 'r')
+        manifest = yaml.safe_load_all(document)
+
+        # Create Resorces
+        for i, doc in enumerate(manifest):
+            resource = cluster.add_manifest('wallet' + doc['kind'] + 'R', doc)
+            if doc['kind'] == "Deployment":
+                resource.node.add_dependency(db_record)
+                resource.node.add_dependency(secret_r)
+        
+        ##########################
+        # Create User Microservice
+
+        # Read manifest
+        document = open('k8s/user.yaml', 'r')
+        manifest = yaml.safe_load_all(document)
+
+        # Create Resorces
+        for i, doc in enumerate(manifest):
+            resource = cluster.add_manifest('user' + doc['kind'] + 'R', doc)
+            if doc['kind'] == "Deployment":
+                resource.node.add_dependency(db_record)
+                resource.node.add_dependency(secret_r)
+
+        ##########################
+        # Create Bot Microservice
+
+        # Read manifest
+        document = open('k8s/bot.yaml', 'r')
+        manifest = yaml.safe_load_all(document)
+
+        # Create Resorces
+        for i, doc in enumerate(manifest):
+            resource = cluster.add_manifest('bot' + doc['kind'] + 'R', doc)
+            if doc['kind'] == "Deployment":
+                resource.node.add_dependency(db_record)
+                resource.node.add_dependency(secret_r)

@@ -14,19 +14,19 @@ spec:
       labels:
         app: bot
     spec:
-      serviceAccountName: nginx-deployment-sa
+      serviceAccountName: rapyd-secret-sa
       volumes:
-        - name: api-secret
+        - name: rapyd-secret
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: "aws-secret-application"
+              secretProviderClass: "aws-rapyd-secret"
       containers:
       - name: bot
         image: 111975705704.dkr.ecr.us-east-2.amazonaws.com/rapydbot/bot:latest
         volumeMounts:
-        - name: api-secret
+        - name: rapyd-secret
           mountPath: "/mnt/secrets-store"
           readOnly: true
 
