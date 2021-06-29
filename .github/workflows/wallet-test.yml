@@ -1,7 +1,7 @@
-name: Wallet Microservice Test
+name: Wallet Service Test
 on: 
-  push:
-    pull_request:
+  pull_request:
+    paths:
       - 'wallet/**'
       - '.github/workflows/wallet-test.yml'
 jobs:
