@@ -5,7 +5,7 @@ on:
       - 'bot/**'
       - '.github/workflows/bot-test.yml'
 jobs:
-  APP2-Test:
+  Bot-Test:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code

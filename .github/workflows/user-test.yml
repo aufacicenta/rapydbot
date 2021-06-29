@@ -5,7 +5,7 @@ on:
       - 'user/**'
       - '.github/workflows/user-test.yml'
 jobs:
-  APP2-Test:
+  User-Test:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code

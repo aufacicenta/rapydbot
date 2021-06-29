@@ -5,7 +5,7 @@ on:
       - 'wallet/**'
       - '.github/workflows/wallet-test.yml'
 jobs:
-  APP2-Test:
+  Wallet-Test:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
