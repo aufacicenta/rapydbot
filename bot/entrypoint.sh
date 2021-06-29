@@ -11,6 +11,7 @@ if [ -f "$SECRET_FILE" ]; then
     export BOT_TOKEN=$(cat $SECRET_FILE | jq -r '.BOT_TOKEN')
     export USER_SERVICE_URL=$(cat $SECRET_FILE | jq -r '.USER_SERVICE_URL')
     export WALLET_SERVICE_URL=$(cat $SECRET_FILE | jq -r '.WALLET_SERVICE_URL')
+    export RAPYD_WEBHOOKS_SERVER_PORT=$(cat $SECRET_FILE | jq -r '.RAPYD_WEBHOOKS_SERVER_PORT')
 else 
     echo "# Secrets file does not exist!"
 fi

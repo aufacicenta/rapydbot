@@ -4,8 +4,6 @@
 # Run container
 # docker run rapydbot/bot
 
-# RAPYD_WEBHOOKS_SERVER_PORT=33355
-
 FROM node:12-slim
 LABEL maintainer="susguzman"
 
