@@ -1,0 +1,17 @@
+name: User Service Test
+on: 
+  pull_request:
+    paths:
+      - 'user/**'
+      - '.github/workflows/user-test.yml'
+jobs:
+  APP2-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Build container image
+        run: |
+          cd user
+          docker build -t rapydbot/user .
