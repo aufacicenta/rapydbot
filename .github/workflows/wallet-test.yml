@@ -1,0 +1,17 @@
+name: Wallet Microservice Test
+on: 
+  push:
+    pull_request:
+      - 'wallet/**'
+      - '.github/workflows/wallet-test.yml'
+jobs:
+  APP2-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Build container image
+        run: |
+          cd wallet
+          docker build -t rapydbot/wallet .
