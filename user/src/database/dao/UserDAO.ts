@@ -4,6 +4,7 @@ import {
   FindUserByTelegramUserIdReply,
   GetUserIdByTelegramUsernameReply,
   GetUserReply,
+  GetUserTelegramChatIdRequest,
 } from "../../server/protos/schema_pb";
 import { UserServiceErrorCodes } from "../../service/error";
 import { TelegramModel, TelegramModelArgs } from "../model/TelegramModel";
@@ -99,7 +100,10 @@ export class UserDAO {
 
   async findUserByTelegramUsername({
     username,
-  }: Pick<TelegramModelArgs, "username">): Promise<GetUserIdByTelegramUsernameReply.AsObject> {
+  }: Pick<
+    TelegramModelArgs,
+    "username"
+  >): Promise<GetUserIdByTelegramUsernameReply.AsObject> {
     const telegram_result = await this.telegram.findOne({
       where: {
         username,
@@ -121,7 +125,11 @@ export class UserDAO {
     };
   }
 
-  async getUser({ user_id }: { user_id: string }): Promise<GetUserReply.AsObject> {
+  async getUser({
+    user_id,
+  }: {
+    user_id: string;
+  }): Promise<GetUserReply.AsObject> {
     const result = await this.user.findOne({
       where: { id: user_id },
       include: {
@@ -155,6 +163,29 @@ export class UserDAO {
     }
 
     return result.map((r) => this.getUserReplyObject(r));
+  }
+
+  async getUserTelegramChatId({
+    userId,
+  }: Pick<GetUserTelegramChatIdRequest.AsObject, "userId">) {
+    const user = await this.user.findOne({
+      where: { id: userId },
+      include: {
+        model: this.telegram,
+      },
+    });
+
+    if (!Boolean(user)) {
+      throw new Error("getUser failed");
+    }
+
+    const telgramInfo = user.getDataValue("telegram");
+
+    if (!Boolean(telgramInfo)) {
+      throw new Error("get_user_telegram_info_failed");
+    }
+
+    return telgramInfo.getDataValue("private_chat_id");
   }
 
   private getUserReplyObject(user: UserModel): GetUserReply.AsObject {

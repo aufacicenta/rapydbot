@@ -12,6 +12,8 @@ import {
   GetUserReply,
   GetUserRequest,
   GetUsersRequest,
+  GetUserTelegramChatIdRequest,
+  GetUserTelegramChatIdReply,
 } from "../server/protos/schema_pb";
 
 type GRPCUnaryCall<Request, Reply> = {
@@ -110,7 +112,10 @@ export class Controller {
     {
       call,
       callback,
-    }: GRPCUnaryCall<FindUserByTelegramUserIdRequest, FindUserByTelegramUserIdReply>,
+    }: GRPCUnaryCall<
+      FindUserByTelegramUserIdRequest,
+      FindUserByTelegramUserIdReply
+    >,
     { dao }: IContext
   ) {
     try {
@@ -134,7 +139,10 @@ export class Controller {
     {
       call,
       callback,
-    }: GRPCUnaryCall<GetUserIdByTelegramUsernameRequest, GetUserIdByTelegramUsernameReply>,
+    }: GRPCUnaryCall<
+      GetUserIdByTelegramUsernameRequest,
+      GetUserIdByTelegramUsernameReply
+    >,
     { dao }: IContext
   ) {
     try {
@@ -147,6 +155,30 @@ export class Controller {
       const reply = new GetUserIdByTelegramUsernameReply();
 
       reply.setUserId(result.userId);
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async getUserTelegramChatId(
+    {
+      call,
+      callback,
+    }: GRPCUnaryCall<GetUserTelegramChatIdRequest, GetUserTelegramChatIdReply>,
+    { dao }: IContext
+  ) {
+    try {
+      const user_id = call.request.getUserId();
+
+      const private_chat_id = await dao.UserDAO.getUserTelegramChatId({
+        userId: user_id,
+      });
+
+      const reply = new GetUserTelegramChatIdReply();
+
+      reply.setPrivateChatId(private_chat_id);
 
       callback(null, reply);
     } catch (error) {
