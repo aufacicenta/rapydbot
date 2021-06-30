@@ -1,0 +1,16 @@
+name: Bot Service Test
+on: 
+  pull_request:
+    paths:
+      - 'bot/**'
+      - '.github/workflows/bot-test.yml'
+jobs:
+  Bot-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Build container image
+        run: |
+          docker build -t rapydbot/bot -f bot/Dockerfile .
