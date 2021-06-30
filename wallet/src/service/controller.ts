@@ -34,6 +34,8 @@ import {
   TopUpWalletRequest,
   TransferFromWalletReply,
   TransferFromWalletRequest,
+  GetUserIdFromWalletAddressReply,
+  GetUserIdFromWalletAddressRequest,
 } from "../server/protos/schema_pb";
 import { WalletServiceErrorCodes } from "../service/error";
 
@@ -502,6 +504,38 @@ export class Controller {
       const reply = new GetWalletCountryCodeReply();
 
       reply.setCountryCode(country_code);
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async getUserIdFromWalletAddress(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<
+      GetUserIdFromWalletAddressRequest,
+      GetUserIdFromWalletAddressReply
+    >,
+    { dao }: IContext
+  ) {
+    try {
+      const rapyd_ewallet_address = call.request.getRapydEwalletAddress();
+      const user_id = await dao.WalletDAO.getUserIdByRapydEwalletAddress({
+        rapyd_ewallet_address,
+      });
+
+      if (!Boolean(user_id)) {
+        throw new Error(
+          WalletServiceErrorCodes.rapyd_ewallet_cannot_get_user_id
+        );
+      }
+
+      const reply = new GetUserIdFromWalletAddressReply();
+
+      reply.setUserId(user_id);
 
       callback(null, reply);
     } catch (error) {

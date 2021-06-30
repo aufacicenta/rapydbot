@@ -15,6 +15,7 @@ export const WalletServiceErrorCodes = {
     "rapyd_ewallet_does_not_have_an_established_currency",
   rapyd_ewallet_does_not_have_an_established_country:
     "rapyd_ewallet_does_not_have_an_established_country",
+  rapyd_ewallet_cannot_get_user_id: "rapyd_ewallet_cannot_get_user_id",
   ERROR_CREATE_USER_EWALLET_REFERENCE_ID_ALREADY_EXISTS:
     "ERROR_CREATE_USER_EWALLET_REFERENCE_ID_ALREADY_EXISTS",
   ERROR_CANNOT_SET_USER_EWALLET_DEFAULT_CURRENCY:
