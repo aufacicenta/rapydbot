@@ -7,6 +7,7 @@ export enum translationKeys {
   command_text_send,
   command_text_topup,
   command_text_balance,
+  command_text_help,
 
   createwallet_command_reply,
   createwallet_command_error_rapyd_ewallet_exists_for_user_id,
@@ -29,4 +30,6 @@ export enum translationKeys {
   transfer_command_reply_username_not_found_error,
 
   walletbalance_command_error_ewallet_does_not_have_balances,
+
+  help_command_buttons,
 }

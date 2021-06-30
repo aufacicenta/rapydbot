@@ -8,12 +8,15 @@ import WalletClientGenerator, {
   TopUpWalletRequest,
   TransferFromWalletReply,
   TransferFromWalletRequest,
+  GetWalletBalanceReply,
+  GetWalletBalanceRequest,
   WalletClient,
 } from "../../client";
 import database from "../../database";
 import { WalletDAO } from "../../database/dao/WalletDAO";
 import RapydClient from "../../lib/rapyd/RapydClient";
 import { WalletObjectResponse } from "../../lib/rapyd/types";
+import { WalletServiceErrorCodes } from "../../service/error";
 import getRandomUsername from "../util/getRandomUsername";
 
 let driver: Sequelize,
@@ -255,5 +258,89 @@ describe("controller", () => {
       currencyCode
     );
     expect(setTransferFromWalletResponseReply.senderUserId).toEqual(sender);
+  });
+
+  test("success: gets wallet balance", async () => {
+    const requestCurrency = "MXN";
+
+    const getBalance = ({
+      userId,
+      currencyCode,
+    }: GetWalletBalanceRequest.AsObject): Promise<GetWalletBalanceReply.AsObject> => {
+      return new Promise((resolve, _) => {
+        const request = new GetWalletBalanceRequest();
+        request.setUserId(userId);
+        request.setCurrencyCode(currencyCode);
+
+        walletClient.getWalletBalance(request, (error, reply) => {
+          if (error) {
+            throw error;
+          }
+
+          resolve({
+            currencyCode: reply.getCurrencyCode(),
+            balance: reply.getBalance(),
+            onHoldBalance: reply.getOnHoldBalance(),
+            receivedBalance: reply.getReceivedBalance(),
+            reserveBalance: reply.getReserveBalance(),
+          });
+        });
+      });
+    };
+
+    const {
+      balance,
+      currencyCode,
+      onHoldBalance,
+      reserveBalance,
+      receivedBalance,
+    } = await getBalance({
+      userId: recipient,
+      currencyCode: requestCurrency,
+    });
+
+    expect(balance).not.toBeUndefined();
+    expect(currencyCode).toBe(requestCurrency);
+    expect(onHoldBalance).toBeNull();
+    expect(reserveBalance).toBeNull();
+    expect(receivedBalance).toBeNull();
+  });
+
+  test("fail: wallet doesn't have balances", async () => {
+    const requestCurrency = "MXN";
+
+    const getBalance = ({
+      userId,
+      currencyCode,
+    }: GetWalletBalanceRequest.AsObject): Promise<GetWalletBalanceReply.AsObject> => {
+      return new Promise((resolve, _) => {
+        const request = new GetWalletBalanceRequest();
+        request.setUserId(userId);
+        request.setCurrencyCode(currencyCode);
+
+        walletClient.getWalletBalance(request, (error, reply) => {
+          if (error) {
+            throw error;
+          }
+
+          resolve({
+            currencyCode: reply.getCurrencyCode(),
+            balance: reply.getBalance(),
+            onHoldBalance: reply.getOnHoldBalance(),
+            receivedBalance: reply.getReceivedBalance(),
+            reserveBalance: reply.getReserveBalance(),
+          });
+        });
+      });
+    };
+
+    getBalance({
+      userId: sender,
+      currencyCode: requestCurrency,
+    }).catch((err) => {
+      expect(err).toMatch(
+        WalletServiceErrorCodes.rapyd_ewallet_does_not_have_balances
+      );
+    });
   });
 });

@@ -1,5 +1,6 @@
 import balance_command_en from "./commands/balance/en";
 import createwallet_command_en from "./commands/createwallet/en";
+import help_command_en from "./commands/help/en";
 import setcountry_command_en from "./commands/setcountry/en";
 import setcurrency_command_en from "./commands/setcurrency/en";
 import start_command_en from "./commands/start/en";
@@ -15,5 +16,6 @@ export const en = {
     ...setcountry_command_en,
     ...balance_command_en,
     ...transfer_command_en,
+    ...help_command_en,
   },
 };

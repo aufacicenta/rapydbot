@@ -1,5 +1,8 @@
-import { generateButtonGroups, generateCountryFlagEmoji } from "../../../commands/util/buttons";
-import { generateTelegramButtons } from "../../util";
+import {
+  generateButtonGroups,
+  generateCountryFlagEmoji,
+} from "../../../../commands/util/buttons/button-groups";
+import { generateTelegramButtons } from "../../../util";
 
 describe("Button Utilities", () => {
   test("Button Utilities: Generate Button Pair Groups", () => {

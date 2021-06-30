@@ -3,6 +3,7 @@ import WALLET_ClientGenerator, { WalletClient } from "@rapydbot/wallet/client";
 import moment, { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
 import { StartCommand } from "./commands";
+import { HelpCommand } from "./commands/HelpCommand";
 import {
   BalanceCommand,
   CreateWalletCommand,
@@ -30,6 +31,7 @@ export class Bot {
   private topUpCommand: TopUpCommand;
   private setCountryCodeCommand: SetCountryCodeCommand;
   private setCurrencyCodeCommand: SetCurrencyCodeCommand;
+  private helpCommand: HelpCommand;
   public balanceCommand: BalanceCommand;
   public transferCommand: TransferCommand;
 
@@ -47,6 +49,7 @@ export class Bot {
     this.topUpCommand = new TopUpCommand(this);
     this.setCountryCodeCommand = new SetCountryCodeCommand(this);
     this.setCurrencyCodeCommand = new SetCurrencyCodeCommand(this);
+    this.helpCommand = new HelpCommand(this);
     this.balanceCommand = new BalanceCommand(this);
     this.transferCommand = new TransferCommand(this);
 
@@ -97,6 +100,7 @@ export class Bot {
     );
     this.api.onText(/^\/balance/i, (msg, match) => this.balanceCommand.onText(msg));
     this.api.onText(/^\/(transfer|enviar)/i, (msg, match) => this.transferCommand.onText(msg));
+    this.api.onText(/^\/(help|ayuda)/i, (msg, match) => this.helpCommand.onText(msg));
   }
 
   reply(msg: Message, translationKey: translationKeys, options?: SendMessageOptions, args?: {}) {
