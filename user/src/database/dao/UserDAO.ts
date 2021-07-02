@@ -176,16 +176,16 @@ export class UserDAO {
     });
 
     if (!Boolean(user)) {
-      throw new Error("getUser failed");
+      throw new Error(UserServiceErrorCodes.user_not_found);
     }
 
-    const telgramInfo = user.getDataValue("telegram");
+    const telegramInfo = user.getDataValue("telegram");
 
-    if (!Boolean(telgramInfo)) {
-      throw new Error("get_user_telegram_info_failed");
+    if (!Boolean(telegramInfo)) {
+      throw new Error(UserServiceErrorCodes.user_telegram_info_not_found);
     }
 
-    return telgramInfo.getDataValue("private_chat_id");
+    return telegramInfo.getDataValue("private_chat_id");
   }
 
   private getUserReplyObject(user: UserModel): GetUserReply.AsObject {
