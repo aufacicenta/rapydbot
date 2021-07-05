@@ -2,7 +2,10 @@ import { Bot } from "../Bot";
 import { Commands } from "../types";
 
 export type BotReplyToMessageIdHandlerStorageKeys = {
-  previousText: string;
+  previousText?: string;
+  username?: string;
+  amount?: string;
+  recipientUserId?: string;
 };
 
 export class BotReplyToMessageIdHandler {

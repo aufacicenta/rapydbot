@@ -34,6 +34,8 @@ import {
   TopUpWalletRequest,
   TransferFromWalletReply,
   TransferFromWalletRequest,
+  GetUserIdFromWalletAddressReply,
+  GetUserIdFromWalletAddressRequest,
 } from "../server/protos/schema_pb";
 import { WalletServiceErrorCodes } from "../service/error";
 
@@ -191,6 +193,8 @@ export class Controller {
 
       // @TODO reply with an error if the recipient hasn't set a default currency_code yet
 
+      const msg = call.request.getMsg();
+
       const { id: pending_transaction_id } = await this.rapydClient.post<
         TransferFundsBetweenWalletsResponse,
         TransferFundsBetweenWalletsParams
@@ -201,6 +205,11 @@ export class Controller {
           amount,
           source_ewallet: sender_rapyd_ewallet_address,
           destination_ewallet: recipient_rapyd_ewallet_address,
+          metadata: {
+            senderUserId: sender_user_id,
+            recipientUserId: recipient_user_id,
+            msg,
+          },
         },
       });
 
@@ -209,6 +218,7 @@ export class Controller {
       reply.setPendingTransactionId(pending_transaction_id);
       reply.setSenderUserId(sender_user_id);
       reply.setRecipientUserId(recipient_user_id);
+      reply.setCurrencyCode(currency_code);
 
       callback(null, reply);
     } catch (error) {
@@ -494,6 +504,38 @@ export class Controller {
       const reply = new GetWalletCountryCodeReply();
 
       reply.setCountryCode(country_code);
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async getUserIdFromWalletAddress(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<
+      GetUserIdFromWalletAddressRequest,
+      GetUserIdFromWalletAddressReply
+    >,
+    { dao }: IContext
+  ) {
+    try {
+      const rapyd_ewallet_address = call.request.getRapydEwalletAddress();
+      const user_id = await dao.WalletDAO.getUserIdByRapydEwalletAddress({
+        rapyd_ewallet_address,
+      });
+
+      if (!Boolean(user_id)) {
+        throw new Error(
+          WalletServiceErrorCodes.rapyd_ewallet_cannot_get_user_id
+        );
+      }
+
+      const reply = new GetUserIdFromWalletAddressReply();
+
+      reply.setUserId(user_id);
 
       callback(null, reply);
     } catch (error) {

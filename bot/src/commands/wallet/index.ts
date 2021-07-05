@@ -3,3 +3,4 @@ export * from "./CreateWalletCommand";
 export * from "./SetCountryCodeCommand";
 export * from "./SetCurrencyCodeCommand";
 export * from "./TopUpCommand";
+export * from "./transfer/TransferCommand";

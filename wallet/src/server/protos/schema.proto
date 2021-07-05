@@ -14,6 +14,7 @@ service Wallet {
   rpc SetWalletCountryCode (SetWalletCountryCodeRequest) returns (SetWalletCountryCodeReply) {}
   rpc GetWalletCurrencyCode (GetWalletCurrencyCodeRequest) returns (GetWalletCurrencyCodeReply) {}
   rpc GetWalletCountryCode (GetWalletCountryCodeRequest) returns (GetWalletCountryCodeReply) {}
+  rpc GetUserIdFromWalletAddress (GetUserIdFromWalletAddressRequest) returns (GetUserIdFromWalletAddressReply) {}
 }
 
 message CreateWalletRequest {
@@ -38,12 +39,14 @@ message TransferFromWalletRequest {
   string sender_user_id = 1;
   string recipient_user_id = 2;
   float amount = 3;
+  string msg = 4;
 }
 
 message TransferFromWalletReply {
   string pending_transaction_id = 1;
   string sender_user_id = 2;
   string recipient_user_id = 3;
+  string currency_code = 4;
 }
 
 message SetTransferFromWalletResponseRequest {
@@ -104,6 +107,14 @@ message GetWalletBalanceReply {
   float received_balance = 3;
   float on_hold_balance = 4;
   float reserve_balance = 5;
+}
+
+message GetUserIdFromWalletAddressRequest {
+  string rapyd_ewallet_address = 1;
+}
+
+message GetUserIdFromWalletAddressReply {
+  string user_id = 1;
 }
 
 message EmptyReply {}

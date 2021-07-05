@@ -27,6 +27,11 @@ export default (context: IContext) => {
       context.controller.setWalletCountryCode({ call, callback }, context),
     getWalletCountryCode: (call, callback) =>
       context.controller.getWalletCountryCode({ call, callback }, context),
+    getUserIdFromWalletAddress: (call, callback) =>
+      context.controller.getUserIdFromWalletAddress(
+        { call, callback },
+        context
+      ),
   });
 
   return server;

@@ -1,10 +1,13 @@
 import { ModelCtor, Sequelize } from "sequelize";
 import {
   CreateUserReply,
-  GetUserReply,
   FindUserByTelegramUserIdReply,
+  GetUserIdByTelegramUsernameReply,
+  GetUserReply,
+  GetUserTelegramChatIdRequest,
 } from "../../server/protos/schema_pb";
-import { TelegramModel } from "../model/TelegramModel";
+import { UserServiceErrorCodes } from "../../service/error";
+import { TelegramModel, TelegramModelArgs } from "../model/TelegramModel";
 import { UserModel } from "../model/UserModel";
 
 export class UserDAO {
@@ -95,6 +98,33 @@ export class UserDAO {
     };
   }
 
+  async findUserByTelegramUsername({
+    username,
+  }: Pick<
+    TelegramModelArgs,
+    "username"
+  >): Promise<GetUserIdByTelegramUsernameReply.AsObject> {
+    const telegram_result = await this.telegram.findOne({
+      where: {
+        username,
+      },
+    });
+
+    if (!Boolean(telegram_result)) {
+      throw new Error(UserServiceErrorCodes.telegram_username_not_found);
+    }
+
+    const userId = telegram_result.getDataValue("user_id");
+
+    if (!Boolean(userId)) {
+      throw new Error(UserServiceErrorCodes.telegram_username_not_found);
+    }
+
+    return {
+      userId,
+    };
+  }
+
   async getUser({
     user_id,
   }: {
@@ -133,6 +163,29 @@ export class UserDAO {
     }
 
     return result.map((r) => this.getUserReplyObject(r));
+  }
+
+  async getUserTelegramChatId({
+    userId,
+  }: Pick<GetUserTelegramChatIdRequest.AsObject, "userId">) {
+    const user = await this.user.findOne({
+      where: { id: userId },
+      include: {
+        model: this.telegram,
+      },
+    });
+
+    if (!Boolean(user)) {
+      throw new Error(UserServiceErrorCodes.user_not_found);
+    }
+
+    const telegramInfo = user.getDataValue("telegram");
+
+    if (!Boolean(telegramInfo)) {
+      throw new Error(UserServiceErrorCodes.user_telegram_info_not_found);
+    }
+
+    return telegramInfo.getDataValue("private_chat_id");
   }
 
   private getUserReplyObject(user: UserModel): GetUserReply.AsObject {
