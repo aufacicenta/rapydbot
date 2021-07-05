@@ -52,4 +52,12 @@ Ok. El dinero será enviado de vuelta a @{{senderUsername}}.
 
 <em>Tus transacciones están protegidas por la red de Rapyd. Más información en <a href="https://www.rapyd.net/platform/protect/">Rapyd Protect</a>.</em>
 `,
+  [translationKeys.transfer_command_error_reply_transfer_from_wallet_response_is_not_paid]: `
+La transacción aún está pendiente. Deberá realizarse pronto.
+
+ID de la transacción: {{pendingTransactionId}}
+
+
+<em>Tus transacciones están protegidas por la red de Rapyd. Más información en <a href="https://www.rapyd.net/platform/protect/">Rapyd Protect</a>.</em>
+`,
 };

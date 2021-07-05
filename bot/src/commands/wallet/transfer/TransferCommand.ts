@@ -11,6 +11,7 @@ import {
   TransferFromWalletReply,
   TransferFromWalletRequest,
 } from "../../../../../wallet/build/client";
+import { WalletServiceErrorCodes } from "../../../../../wallet/build/service/error";
 import { Bot } from "../../../Bot";
 import {
   BotReplyToMessageIdHandler,
@@ -300,37 +301,44 @@ export class TransferCommand implements IBotCommand {
     const response = msg.text;
 
     if (/[Accept|Aceptar]/i.test(response)) {
-      try {
-        const request = new SetTransferFromWalletResponseRequest();
-        request.setSenderUserId(senderUserId);
-        request.setRecipientUserId(recipientUserId);
-        request.setPendingTransactionId(pendingTransactionId);
-        request.setResponseStatus("accept");
+      const request = new SetTransferFromWalletResponseRequest();
+      request.setSenderUserId(senderUserId);
+      request.setRecipientUserId(recipientUserId);
+      request.setPendingTransactionId(pendingTransactionId);
+      request.setResponseStatus("accept");
 
-        this.bot.WalletServiceClient.setTransferFromWalletResponse(request, (error, reply) => {
-          if (Boolean(error)) {
-            throw error;
+      this.bot.WalletServiceClient.setTransferFromWalletResponse(request, (error, reply) => {
+        if (Boolean(error)) {
+          if (
+            error?.message.includes(WalletServiceErrorCodes.rapyd_transfer_to_ewallet_is_not_paid)
+          ) {
+            return this.bot.reply(
+              msg,
+              translationKeys.transfer_command_error_reply_transfer_from_wallet_response_is_not_paid,
+              null,
+              {
+                pendingTransactionId,
+              }
+            );
           }
+        }
 
-          this.bot.replyWithMessageID(
-            msg,
-            translationKeys.transfer_command_reply_accept_transfer_request,
-            this,
-            null,
-            null,
-            null,
-            {
-              amount,
-              senderUsername,
-              currency,
-            }
-          );
-        });
+        this.bot.replyWithMessageID(
+          msg,
+          translationKeys.transfer_command_reply_accept_transfer_request,
+          this,
+          null,
+          null,
+          null,
+          {
+            amount: reply.getAmount(),
+            senderUsername,
+            currency: reply.getCurrencyCode(),
+          }
+        );
+      });
 
-        return;
-      } catch (error) {
-        this.handleErrorReply(error, msg);
-      }
+      return;
     }
   }
 

@@ -33,6 +33,7 @@ export enum translationKeys {
   transfer_command_button_reject,
   transfer_command_reply_accept_transfer_request,
   transfer_command_reply_reject_transfer_request,
+  transfer_command_error_reply_transfer_from_wallet_response_is_not_paid,
 
   walletbalance_command_error_ewallet_does_not_have_balances,
 

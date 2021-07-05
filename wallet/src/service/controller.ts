@@ -7,7 +7,6 @@ import {
   CheckoutObjectResponse,
   CreateCheckoutPageParams,
   CreateWalletParams,
-  GetDetailsOfWalletTransactionResponse,
   GetWalletBalanceResponse,
   SetTransferFromWalletParams,
   SetTransferFromWalletResponse,
@@ -279,7 +278,7 @@ export class Controller {
         );
       }
 
-      const { destination_transaction_id } = await this.rapydClient.post<
+      const { status, amount, currency_code } = await this.rapydClient.post<
         SetTransferFromWalletResponse,
         SetTransferFromWalletParams
       >({
@@ -290,15 +289,7 @@ export class Controller {
         },
       });
 
-      const {
-        amount: wallet_transaction_amount,
-        currency: wallet_transaction_currency,
-        status: wallet_transaction_status,
-      } = await this.rapydClient.get<GetDetailsOfWalletTransactionResponse>({
-        path: `/v1/user/${recipient_rapyd_ewallet_address}/transactions/${destination_transaction_id}`,
-      });
-
-      if (wallet_transaction_status !== "CLOSED") {
+      if (status !== "CLO") {
         throw new Error(
           WalletServiceErrorCodes.rapyd_transfer_to_ewallet_is_not_paid
         );
@@ -306,8 +297,8 @@ export class Controller {
 
       const reply = new SetTransferFromWalletResponseReply();
 
-      reply.setAmount(wallet_transaction_amount);
-      reply.setCurrencyCode(wallet_transaction_currency);
+      reply.setAmount(amount);
+      reply.setCurrencyCode(currency_code);
       reply.setSenderUserId(sender_user_id);
 
       callback(null, reply);

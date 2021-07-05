@@ -51,4 +51,12 @@ Ok. The money will be sent back to @{{senderUsername}}.
 
 <em>Your transactions are secured by <a href="https://www.rapyd.net/platform/protect/">Rapyd Protect</a>.</em>
 `,
+  [translationKeys.transfer_command_error_reply_transfer_from_wallet_response_is_not_paid]: `
+The transaction is still pending. It should go through soon.
+
+Transaction ID: {{pendingTransactionId}}
+
+
+<em>Your transactions are secured by <a href="https://www.rapyd.net/platform/protect/">Rapyd Protect</a>.</em>
+`,
 };
