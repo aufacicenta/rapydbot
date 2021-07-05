@@ -74,9 +74,9 @@ export class Bot {
     });
 
     this.api.on("message", async (msg) => {
-      const reply_to_message_id = msg.reply_to_message?.message_id - 1;
-      if (Boolean(reply_to_message_id)) {
-        const handler = this.getReplyToMessageIdHandler(msg.chat.id);
+      const handler = this.getReplyToMessageIdHandler(msg.chat.id);
+
+      if (handler) {
         const command = handler?.command;
 
         if (!Boolean(command)) {
@@ -142,6 +142,40 @@ export class Bot {
       {
         reply_to_message_id: reply_to_message_id ?? msg.message_id,
         reply_markup: { force_reply: true },
+        ...options,
+      },
+      args
+    );
+  }
+
+  replyWithHandler(
+    msg: Message,
+    translationKey: translationKeys,
+    command: Commands,
+    handlerData?: Record<string, any>,
+    options?: SendMessageOptions,
+    args?: {}
+  ) {
+    const chat_id = msg.chat.id;
+
+    let handler = this.getReplyToMessageIdHandler(chat_id);
+
+    if (!Boolean(handler)) {
+      handler = new BotReplyToMessageIdHandler(this, command);
+      handler.id = chat_id;
+      this.replyToMessageIDMap.set(chat_id, handler);
+    }
+
+    if (Boolean(handlerData)) {
+      Object.keys(handlerData).forEach((key: keyof BotReplyToMessageIdHandlerStorageKeys) => {
+        handler.storage.set(key, handlerData[key]);
+      });
+    }
+
+    this.reply(
+      msg,
+      translationKey,
+      {
         ...options,
       },
       args

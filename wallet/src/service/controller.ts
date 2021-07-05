@@ -1,3 +1,4 @@
+import axios from "axios";
 import grpc from "grpc";
 import { injectable } from "inversify";
 import "reflect-metadata";
@@ -18,6 +19,8 @@ import { IContext } from "../server/interface/IContext";
 import {
   CreateWalletReply,
   CreateWalletRequest,
+  GetUserIdFromWalletAddressReply,
+  GetUserIdFromWalletAddressRequest,
   GetWalletBalanceReply,
   GetWalletBalanceRequest,
   GetWalletCountryCodeReply,
@@ -34,8 +37,6 @@ import {
   TopUpWalletRequest,
   TransferFromWalletReply,
   TransferFromWalletRequest,
-  GetUserIdFromWalletAddressReply,
-  GetUserIdFromWalletAddressRequest,
 } from "../server/protos/schema_pb";
 import { WalletServiceErrorCodes } from "../service/error";
 
@@ -194,6 +195,11 @@ export class Controller {
       // @TODO reply with an error if the recipient hasn't set a default currency_code yet
 
       const msg = call.request.getMsg();
+      const metadata = {
+        senderUserId: sender_user_id,
+        recipientUserId: recipient_user_id,
+        msg,
+      };
 
       const { id: pending_transaction_id } = await this.rapydClient.post<
         TransferFundsBetweenWalletsResponse,
@@ -205,11 +211,7 @@ export class Controller {
           amount,
           source_ewallet: sender_rapyd_ewallet_address,
           destination_ewallet: recipient_rapyd_ewallet_address,
-          metadata: {
-            senderUserId: sender_user_id,
-            recipientUserId: recipient_user_id,
-            msg,
-          },
+          metadata,
         },
       });
 
@@ -219,6 +221,30 @@ export class Controller {
       reply.setSenderUserId(sender_user_id);
       reply.setRecipientUserId(recipient_user_id);
       reply.setCurrencyCode(currency_code);
+
+      // Notify the Bot via an internal webhook
+      const body = {
+        type: "TRANSFER_FUNDS_BETWEEN_WALLETS_INTERNAL_NOTIFICATION",
+        data: {
+          ...metadata,
+          amount,
+          currency_code,
+          pending_transaction_id,
+        },
+      };
+
+      axios
+        .post(process.env.RAPYDBOT_WEBHOOKS_ENDPOINT, body, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then(() => {
+          console.log(body.type);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
 
       callback(null, reply);
     } catch (error) {
