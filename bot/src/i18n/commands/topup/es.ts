@@ -21,4 +21,15 @@ export default {
 
 <em>Tus transacciones están protegidas por la red de Rapyd. Más información en <a href="https://www.rapyd.net/platform/protect/">Rapyd Protect</a>.</em>,
   `,
+  [translationKeys.command_missing_country]: `
+Parece que no has configurado tu país aún... 🪐👽 
+  
+Configúralo con <strong>/fijarpais</strong> e intenta de nuevo.
+`,
+
+  [translationKeys.command_missing_currency]: `
+Parece que no has configurado tu moneda aún... 💸💰
+  
+Configúrala con <strong>/fijarmoneda</strong> e intenta de nuevo.
+`,
 };

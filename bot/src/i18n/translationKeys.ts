@@ -8,6 +8,8 @@ export enum translationKeys {
   command_text_topup,
   command_text_balance,
   command_text_help,
+  command_missing_country,
+  command_missing_currency,
 
   createwallet_command_reply,
   createwallet_command_error_rapyd_ewallet_exists_for_user_id,
