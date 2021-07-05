@@ -4,16 +4,11 @@
 ## Load env variables
 
 SECRET_FILE=/mnt/secrets-store/$SECRET_NAME
-if [ -f "$SECRET_FILE" ]; then
+if [ -f "$SECRET_FILE" ] && [ "$SKIP_SECRET_FILE" = false ] ; then
     echo "# Loading secrets from $SECRET_FILE"
-    # Service
-    export NODE_ENV=$(cat $SECRET_FILE | jq -r '.NODE_ENV')
-    export BOT_TOKEN=$(cat $SECRET_FILE | jq -r '.BOT_TOKEN')
-    export USER_SERVICE_URL=$(cat $SECRET_FILE | jq -r '.USER_SERVICE_URL')
-    export WALLET_SERVICE_URL=$(cat $SECRET_FILE | jq -r '.WALLET_SERVICE_URL')
-    export RAPYD_WEBHOOKS_SERVER_PORT=$(cat $SECRET_FILE | jq -r '.RAPYD_WEBHOOKS_SERVER_PORT')
+    export BOT_TOKEN=$(cat $SECRET_FILE | jq -r '.bot_token')
 else 
-    echo "# Secrets file does not exist!"
+    echo "# Secrets were not loaded from file!"
 fi
 
 ## Start Service
