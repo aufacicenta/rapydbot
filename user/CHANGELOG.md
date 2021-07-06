@@ -1,4 +1,8 @@
-# 0.1.0 (2021-07-06)
+## [0.1.1](https://github.com/aufacicenta/rapydbot/compare/user-0.1.0...user-0.1.1) (2021-07-06)
+
+
+
+# [0.1.0](https://github.com/aufacicenta/rapydbot/compare/9fbe4f60a3bc5446fc81af2fb3837893f0bb1262...user-0.1.0) (2021-07-06)
 
 
 ### Bug Fixes
