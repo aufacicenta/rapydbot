@@ -1,3 +1,7 @@
+## [0.1.7](https://github.com/aufacicenta/rapydbot/compare/wallet-0.1.6...wallet-0.1.7) (2021-07-06)
+
+
+
 ## [0.1.6](https://github.com/aufacicenta/rapydbot/compare/wallet-0.1.5...wallet-0.1.6) (2021-07-06)
 
 
