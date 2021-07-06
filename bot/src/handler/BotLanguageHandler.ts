@@ -17,7 +17,7 @@ export class BotLanguageHandler {
   }
 
   getTranslation(msg: Message, translationKey: translationKeys, args: {} = {}) {
-    const lng = msg.from.language_code;
+    const lng = msg?.from?.language_code || "en";
     return this.languageProcessor(translationKey.toString(), {
       lng,
       ...args,
