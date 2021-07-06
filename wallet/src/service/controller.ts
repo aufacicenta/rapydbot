@@ -1,3 +1,4 @@
+import axios from "axios";
 import grpc from "grpc";
 import { injectable } from "inversify";
 import "reflect-metadata";
@@ -6,7 +7,6 @@ import {
   CheckoutObjectResponse,
   CreateCheckoutPageParams,
   CreateWalletParams,
-  GetDetailsOfWalletTransactionResponse,
   GetWalletBalanceResponse,
   SetTransferFromWalletParams,
   SetTransferFromWalletResponse,
@@ -18,6 +18,8 @@ import { IContext } from "../server/interface/IContext";
 import {
   CreateWalletReply,
   CreateWalletRequest,
+  GetUserIdFromWalletAddressReply,
+  GetUserIdFromWalletAddressRequest,
   GetWalletBalanceReply,
   GetWalletBalanceRequest,
   GetWalletCountryCodeReply,
@@ -34,8 +36,6 @@ import {
   TopUpWalletRequest,
   TransferFromWalletReply,
   TransferFromWalletRequest,
-  GetUserIdFromWalletAddressReply,
-  GetUserIdFromWalletAddressRequest,
 } from "../server/protos/schema_pb";
 import { WalletServiceErrorCodes } from "../service/error";
 
@@ -204,9 +204,18 @@ export class Controller {
         user_id: sender_user_id,
       });
 
-      // @TODO reply with an error if the recipient hasn't set a default currency_code yet
+      if (!Boolean(currency_code)) {
+        throw new Error(
+          WalletServiceErrorCodes.rapyd_ewallet_does_not_have_an_established_currency
+        );
+      }
 
       const msg = call.request.getMsg();
+      const metadata = {
+        senderUserId: sender_user_id,
+        recipientUserId: recipient_user_id,
+        msg,
+      };
 
       const { id: pending_transaction_id } = await this.rapydClient.post<
         TransferFundsBetweenWalletsResponse,
@@ -218,11 +227,7 @@ export class Controller {
           amount,
           source_ewallet: sender_rapyd_ewallet_address,
           destination_ewallet: recipient_rapyd_ewallet_address,
-          metadata: {
-            senderUserId: sender_user_id,
-            recipientUserId: recipient_user_id,
-            msg,
-          },
+          metadata,
         },
       });
 
@@ -232,6 +237,30 @@ export class Controller {
       reply.setSenderUserId(sender_user_id);
       reply.setRecipientUserId(recipient_user_id);
       reply.setCurrencyCode(currency_code);
+
+      // Notify the Bot via an internal webhook
+      const body = {
+        type: "TRANSFER_FUNDS_BETWEEN_WALLETS_INTERNAL_NOTIFICATION",
+        data: {
+          ...metadata,
+          amount,
+          currency_code,
+          pending_transaction_id,
+        },
+      };
+
+      axios
+        .post(process.env.RAPYDBOT_WEBHOOKS_ENDPOINT, body, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then(() => {
+          console.log(body.type);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
 
       callback(null, reply);
     } catch (error) {
@@ -266,7 +295,7 @@ export class Controller {
         );
       }
 
-      const { destination_transaction_id } = await this.rapydClient.post<
+      const { status, amount, currency_code } = await this.rapydClient.post<
         SetTransferFromWalletResponse,
         SetTransferFromWalletParams
       >({
@@ -277,15 +306,7 @@ export class Controller {
         },
       });
 
-      const {
-        amount: wallet_transaction_amount,
-        currency: wallet_transaction_currency,
-        status: wallet_transaction_status,
-      } = await this.rapydClient.get<GetDetailsOfWalletTransactionResponse>({
-        path: `/v1/user/${recipient_rapyd_ewallet_address}/transactions/${destination_transaction_id}`,
-      });
-
-      if (wallet_transaction_status !== "CLOSED") {
+      if (status !== "CLO") {
         throw new Error(
           WalletServiceErrorCodes.rapyd_transfer_to_ewallet_is_not_paid
         );
@@ -293,8 +314,8 @@ export class Controller {
 
       const reply = new SetTransferFromWalletResponseReply();
 
-      reply.setAmount(wallet_transaction_amount);
-      reply.setCurrencyCode(wallet_transaction_currency);
+      reply.setAmount(amount);
+      reply.setCurrencyCode(currency_code);
       reply.setSenderUserId(sender_user_id);
 
       callback(null, reply);

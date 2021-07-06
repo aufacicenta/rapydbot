@@ -20,6 +20,14 @@ import server from "./webhooks/server";
         await bot.balanceCommand.replyToPaymentCompleteWebhook(body.data.metadata);
       }
 
+      if (
+        body &&
+        body.type &&
+        body.type === "TRANSFER_FUNDS_BETWEEN_WALLETS_INTERNAL_NOTIFICATION"
+      ) {
+        await bot.transferCommand.replyToTransferFundsBetweenEwalletsCreatedWebhook(body);
+      }
+
       res.sendStatus(200);
     });
   } catch (error) {

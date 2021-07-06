@@ -57,6 +57,8 @@ export type TransferFundsBetweenWalletsResponse = {
 
 export type SetTransferFromWalletResponse = {
   id: string;
+  amount: number;
+  currency_code: string;
   source_transaction_id: string;
   status: string;
   destination_ewallet_id: string;

@@ -4,8 +4,12 @@ import { Commands } from "../types";
 export type BotReplyToMessageIdHandlerStorageKeys = {
   previousText?: string;
   username?: string;
+  senderUsername?: string;
   amount?: string;
+  currency?: string;
   recipientUserId?: string;
+  senderUserId?: string;
+  pendingTransactionId?: string;
 };
 
 export class BotReplyToMessageIdHandler {

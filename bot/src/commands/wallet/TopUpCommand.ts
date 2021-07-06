@@ -123,17 +123,16 @@ export class TopUpCommand implements IBotCommand {
   }
 
   private handleErrorReply(error: Error, msg: Message) {
-    const { containsErrorCode } = this;
     const {
       rapyd_ewallet_does_not_have_an_established_country: country_error,
       rapyd_ewallet_does_not_have_an_established_currency: currency_error,
     } = WalletServiceErrorCodes;
 
-    if (containsErrorCode(error, country_error)) {
+    if (this.containsErrorCode(error, country_error)) {
       return this.bot.reply(msg, translationKeys.command_missing_country, {
         disable_web_page_preview: true,
       });
-    } else if (containsErrorCode(error, currency_error)) {
+    } else if (this.containsErrorCode(error, currency_error)) {
       return this.bot.reply(msg, translationKeys.command_missing_currency, {
         disable_web_page_preview: true,
       });
