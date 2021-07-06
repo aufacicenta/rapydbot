@@ -204,7 +204,11 @@ export class Controller {
         user_id: sender_user_id,
       });
 
-      // @TODO reply with an error if the recipient hasn't set a default currency_code yet
+      if (!Boolean(currency_code)) {
+        throw new Error(
+          WalletServiceErrorCodes.rapyd_ewallet_does_not_have_an_established_currency
+        );
+      }
 
       const msg = call.request.getMsg();
       const metadata = {

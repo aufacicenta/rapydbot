@@ -20,6 +20,7 @@ import {
 import { translationKeys } from "../../../i18n";
 import { IBotCommand } from "../../IBotCommand";
 import getUserId from "../../util/getUserId";
+import { containsErrorCode } from "../../util/errorHandling";
 
 export class TransferCommand implements IBotCommand {
   private bot: Bot;
@@ -35,12 +36,18 @@ export class TransferCommand implements IBotCommand {
   ) {
     try {
       const previousText = handler.storage.get("previousText");
-      if (previousText && previousText === "transfer_command_reply_no_user_no_amount") {
+      if (
+        previousText &&
+        previousText === "transfer_command_reply_no_user_no_amount"
+      ) {
         await this.handleRecipientReply(msg, handler);
         return;
       }
 
-      if (previousText && previousText === "transfer_command_reply_username_pending_amount") {
+      if (
+        previousText &&
+        previousText === "transfer_command_reply_username_pending_amount"
+      ) {
         await this.handleAmountReply(msg, handler);
         return;
       }
@@ -71,7 +78,7 @@ export class TransferCommand implements IBotCommand {
         return;
       }
     } catch (error) {
-      this.handleErrorReply(error, msg);
+      this.handleErrorReply(error, msg, null);
     }
   }
 
@@ -90,7 +97,7 @@ export class TransferCommand implements IBotCommand {
         }
       );
     } catch (error) {
-      this.handleErrorReply(error, msg);
+      this.handleErrorReply(error, msg, null);
     }
   }
 
@@ -166,8 +173,7 @@ export class TransferCommand implements IBotCommand {
         }
       );
     } catch (error) {
-      console.error(error);
-      this.handleErrorReply(error, msg);
+      this.handleErrorReply(error, msg, null);
     }
   }
 
@@ -176,14 +182,17 @@ export class TransferCommand implements IBotCommand {
       const request = new GetUserIdFromWalletAddressRequest();
       request.setRapydEwalletAddress(address);
 
-      this.bot.WalletServiceClient.getUserIdFromWalletAddress(request, (error, reply) => {
-        if (Boolean(error)) {
-          reject(error);
-          return;
-        }
+      this.bot.WalletServiceClient.getUserIdFromWalletAddress(
+        request,
+        (error, reply) => {
+          if (Boolean(error)) {
+            reject(error);
+            return;
+          }
 
-        resolve(reply.getUserId());
-      });
+          resolve(reply.getUserId());
+        }
+      );
     });
   }
 
@@ -209,11 +218,17 @@ export class TransferCommand implements IBotCommand {
     });
   }
 
-  private async handleRecipientReply(msg: Message, handler: BotReplyToMessageIdHandler) {
+  private async handleRecipientReply(
+    msg: Message,
+    handler: BotReplyToMessageIdHandler
+  ) {
     const username = msg.text.replace(/@/i, "");
 
     try {
-      const recipientUserId = await this.getUserIdFromTelegramUsername(msg, username);
+      const recipientUserId = await this.getUserIdFromTelegramUsername(
+        msg,
+        username
+      );
 
       this.bot.replyWithMessageID(
         msg,
@@ -230,22 +245,14 @@ export class TransferCommand implements IBotCommand {
         }
       );
     } catch (error) {
-      if (error?.message.includes(UserServiceErrorCodes.telegram_username_not_found)) {
-        return this.bot.reply(
-          msg,
-          translationKeys.transfer_command_reply_username_not_found_error,
-          null,
-          {
-            username,
-          }
-        );
-      }
-
-      throw error;
+      this.handleErrorReply(error, msg, { username });
     }
   }
 
-  private async handleAmountReply(msg: Message, handler: BotReplyToMessageIdHandler) {
+  private async handleAmountReply(
+    msg: Message,
+    handler: BotReplyToMessageIdHandler
+  ) {
     const amountMatch = msg.text.match(/^\d+(\.\d{1,2})?$/i);
 
     if (!Boolean(amountMatch)) {
@@ -266,11 +273,8 @@ export class TransferCommand implements IBotCommand {
     const username = handler.storage.get("username");
     const [amount] = amountMatch;
 
-    const { pendingTransactionId, currencyCode } = await this.transferFromWallet(
-      msg,
-      recipientUserId,
-      Number(amount)
-    );
+    const { pendingTransactionId, currencyCode } =
+      await this.transferFromWallet(msg, recipientUserId, Number(amount));
 
     this.bot.clearCommandHandler(msg.chat.id);
     this.bot.reply(
@@ -307,53 +311,51 @@ export class TransferCommand implements IBotCommand {
       request.setPendingTransactionId(pendingTransactionId);
       request.setResponseStatus("accept");
 
-      this.bot.WalletServiceClient.setTransferFromWalletResponse(request, (error, reply) => {
-        if (Boolean(error)) {
-          if (
-            error?.message.includes(WalletServiceErrorCodes.rapyd_transfer_to_ewallet_is_not_paid)
-          ) {
-            return this.bot.reply(
-              msg,
-              translationKeys.transfer_command_error_reply_transfer_from_wallet_response_is_not_paid,
-              null,
-              {
-                pendingTransactionId,
-              }
-            );
+      this.bot.WalletServiceClient.setTransferFromWalletResponse(
+        request,
+        (error, reply) => {
+          if (Boolean(error)) {
+            this.handleErrorReply(error, msg, { pendingTransactionId });
           }
-        }
 
-        this.bot.replyWithMessageID(
-          msg,
-          translationKeys.transfer_command_reply_accept_transfer_request,
-          this,
-          null,
-          null,
-          null,
-          {
-            amount: reply.getAmount(),
-            senderUsername,
-            currency: reply.getCurrencyCode(),
-          }
-        );
-      });
+          this.bot.replyWithMessageID(
+            msg,
+            translationKeys.transfer_command_reply_accept_transfer_request,
+            this,
+            null,
+            null,
+            null,
+            {
+              amount: reply.getAmount(),
+              senderUsername,
+              currency: reply.getCurrencyCode(),
+            }
+          );
+        }
+      );
 
       return;
     }
   }
 
-  private async getUserIdFromTelegramUsername(msg: Message, username: string): Promise<string> {
+  private async getUserIdFromTelegramUsername(
+    msg: Message,
+    username: string
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       const request = new GetUserIdByTelegramUsernameRequest();
       request.setTelegramUsername(username);
 
-      this.bot.UserServiceClient.getUserIdByTelegramUsername(request, (error, reply) => {
-        if (Boolean(error)) {
-          return reject(error);
-        }
+      this.bot.UserServiceClient.getUserIdByTelegramUsername(
+        request,
+        (error, reply) => {
+          if (Boolean(error)) {
+            return reject(error);
+          }
 
-        resolve(reply.getUserId());
-      });
+          resolve(reply.getUserId());
+        }
+      );
     });
   }
 
@@ -371,24 +373,65 @@ export class TransferCommand implements IBotCommand {
           request.setAmount(amount);
           request.setMsg(JSON.stringify(msg));
 
-          this.bot.WalletServiceClient.transferFromWallet(request, (error, reply) => {
-            if (Boolean(error)) {
-              return reject(error);
-            }
+          this.bot.WalletServiceClient.transferFromWallet(
+            request,
+            (error, reply) => {
+              if (Boolean(error)) {
+                return reject(error);
+              }
 
-            resolve({
-              pendingTransactionId: reply.getPendingTransactionId(),
-              currencyCode: reply.getCurrencyCode(),
-              senderUserId: reply.getSenderUserId(),
-              recipientUserId: reply.getRecipientUserId(),
-            });
-          });
+              resolve({
+                pendingTransactionId: reply.getPendingTransactionId(),
+                currencyCode: reply.getCurrencyCode(),
+                senderUserId: reply.getSenderUserId(),
+                recipientUserId: reply.getRecipientUserId(),
+              });
+            }
+          );
         })
         .catch((error) => reject(error));
     });
   }
 
-  private handleErrorReply(error: Error, msg: Message) {
+  private handleErrorReply(error: Error, msg: Message, context: any) {
+    const errors = { ...UserServiceErrorCodes, ...WalletServiceErrorCodes };
+    const { containsCode, errorId } = containsErrorCode(error, errors);
+    const {
+      rapyd_ewallet_does_not_have_an_established_currency: missingCurrency,
+      telegram_username_not_found: userNotFound,
+      rapyd_transfer_to_ewallet_is_not_paid: unpaidTransfer,
+    } = errors;
+
+    if (containsCode) {
+      switch (errorId) {
+        case missingCurrency: {
+          return this.bot.reply(msg, translationKeys.command_missing_currency, {
+            disable_web_page_preview: true,
+          });
+        }
+        case userNotFound: {
+          return this.bot.reply(
+            msg,
+            translationKeys.transfer_command_reply_username_not_found_error,
+            null,
+            {
+              ...context,
+            }
+          );
+        }
+        case unpaidTransfer: {
+          return this.bot.reply(
+            msg,
+            translationKeys.transfer_command_error_reply_transfer_from_wallet_response_is_not_paid,
+            null,
+            {
+              ...context,
+            }
+          );
+        }
+      }
+    }
+
     return this.bot.reply(msg, translationKeys.start_command_error);
   }
 }
