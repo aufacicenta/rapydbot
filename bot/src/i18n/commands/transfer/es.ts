@@ -60,4 +60,24 @@ ID de la transacción: {{pendingTransactionId}}
 
 <em>Tus transacciones están protegidas por la red de Rapyd. Más información en <a href="https://www.rapyd.net/platform/protect/">Rapyd Protect</a>.</em>
 `,
+  [translationKeys.transfer_command_notify_sender_about_accepted_transfer]: `
+@{{recipientUsername}} ha aceptado la transferencia de {{amount}} {{currency}}.
+
+ID de la transacción: {{pendingTransactionId}}
+
+Consulta tu /balance para más información.
+
+
+<em>Tus transacciones están protegidas por la red de Rapyd. Más información en <a href="https://www.rapyd.net/platform/protect/">Rapyd Protect</a>.</em>
+`,
+  [translationKeys.transfer_command_notify_sender_about_rejected_transfer]: `
+@{{recipientUsername}} ha rechazado la transferencia de {{amount}} {{currency}}.
+
+ID de la transacción: {{pendingTransactionId}}
+
+Consulta tu /balance para más información.
+
+
+<em>Tus transacciones están protegidas por la red de Rapyd. Más información en <a href="https://www.rapyd.net/platform/protect/">Rapyd Protect</a>.</em>
+`,
 };

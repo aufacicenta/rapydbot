@@ -21,7 +21,7 @@ Puedes controlarme enviando cualquiera de los siguientes comandos:
      {"text":"/crearbilletera"},
      {"text":"/recargar"},
      {"text":"/balance"},
-     {"text":"/transferir"},  
+     {"text":"/transferir"},
      {"text":"/fijarpais"},
      {"text":"/fijarmoneda"}
   ]`,

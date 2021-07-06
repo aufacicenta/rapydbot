@@ -5,7 +5,6 @@ import { Bot } from "../../Bot";
 import { BotReplyToMessageIdHandler } from "../../handler";
 import { translationKeys } from "../../i18n";
 import { IBotCommand } from "../IBotCommand";
-import { containsErrorCode } from "../util/errorHandling";
 import getUserId from "../util/getUserId";
 
 export class TopUpCommand implements IBotCommand {
@@ -119,29 +118,24 @@ export class TopUpCommand implements IBotCommand {
     });
   }
 
+  private containsErrorCode(error: Error, errorCode: string) {
+    return Boolean(error?.message.includes(errorCode));
+  }
+
   private handleErrorReply(error: Error, msg: Message) {
-    const { containsCode, errorId } = containsErrorCode(
-      error,
-      WalletServiceErrorCodes
-    );
     const {
-      rapyd_ewallet_does_not_have_an_established_country: missing_country,
-      rapyd_ewallet_does_not_have_an_established_currency: missing_currency,
+      rapyd_ewallet_does_not_have_an_established_country: country_error,
+      rapyd_ewallet_does_not_have_an_established_currency: currency_error,
     } = WalletServiceErrorCodes;
 
-    if (containsCode) {
-      switch (errorId) {
-        case missing_country: {
-          return this.bot.reply(msg, translationKeys.command_missing_country, {
-            disable_web_page_preview: true,
-          });
-        }
-        case missing_currency: {
-          return this.bot.reply(msg, translationKeys.command_missing_currency, {
-            disable_web_page_preview: true,
-          });
-        }
-      }
+    if (this.containsErrorCode(error, country_error)) {
+      return this.bot.reply(msg, translationKeys.command_missing_country, {
+        disable_web_page_preview: true,
+      });
+    } else if (this.containsErrorCode(error, currency_error)) {
+      return this.bot.reply(msg, translationKeys.command_missing_currency, {
+        disable_web_page_preview: true,
+      });
     }
 
     return this.bot.reply(msg, translationKeys.start_command_error);
