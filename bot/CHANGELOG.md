@@ -1,4 +1,13 @@
-# 0.1.0 (2021-07-06)
+# [0.2.0](https://github.com/aufacicenta/rapydbot/compare/bot-0.1.0...bot-0.2.0) (2021-07-06)
+
+
+### Features
+
+* adding license ([#35](https://github.com/aufacicenta/rapydbot/issues/35)) ([fe645e8](https://github.com/aufacicenta/rapydbot/commit/fe645e8c28da6af779d6639088c270780cd825a8))
+
+
+
+# [0.1.0](https://github.com/aufacicenta/rapydbot/compare/9fbe4f60a3bc5446fc81af2fb3837893f0bb1262...bot-0.1.0) (2021-07-06)
 
 
 ### Bug Fixes
