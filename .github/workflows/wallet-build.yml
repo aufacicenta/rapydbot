@@ -5,8 +5,8 @@ on:
       - master
     paths:
       - 'wallet/**'
-      - '!package.json'
-      - '!CHANGELOG.md'
+      - '!wallet/package.json'
+      - '!wallet/CHANGELOG.md'
 jobs:
   Wallet-Build:
     runs-on: ubuntu-latest

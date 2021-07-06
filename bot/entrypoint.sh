@@ -1,5 +1,5 @@
 #/bin/bash
-# Entrypoint for Bot Microservice
+# Entrypoint script for Bot Microservice
 
 ## Load env variables
 
