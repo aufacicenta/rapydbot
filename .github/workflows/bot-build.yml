@@ -1,0 +1,51 @@
+name: Bot Build
+on: 
+  push:
+    branches:
+      - master
+    paths:
+      - 'bot/**'
+      - '!bot/package.json'
+      - '!bot/CHANGELOG.md'
+jobs:
+  Bot-Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT_AWS_ACTIONS }}
+
+      # Login to AWS an ECR
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      # Bump Version
+      - name: Conventional Changelog Action
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          github-token: ${{ secrets.github_token }}
+          output-file: 'bot/CHANGELOG.md'
+          tag-prefix: 'bot-'
+          skip-version-file: 'true' # ./package.json
+          skip-on-empty: 'false'
+          release-count: 0
+
+      - name: Get Version
+        id: appVersion
+        run: echo "::set-output name=version::$(git tag --sort=-v:refname --list "bot-[0-9]*" | head -n 1 | cut -c 5-)"
+
+      - name: Build and Push to ECR public
+        id: build-and-push
+        uses: pahud/ecr-public-action@8cd826db40befb59b0cd0b60b22a7ba72d06a7f7
+        with:
+          dockerfile: bot/Dockerfile
+          context: .
+          tags: |
+            public.ecr.aws/l0y7w6p3/rapydbot/bot:latest
+            public.ecr.aws/l0y7w6p3/rapydbot/bot:${{ steps.appVersion.outputs.version }}
+            
