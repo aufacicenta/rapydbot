@@ -10,7 +10,6 @@ Puedes controlarme enviando cualquiera de los siguientes comandos:
 <strong>/crearbilletera</strong> - crea una nueva billetera Rapyd
 <strong>/recargar</strong> - crea una nueva página de pago para recargar tu billetera
 <strong>/transferir</strong> - envía fondos a otros usuarios de telegram que utilizan @rapydbot
-<strong>/retirar</strong> - retira efectivo de tu billetera desde cualquier punto POS de Rapyd, como cajeros automáticos y tiendas de conveniencia
 <strong>/balance</strong> - obtén el balance de tu billetera Rapyd
 
 <b><u>Configuración de tu Billetera</u></b>
@@ -22,8 +21,7 @@ Puedes controlarme enviando cualquiera de los siguientes comandos:
      {"text":"/crearbilletera"},
      {"text":"/recargar"},
      {"text":"/balance"},
-     {"text":"/transferir"},
-     {"text":"/retirar"},
+     {"text":"/transferir"},  
      {"text":"/fijarpais"},
      {"text":"/fijarmoneda"}
   ]`,
