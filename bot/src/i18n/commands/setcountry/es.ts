@@ -8,7 +8,8 @@ Esto mostrará las opciones de pago correspondientes al país en la página de p
 
 <em>Your transactions are secured by <a href="https://www.rapyd.net/platform/protect/">Rapyd Protect</a>.</em>
   `,
-  [translationKeys.setcountry_command_on_country_select_reply]: `Done!
+  [translationKeys.setcountry_command_on_country_select_reply]: `
+!Hecho!
 
 Tu billetera de Rapyd está configurada en {{countryName}} con la moneda {{currencyCode}}.
 
