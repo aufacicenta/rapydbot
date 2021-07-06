@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT_AWS_ACTIONS }}
 
       # Login to AWS an ECR
       - name: Configure AWS credentials
@@ -20,11 +22,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      # Publish versions
+      # Bump Version
       - name: Conventional Changelog Action
         uses: TriPSs/conventional-changelog-action@v3
         with:
@@ -33,13 +31,19 @@ jobs:
           tag-prefix: 'wallet-'
           skip-version-file: 'true' # ./package.json
           skip-on-empty: 'false'
+          release-count: 0
 
-      - name: Build, tag, and push image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: rapydbot/wallet
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          cd wallet
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Get Version
+        id: appVersion
+        run: echo "::set-output name=version::$(git tag --sort=-v:refname --list "wallet-[0-9]*" | head -n 1 | cut -c 8-)"
+
+      - name: Build and Push to ECR public
+        id: build-and-push
+        uses: pahud/ecr-public-action@8cd826db40befb59b0cd0b60b22a7ba72d06a7f7
+        with:
+          dockerfile: wallet/Dockerfile
+          context: wallet
+          tags: |
+            public.ecr.aws/l0y7w6p3/rapydbot/wallet:latest
+            public.ecr.aws/l0y7w6p3/rapydbot/wallet:${{ steps.appVersion.outputs.version }}
+            
