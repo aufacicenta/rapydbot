@@ -31,6 +31,8 @@ export enum translationKeys {
   transfer_command_reply_amount_error,
   transfer_command_reply_username_not_found_error,
   transfer_command_notify_recipient_about_incoming_transfer,
+  transfer_command_notify_sender_about_accepted_transfer,
+  transfer_command_notify_sender_about_rejected_transfer,
   transfer_command_button_accept,
   transfer_command_button_reject,
   transfer_command_reply_accept_transfer_request,

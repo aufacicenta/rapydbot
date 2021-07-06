@@ -6,7 +6,6 @@ import {
 import { UserServiceErrorCodes } from "@rapydbot/user/service/error";
 import { Message } from "node-telegram-bot-api";
 import {
-  GetUserIdFromWalletAddressRequest,
   SetTransferFromWalletResponseRequest,
   TransferFromWalletReply,
   TransferFromWalletRequest,
@@ -141,6 +140,7 @@ export class TransferCommand implements IBotCommand {
         {
           reply_markup: {
             force_reply: false,
+            resize_keyboard: true,
             keyboard: [
               [
                 {
@@ -169,22 +169,6 @@ export class TransferCommand implements IBotCommand {
       console.error(error);
       this.handleErrorReply(error, msg);
     }
-  }
-
-  private getUserIdFromWalletAddress(address: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const request = new GetUserIdFromWalletAddressRequest();
-      request.setRapydEwalletAddress(address);
-
-      this.bot.WalletServiceClient.getUserIdFromWalletAddress(request, (error, reply) => {
-        if (Boolean(error)) {
-          reject(error);
-          return;
-        }
-
-        resolve(reply.getUserId());
-      });
-    });
   }
 
   private getUser(userId: string): Promise<GetUserReply.AsObject> {
@@ -291,16 +275,19 @@ export class TransferCommand implements IBotCommand {
     handler: BotReplyToMessageIdHandler,
     {
       senderUsername,
-      amount,
-      currency,
       pendingTransactionId,
       senderUserId,
       recipientUserId,
+      amount,
+      currency,
     }: Omit<BotReplyToMessageIdHandlerStorageKeys, "username" | "previousText">
   ) {
     const response = msg.text;
 
-    if (/[Accept|Aceptar]/i.test(response)) {
+    const recipient = await this.getUser(recipientUserId);
+    const sender = await this.getUser(senderUserId);
+
+    if (/Accept|Aceptar/i.test(response)) {
       const request = new SetTransferFromWalletResponseRequest();
       request.setSenderUserId(senderUserId);
       request.setRecipientUserId(recipientUserId);
@@ -321,7 +308,15 @@ export class TransferCommand implements IBotCommand {
               }
             );
           }
+
+          throw error;
         }
+
+        const replyArgs = {
+          amount: reply.getAmount(),
+          currency: reply.getCurrencyCode(),
+          pendingTransactionId,
+        };
 
         this.bot.replyWithMessageID(
           msg,
@@ -331,14 +326,79 @@ export class TransferCommand implements IBotCommand {
           null,
           null,
           {
-            amount: reply.getAmount(),
             senderUsername,
-            currency: reply.getCurrencyCode(),
+            ...replyArgs,
+          }
+        );
+
+        this.bot.reply(
+          {
+            ...msg,
+            chat: {
+              ...msg.chat,
+              id: sender.telegramPrivateChatId,
+              type: "private",
+            },
+          },
+          translationKeys.transfer_command_notify_sender_about_accepted_transfer,
+          null,
+          {
+            recipientUsername: recipient.telegramUsername,
+            ...replyArgs,
           }
         );
       });
 
       return;
+    }
+
+    if (/Reject|Rechazar/i.test(response)) {
+      const request = new SetTransferFromWalletResponseRequest();
+      request.setSenderUserId(senderUserId);
+      request.setRecipientUserId(recipientUserId);
+      request.setPendingTransactionId(pendingTransactionId);
+      request.setResponseStatus("decline");
+
+      this.bot.WalletServiceClient.setTransferFromWalletResponse(request, (error, reply) => {
+        if (Boolean(error)) {
+          if (
+            error?.message.includes(WalletServiceErrorCodes.rapyd_transfer_to_ewallet_is_not_paid)
+          ) {
+            this.bot.replyWithMessageID(
+              msg,
+              translationKeys.transfer_command_reply_reject_transfer_request,
+              this,
+              null,
+              null,
+              null,
+              {
+                senderUsername,
+              }
+            );
+
+            return this.bot.reply(
+              {
+                ...msg,
+                chat: {
+                  ...msg.chat,
+                  id: sender.telegramPrivateChatId,
+                  type: "private",
+                },
+              },
+              translationKeys.transfer_command_notify_sender_about_rejected_transfer,
+              null,
+              {
+                recipientUsername: recipient.telegramUsername,
+                amount,
+                currency,
+                pendingTransactionId,
+              }
+            );
+          }
+
+          throw error;
+        }
+      });
     }
   }
 
