@@ -8,7 +8,8 @@
 FROM node:12-slim
 LABEL maintainer="susguzman"
 
-ENV SECRET_NAME="service-api-key"
+ENV SECRET_NAME="service-api-key" \
+    SKIP_SECRET_FILE=false
 
 WORKDIR /app/src/rapydbot/wallet
 
