@@ -38,13 +38,28 @@ export class BalanceCommand implements IBotCommand {
     });
   }
 
-  public async replyToPaymentCompleteWebhook({ msg, userId }: { msg: string; userId: string }) {
+  public async replyToPaymentCompleteWebhook({
+    msg,
+    userId,
+  }: {
+    msg: string;
+    userId: string;
+  }) {
     const balance = await this.getBalance(userId);
 
-    this.bot.reply(JSON.parse(msg), translationKeys.command_text_balance, null, {
-      currentDate: this.getBalanceDate(),
-      ...balance,
-    });
+    this.bot.reply(
+      JSON.parse(msg),
+      translationKeys.command_text_balance,
+      null,
+      {
+        currentDate: this.getBalanceDate(),
+        currencyCode: balance.currencyCode,
+        onHoldBalance: String(balance.onHoldBalance).padStart(10, " "),
+        reserveBalance: String(balance.reserveBalance).padStart(10, " "),
+        receivedBalance: String(balance.receivedBalance).padStart(10, " "),
+        currentBalance: String(balance.currentBalance).padStart(10, " "),
+      }
+    );
   }
 
   private getBalanceDate(): string {
@@ -52,7 +67,11 @@ export class BalanceCommand implements IBotCommand {
   }
 
   private handleErrorReply(error: Error, msg: Message) {
-    if (error?.message.includes(WalletServiceErrorCodes.rapyd_ewallet_does_not_have_balances)) {
+    if (
+      error?.message.includes(
+        WalletServiceErrorCodes.rapyd_ewallet_does_not_have_balances
+      )
+    ) {
       return this.bot.reply(
         msg,
         translationKeys.walletbalance_command_error_ewallet_does_not_have_balances,
@@ -68,25 +87,28 @@ export class BalanceCommand implements IBotCommand {
       const getWalletBalanceRequest = new GetWalletBalanceRequest();
       getWalletBalanceRequest.setUserId(userId);
 
-      this.bot.WalletServiceClient.getWalletBalance(getWalletBalanceRequest, (error, reply) => {
-        if (Boolean(error)) {
-          return reject(error);
+      this.bot.WalletServiceClient.getWalletBalance(
+        getWalletBalanceRequest,
+        (error, reply) => {
+          if (Boolean(error)) {
+            return reject(error);
+          }
+
+          const currencyCode = reply.getCurrencyCode();
+          const currentBalance = reply.getBalance();
+          const onHoldBalance = reply.getOnHoldBalance();
+          const reserveBalance = reply.getReserveBalance();
+          const receivedBalance = reply.getReceivedBalance();
+
+          resolve({
+            currencyCode,
+            currentBalance,
+            onHoldBalance,
+            reserveBalance,
+            receivedBalance,
+          });
         }
-
-        const currencyCode = reply.getCurrencyCode();
-        const currentBalance = reply.getBalance();
-        const onHoldBalance = reply.getOnHoldBalance();
-        const reserveBalance = reply.getReserveBalance();
-        const receivedBalance = reply.getReceivedBalance();
-
-        resolve({
-          currencyCode,
-          currentBalance,
-          onHoldBalance,
-          reserveBalance,
-          receivedBalance,
-        });
-      });
+      );
     });
   }
 

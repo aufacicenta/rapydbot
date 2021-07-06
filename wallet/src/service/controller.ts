@@ -120,9 +120,22 @@ export class Controller {
       const country_code = await dao.WalletDAO.getWalletCountryCode({
         user_id,
       });
+
+      if (!Boolean(country_code)) {
+        throw new Error(
+          WalletServiceErrorCodes.rapyd_ewallet_does_not_have_an_established_country
+        );
+      }
+
       const currency_code = await dao.WalletDAO.getWalletCurrencyCode({
         user_id,
       });
+
+      if (!Boolean(currency_code)) {
+        throw new Error(
+          WalletServiceErrorCodes.rapyd_ewallet_does_not_have_an_established_currency
+        );
+      }
 
       const msg = call.request.getMsg();
 
@@ -347,14 +360,17 @@ export class Controller {
         );
       }
 
-      const balanceBySelectedCurrency = balances
+      let balanceBySelectedCurrency = balances
         .filter(({ currency }) => currency === currency_code)
         .shift();
 
       if (!Boolean(balanceBySelectedCurrency)) {
-        throw new Error(
-          WalletServiceErrorCodes.rapyd_ewallet_does_not_have_balance_for_currency
-        );
+        /*
+         * If there's no balance for the specified currency we will return
+         * a general one.
+         */
+
+        balanceBySelectedCurrency = balances.shift();
       }
 
       const reply = new GetWalletBalanceReply();
