@@ -23,13 +23,13 @@ Try again?
 <em>Your transactions are secured by <a href="https://www.rapyd.net/platform/protect/">Rapyd Protect</a>.</em>
   `,
   [translationKeys.command_missing_country]: `
-It seems you haven't set your country yet... 🪐👽 
+It seems you haven't set your country yet... 🪐👽
 
 Set it with <strong>/setcountry</strong> and try again.
 `,
-  [translationKeys.command_missing_country]: `
-It seems you haven't set your currency yet... 💸💰 
+  [translationKeys.command_missing_currency]: `
+It seems you haven't set your currency yet... 💸💰
 
-Set it with <strong>/setcountry</strong> and try again.
+Set it with <strong>/setcurrency</strong> and try again.
 `,
 };

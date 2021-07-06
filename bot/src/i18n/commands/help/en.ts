@@ -11,9 +11,7 @@ You can control me by sending these commands:
 
 <strong>/topup</strong> - create a new checkout page to top-up your e-wallet
 
-<strong>/transfer</strong> - send funds to other users using @rapydbot on telegram 
-
-<strong>/withdraw</strong> - withdraw cash from your wallet at Rapyd POS locations, such as ATMs and retail stores
+<strong>/transfer</strong> - send funds to other users using @rapydbot on telegram
 
 <strong>/balance</strong> - get your e-wallet balance by your default currency
 
@@ -28,7 +26,6 @@ You can control me by sending these commands:
      {"text":"/topup"},
      {"text":"/balance"},
      {"text":"/transfer"},
-     {"text":"/withdraw"},
      {"text":"/setcountry"},
      {"text":"/setcurrency"}
   ]`,
