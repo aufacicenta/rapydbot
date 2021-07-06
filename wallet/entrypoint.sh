@@ -1,5 +1,5 @@
 #/bin/bash
-# Entrypoint for Wallet Microservice
+# Entrypoint script for Wallet Microservice
 
 ## Load env variables
 

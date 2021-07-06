@@ -1,5 +1,5 @@
 #/bin/bash
-# Entrypoint for User Microservice
+# Entrypoint script for User Microservice
 
 ## Load env variables
 
