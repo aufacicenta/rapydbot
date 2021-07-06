@@ -1,5 +1,6 @@
 import { TopUpWalletRequest } from "@rapydbot/wallet/client";
 import { Message } from "node-telegram-bot-api";
+import { WalletServiceErrorCodes } from "../../../../wallet/build/service/error";
 import { Bot } from "../../Bot";
 import { BotReplyToMessageIdHandler } from "../../handler";
 import { translationKeys } from "../../i18n";
@@ -37,25 +38,32 @@ export class TopUpCommand implements IBotCommand {
             }
           );
         } else {
-          const checkoutPageUrl = await this.getCheckoutPageURL(msg, Number(amount));
+          const checkoutPageUrl = await this.getCheckoutPageURL(
+            msg,
+            Number(amount)
+          );
 
-          this.bot.reply(msg, translationKeys.topup_command_checkout_page_reply, {
-            disable_web_page_preview: true,
-            reply_markup: {
-              inline_keyboard: [
-                [
-                  {
-                    text: this.bot.getTranslation(
-                      msg,
-                      translationKeys.topup_command_checkout_page_button_text,
-                      { amount }
-                    ),
-                    url: checkoutPageUrl,
-                  },
+          this.bot.reply(
+            msg,
+            translationKeys.topup_command_checkout_page_reply,
+            {
+              disable_web_page_preview: true,
+              reply_markup: {
+                inline_keyboard: [
+                  [
+                    {
+                      text: this.bot.getTranslation(
+                        msg,
+                        translationKeys.topup_command_checkout_page_button_text,
+                        { amount }
+                      ),
+                      url: checkoutPageUrl,
+                    },
+                  ],
                 ],
-              ],
-            },
-          });
+              },
+            }
+          );
         }
       }
     } catch (error) {
@@ -86,7 +94,10 @@ export class TopUpCommand implements IBotCommand {
     return /^\d+(\.\d{1,2})?$/i.test(amount);
   }
 
-  private async getCheckoutPageURL(msg: Message, amount: number): Promise<string> {
+  private async getCheckoutPageURL(
+    msg: Message,
+    amount: number
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       getUserId(msg, this.bot.UserServiceClient)
         .then((userId) => {
@@ -107,7 +118,27 @@ export class TopUpCommand implements IBotCommand {
     });
   }
 
+  private containsErrorCode(error: Error, errorCode: string) {
+    return Boolean(error?.message.includes(errorCode));
+  }
+
   private handleErrorReply(error: Error, msg: Message) {
+    const { containsErrorCode } = this;
+    const {
+      rapyd_ewallet_does_not_have_an_established_country: country_error,
+      rapyd_ewallet_does_not_have_an_established_currency: currency_error,
+    } = WalletServiceErrorCodes;
+
+    if (containsErrorCode(error, country_error)) {
+      return this.bot.reply(msg, translationKeys.command_missing_country, {
+        disable_web_page_preview: true,
+      });
+    } else if (containsErrorCode(error, currency_error)) {
+      return this.bot.reply(msg, translationKeys.command_missing_currency, {
+        disable_web_page_preview: true,
+      });
+    }
+
     return this.bot.reply(msg, translationKeys.start_command_error);
   }
 }
