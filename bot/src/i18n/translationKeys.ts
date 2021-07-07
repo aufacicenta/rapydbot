@@ -46,4 +46,5 @@ export enum translationKeys {
   walletbalance_command_error_ewallet_does_not_have_balances,
 
   help_command_buttons,
+  help_command_reply,
 }

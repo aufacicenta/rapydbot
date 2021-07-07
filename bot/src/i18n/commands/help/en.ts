@@ -1,7 +1,7 @@
 import { translationKeys } from "../../translationKeys";
 
 export default {
-  [translationKeys.command_text_help]: `
+  [translationKeys.help_command_reply]: `
 I can help you with the creation and management of your Rapyd E-Wallet.
 
 You can control me by sending these commands:

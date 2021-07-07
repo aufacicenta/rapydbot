@@ -18,6 +18,7 @@ Para comenzar, crea tu billetera con el comando /crearbilletera.
   [translationKeys.command_text_createwallet]: `/crearbilletera`,
   [translationKeys.command_text_send]: `/enviar`,
   [translationKeys.command_text_topup]: `/recarga`,
+  [translationKeys.command_text_help]: `/ayuda`,
   [translationKeys.command_text_balance]: `/saldo`,
   [translationKeys.command_text_setcountry]: `/fijarpais`,
   [translationKeys.command_text_setcurrency]: `/fijarmoneda`,

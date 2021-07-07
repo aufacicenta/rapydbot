@@ -1,7 +1,7 @@
 import { translationKeys } from "../../translationKeys";
 
 export default {
-  [translationKeys.command_text_help]: `
+  [translationKeys.help_command_reply]: `
 Puedo ayudarte con la creación y administración de tu billetera Rapyd.
 
 Puedes controlarme enviando cualquiera de los siguientes comandos:
