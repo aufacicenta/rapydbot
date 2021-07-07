@@ -1,3 +1,12 @@
+## [0.2.1](https://github.com/aufacicenta/rapydbot/compare/bot-0.2.0...bot-0.2.1) (2021-07-07)
+
+
+### Bug Fixes
+
+* balance command replies ([#38](https://github.com/aufacicenta/rapydbot/issues/38)) ([f30ee0d](https://github.com/aufacicenta/rapydbot/commit/f30ee0d86418b401de77872813e7ad228055aab7))
+
+
+
 # [0.2.0](https://github.com/aufacicenta/rapydbot/compare/bot-0.1.0...bot-0.2.0) (2021-07-06)
 
 
