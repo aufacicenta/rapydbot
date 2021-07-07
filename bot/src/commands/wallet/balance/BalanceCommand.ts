@@ -32,7 +32,7 @@ export class BalanceCommand implements IBotCommand {
   private async handleBalanceReply(msg: Message) {
     const balance = await this.getWalletBalance(msg);
 
-    this.bot.reply(msg, translationKeys.command_text_balance, null, {
+    this.bot.reply(msg, translationKeys.balance_command_reply, null, {
       currentDate: this.getBalanceDate(),
       ...balance,
     });
@@ -49,7 +49,7 @@ export class BalanceCommand implements IBotCommand {
 
     this.bot.reply(
       JSON.parse(msg),
-      translationKeys.command_text_balance,
+      translationKeys.balance_command_reply,
       null,
       {
         currentDate: this.getBalanceDate(),

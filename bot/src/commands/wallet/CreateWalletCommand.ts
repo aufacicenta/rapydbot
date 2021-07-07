@@ -52,13 +52,13 @@ export class CreateWalletCommand implements IBotCommand {
               {
                 text: this.bot.languageHandler.getTranslation(
                   msg,
-                  translationKeys.command_text_topup
+                  translationKeys.command_text_setcountry
                 ),
               },
               {
                 text: this.bot.languageHandler.getTranslation(
                   msg,
-                  translationKeys.command_text_balance
+                  translationKeys.command_text_help
                 ),
               },
             ],
