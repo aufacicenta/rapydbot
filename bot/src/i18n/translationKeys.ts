@@ -8,6 +8,8 @@ export enum translationKeys {
   command_text_topup,
   command_text_balance,
   command_text_help,
+  command_text_setcountry,
+  command_text_setcurrency,
   command_missing_country,
   command_missing_currency,
 
