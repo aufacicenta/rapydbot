@@ -5,7 +5,7 @@ export default {
 
 For reference, your e-wallet address is {{e_wallet_address}}, and it is linked to your Telegram username: @{{username}}.
 
-Now you can top-up your Rapyd e-wallet with a bank transfer, a cash deposit or a card payment using the <code>/topup</code> command!
+Now set your default <strong>country and currency</strong> with the /setcountry command!
 
 Type /help for more.
 

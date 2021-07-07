@@ -1,7 +1,7 @@
 import { translationKeys } from "../../translationKeys";
 
 export default {
-  [translationKeys.command_text_balance]: `
+  [translationKeys.balance_command_reply]: `
 El balance de tu billetera de Rapyd en {{currencyCode}} a partir de {{currentDate}}:
 
 Reserva: {{reserveBalance}}
