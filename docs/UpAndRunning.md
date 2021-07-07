@@ -1,12 +1,16 @@
 # RapydBot - Up and Running
 
+<<<<<<< HEAD
 Here you will find everything you need to know to be able to run and test **@rapydbot** in your own local environment.
 <br>
+=======
+Here you will find everything you need to know to be able to test RapydBot in your own local environment.
+>>>>>>> 29ddcb8748979bc336657bcebc03088ebe728ea4
 
 ## Prerequisites
-
 <hr>
-Before you begin, check that you have the following programs installed on your computer:  
+Before you begin, check that you have the following programs installed on your computer:
+<br>
 <br>
 
 - [Git](https://git-scm.com/downloads)
