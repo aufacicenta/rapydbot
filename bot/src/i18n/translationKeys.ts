@@ -11,6 +11,8 @@ export enum translationKeys {
   command_missing_country,
   command_missing_currency,
 
+  balance_command_reply,
+
   createwallet_command_reply,
   createwallet_command_error_rapyd_ewallet_exists_for_user_id,
 
