@@ -2,35 +2,29 @@
 
 RapydBot is a Conversational User Experience designed for Telegram Messenger applications.
 <br>
-<br>
 
 ## Summary
 
 <hr>
-<br>
 
-Using the Telegram Bot API, **RapydBot** implements some of the Rapyd API’s features to allow any Telegram user to create a  
-Rapyd e-wallet, top up its balance using their card, cash payment or a bank transfer, and use that money in a variety of ways  
+Using the Telegram Bot API, **RapydBot** implements some of the Rapyd API’s features to allow any Telegram user to create a
+Rapyd e-wallet, top up its balance using their card, cash payment or a bank transfer, and use that money in a variety of ways
 to create innovative **chat economies**, all within the Telegram interface.
-<br>
 <br>
 
 ## Current Features
 
 <hr>
-<br>
 
 **@rapydbot** is the official name of the Telegram Bot. Any Telegram user can search for this bot and start a conversation with it.
 
-Like most of the bots in telegram, **@rapydbot** facilitates the use of its features through commands. In the following list you can  
+Like most of the bots in telegram, **@rapydbot** facilitates the use of its features through commands. In the following list you can
 see the commands you can call.
-<br>
 <br>
 
 ### Principal Commands
 
 <hr>
-<br>
 
 | Command         | Description                                                                                                                                                                                                                                                    |
 | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -42,16 +36,13 @@ see the commands you can call.
 | `/balance`      | Responds with a balance summary of the user’s Rapyd e-wallet according to its default Currency. If the user does not have a balance for the set currency, the first balance with a set currency is returned.                                                   |
 | `/transfer`     | Responds with a confirmation message to transfer an amount from the user’s Rapyd e-wallet to another Telegram user Rapyd e-wallet. If the recipient user does not have a Rapyd e-wallet yet, the command will notify the sender.                               |
 | `/help`         | Respond with a detailed list of available commands.                                                                                                                                                                                                            |
-
-<br>
 <br>
 
-### Future Commands
+### Upcoming Features
 
 <hr>
-<br>
 
-These are just some of the up coming commands that **@rapydbot** will implement.
+These are just some of the upcoming commands that **@rapydbot** will implement.
 
 | Command          | Description                                                                                                                                                                                          |
 | :--------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -60,7 +51,6 @@ These are just some of the up coming commands that **@rapydbot** will implement.
 | `/escrow`        | Requests the amount to transfer from the user’s Rapyd e-wallet and notifies the user upon a successful transaction.                                                                                  |
 | `/escrowbalance` | Responds with a Rapyd escrow balance if it exists.                                                                                                                                                   |
 
-<br>
 <br>
 
 ## Behind The Scenes ⚙️
@@ -83,14 +73,10 @@ A detailed explanation of the internal components, technologies used and general
 
 **_[This repo](https://github.com/aufacicenta/rapydbot-infra)_** contains everything you need to know about the infrastructure used by **@rapydbot**\.
 <br>
-<br>
-
-<br>
 
 ## Contributors ✨
 
 <hr>
-<br>
 <table >
   <tr>
     <td align="center">
@@ -98,11 +84,11 @@ A detailed explanation of the internal components, technologies used and general
      <img src="https://avatars.githubusercontent.com/u/4053518?v=4" width="100px;" alt=""/>
      <br />
      <sub><b>Netpoe</b></sub>
-     </a><br /> 
+     </a><br />
      <a  href="#" title="Code">💻</a>
-     <a  href="#" title="Reviewed  Pull Requests">👀<a> 
+     <a  href="#" title="Reviewed  Pull Requests">👀<a>
      <a href="#"  title="Documentation">📖</a>
-     <a href="#" title="Tools">🔧</a> 
+     <a href="#" title="Tools">🔧</a>
      <a href="#" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a>
     </td>
     <td align="center">
@@ -110,9 +96,9 @@ A detailed explanation of the internal components, technologies used and general
      <img src="https://avatars.githubusercontent.com/u/60626791?v=4" width="100px;" alt=""/>
      <br />
      <sub><b>Ktoxcon</b></sub>
-     </a><br /> 
+     </a><br />
      <a href="#" title="Code">💻</a>
-     <a href="#" title="Reviewed  Pull Requests">👀<a> 
+     <a href="#" title="Reviewed  Pull Requests">👀<a>
      <a href="#"  title="Documentation">📖</a>
     </td>
      <td align="center">
@@ -120,12 +106,12 @@ A detailed explanation of the internal components, technologies used and general
      <img src="https://avatars.githubusercontent.com/u/7908092?v=4" width="100px;" alt=""/>
      <br />
      <sub><b>Susguzman</b></sub>
-     </a><br /> 
+     </a><br />
      <a href="#" title="Code">💻</a>
-     <a href="#" title="Reviewed  Pull Requests">👀<a> 
+     <a href="#" title="Reviewed  Pull Requests">👀<a>
      <a href="#"  title="Documentation">📖</a>
      <a href="#" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a>
     </td>
-    </td>  
+    </td>
   </tr>
 </table>
