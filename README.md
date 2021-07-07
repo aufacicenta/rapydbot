@@ -68,12 +68,12 @@ These are just some of the upcoming commands that **@rapydbot** will implement.
 
 Rapydbot was built using microservices, Node JS, Typescript, The **Rapyd API** and lots of love 💖. If you want to know more about the **@rapydbot**'s architecture choose one of the following documents:
 
-### **_[RapydBot Up and Running](/doc/UpAndRunning.md)_** :
+### **_[RapydBot Up and Running](docs/up-and-running.md)_** :
 
 Everything you need to know about how to put **@rapydbot** in motion. Includes a detailed guide with which you can create your own **@rapydbot** in a local environment.
 <br>
 
-### **_[Inside RapydBot](/doc/InsideRapydBot.md)_** :
+### **_[Inside RapydBot](docs/inside-rapydbot.md)_** :
 
 A detailed explanation of the internal components, technologies used and general architecture of **@rapydbot**\.
 <br>
