@@ -1,12 +1,20 @@
-# RapydBot
+<h1 align="center">
+  <br>
+  <a href="https://ibb.co/d5xp4Jw"><img src="https://i.ibb.co/LZHgdhX/logo.jpg" alt="RapydBot" border="0" width="200"></a>
+  <br>
+  RapydBot
+  <br>
+</h1>
 
-RapydBot is a Conversational User Experience designed for Telegram Messenger applications.
-<br>
-<br>
+<h3 align="center">RapydBot is a Conversational User Experience designed for Telegram Messenger applications.</h3>
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
+  </a>
+</p>
 
 ## Summary
 
-<hr>
 <br>
 
 Using the Telegram Bot API, **RapydBot** implements some of the Rapyd API’s features to allow any Telegram user to create a  
@@ -17,7 +25,6 @@ to create innovative **chat economies**, all within the Telegram interface.
 
 ## Current Features
 
-<hr>
 <br>
 
 **@rapydbot** is the official name of the Telegram Bot. Any Telegram user can search for this bot and start a conversation with it.
@@ -29,7 +36,6 @@ see the commands you can call.
 
 ### Principal Commands
 
-<hr>
 <br>
 
 | Command         | Description                                                                                                                                                                                                                                                    |
@@ -48,7 +54,6 @@ see the commands you can call.
 
 ### Future Commands
 
-<hr>
 <br>
 
 These are just some of the up coming commands that **@rapydbot** will implement.
@@ -64,8 +69,6 @@ These are just some of the up coming commands that **@rapydbot** will implement.
 <br>
 
 ## Behind The Scenes ⚙️
-
-<hr>
 
 Rapydbot was built using microservices, Node JS, Typescript, The **Rapyd API** and lots of love 💖. If you want to know more about the **@rapydbot**'s architecture choose one of the following documents:
 
@@ -84,12 +87,10 @@ A detailed explanation of the internal components, technologies used and general
 **_[This repo](https://github.com/aufacicenta/rapydbot-infra)_** contains everything you need to know about the infrastructure used by **@rapydbot**\.
 <br>
 <br>
-
 <br>
 
 ## Contributors ✨
 
-<hr>
 <br>
 <table >
   <tr>
@@ -129,3 +130,11 @@ A detailed explanation of the internal components, technologies used and general
     </td>  
   </tr>
 </table>
+<br>
+<br>
+
+## License
+
+<br>MIT
+<br>
+<br>
