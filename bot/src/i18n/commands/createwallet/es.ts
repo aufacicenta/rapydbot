@@ -5,7 +5,7 @@ export default {
 
 La dirección de tu e-wallet es {{e_wallet_address}}, y está vinculada a tu usuario de Telegram: @{{username}}.
 
-Ahora, /recarga saldo en tu Billetera de Rapyd de manera segura con una transferencia bancaria, un depósito en efectivo o un pago con tarjeta.
+Ahora, utiliza el comando /fijarpais para establecer el <strong>país y la moneda</strong> de tu billetera de Rapyd.
 
 Escribe /ayuda para más opciones.
 
