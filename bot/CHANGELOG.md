@@ -1,3 +1,12 @@
+## [0.2.2](https://github.com/aufacicenta/rapydbot/compare/bot-0.2.1...bot-0.2.2) (2021-07-07)
+
+
+### Bug Fixes
+
+* command text help ([#39](https://github.com/aufacicenta/rapydbot/issues/39)) ([766dbfe](https://github.com/aufacicenta/rapydbot/commit/766dbfe067ef3141d8c06895c53f9a7a4fb90e1a))
+
+
+
 ## [0.2.1](https://github.com/aufacicenta/rapydbot/compare/bot-0.2.0...bot-0.2.1) (2021-07-07)
 
 
