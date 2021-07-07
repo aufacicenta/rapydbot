@@ -26,9 +26,9 @@ export class HelpCommand implements IBotCommand {
         null
       );
 
-      this.bot.reply(msg, translationKeys.command_text_help, {
+      this.bot.reply(msg, translationKeys.help_command_reply, {
         disable_web_page_preview: true,
-        reply_markup: {          
+        reply_markup: {
           keyboard: getCommandButtons({ commandButtonsString }),
         },
       });
