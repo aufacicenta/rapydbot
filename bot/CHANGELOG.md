@@ -1,3 +1,7 @@
+## [0.2.3](https://github.com/aufacicenta/rapydbot/compare/bot-0.2.2...bot-0.2.3) (2021-07-07)
+
+
+
 ## [0.2.2](https://github.com/aufacicenta/rapydbot/compare/bot-0.2.1...bot-0.2.2) (2021-07-07)
 
 
