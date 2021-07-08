@@ -223,7 +223,6 @@ If all goes well you should receive a successful log.
 <h2 id="grpcsetup">Microservices Setup</h2>
 <br>
 Now with the DB ready we must prepare each one of the microservices. As in the previous step, we need to access
-
 each of the directories and execute the `install.sh` script We can do this easily with the following commands:
 
 ```bash
