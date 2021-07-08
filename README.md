@@ -6,7 +6,7 @@
   <br>
 </h1>
 
-<h3 align="center">RapydBot is a Conversational User Experience designed for Telegram Messenger applications.</h3>
+<h3 align="center">RapydBot is a Conversational User Experience<br> designed for Telegram Messenger applications.</h3>
 <p align="center">
   <a href="https://opensource.org/licenses/MIT">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
