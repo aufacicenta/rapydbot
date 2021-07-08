@@ -51,8 +51,7 @@ Follow the below steps to have your own **@rapydbot** instance ready for testing
 
 This steps are optional but if you want to use all the features it's recommended that you follow them.
 
-- <a href="#rapydhooksetup">Setting Up the Top-up Webhook</a>
-- <a href="#rapydhooksetup">Setting Up the Transfer Webhook</a>
+- <a href="#rapydhooksetup">Setting Up the Rapyd Webhooks</a>
   <br>
   <br>
 
@@ -162,6 +161,7 @@ export MYSQL_DATABASE="MCS_DB_NAME"
 
 export RAPYD_BASE_URL="https://sandboxapi.rapyd.net"
 export RAPYD_SALT_LENGTH="8"
+export RAPYD_WEBHOOKS_SERVER_PORT=8080
 
 export BOT_TOKEN="YOUR TELEGRAM BOT TOKEN HERE"
 export RAPYD_ACCESS_KEY="YOUR RAPYD ACCESS KEY HERE"
@@ -257,6 +257,38 @@ yarn start:debug
 ```
 
 If everything goes as it should, you can now test your bot via Telegram, Fantastic! 😀😀😀
+
+<br>
+<br>
+
+<h2 id="rapydhookssetup">Optional Settigns</h2>
+<br>
+
+These settings are optional but you will not be able to enjoy the entire **@rapydbot** experience without them.
+
+### Setting Up the Rapyd Webhooks
+
+In order to use the `/topup` and `/transfer` commands you must activate the Rapyd webhooks. Let's start by executing  
+Ngrok in your local:
+
+```bash
+ngrok http <YOUR RAPYD_WEBHOOKS_SERVER_PORT VAR>
+```
+
+Ngrok will return two urls that you can use to connect Rapyd with the services.
+Now add the following environment variable to  
+the `.env` file of the microservices and restart them:
+
+```env
+export RAPYD_WEBHOOKS_ENDPOINT="<YOUR_NGROK_HTTPS_GENERATED_URL>/rapyd"
+```
+
+Time to bind the url in Rapyd, Access the Rapyd Client Portal and set your Ngrok URL and active the following webhooks:
+
+<a href="https://ibb.co/1sYw7vZ"><img src="https://i.ibb.co/YD4qPR2/webhook.png" alt="webhooks" border="0"></a>
+
+The URL in the image it's just an example don't use it.
+All ready! now you can use `/transfer` and `/topup`.
 
 <br>
 <br>
