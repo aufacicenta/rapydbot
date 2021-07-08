@@ -17,8 +17,7 @@ Before you begin, check that you have the following programs installed on your c
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - A command line tool like Bash or Zsh
 
-If you are a Windows user we recommend you to install and use [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10). Make sure to follow the instructions provided  
-for the installation of the above programs based on your operating system.
+If you are a Windows user we recommend you to install and use [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10). Make sure to follow the instructions provided for the installation of the above programs based on your operating system.
 
 Additionally we assume that you have knowledge or previous experience using the following tools and technologies:
 
@@ -37,7 +36,7 @@ they work will only make the process faster.
 
 ## Up and Running
 
-Follow the below steps to have your own **@rapydbot** instance ready for testing:
+Follow the steps bellow to have your own **@rapydbot** instance ready for testing:
 
 1. <a href="#reposetup">Clone or Download The RapydBot Repository</a>
 2. <a href="#telegramsetup">Request your access token to the Telegram Bot API</a>
@@ -80,8 +79,7 @@ Once you have a clone of the repository in your local make sure you are in the m
 <h2 id="telegramsetup">Telegram Setup</h2>
 <br>
 
-In order to run your rapydbot instance you must first talk to the parent of all bots, [BotFather](https://telegram.me/BotFather). Tell him that you want to create  
-a new bot, you can give it whatever name you want.
+In order to run your rapydbot instance you must first talk to [BotFather](https://telegram.me/BotFather). Tell him that you want to create a new bot, you can give it whatever name you want.
 
 BotFather will respond to you with the access token necessary to use the Telegram Bot API, You can see an example below.
 
@@ -109,11 +107,10 @@ Remember that these keys must remain private and secure. As with the token, save
  use them in the next step.
 
 <br>
-<br>
 
 <h2 id="envvarssetup">Environment Variables Setup</h2>
 
-Easy right? We are almost ready, it is time to prepare your environment.
+It is time to prepare the environment.
 
 The repository that you previously cloned should have a directory structure similar to this:
 
@@ -225,7 +222,7 @@ If all goes well you should receive a successful log.
 
 <h2 id="grpcsetup">Microservices Setup</h2>
 <br>
-We are so close 😃, Now with the DB ready we must prepare each one of the microservices. As in the previous step, we need to access
+Now with the DB ready we must prepare each one of the microservices. As in the previous step, we need to access
 
 each of the directories and execute the `install.sh` script We can do this easily with the following commands:
 
@@ -239,9 +236,9 @@ each of the directories and execute the `install.sh` script We can do this easil
 
 This will expose the microservice as a node package.
 
-`cd` into another microservice or the `bot` and run `yarn link @rapydbot/user`, for linking the @rapydbot/user mcs, for example.
+`cd` into another microservice or the `bot` and run `cd build && yarn link @rapydbot/user`, for linking the @rapydbot/user mcs, for example.
 
-Finally to start the gRPC server of the microservices run the command `yarn start` in the root of each microservice.
+Finally to start the gRPC server of the microservices run the command `yarn start` or `yarn start:debug` in the root of each microservice.
 
 <br>
 <br>
@@ -256,7 +253,7 @@ instance of **@rapydbot** to do so, access the directory `bot` and enter the fol
 yarn start:debug
 ```
 
-If everything goes as it should, you can now test your bot via Telegram, Fantastic! 😀😀😀
+If everything goes as it should, you can now test your bot via Telegram.
 
 <br>
 <br>
@@ -276,8 +273,7 @@ ngrok http <YOUR RAPYD_WEBHOOKS_SERVER_PORT VAR>
 ```
 
 Ngrok will return two urls that you can use to connect Rapyd with the services.
-Now add the following environment variable to  
-the `.env` file of the microservices and restart them:
+Now add the following environment variable to the `.env` file of the microservices and restart them:
 
 ```env
 export RAPYD_WEBHOOKS_ENDPOINT="<YOUR_NGROK_HTTPS_GENERATED_URL>/rapyd"
@@ -287,8 +283,7 @@ Time to bind the url in Rapyd, Access the Rapyd Client Portal and set your Ngrok
 
 <a href="https://ibb.co/1sYw7vZ"><img src="https://i.ibb.co/YD4qPR2/webhook.png" alt="webhooks" border="0"></a>
 
-The URL in the image it's just an example don't use it.
-All ready! now you can use `/transfer` and `/topup`.
+The URL in the image it's just an example don't use it. Now you can use `/transfer` and `/topup`.
 
 <br>
 <br>
