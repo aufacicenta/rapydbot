@@ -1,3 +1,23 @@
+# [0.3.0](https://github.com/aufacicenta/rapydbot/compare/bot-0.2.3...bot-0.3.0) (2021-07-08)
+
+
+### Bug Fixes
+
+* fixes in country name utility ([c5fc1b1](https://github.com/aufacicenta/rapydbot/commit/c5fc1b11f9cefdad189902bdff9bbf10ab1e2334))
+* fixes in country name utility ([9187d88](https://github.com/aufacicenta/rapydbot/commit/9187d884d483f99c6ca43e098f5420e4180d0def))
+* Title alignment ([#41](https://github.com/aufacicenta/rapydbot/issues/41)) ([3bfd988](https://github.com/aufacicenta/rapydbot/commit/3bfd988bee7410c9f1264dbc8dd66f63fe750518))
+
+
+### Features
+
+* finishes up-and-running ([90af5fc](https://github.com/aufacicenta/rapydbot/commit/90af5fc60919d7645371a2be652368145a1df910))
+* improvements in readme ([fd5fc2a](https://github.com/aufacicenta/rapydbot/commit/fd5fc2aacd82a26b5f13ded14436ee91f975ab15))
+* updating readme and docs ([cbc5980](https://github.com/aufacicenta/rapydbot/commit/cbc5980de4fce09de199f975d889fcc7cc255e25))
+* updating setup readme ([7733b80](https://github.com/aufacicenta/rapydbot/commit/7733b80c2cb17a301977a0bb058306c460074c08))
+* updating up-and-running doc ([63b0bab](https://github.com/aufacicenta/rapydbot/commit/63b0bab49d948f4b28325064873274c205536552))
+
+
+
 ## [0.2.3](https://github.com/aufacicenta/rapydbot/compare/bot-0.2.2...bot-0.2.3) (2021-07-07)
 
 
