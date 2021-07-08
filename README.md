@@ -6,7 +6,7 @@
   <br>
 </h1>
 
-<h3 align="center">RapydBot is a Conversational User Experience designed for Telegram Messenger applications.</h3>
+<h3 align="center">RapydBot is a Conversational User Experience<br> designed for Telegram Messenger applications.</h3>
 <p align="center">
   <a href="https://opensource.org/licenses/MIT">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
@@ -62,27 +62,18 @@ These are just some of the upcoming commands that **@rapydbot** will implement.
 | `/escrow`        | Requests the amount to transfer from the user’s Rapyd e-wallet and notifies the user upon a successful transaction.                                                                                  |
 | `/escrowbalance` | Responds with a Rapyd escrow balance if it exists.                                                                                                                                                   |
 
-<br>
-
 ## Behind The Scenes ⚙️
 
-Rapydbot was built using microservices, Node JS, Typescript, The **Rapyd API** and lots of love 💖. If you want to know more about the **@rapydbot**'s architecture choose one of the following documents:
+Rapydbot was built using microservices, Node JS, Typescript, The **Rapyd API** and lots of love 💖. If you want to know more about the **@rapydbot**'s architecture check one of the following resources:
 
 ### **_[RapydBot Up and Running](docs/up-and-running.md)_** :
 
 Everything you need to know about how to put **@rapydbot** in motion. Includes a detailed guide with which you can create your own **@rapydbot** in a local environment.
 <br>
 
-### **_[Inside RapydBot](docs/inside-rapydbot.md)_** :
-
-A detailed explanation of the internal components, technologies used and general architecture of **@rapydbot**\.
-<br>
-
 ### **_RapydBot Infra_**:
 
 **_[This repo](https://github.com/aufacicenta/rapydbot-infra)_** contains everything you need to know about the infrastructure used by **@rapydbot**\.
-<br>
-<br>
 <br>
 
 ## Contributors ✨
@@ -127,10 +118,7 @@ A detailed explanation of the internal components, technologies used and general
   </tr>
 </table>
 <br>
-<br>
 
 ## License
 
-<br>MIT
-<br>
-<br>
+MIT
