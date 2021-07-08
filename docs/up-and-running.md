@@ -2,12 +2,10 @@
 
 Here you will find everything you need to know to be able to run and test **@rapydbot** in your own local environment.
 <br>
-<br>
 
 ## Prerequisites
 
 Before you begin, check that you have the following programs installed on your computer:
-<br>
 <br>
 
 - [Git](https://git-scm.com/downloads)
@@ -32,7 +30,6 @@ Don't worry, if you don't have previous experience with any of these tools, you 
   
 they work will only make the process faster.
 <br>
-<br>
 
 ## Up and Running
 
@@ -51,13 +48,6 @@ Follow the steps bellow to have your own **@rapydbot** instance ready for testin
 This steps are optional but if you want to use all the features it's recommended that you follow them.
 
 - <a href="#rapydhookssetup">Setting Up the Rapyd Webhooks</a>
-  <br>
-  <br>
-
-## Troubleshooting
-
-Problems with your **@rapydbot** instance?  
-We got you covered, Visit the following [document](troubleshooting.md) which describes some of the most common boot/installation problems.
 
 <br>
 
@@ -87,7 +77,6 @@ BotFather will respond to you with the access token necessary to use the Telegra
 
 You must save and keep your token safe. We will use it in the following steps so do not lose it or you will have to generate a new one.
 
-<br>
 <br>
 
 <h2 id="rapydsetup">Rapyd Setup</h2>
@@ -166,7 +155,6 @@ export RAPYD_SECRET_KEY="YOUR RAPYD SECRET KEY HERE"
 ```
 
 <br>
-<br>
 
 ### Take Into Consideration
 
@@ -188,7 +176,6 @@ In the wallet microservice you would add this:
 export USER_SERVICE_URL="localhost:4040"
 ```
 
-<br>
 <br>
 
 <h2 id="dbsetup">DB Setup</h2>
@@ -218,7 +205,6 @@ And run the following command:
 If all goes well you should receive a successful log.
 
 <br>
-<br>
 
 <h2 id="grpcsetup">Microservices Setup</h2>
 <br>
@@ -240,7 +226,6 @@ This will expose the microservice as a node package.
 Finally to start the gRPC server of the microservices run the command `yarn start` or `yarn start:debug` in the root of each microservice.
 
 <br>
-<br>
 
 <h2 id="botrunning">Start Your RapydBot Instance</h2>
 <br>
@@ -254,7 +239,6 @@ yarn start:debug
 
 If everything goes as it should, you can now test your bot via Telegram.
 
-<br>
 <br>
 
 <h2 id="rapydhookssetup">Optional Settigns</h2>
@@ -284,5 +268,4 @@ Time to bind the url in Rapyd, Access the Rapyd Client Portal and set your Ngrok
 
 The URL in the image it's just an example don't use it. Now you can use `/transfer` and `/topup`.
 
-<br>
 <br>
