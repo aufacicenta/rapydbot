@@ -30,8 +30,17 @@ export function getCountryFromName(
   countryName: string
 ): typeof Countries[number] | null {
   const countryByName = Countries.filter(({ name }) => {
-    const countryNameWhithoutFlag = countryName.split(" ").shift();
-    return countryNameWhithoutFlag === name;
+    const countryNamePieces = countryName.split(" ");
+
+    if (Boolean(countryNamePieces.length > 2)) {
+      const namePiecesWithoutFlag = countryNamePieces
+        .slice(0, countryNamePieces.length - 1)
+        .join(" ");
+
+      return namePiecesWithoutFlag === name;
+    } else {
+      return countryNamePieces.shift() === name;
+    }
   }).shift();
 
   if (!Boolean(countryByName)) return null;
