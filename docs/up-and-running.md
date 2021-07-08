@@ -51,7 +51,7 @@ Follow the below steps to have your own **@rapydbot** instance ready for testing
 
 This steps are optional but if you want to use all the features it's recommended that you follow them.
 
-- <a href="#rapydhooksetup">Setting Up the Rapyd Webhooks</a>
+- <a href="#rapydhookssetup">Setting Up the Rapyd Webhooks</a>
   <br>
   <br>
 
