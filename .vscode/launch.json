@@ -69,7 +69,7 @@
       "windows": {
         "program": "${workspaceFolder}/wallet/node_modules/jest/bin/jest"
       }
-    }
+    },
     {
       "type": "node",
       "request": "attach",

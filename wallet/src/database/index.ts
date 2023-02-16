@@ -12,17 +12,14 @@ const opts = {
 export default {
   async connect(options?: SyncOptions) {
     try {
-      const connection = await mysql.createConnection(opts);
+      // const connection = await mysql.createConnection(opts);
 
-      await connection.query(
-        `CREATE DATABASE IF NOT EXISTS \`${process.env.MYSQL_DATABASE}\`;`
-      );
+      // await connection.query(
+      //   `CREATE DATABASE IF NOT EXISTS \`${process.env.MYSQL_DATABASE}\`;`
+      // );
 
-      const sequelize = new Sequelize({
-        ...opts,
-        username: process.env.MYSQL_ROOT_USER,
-        database: process.env.MYSQL_DATABASE,
-        dialect: "mysql",
+      const sequelize = new Sequelize(process.env.MYSQL_URL, {
+        dialect: "postgres",
       });
 
       sequelize.define(

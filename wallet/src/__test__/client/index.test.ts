@@ -11,6 +11,8 @@ import WalletClientGenerator, {
   GetWalletBalanceReply,
   GetWalletBalanceRequest,
   WalletClient,
+  GetSupportedCountriesRequest,
+  GetOfficialIdDocumentsRequest,
 } from "../../client";
 import database from "../../database";
 import { WalletDAO } from "../../database/dao/WalletDAO";
@@ -27,6 +29,8 @@ let driver: Sequelize,
 describe("controller", () => {
   const users = [getRandomUsername(), getRandomUsername()];
   const [sender, recipient] = users;
+  const defaultCountryCode = "GT";
+  const defaultCurrencyCode = "GTQ";
 
   beforeAll(async () => {
     driver = await database.connect({ force: true });
@@ -36,6 +40,42 @@ describe("controller", () => {
     ).create();
     rapydClient = new RapydClient();
   });
+
+  // test("success: get a list of all Rapyd official identification documents", async () => {
+  //   const request = new GetOfficialIdDocumentsRequest();
+
+  //   const getOfficialIdDocuments = (): Promise<void> =>
+  //     new Promise((resolve) => {
+  //       request.setCountryCode(defaultCountryCode);
+
+  //       walletClient.getOfficialIdDocuments(request, (error, reply) => {
+  //         if (error) {
+  //           throw error;
+  //         }
+
+  //         resolve();
+  //       });
+  //     });
+
+  //   await getOfficialIdDocuments();
+  // });
+
+  // test("success: get a list of all Rapyd supported countries", async () => {
+  //   const request = new GetSupportedCountriesRequest();
+
+  //   const getSupportedCountries = (): Promise<void> =>
+  //     new Promise((resolve) => {
+  //       walletClient.getSupportedCountries(request, (error, reply) => {
+  //         if (error) {
+  //           throw error;
+  //         }
+
+  //         resolve();
+  //       });
+  //     });
+
+  //   await getSupportedCountries();
+  // });
 
   test("success: creates a real Rapyd wallet per user and stores it in the database and in Rapyd", async () => {
     const request = new CreateWalletRequest();
@@ -109,8 +149,8 @@ describe("controller", () => {
         });
       });
 
-    const sender_currency_code = "MXN";
-    const sender_country_code = "MX";
+    const sender_currency_code = defaultCurrencyCode;
+    const sender_country_code = defaultCountryCode;
 
     const sender_currency_code_response = await setDefaultCurrencyCode({
       userId: sender,
@@ -175,7 +215,7 @@ describe("controller", () => {
   });
 
   test("success: transfers an amount from a Rapyd ewallet balance to another Rapyd ewallet", async () => {
-    const requestCurrency = "MXN";
+    const requestCurrency = defaultCurrencyCode;
     const requestAmount = 500.0;
 
     const transferFromWallet = ({
@@ -261,7 +301,7 @@ describe("controller", () => {
   });
 
   test("success: gets wallet balance", async () => {
-    const requestCurrency = "MXN";
+    const requestCurrency = defaultCurrencyCode;
 
     const getBalance = ({
       userId,
@@ -307,7 +347,7 @@ describe("controller", () => {
   });
 
   test("fail: wallet doesn't have balances", async () => {
-    const requestCurrency = "MXN";
+    const requestCurrency = defaultCurrencyCode;
 
     const getBalance = ({
       userId,

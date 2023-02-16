@@ -18,6 +18,9 @@ import { IContext } from "../server/interface/IContext";
 import {
   CreateWalletReply,
   CreateWalletRequest,
+  EmptyReply,
+  GetOfficialIdDocumentsRequest,
+  GetSupportedCountriesRequest,
   GetUserIdFromWalletAddressReply,
   GetUserIdFromWalletAddressRequest,
   GetWalletBalanceReply,
@@ -49,6 +52,48 @@ export class Controller {
   public static type: string = "Controller";
 
   private rapydClient = new RapydClient();
+
+  async getOfficialIdDocuments(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<GetOfficialIdDocumentsRequest, EmptyReply>,
+    {}: IContext
+  ) {
+    try {
+      const country_code = call.request.getCountryCode();
+
+      const response = await this.rapydClient.get<any>({
+        path: `/v1/identities/types?country=${country_code}`,
+      });
+
+      const reply = new EmptyReply();
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async getSupportedCountries(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<GetSupportedCountriesRequest, EmptyReply>,
+    { dao }: IContext
+  ) {
+    try {
+      const response = await this.rapydClient.get<any>({
+        path: "/v1/data/countries",
+      });
+
+      const reply = new EmptyReply();
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
 
   async createWallet(
     {

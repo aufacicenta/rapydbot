@@ -5,7 +5,7 @@ import { Controller } from "../../service/controller";
 export interface IContext {
   controller: Controller;
   database?: Sequelize;
-  dao?: {
+  dao: {
     WalletDAO: WalletDAO;
   };
 }

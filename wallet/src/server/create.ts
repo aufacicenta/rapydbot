@@ -6,6 +6,10 @@ export default (context: IContext) => {
   const server = new grpc.Server();
 
   server.addService<IWalletServer>(WalletService, {
+    getOfficialIdDocuments: (call, callback) =>
+      context.controller.getOfficialIdDocuments({ call, callback }, context),
+    getSupportedCountries: (call, callback) =>
+      context.controller.getSupportedCountries({ call, callback }, context),
     createWallet: (call, callback) =>
       context.controller.createWallet({ call, callback }, context),
     topUpWallet: (call, callback) =>
