@@ -1,4 +1,6 @@
 import * as grpc from "@grpc/grpc-js";
+import { classifyBaseRequest } from "cohere-ai/dist/models";
+import cohere from "../providers/cohere";
 
 import { IContext } from "../server/interface/IContext";
 import { ClassifyRequest, ClassifyReply } from "../server/protos/schema_pb";
@@ -18,11 +20,24 @@ export class Controller {
     try {
       const input = call.request.getInput();
 
-      // const response;
+      const {
+        body: { results },
+      } = await cohere.client.detectLanguage({ texts: [input] });
+
+      const [language] = results;
+
+      const examples = cohere.examples.getExamplesByLanguageCode(language.language_code);
+
+      const response = await cohere.client.classify({
+        model: "60a0705a-5231-4d4a-b62f-8be55def74a5-ft",
+        inputs: [input],
+      });
+
+      const prediction = cohere.classify.getHighestConfidenceIntent(response);
 
       const reply = new ClassifyReply();
 
-      reply.setAction("send");
+      reply.setAction(prediction);
 
       callback(null, reply);
     } catch (error) {

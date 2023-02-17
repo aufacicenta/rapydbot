@@ -17,7 +17,7 @@ describe("controller", () => {
   test("success: call cohere classify API", async () => {
     const request = new ClassifyRequest();
 
-    const input = "Envía 100 a juan";
+    const input = "crear wallet mxn";
 
     const classify = (): Promise<ClassifyReply.AsObject["action"]> =>
       new Promise((resolve) => {

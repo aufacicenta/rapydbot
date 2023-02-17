@@ -16,7 +16,8 @@
     "build": "build"
   },
   "dependencies": {
-    "@grpc/grpc-js": "^1.8.9"
+    "@grpc/grpc-js": "^1.8.9",
+    "cohere-ai": "^5.0.2"
   },
   "devDependencies": {
     "@grpc/proto-loader": "^0.5.5",
