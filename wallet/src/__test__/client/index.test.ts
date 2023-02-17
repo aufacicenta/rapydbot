@@ -11,30 +11,28 @@ import WalletClientGenerator, {
   GetWalletBalanceReply,
   GetWalletBalanceRequest,
   WalletClient,
-  GetSupportedCountriesRequest,
-  GetOfficialIdDocumentsRequest,
 } from "../../client";
 import database from "../../database";
-import { WalletDAO } from "../../database/dao/WalletDAO";
-import RapydClient from "../../lib/rapyd/RapydClient";
-import { WalletObjectResponse } from "../../lib/rapyd/types";
+import { Wallet } from "../../database/wallet";
+import RapydClient from "../../providers/rapyd/client";
+import { WalletObjectResponse } from "../../providers/rapyd/types";
 import { WalletServiceErrorCodes } from "../../service/error";
 import getRandomUsername from "../util/getRandomUsername";
 
 let driver: Sequelize,
-  dao: WalletDAO,
+  dao: Wallet,
   walletClient: WalletClient,
   rapydClient: RapydClient;
 
 describe("controller", () => {
   const users = [getRandomUsername(), getRandomUsername()];
   const [sender, recipient] = users;
-  const defaultCountryCode = "GT";
-  const defaultCurrencyCode = "GTQ";
+  const defaultCountryCode = "MX";
+  const defaultCurrencyCode = "MXN";
 
   beforeAll(async () => {
     driver = await database.connect({ force: true });
-    dao = new WalletDAO(driver);
+    dao = new Wallet(driver);
     walletClient = new WalletClientGenerator(
       `${process.env.IP_ADDRESS}:${process.env.HTTP_PORT}`
     ).create();

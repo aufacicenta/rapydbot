@@ -13,6 +13,7 @@ export class WalletClientGenerator {
 
   setURL(url: string): WalletClientGenerator {
     this.url = url;
+
     return this;
   }
 

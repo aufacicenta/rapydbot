@@ -1,9 +1,9 @@
-import generateSalt from "../../../lib/crypto/generateSalt";
-import RapydClient from "../../../lib/rapyd/RapydClient";
+import generateSalt from "../../../providers/crypto/generateSalt";
+import RapydClient from "../../../providers/rapyd/client";
 import {
   CreateWalletParams,
   WalletObjectResponse,
-} from "../../../lib/rapyd/types";
+} from "../../../providers/rapyd/types";
 import { WalletServiceErrorCodes } from "../../../service/error";
 
 describe("RapydClient", () => {
