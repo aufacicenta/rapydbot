@@ -1,7 +1,5 @@
 import axios from "axios";
-import grpc from "grpc";
-import { injectable } from "inversify";
-import "reflect-metadata";
+import * as grpc from "@grpc/grpc-js";
 import RapydClient from "../providers/rapyd/client";
 import {
   CheckoutObjectResponse,
@@ -43,11 +41,10 @@ import {
 import { WalletServiceErrorCodes } from "../service/error";
 
 type gRPCServerUnaryCall<Request, Reply> = {
-  call: grpc.ServerUnaryCall<Request>;
+  call: grpc.ServerUnaryCall<Request, Reply>;
   callback: grpc.sendUnaryData<Reply>;
 };
 
-@injectable()
 export class Controller {
   public static type: string = "Controller";
 

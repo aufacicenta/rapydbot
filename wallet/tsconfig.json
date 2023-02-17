@@ -19,6 +19,7 @@
   "include": [
     "./src/client",
     "./src/service/error.ts",
-    "./src/__test__/**/*.ts"
+    "./src/__test__/**/*.ts",
+    "./src/providers/rapyd/types"
   ]
 }

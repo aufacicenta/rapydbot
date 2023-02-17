@@ -36,7 +36,7 @@ describe("RapydClient", () => {
         },
       });
     } catch (error) {
-      expect(error.response.data.status.error_code).toEqual(
+      expect((error as any).response.data.status.error_code).toEqual(
         WalletServiceErrorCodes.ERROR_CREATE_USER_EWALLET_REFERENCE_ID_ALREADY_EXISTS
       );
     }
