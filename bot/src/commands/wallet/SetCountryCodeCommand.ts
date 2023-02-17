@@ -20,7 +20,7 @@ export class SetCountryCodeCommand implements IBotCommand {
   async onReplyFromMessageID(
     msg: Message,
     handler: BotReplyToMessageIdHandler,
-    match?: RegExpMatchArray
+    match?: RegExpMatchArray,
   ) {
     try {
       const previousText = handler.storage.get("previousText");
@@ -49,7 +49,7 @@ export class SetCountryCodeCommand implements IBotCommand {
             one_time_keyboard: true,
             keyboard: getCountryButtons(),
           },
-        }
+        },
       );
     } catch (error) {
       this.handleErrorReply(error, msg);
@@ -72,7 +72,7 @@ export class SetCountryCodeCommand implements IBotCommand {
       currencyCode,
     });
 
-    this.bot.reply(
+    this.bot.replyWithTranslation(
       msg,
       translationKeys.setcountry_command_on_country_select_reply,
       {
@@ -81,17 +81,17 @@ export class SetCountryCodeCommand implements IBotCommand {
       {
         currencyCode,
         countryName: country.name,
-      }
+      },
     );
   }
 
   private handleErrorReply(error: Error, msg: Message) {
-    return this.bot.reply(msg, translationKeys.start_command_error);
+    return this.bot.replyWithTranslation(msg, translationKeys.start_command_error);
   }
 
   private async setWalletCountryCode(
     msg: Message,
-    countryCode: string
+    countryCode: string,
   ): Promise<{
     userId: string;
     countryCode: string;
@@ -112,7 +112,7 @@ export class SetCountryCodeCommand implements IBotCommand {
 
               const countryCode = reply.getCountryCode();
               resolve({ userId, countryCode });
-            }
+            },
           );
         })
         .catch((error) => reject(error));
@@ -121,7 +121,7 @@ export class SetCountryCodeCommand implements IBotCommand {
 
   private async setWalletCurrencyCode(
     msg: Message,
-    { userId, currencyCode }: { userId: string; currencyCode: string }
+    { userId, currencyCode }: { userId: string; currencyCode: string },
   ): Promise<string> {
     return new Promise((resolve, reject) => {
       const request = new SetWalletCurrencyCodeRequest();

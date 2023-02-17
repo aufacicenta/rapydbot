@@ -18,7 +18,7 @@ export class BalanceCommand implements IBotCommand {
   async onReplyFromMessageID(
     msg: Message,
     handler: BotReplyToMessageIdHandler,
-    match?: RegExpMatchArray
+    match?: RegExpMatchArray,
   ) {}
 
   async onText(msg: Message) {
@@ -32,34 +32,23 @@ export class BalanceCommand implements IBotCommand {
   private async handleBalanceReply(msg: Message) {
     const balance = await this.getWalletBalance(msg);
 
-    this.bot.reply(msg, translationKeys.balance_command_reply, null, {
+    this.bot.replyWithTranslation(msg, translationKeys.balance_command_reply, null, {
       currentDate: this.getBalanceDate(),
       ...balance,
     });
   }
 
-  public async replyToPaymentCompleteWebhook({
-    msg,
-    userId,
-  }: {
-    msg: string;
-    userId: string;
-  }) {
+  public async replyToPaymentCompleteWebhook({ msg, userId }: { msg: string; userId: string }) {
     const balance = await this.getBalance(userId);
 
-    this.bot.reply(
-      JSON.parse(msg),
-      translationKeys.balance_command_reply,
-      null,
-      {
-        currentDate: this.getBalanceDate(),
-        currencyCode: balance.currencyCode,
-        onHoldBalance: String(balance.onHoldBalance).padStart(10, " "),
-        reserveBalance: String(balance.reserveBalance).padStart(10, " "),
-        receivedBalance: String(balance.receivedBalance).padStart(10, " "),
-        currentBalance: String(balance.currentBalance).padStart(10, " "),
-      }
-    );
+    this.bot.replyWithTranslation(JSON.parse(msg), translationKeys.balance_command_reply, null, {
+      currentDate: this.getBalanceDate(),
+      currencyCode: balance.currencyCode,
+      onHoldBalance: String(balance.onHoldBalance).padStart(10, " "),
+      reserveBalance: String(balance.reserveBalance).padStart(10, " "),
+      receivedBalance: String(balance.receivedBalance).padStart(10, " "),
+      currentBalance: String(balance.currentBalance).padStart(10, " "),
+    });
   }
 
   private getBalanceDate(): string {
@@ -67,17 +56,13 @@ export class BalanceCommand implements IBotCommand {
   }
 
   private handleErrorReply(error: Error, msg: Message) {
-    if (
-      error?.message.includes(
-        WalletServiceErrorCodes.rapyd_ewallet_does_not_have_balances
-      )
-    ) {
-      return this.bot.reply(
+    if (error?.message.includes(WalletServiceErrorCodes.rapyd_ewallet_does_not_have_balances)) {
+      return this.bot.replyWithTranslation(
         msg,
         translationKeys.walletbalance_command_error_ewallet_does_not_have_balances,
         {
           disable_web_page_preview: true,
-        }
+        },
       );
     }
   }
@@ -87,28 +72,25 @@ export class BalanceCommand implements IBotCommand {
       const getWalletBalanceRequest = new GetWalletBalanceRequest();
       getWalletBalanceRequest.setUserId(userId);
 
-      this.bot.WalletServiceClient.getWalletBalance(
-        getWalletBalanceRequest,
-        (error, reply) => {
-          if (Boolean(error)) {
-            return reject(error);
-          }
-
-          const currencyCode = reply.getCurrencyCode();
-          const currentBalance = reply.getBalance();
-          const onHoldBalance = reply.getOnHoldBalance();
-          const reserveBalance = reply.getReserveBalance();
-          const receivedBalance = reply.getReceivedBalance();
-
-          resolve({
-            currencyCode,
-            currentBalance,
-            onHoldBalance,
-            reserveBalance,
-            receivedBalance,
-          });
+      this.bot.WalletServiceClient.getWalletBalance(getWalletBalanceRequest, (error, reply) => {
+        if (Boolean(error)) {
+          return reject(error);
         }
-      );
+
+        const currencyCode = reply.getCurrencyCode();
+        const currentBalance = reply.getBalance();
+        const onHoldBalance = reply.getOnHoldBalance();
+        const reserveBalance = reply.getReserveBalance();
+        const receivedBalance = reply.getReceivedBalance();
+
+        resolve({
+          currencyCode,
+          currentBalance,
+          onHoldBalance,
+          reserveBalance,
+          receivedBalance,
+        });
+      });
     });
   }
 

@@ -15,7 +15,7 @@ export class HelpCommand implements IBotCommand {
   async onReplyFromMessageID(
     msg: Message,
     handler: BotReplyToMessageIdHandler,
-    match?: RegExpMatchArray
+    match?: RegExpMatchArray,
   ) {}
 
   async onText(msg: Message) {
@@ -23,10 +23,10 @@ export class HelpCommand implements IBotCommand {
       const commandButtonsString = this.bot.languageHandler.getTranslation(
         msg,
         translationKeys.help_command_buttons,
-        null
+        null,
       );
 
-      this.bot.reply(msg, translationKeys.help_command_reply, {
+      this.bot.replyWithTranslation(msg, translationKeys.help_command_reply, {
         disable_web_page_preview: true,
         reply_markup: {
           keyboard: getCommandButtons({ commandButtonsString }),
@@ -38,6 +38,6 @@ export class HelpCommand implements IBotCommand {
   }
 
   private handleErrorReply(error: Error, msg: Message) {
-    return this.bot.reply(msg, translationKeys.start_command_error);
+    return this.bot.replyWithTranslation(msg, translationKeys.start_command_error);
   }
 }

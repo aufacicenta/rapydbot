@@ -17,7 +17,7 @@ export class TopUpCommand implements IBotCommand {
   async onReplyFromMessageID(
     msg: Message,
     handler: BotReplyToMessageIdHandler,
-    match?: RegExpMatchArray
+    match?: RegExpMatchArray,
   ) {
     try {
       const previousText = handler.storage.get("previousText");
@@ -35,35 +35,28 @@ export class TopUpCommand implements IBotCommand {
             null,
             {
               disable_web_page_preview: true,
-            }
+            },
           );
         } else {
-          const checkoutPageUrl = await this.getCheckoutPageURL(
-            msg,
-            Number(amount)
-          );
+          const checkoutPageUrl = await this.getCheckoutPageURL(msg, Number(amount));
 
-          this.bot.reply(
-            msg,
-            translationKeys.topup_command_checkout_page_reply,
-            {
-              disable_web_page_preview: true,
-              reply_markup: {
-                inline_keyboard: [
-                  [
-                    {
-                      text: this.bot.getTranslation(
-                        msg,
-                        translationKeys.topup_command_checkout_page_button_text,
-                        { amount }
-                      ),
-                      url: checkoutPageUrl,
-                    },
-                  ],
+          this.bot.replyWithTranslation(msg, translationKeys.topup_command_checkout_page_reply, {
+            disable_web_page_preview: true,
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: this.bot.getTranslation(
+                      msg,
+                      translationKeys.topup_command_checkout_page_button_text,
+                      { amount },
+                    ),
+                    url: checkoutPageUrl,
+                  },
                 ],
-              },
-            }
-          );
+              ],
+            },
+          });
         }
       }
     } catch (error) {
@@ -83,7 +76,7 @@ export class TopUpCommand implements IBotCommand {
         null,
         {
           disable_web_page_preview: true,
-        }
+        },
       );
     } catch (error) {
       this.handleErrorReply(error, msg);
@@ -94,10 +87,7 @@ export class TopUpCommand implements IBotCommand {
     return /^\d+(\.\d{1,2})?$/i.test(amount);
   }
 
-  private async getCheckoutPageURL(
-    msg: Message,
-    amount: number
-  ): Promise<string> {
+  private async getCheckoutPageURL(msg: Message, amount: number): Promise<string> {
     return new Promise((resolve, reject) => {
       getUserId(msg, this.bot.UserServiceClient)
         .then((userId) => {
@@ -129,15 +119,15 @@ export class TopUpCommand implements IBotCommand {
     } = WalletServiceErrorCodes;
 
     if (this.containsErrorCode(error, country_error)) {
-      return this.bot.reply(msg, translationKeys.command_missing_country, {
+      return this.bot.replyWithTranslation(msg, translationKeys.command_missing_country, {
         disable_web_page_preview: true,
       });
     } else if (this.containsErrorCode(error, currency_error)) {
-      return this.bot.reply(msg, translationKeys.command_missing_currency, {
+      return this.bot.replyWithTranslation(msg, translationKeys.command_missing_currency, {
         disable_web_page_preview: true,
       });
     }
 
-    return this.bot.reply(msg, translationKeys.start_command_error);
+    return this.bot.replyWithTranslation(msg, translationKeys.start_command_error);
   }
 }

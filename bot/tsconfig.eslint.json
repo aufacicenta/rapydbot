@@ -1,0 +1,13 @@
+{
+  "extraFileExtensions": [".json"],
+  "include": [
+    "*.js",
+    "*.ts",
+    ".eslintrc.js",
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.tsx",
+    "src/**/*.jsx"
+  ],
+  "exclude": ["build", "node_modules"]
+}

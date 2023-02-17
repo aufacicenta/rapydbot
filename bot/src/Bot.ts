@@ -1,17 +1,11 @@
-import USER_ClientGenerator, { UserClient } from "@rapydbot/user/client";
-import WALLET_ClientGenerator, { WalletClient } from "@rapydbot/wallet/client";
+import { UserClient } from "@rapydbot/user/client";
+import { WalletClient, WalletClientGenerator } from "@rapydbot/wallet/client";
+import {
+  IntentRecognitionClient,
+  IntentRecognitionClientGenerator,
+} from "@rapydbot/intent-recognition/client";
 import moment, { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
-import { StartCommand } from "./commands";
-import { HelpCommand } from "./commands/HelpCommand";
-import {
-  BalanceCommand,
-  CreateWalletCommand,
-  SetCountryCodeCommand,
-  SetCurrencyCodeCommand,
-  TopUpCommand,
-  TransferCommand,
-} from "./commands/wallet";
 import {
   BotLanguageHandler,
   BotReplyToMessageIdHandler,
@@ -19,45 +13,33 @@ import {
 } from "./handler";
 import { translationKeys } from "./i18n";
 import { Commands } from "./types";
+import { IntentRecognitionHandler } from "./handler/IntentRecognitionHandler";
 
 export class Bot {
   public api: TelegramBotApi;
   public moment: Moment;
 
   public languageHandler: BotLanguageHandler;
-
-  private startCommand: StartCommand;
-  private createWalletCommand: CreateWalletCommand;
-  private topUpCommand: TopUpCommand;
-  private setCountryCodeCommand: SetCountryCodeCommand;
-  private setCurrencyCodeCommand: SetCurrencyCodeCommand;
-  private helpCommand: HelpCommand;
-  public balanceCommand: BalanceCommand;
-  public transferCommand: TransferCommand;
+  public intentRecognitionHandler: IntentRecognitionHandler;
 
   public UserServiceClient: UserClient;
   public WalletServiceClient: WalletClient;
+  public IntentRecognitionClient: IntentRecognitionClient;
 
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
   constructor() {
     this.api = new TelegramBotApi(process.env.BOT_TOKEN, { polling: true });
-    this.languageHandler = new BotLanguageHandler();
 
-    this.startCommand = new StartCommand(this);
-    this.createWalletCommand = new CreateWalletCommand(this);
-    this.topUpCommand = new TopUpCommand(this);
-    this.setCountryCodeCommand = new SetCountryCodeCommand(this);
-    this.setCurrencyCodeCommand = new SetCurrencyCodeCommand(this);
-    this.helpCommand = new HelpCommand(this);
-    this.balanceCommand = new BalanceCommand(this);
-    this.transferCommand = new TransferCommand(this);
+    this.languageHandler = new BotLanguageHandler();
+    this.intentRecognitionHandler = new IntentRecognitionHandler(this);
 
     this.moment = moment();
 
-    this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
-    this.WalletServiceClient = new WALLET_ClientGenerator(
-      process.env.WALLET_SERVICE_URL
+    this.WalletServiceClient = new WalletClientGenerator(process.env.WALLET_SERVICE_URL).create();
+
+    this.IntentRecognitionClient = new IntentRecognitionClientGenerator(
+      process.env.INTENT_RECOGNITION_SERVICE_URL,
     ).create();
   }
 
@@ -74,42 +56,28 @@ export class Bot {
     });
 
     this.api.on("message", async (msg) => {
-      const handler = this.getReplyToMessageIdHandler(msg.chat.id);
-
-      if (handler) {
-        const command = handler?.command;
-
-        if (!Boolean(command)) {
-          return;
-        }
-
-        this.clearCommandHandler(msg.chat.id);
-
-        return command.onReplyFromMessageID(msg, handler);
-      }
+      // @TODO detect message intent with the classify service  and execute the command
     });
-
-    this.api.onText(/^\/start/i, (msg, match) => this.startCommand.onText(msg));
-    this.api.onText(/^\/(createwallet|crearbilletera)/i, (msg, match) =>
-      this.createWalletCommand.onText(msg)
-    );
-    this.api.onText(/^\/(topup|recarga)/i, (msg, match) => this.topUpCommand.onText(msg));
-    this.api.onText(/^\/(setcountry|fijarpais)/, (msg, match) =>
-      this.setCountryCodeCommand.onText(msg)
-    );
-    this.api.onText(/^\/(setcurrency|fijarmoneda)/i, (msg, match) =>
-      this.setCurrencyCodeCommand.onText(msg)
-    );
-    this.api.onText(/^\/balance/i, (msg, match) => this.balanceCommand.onText(msg));
-    this.api.onText(/^\/(transfer|enviar)/i, (msg, match) => this.transferCommand.onText(msg));
-    this.api.onText(/^\/(help|ayuda)/i, (msg, match) => this.helpCommand.onText(msg));
   }
 
-  reply(msg: Message, translationKey: translationKeys, options?: SendMessageOptions, args?: {}) {
+  reply(msg: Message, text: string, options?: SendMessageOptions, args?: {}) {
+    this.api.sendMessage(msg.chat.id, text, {
+      parse_mode: "HTML",
+      disable_web_page_preview: true,
+      ...options,
+    });
+  }
+
+  replyWithTranslation(
+    msg: Message,
+    translationKey: translationKeys,
+    options?: SendMessageOptions,
+    args?: {},
+  ) {
     this.api.sendMessage(
       msg.chat.id,
       this.languageHandler.getTranslation(msg, translationKey, args),
-      { parse_mode: "HTML", disable_web_page_preview: true, ...options }
+      { parse_mode: "HTML", disable_web_page_preview: true, ...options },
     );
   }
 
@@ -120,7 +88,7 @@ export class Bot {
     handlerData?: Record<string, any>,
     reply_to_message_id?: number,
     options?: SendMessageOptions,
-    args?: {}
+    args?: {},
   ) {
     const chat_id = msg.chat.id;
 
@@ -138,7 +106,7 @@ export class Bot {
       });
     }
 
-    this.reply(
+    this.replyWithTranslation(
       msg,
       translationKey,
       {
@@ -146,7 +114,7 @@ export class Bot {
         reply_markup: { force_reply: true },
         ...options,
       },
-      args
+      args,
     );
   }
 
@@ -156,7 +124,7 @@ export class Bot {
     command: Commands,
     handlerData?: Record<string, any>,
     options?: SendMessageOptions,
-    args?: {}
+    args?: {},
   ) {
     const chat_id = msg.chat.id;
 
@@ -174,13 +142,13 @@ export class Bot {
       });
     }
 
-    this.reply(
+    this.replyWithTranslation(
       msg,
       translationKey,
       {
         ...options,
       },
-      args
+      args,
     );
   }
 

@@ -30,7 +30,7 @@ export class TransferCommand implements IBotCommand {
   async onReplyFromMessageID(
     msg: Message,
     handler: BotReplyToMessageIdHandler,
-    match?: RegExpMatchArray
+    match?: RegExpMatchArray,
   ) {
     try {
       const previousText = handler.storage.get("previousText");
@@ -86,7 +86,7 @@ export class TransferCommand implements IBotCommand {
         null,
         {
           disable_web_page_preview: true,
-        }
+        },
       );
     } catch (error) {
       this.handleErrorReply(error, msg);
@@ -146,13 +146,13 @@ export class TransferCommand implements IBotCommand {
                 {
                   text: this.bot.getTranslation(
                     msg,
-                    translationKeys.transfer_command_button_accept
+                    translationKeys.transfer_command_button_accept,
                   ),
                 },
                 {
                   text: this.bot.getTranslation(
                     msg,
-                    translationKeys.transfer_command_button_reject
+                    translationKeys.transfer_command_button_reject,
                   ),
                 },
               ],
@@ -163,7 +163,7 @@ export class TransferCommand implements IBotCommand {
           amount,
           currency,
           senderUsername: sender.telegramUsername,
-        }
+        },
       );
     } catch (error) {
       console.error(error);
@@ -211,17 +211,17 @@ export class TransferCommand implements IBotCommand {
         null,
         {
           disable_web_page_preview: true,
-        }
+        },
       );
     } catch (error) {
       if (error?.message.includes(UserServiceErrorCodes.telegram_username_not_found)) {
-        return this.bot.reply(
+        return this.bot.replyWithTranslation(
           msg,
           translationKeys.transfer_command_reply_username_not_found_error,
           null,
           {
             username,
-          }
+          },
         );
       }
 
@@ -242,7 +242,7 @@ export class TransferCommand implements IBotCommand {
         null,
         {
           amount: msg.text,
-        }
+        },
       );
     }
 
@@ -253,11 +253,11 @@ export class TransferCommand implements IBotCommand {
     const { pendingTransactionId, currencyCode } = await this.transferFromWallet(
       msg,
       recipientUserId,
-      Number(amount)
+      Number(amount),
     );
 
     this.bot.clearCommandHandler(msg.chat.id);
-    this.bot.reply(
+    this.bot.replyWithTranslation(
       msg,
       translationKeys.transfer_command_reply_confirmation,
       { disable_web_page_preview: true },
@@ -266,7 +266,7 @@ export class TransferCommand implements IBotCommand {
         username,
         currencyCode,
         pendingTransactionId,
-      }
+      },
     );
   }
 
@@ -280,7 +280,7 @@ export class TransferCommand implements IBotCommand {
       recipientUserId,
       amount,
       currency,
-    }: Omit<BotReplyToMessageIdHandlerStorageKeys, "username" | "previousText">
+    }: Omit<BotReplyToMessageIdHandlerStorageKeys, "username" | "previousText">,
   ) {
     const response = msg.text;
 
@@ -299,13 +299,13 @@ export class TransferCommand implements IBotCommand {
           if (
             error?.message.includes(WalletServiceErrorCodes.rapyd_transfer_to_ewallet_is_not_paid)
           ) {
-            return this.bot.reply(
+            return this.bot.replyWithTranslation(
               msg,
               translationKeys.transfer_command_error_reply_transfer_from_wallet_response_is_not_paid,
               null,
               {
                 pendingTransactionId,
-              }
+              },
             );
           }
 
@@ -328,10 +328,10 @@ export class TransferCommand implements IBotCommand {
           {
             senderUsername,
             ...replyArgs,
-          }
+          },
         );
 
-        this.bot.reply(
+        this.bot.replyWithTranslation(
           {
             ...msg,
             chat: {
@@ -345,7 +345,7 @@ export class TransferCommand implements IBotCommand {
           {
             recipientUsername: recipient.telegramUsername,
             ...replyArgs,
-          }
+          },
         );
       });
 
@@ -373,10 +373,10 @@ export class TransferCommand implements IBotCommand {
               null,
               {
                 senderUsername,
-              }
+              },
             );
 
-            return this.bot.reply(
+            return this.bot.replyWithTranslation(
               {
                 ...msg,
                 chat: {
@@ -392,7 +392,7 @@ export class TransferCommand implements IBotCommand {
                 amount,
                 currency,
                 pendingTransactionId,
-              }
+              },
             );
           }
 
@@ -420,7 +420,7 @@ export class TransferCommand implements IBotCommand {
   private async transferFromWallet(
     msg: Message,
     recipientUserId: string,
-    amount: number
+    amount: number,
   ): Promise<TransferFromWalletReply.AsObject> {
     return new Promise((resolve, reject) => {
       getUserId(msg, this.bot.UserServiceClient)
@@ -449,6 +449,6 @@ export class TransferCommand implements IBotCommand {
   }
 
   private handleErrorReply(error: Error, msg: Message) {
-    return this.bot.reply(msg, translationKeys.start_command_error);
+    return this.bot.replyWithTranslation(msg, translationKeys.start_command_error);
   }
 }

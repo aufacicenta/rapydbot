@@ -15,14 +15,14 @@ export class StartCommand implements IBotCommand {
   async onReplyFromMessageID(
     msg: Message,
     handler: BotReplyToMessageIdHandler,
-    match?: RegExpMatchArray
+    match?: RegExpMatchArray,
   ) {}
 
   async onText(msg: Message) {
     try {
       await this.findUserByTelegramUserIdOrCreateUser(msg);
 
-      this.bot.reply(msg, translationKeys.start_command_intro, {
+      this.bot.replyWithTranslation(msg, translationKeys.start_command_intro, {
         disable_web_page_preview: true,
         reply_markup: {
           resize_keyboard: true,
@@ -32,7 +32,7 @@ export class StartCommand implements IBotCommand {
               {
                 text: this.bot.languageHandler.getTranslation(
                   msg,
-                  translationKeys.command_text_createwallet
+                  translationKeys.command_text_createwallet,
                 ),
               },
             ],
@@ -65,12 +65,12 @@ export class StartCommand implements IBotCommand {
           const user_id = response.getUserId();
           resolve();
           // @TODO create a wallet right away?
-        }
+        },
       );
     });
   }
 
   private handleErrorReply(error: Error, msg: Message) {
-    return this.bot.reply(msg, translationKeys.start_command_error);
+    return this.bot.replyWithTranslation(msg, translationKeys.start_command_error);
   }
 }

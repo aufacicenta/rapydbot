@@ -17,10 +17,10 @@ export class SetCurrencyCodeCommand implements IBotCommand {
   async onReplyFromMessageID(
     msg: Message,
     handler: BotReplyToMessageIdHandler,
-    match?: RegExpMatchArray
+    match?: RegExpMatchArray,
   ) {
     try {
-      const previousText = handler.storage.get("previousText");      
+      const previousText = handler.storage.get("previousText");
       if (previousText && previousText === "/setcurrency") {
         await this.handleCurrencyChangeReply(msg);
       }
@@ -46,7 +46,7 @@ export class SetCurrencyCodeCommand implements IBotCommand {
             one_time_keyboard: true,
             keyboard: getCurrencyButtons(),
           },
-        }
+        },
       );
     } catch (error) {
       this.handleErrorReply(error, msg);
@@ -54,7 +54,7 @@ export class SetCurrencyCodeCommand implements IBotCommand {
   }
 
   private handleErrorReply(error: Error, msg: Message) {
-    return this.bot.reply(msg, translationKeys.start_command_error);
+    return this.bot.replyWithTranslation(msg, translationKeys.start_command_error);
   }
 
   private async handleCurrencyChangeReply(msg: Message) {
@@ -66,7 +66,7 @@ export class SetCurrencyCodeCommand implements IBotCommand {
       currencyCode: newCurrency,
     });
 
-    this.bot.reply(
+    this.bot.replyWithTranslation(
       msg,
       translationKeys.setcurrency_command_on_currency_change_reply,
       {
@@ -74,30 +74,27 @@ export class SetCurrencyCodeCommand implements IBotCommand {
       },
       {
         currencyCode,
-      }
+      },
     );
   }
 
   private async setWalletCurrencyCode(
     msg: Message,
-    { userId, currencyCode }: { userId: string; currencyCode: string }
+    { userId, currencyCode }: { userId: string; currencyCode: string },
   ): Promise<string> {
     return new Promise((resolve, reject) => {
       const request = new SetWalletCurrencyCodeRequest();
       request.setUserId(userId);
       request.setCurrencyCode(currencyCode);
 
-      this.bot.WalletServiceClient.setWalletCurrencyCode(
-        request,
-        (error, reply) => {
-          if (Boolean(error)) {
-            return reject(error);
-          }
-
-          const currencyCode = reply.getCurrencyCode();
-          resolve(currencyCode);
+      this.bot.WalletServiceClient.setWalletCurrencyCode(request, (error, reply) => {
+        if (Boolean(error)) {
+          return reject(error);
         }
-      );
+
+        const currencyCode = reply.getCurrencyCode();
+        resolve(currencyCode);
+      });
     });
   }
 }
