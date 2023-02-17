@@ -32,7 +32,7 @@
       "type": "node",
       "request": "attach",
       "name": "INTENT: Attach by Process ID",
-      "cwd": "${workspaceRoot}/wallet/src",
+      "cwd": "${workspaceRoot}/intent-recognition/src",
       "trace": true,
       "port": 9224,
       "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]

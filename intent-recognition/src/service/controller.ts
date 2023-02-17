@@ -24,9 +24,10 @@ export class Controller {
         body: { results },
       } = await cohere.client.detectLanguage({ texts: [input] });
 
-      const [language] = results;
+      // @TODO resolce to model ID by language code
+      // const [language] = results;
 
-      const examples = cohere.examples.getExamplesByLanguageCode(language.language_code);
+      // const examples = cohere.examples.getExamplesByLanguageCode(language.language_code);
 
       const response = await cohere.client.classify({
         model: "60a0705a-5231-4d4a-b62f-8be55def74a5-ft",

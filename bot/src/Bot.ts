@@ -84,6 +84,7 @@ export class Bot {
         }
 
         this.clearCommandHandler(msg.chat.id);
+
         return command.onReplyFromMessageID(msg, handler);
       }
     });
