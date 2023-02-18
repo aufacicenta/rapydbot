@@ -1,11 +1,11 @@
 import { GetWalletBalanceRequest } from "@rapydbot/wallet/client";
 import { WalletServiceErrorCodes } from "@rapydbot/wallet/service/error";
 import { Message } from "node-telegram-bot-api";
-import { Bot } from "../../../Bot";
-import { BotReplyToMessageIdHandler } from "../../../handler";
-import { translationKeys } from "../../../i18n";
-import { IBotCommand } from "../../IBotCommand";
-import getUserId from "../../util/getUserId";
+import { Bot } from "../../Bot";
+import { BotReplyToMessageIdHandler } from "../../handler";
+import { translationKeys } from "../../i18n";
+import { IBotCommand } from "../IBotCommand";
+import getUserId from "../util/getUserId";
 import { BalanceReplyProps } from "./types";
 
 export class BalanceCommand implements IBotCommand {
@@ -72,7 +72,7 @@ export class BalanceCommand implements IBotCommand {
       const getWalletBalanceRequest = new GetWalletBalanceRequest();
       getWalletBalanceRequest.setUserId(userId);
 
-      this.bot.WalletServiceClient.getWalletBalance(getWalletBalanceRequest, (error, reply) => {
+      this.bot.clients.wallet.getWalletBalance(getWalletBalanceRequest, (error, reply) => {
         if (Boolean(error)) {
           return reject(error);
         }
@@ -96,7 +96,7 @@ export class BalanceCommand implements IBotCommand {
 
   private async getWalletBalance(msg: Message): Promise<BalanceReplyProps> {
     return new Promise((resolve, reject) => {
-      getUserId(msg, this.bot.UserServiceClient)
+      getUserId(msg, this.bot.clients.user)
         .then(async (userId) => {
           try {
             resolve(await this.getBalance(userId));

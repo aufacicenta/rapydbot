@@ -13,38 +13,43 @@ import {
 } from "./handler";
 import { translationKeys } from "./i18n";
 import { Commands } from "./types";
-import { IntentRecognitionHandler } from "./handler/IntentRecognitionHandler";
+import { IntentRecognitionHandler } from "./handler/intent-recognition";
 
 export class Bot {
   public api: TelegramBotApi;
   public moment: Moment;
 
-  public languageHandler: BotLanguageHandler;
-  public intentRecognitionHandler: IntentRecognitionHandler;
+  public handlers: {
+    language: BotLanguageHandler;
+    intentRecognition: IntentRecognitionHandler;
+  };
 
-  public UserServiceClient: UserClient;
-  public WalletServiceClient: WalletClient;
-  public IntentRecognitionClient: IntentRecognitionClient;
+  public clients: {
+    user: UserClient;
+    wallet: WalletClient;
+    intentRecognition: IntentRecognitionClient;
+  };
+
+  public commands: Commands;
 
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
   constructor() {
     this.api = new TelegramBotApi(process.env.BOT_TOKEN, { polling: true });
 
-    this.languageHandler = new BotLanguageHandler();
-    this.intentRecognitionHandler = new IntentRecognitionHandler(this);
+    this.handlers.language = new BotLanguageHandler();
+    this.handlers.intentRecognition = new IntentRecognitionHandler(this);
 
     this.moment = moment();
 
-    this.WalletServiceClient = new WalletClientGenerator(process.env.WALLET_SERVICE_URL).create();
-
-    this.IntentRecognitionClient = new IntentRecognitionClientGenerator(
+    this.clients.wallet = new WalletClientGenerator(process.env.WALLET_SERVICE_URL).create();
+    this.clients.intentRecognition = new IntentRecognitionClientGenerator(
       process.env.INTENT_RECOGNITION_SERVICE_URL,
     ).create();
   }
 
   async prepare(): Promise<Bot> {
-    await this.languageHandler.init();
+    await this.handlers.language.init();
     return this;
   }
 
@@ -56,11 +61,15 @@ export class Bot {
     });
 
     this.api.on("message", async (msg) => {
-      // @TODO detect message intent with the classify service  and execute the command
+      // @TODO record every message for training purposes, async
+      // @TODO detect message intent with the classify service and execute the command
+      // @TODO extract the entities from the text message and create a data request record, if values are missing, let the bot ask for them
     });
   }
 
   reply(msg: Message, text: string, options?: SendMessageOptions, args?: {}) {
+    // @TODO text should be a ChatGPT response by using the reponse params
+
     this.api.sendMessage(msg.chat.id, text, {
       parse_mode: "HTML",
       disable_web_page_preview: true,
@@ -76,7 +85,7 @@ export class Bot {
   ) {
     this.api.sendMessage(
       msg.chat.id,
-      this.languageHandler.getTranslation(msg, translationKey, args),
+      this.handlers.language.getTranslation(msg, translationKey, args),
       { parse_mode: "HTML", disable_web_page_preview: true, ...options },
     );
   }
@@ -153,7 +162,7 @@ export class Bot {
   }
 
   getTranslation(msg: Message, translationKey: translationKeys, args?: {}) {
-    return this.languageHandler.getTranslation(msg, translationKey, args);
+    return this.handlers.language.getTranslation(msg, translationKey, args);
   }
 
   public clearCommandHandler(chat_id: number) {

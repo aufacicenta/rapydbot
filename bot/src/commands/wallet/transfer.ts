@@ -9,16 +9,13 @@ import {
   SetTransferFromWalletResponseRequest,
   TransferFromWalletReply,
   TransferFromWalletRequest,
-} from "../../../../../wallet/build/client";
-import { WalletServiceErrorCodes } from "../../../../../wallet/build/service/error";
-import { Bot } from "../../../Bot";
-import {
-  BotReplyToMessageIdHandler,
-  BotReplyToMessageIdHandlerStorageKeys,
-} from "../../../handler";
-import { translationKeys } from "../../../i18n";
-import { IBotCommand } from "../../IBotCommand";
-import getUserId from "../../util/getUserId";
+} from "@rapydbot/wallet/client";
+import { WalletServiceErrorCodes } from "@rapydbot/wallet/service/error";
+import { Bot } from "../../Bot";
+import { BotReplyToMessageIdHandler, BotReplyToMessageIdHandlerStorageKeys } from "../../handler";
+import { translationKeys } from "../../i18n";
+import { IBotCommand } from "../IBotCommand";
+import getUserId from "../util/getUserId";
 
 export class TransferCommand implements IBotCommand {
   private bot: Bot;
@@ -176,7 +173,7 @@ export class TransferCommand implements IBotCommand {
       const request = new GetUserRequest();
       request.setUserId(userId);
 
-      this.bot.UserServiceClient.getUser(request, (error, reply) => {
+      this.bot.clients.user.getUser(request, (error, reply) => {
         if (Boolean(error)) {
           reject(error);
           return;
@@ -294,7 +291,7 @@ export class TransferCommand implements IBotCommand {
       request.setPendingTransactionId(pendingTransactionId);
       request.setResponseStatus("accept");
 
-      this.bot.WalletServiceClient.setTransferFromWalletResponse(request, (error, reply) => {
+      this.bot.clients.wallet.setTransferFromWalletResponse(request, (error, reply) => {
         if (Boolean(error)) {
           if (
             error?.message.includes(WalletServiceErrorCodes.rapyd_transfer_to_ewallet_is_not_paid)
@@ -359,7 +356,7 @@ export class TransferCommand implements IBotCommand {
       request.setPendingTransactionId(pendingTransactionId);
       request.setResponseStatus("decline");
 
-      this.bot.WalletServiceClient.setTransferFromWalletResponse(request, (error, reply) => {
+      this.bot.clients.wallet.setTransferFromWalletResponse(request, (error, reply) => {
         if (Boolean(error)) {
           if (
             error?.message.includes(WalletServiceErrorCodes.rapyd_transfer_to_ewallet_is_not_paid)
@@ -407,7 +404,7 @@ export class TransferCommand implements IBotCommand {
       const request = new GetUserIdByTelegramUsernameRequest();
       request.setTelegramUsername(username);
 
-      this.bot.UserServiceClient.getUserIdByTelegramUsername(request, (error, reply) => {
+      this.bot.clients.user.getUserIdByTelegramUsername(request, (error, reply) => {
         if (Boolean(error)) {
           return reject(error);
         }
@@ -423,7 +420,7 @@ export class TransferCommand implements IBotCommand {
     amount: number,
   ): Promise<TransferFromWalletReply.AsObject> {
     return new Promise((resolve, reject) => {
-      getUserId(msg, this.bot.UserServiceClient)
+      getUserId(msg, this.bot.clients.user)
         .then((senderUserId) => {
           const request = new TransferFromWalletRequest();
           request.setSenderUserId(senderUserId);
@@ -431,7 +428,7 @@ export class TransferCommand implements IBotCommand {
           request.setAmount(amount);
           request.setMsg(JSON.stringify(msg));
 
-          this.bot.WalletServiceClient.transferFromWallet(request, (error, reply) => {
+          this.bot.clients.wallet.transferFromWallet(request, (error, reply) => {
             if (Boolean(error)) {
               return reject(error);
             }

@@ -1,6 +1,6 @@
 import { TopUpWalletRequest } from "@rapydbot/wallet/client";
 import { Message } from "node-telegram-bot-api";
-import { WalletServiceErrorCodes } from "../../../../wallet/build/service/error";
+import { WalletServiceErrorCodes } from "@rapydbot/wallet/service/error";
 import { Bot } from "../../Bot";
 import { BotReplyToMessageIdHandler } from "../../handler";
 import { translationKeys } from "../../i18n";
@@ -89,14 +89,14 @@ export class TopUpCommand implements IBotCommand {
 
   private async getCheckoutPageURL(msg: Message, amount: number): Promise<string> {
     return new Promise((resolve, reject) => {
-      getUserId(msg, this.bot.UserServiceClient)
+      getUserId(msg, this.bot.clients.user)
         .then((userId) => {
           const request = new TopUpWalletRequest();
           request.setUserId(userId);
           request.setAmount(amount);
           request.setMsg(JSON.stringify(msg));
 
-          this.bot.WalletServiceClient.topUpWallet(request, (error, reply) => {
+          this.bot.clients.wallet.topUpWallet(request, (error, reply) => {
             if (Boolean(error)) {
               return reject(error);
             }

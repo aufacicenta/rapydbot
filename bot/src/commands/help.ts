@@ -20,7 +20,7 @@ export class HelpCommand implements IBotCommand {
 
   async onText(msg: Message) {
     try {
-      const commandButtonsString = this.bot.languageHandler.getTranslation(
+      const commandButtonsString = this.bot.handlers.language.getTranslation(
         msg,
         translationKeys.help_command_buttons,
         null,

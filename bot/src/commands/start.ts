@@ -30,7 +30,7 @@ export class StartCommand implements IBotCommand {
           keyboard: [
             [
               {
-                text: this.bot.languageHandler.getTranslation(
+                text: this.bot.handlers.language.getTranslation(
                   msg,
                   translationKeys.command_text_createwallet,
                 ),
@@ -55,7 +55,7 @@ export class StartCommand implements IBotCommand {
         createUserRequest.setTelegramPrivateChatId(msg.chat.id);
       }
 
-      this.bot.UserServiceClient.findUserByTelegramUserIdOrCreateUser(
+      this.bot.clients.user.findUserByTelegramUserIdOrCreateUser(
         createUserRequest,
         (err, response) => {
           if (Boolean(err)) {

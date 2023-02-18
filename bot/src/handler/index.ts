@@ -1,2 +1,2 @@
-export * from "./BotLanguageHandler";
-export * from "./BotReplyToMessageIdHandler";
+export * from "./language";
+export * from "./reply-to-message-id";

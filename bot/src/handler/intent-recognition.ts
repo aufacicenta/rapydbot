@@ -15,7 +15,7 @@ export class IntentRecognitionHandler {
 
       request.setInput(msg.text);
 
-      this.bot.IntentRecognitionClient.classify(request, (error, reply) => {
+      this.bot.clients.intentRecognition.classify(request, (error, reply) => {
         if (Boolean(error)) {
           return reject(error);
         }

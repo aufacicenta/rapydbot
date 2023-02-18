@@ -2,7 +2,7 @@ import { Message } from "node-telegram-bot-api";
 import {
   SetWalletCountryCodeRequest,
   SetWalletCurrencyCodeRequest,
-} from "../../../../wallet/build/client";
+} from "@rapydbot/wallet/client";
 import { Bot } from "../../Bot";
 import { BotReplyToMessageIdHandler } from "../../handler";
 import { translationKeys } from "../../i18n";
@@ -97,13 +97,13 @@ export class SetCountryCodeCommand implements IBotCommand {
     countryCode: string;
   }> {
     return new Promise((resolve, reject) => {
-      getUserId(msg, this.bot.UserServiceClient)
+      getUserId(msg, this.bot.clients.user)
         .then((userId) => {
           const setWalletCountryCodeRequest = new SetWalletCountryCodeRequest();
           setWalletCountryCodeRequest.setUserId(userId);
           setWalletCountryCodeRequest.setCountryCode(countryCode);
 
-          this.bot.WalletServiceClient.setWalletCountryCode(
+          this.bot.clients.wallet.setWalletCountryCode(
             setWalletCountryCodeRequest,
             (error, reply) => {
               if (Boolean(error)) {
@@ -128,7 +128,7 @@ export class SetCountryCodeCommand implements IBotCommand {
       request.setUserId(userId);
       request.setCurrencyCode(currencyCode);
 
-      this.bot.WalletServiceClient.setWalletCurrencyCode(request, (error, reply) => {
+      this.bot.clients.wallet.setWalletCurrencyCode(request, (error, reply) => {
         if (Boolean(error)) {
           return reject(error);
         }

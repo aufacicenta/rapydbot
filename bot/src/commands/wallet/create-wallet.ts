@@ -50,13 +50,13 @@ export class CreateWalletCommand implements IBotCommand {
           keyboard: [
             [
               {
-                text: this.bot.languageHandler.getTranslation(
+                text: this.bot.handlers.language.getTranslation(
                   msg,
                   translationKeys.command_text_setcountry,
                 ),
               },
               {
-                text: this.bot.languageHandler.getTranslation(
+                text: this.bot.handlers.language.getTranslation(
                   msg,
                   translationKeys.command_text_help,
                 ),
@@ -88,12 +88,12 @@ export class CreateWalletCommand implements IBotCommand {
 
   private async createWallet(msg: Message): Promise<any> {
     return new Promise((resolve, reject) => {
-      getUserId(msg, this.bot.UserServiceClient)
+      getUserId(msg, this.bot.clients.user)
         .then((userId) => {
           const createWalletRequest = new CreateWalletRequest();
           createWalletRequest.setUserId(userId);
 
-          this.bot.WalletServiceClient.createWallet(createWalletRequest, (error, reply) => {
+          this.bot.clients.wallet.createWallet(createWalletRequest, (error, reply) => {
             if (Boolean(error)) {
               return reject(error);
             }

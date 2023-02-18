@@ -1,5 +1,5 @@
 import { Message } from "node-telegram-bot-api";
-import { SetWalletCurrencyCodeRequest } from "../../../../wallet/build/client";
+import { SetWalletCurrencyCodeRequest } from "@rapydbot/wallet/client";
 import { Bot } from "../../Bot";
 import { BotReplyToMessageIdHandler } from "../../handler";
 import { translationKeys } from "../../i18n";
@@ -59,7 +59,7 @@ export class SetCurrencyCodeCommand implements IBotCommand {
 
   private async handleCurrencyChangeReply(msg: Message) {
     const newCurrency = getCurrencyCode(msg.text);
-    const userId = await getUserId(msg, this.bot.UserServiceClient);
+    const userId = await getUserId(msg, this.bot.clients.user);
 
     const currencyCode = await this.setWalletCurrencyCode(msg, {
       userId,
@@ -87,7 +87,7 @@ export class SetCurrencyCodeCommand implements IBotCommand {
       request.setUserId(userId);
       request.setCurrencyCode(currencyCode);
 
-      this.bot.WalletServiceClient.setWalletCurrencyCode(request, (error, reply) => {
+      this.bot.clients.wallet.setWalletCurrencyCode(request, (error, reply) => {
         if (Boolean(error)) {
           return reject(error);
         }
