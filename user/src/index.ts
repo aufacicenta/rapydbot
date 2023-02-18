@@ -1,20 +1,19 @@
 import * as grpc from "@grpc/grpc-js";
+
 import database from "./database";
-import { UserDAO } from "./database/user";
+import { User } from "./database/user";
 import server from "./server";
-import configuration from "./server/config";
-import create from "./server/create";
 import { IContext } from "./server/interface/IContext";
 import { Controller } from "./service/controller";
 
-(async () => {
+const run = async () => {
   const driver = await database.connect();
 
   const context: IContext = {
     controller: new Controller(),
     db: {
       driver,
-      user: new UserDAO(driver),
+      user: new User(driver),
     },
   };
 
@@ -35,4 +34,6 @@ import { Controller } from "./service/controller";
       }
     },
   );
-})();
+};
+
+run();

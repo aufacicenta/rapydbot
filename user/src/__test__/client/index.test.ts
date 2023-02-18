@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize/types";
-import { CreateUserReply, UserClient, USER_ClientGenerator } from "../../client";
+
+import { CreateUserReply, UserClient, UserClientGenerator } from "../../client";
 import database from "../../database";
 import { User } from "../../database/user";
 import { GetUserReply, GetUsersRequest } from "../../server/protos/schema_pb";
@@ -12,7 +13,7 @@ describe("client", () => {
   beforeAll(async () => {
     driver = await database.connect({ force: true });
     dao = new User(driver);
-    client = new USER_ClientGenerator(`${address}:${port}`).create();
+    client = new UserClientGenerator(`${address}:${port}`).create();
   });
 
   test("success: getUsers", async () => {

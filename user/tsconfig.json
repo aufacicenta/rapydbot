@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
+    "target": "es2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "allowJs": true,
     "sourceMap": true,
     "outDir": "./build",
@@ -15,5 +16,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["./src/client", "./src/service/error.ts", "./src/__test__/**/*.ts"]
+  "include": ["./src/client/index.ts"],
+  "exlude": ["node_modules"]
 }
