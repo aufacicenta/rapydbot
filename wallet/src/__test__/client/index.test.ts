@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize";
+
 import WalletClientGenerator, {
   CreateWalletRequest,
   SetTransferFromWalletResponseReply,
@@ -206,7 +207,7 @@ describe("controller", () => {
 
     const url = await topUpWallet({
       userId: sender,
-      amount: 1000.0,
+      amount: 1000,
     });
 
     expect(url).toBeTruthy(); // PAUSE the debugger here to get the URL and top up wallet manually
@@ -214,7 +215,7 @@ describe("controller", () => {
 
   test("success: transfers an amount from a Rapyd ewallet balance to another Rapyd ewallet", async () => {
     const requestCurrency = defaultCurrencyCode;
-    const requestAmount = 500.0;
+    const requestAmount = 500;
 
     const transferFromWallet = ({
       senderUserId,
@@ -304,8 +305,8 @@ describe("controller", () => {
     const getBalance = ({
       userId,
       currencyCode,
-    }: GetWalletBalanceRequest.AsObject): Promise<GetWalletBalanceReply.AsObject> => {
-      return new Promise((resolve, _) => {
+    }: GetWalletBalanceRequest.AsObject): Promise<GetWalletBalanceReply.AsObject> =>
+      new Promise((resolve, _) => {
         const request = new GetWalletBalanceRequest();
         request.setUserId(userId);
         request.setCurrencyCode(currencyCode);
@@ -324,7 +325,6 @@ describe("controller", () => {
           });
         });
       });
-    };
 
     const {
       balance,
@@ -350,8 +350,8 @@ describe("controller", () => {
     const getBalance = ({
       userId,
       currencyCode,
-    }: GetWalletBalanceRequest.AsObject): Promise<GetWalletBalanceReply.AsObject> => {
-      return new Promise((resolve, _) => {
+    }: GetWalletBalanceRequest.AsObject): Promise<GetWalletBalanceReply.AsObject> =>
+      new Promise((resolve, _) => {
         const request = new GetWalletBalanceRequest();
         request.setUserId(userId);
         request.setCurrencyCode(currencyCode);
@@ -370,13 +370,12 @@ describe("controller", () => {
           });
         });
       });
-    };
 
     getBalance({
       userId: sender,
       currencyCode: requestCurrency,
-    }).catch((err) => {
-      expect(err).toMatch(
+    }).catch((error) => {
+      expect(error).toMatch(
         WalletServiceErrorCodes.rapyd_ewallet_does_not_have_balances
       );
     });

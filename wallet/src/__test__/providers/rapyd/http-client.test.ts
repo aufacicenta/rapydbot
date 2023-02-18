@@ -1,5 +1,6 @@
 import { describe, expect, it, jest } from "@jest/globals";
 import axios from "axios";
+
 import RapydClient from "../../../providers/rapyd/client";
 import * as CreateWalletRequest from "../../util/request/CreateWallet.json";
 import * as CreateWalletReponses from "../../util/response/CreateWallet.json";

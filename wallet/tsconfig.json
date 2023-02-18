@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
+    "target": "es2022",
+    "module": "CommonJS",
     "allowJs": true,
     "sourceMap": true,
     "outDir": "./build",
@@ -16,10 +16,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": [
-    "./src/client",
-    "./src/service/error.ts",
-    "./src/__test__/**/*.ts",
-    "./src/providers/rapyd/types"
-  ]
+  "include": ["./src/client", "./src/providers/rapyd/types"],
+  "exclude": ["node_modules", "build"]
 }

@@ -3,7 +3,7 @@ module.exports = {
   testMatch: ["**/*.test.ts"],
   preset: "ts-jest",
   testEnvironment: "node",
-  testTimeout: 1200000,
+  testTimeout: 1_200_000,
   verbose: true,
   silent: false,
   testPathIgnorePatterns: ["<rootDir>/build/", "<rootDir>/node_modules/"],

@@ -6,7 +6,13 @@ module.exports = {
     sourceType: "module",
     project: ["./tsconfig.eslint.json"],
   },
-  plugins: ["import", "@typescript-eslint", "jest", "prettier", "unused-imports"],
+  plugins: [
+    "import",
+    "@typescript-eslint",
+    "jest",
+    "prettier",
+    "unused-imports",
+  ],
   extends: [
     "plugin:import/errors",
     "plugin:import/warnings",
@@ -75,7 +81,15 @@ module.exports = {
         paths: [
           {
             name: "@testing-library/react",
-            importNames: ["render", "screen", "fireEvent", "act", "cleanup", "wait", "waitFor"],
+            importNames: [
+              "render",
+              "screen",
+              "fireEvent",
+              "act",
+              "cleanup",
+              "wait",
+              "waitFor",
+            ],
             message: "Import from 'tests' instead.",
           },
           {
