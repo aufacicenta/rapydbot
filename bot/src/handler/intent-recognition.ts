@@ -1,5 +1,6 @@
-import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
-import { ClassifyRequest, ClassifyReply } from "@rapydbot/intent-recognition/client";
+import { Message } from "node-telegram-bot-api";
+import { ClassifyRequest } from "@rapydbot/intent-recognition/client";
+
 import { Bot } from "../Bot";
 
 export class IntentRecognitionHandler {

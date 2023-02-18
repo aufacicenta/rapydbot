@@ -1,5 +1,6 @@
 import i18next, { TFunction } from "i18next";
 import { Message } from "node-telegram-bot-api";
+
 import { en, es, translationKeys } from "../i18n";
 
 export class BotLanguageHandler {
@@ -18,6 +19,7 @@ export class BotLanguageHandler {
 
   getTranslation(msg: Message, translationKey: translationKeys, args: {} = {}) {
     const lng = msg?.from?.language_code || "en";
+
     return this.languageProcessor(translationKey.toString(), {
       lng,
       ...args,

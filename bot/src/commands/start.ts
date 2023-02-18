@@ -1,8 +1,9 @@
 import { CreateUserRequest } from "@rapydbot/user/client";
 import { Message } from "node-telegram-bot-api";
+
 import { Bot } from "../Bot";
-import { BotReplyToMessageIdHandler } from "../handler";
 import { translationKeys } from "../i18n";
+
 import { IBotCommand } from "./IBotCommand";
 
 export class StartCommand implements IBotCommand {
@@ -12,33 +13,9 @@ export class StartCommand implements IBotCommand {
     this.bot = bot;
   }
 
-  async onReplyFromMessageID(
-    msg: Message,
-    handler: BotReplyToMessageIdHandler,
-    match?: RegExpMatchArray,
-  ) {}
-
   async onText(msg: Message) {
     try {
       await this.findUserByTelegramUserIdOrCreateUser(msg);
-
-      this.bot.replyWithTranslation(msg, translationKeys.start_command_intro, {
-        disable_web_page_preview: true,
-        reply_markup: {
-          resize_keyboard: true,
-          one_time_keyboard: true,
-          keyboard: [
-            [
-              {
-                text: this.bot.handlers.language.getTranslation(
-                  msg,
-                  translationKeys.command_text_createwallet,
-                ),
-              },
-            ],
-          ],
-        },
-      });
     } catch (error) {
       this.handleErrorReply(error, msg);
     }
@@ -57,14 +34,12 @@ export class StartCommand implements IBotCommand {
 
       this.bot.clients.user.findUserByTelegramUserIdOrCreateUser(
         createUserRequest,
-        (err, response) => {
+        (err, _reply) => {
           if (Boolean(err)) {
             return reject(err);
           }
 
-          const user_id = response.getUserId();
           resolve();
-          // @TODO create a wallet right away?
         },
       );
     });

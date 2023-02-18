@@ -1,4 +1,4 @@
-import { UserClient } from "@rapydbot/user/client";
+import { UserClient, UserClientGenerator } from "@rapydbot/user/client";
 import { WalletClient, WalletClientGenerator } from "@rapydbot/wallet/client";
 import {
   IntentRecognitionClient,
@@ -6,6 +6,7 @@ import {
 } from "@rapydbot/intent-recognition/client";
 import moment, { Moment } from "moment";
 import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
+
 import {
   BotLanguageHandler,
   BotReplyToMessageIdHandler,
@@ -14,23 +15,24 @@ import {
 import { translationKeys } from "./i18n";
 import { Commands } from "./types";
 import { IntentRecognitionHandler } from "./handler/intent-recognition";
+import { StartCommand } from "./commands";
 
 export class Bot {
   public api: TelegramBotApi;
   public moment: Moment;
 
   public handlers: {
-    language: BotLanguageHandler;
-    intentRecognition: IntentRecognitionHandler;
-  };
+    language?: BotLanguageHandler;
+    intentRecognition?: IntentRecognitionHandler;
+  } = {};
 
   public clients: {
-    user: UserClient;
-    wallet: WalletClient;
-    intentRecognition: IntentRecognitionClient;
-  };
+    user?: UserClient;
+    wallet?: WalletClient;
+    intentRecognition?: IntentRecognitionClient;
+  } = {};
 
-  public commands: Commands;
+  public commands: Commands = {};
 
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
@@ -42,18 +44,25 @@ export class Bot {
 
     this.moment = moment();
 
+    this.clients.user = new UserClientGenerator(process.env.USER_SERVICE_URL).create();
     this.clients.wallet = new WalletClientGenerator(process.env.WALLET_SERVICE_URL).create();
     this.clients.intentRecognition = new IntentRecognitionClientGenerator(
       process.env.INTENT_RECOGNITION_SERVICE_URL,
     ).create();
+
+    this.commands.start = new StartCommand(this);
+    this.commands.start.onText.bind(this.commands.start);
   }
 
   async prepare(): Promise<Bot> {
     await this.handlers.language.init();
+
     return this;
   }
 
   listen() {
+    this.api.onText(/^\/start/i, (msg, match) => this.commands.start.onText(msg));
+
     this.api.on("polling_error", console.error);
 
     this.api.on("inline_query", (msg) => {
@@ -67,7 +76,7 @@ export class Bot {
     });
   }
 
-  reply(msg: Message, text: string, options?: SendMessageOptions, args?: {}) {
+  reply(msg: Message, text: string, options?: SendMessageOptions) {
     // @TODO text should be a ChatGPT response by using the reponse params
 
     this.api.sendMessage(msg.chat.id, text, {
@@ -81,7 +90,7 @@ export class Bot {
     msg: Message,
     translationKey: translationKeys,
     options?: SendMessageOptions,
-    args?: {},
+    args?: Record<string, unknown>,
   ) {
     this.api.sendMessage(
       msg.chat.id,
@@ -94,10 +103,10 @@ export class Bot {
     msg: Message,
     translationKey: translationKeys,
     command: Commands,
-    handlerData?: Record<string, any>,
+    handlerData?: Record<string, unknown>,
     reply_to_message_id?: number,
     options?: SendMessageOptions,
-    args?: {},
+    args?: Record<string, unknown>,
   ) {
     const chat_id = msg.chat.id;
 
@@ -131,9 +140,9 @@ export class Bot {
     msg: Message,
     translationKey: translationKeys,
     command: Commands,
-    handlerData?: Record<string, any>,
+    handlerData?: Record<string, unknown>,
     options?: SendMessageOptions,
-    args?: {},
+    args?: Record<string, unknown>,
   ) {
     const chat_id = msg.chat.id;
 
@@ -161,7 +170,7 @@ export class Bot {
     );
   }
 
-  getTranslation(msg: Message, translationKey: translationKeys, args?: {}) {
+  getTranslation(msg: Message, translationKey: translationKeys, args?: Record<string, unknown>) {
     return this.handlers.language.getTranslation(msg, translationKey, args);
   }
 
