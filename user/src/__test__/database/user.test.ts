@@ -1,15 +1,15 @@
 import { Sequelize } from "sequelize/types";
-import database from "../../../database";
-import { UserDAO } from "../../../database/dao/UserDAO";
-import { TelegramModel } from "../../../database/model/TelegramModel";
-import { UserModel } from "../../../database/model/UserModel";
+import database from "../../database";
+import { TelegramModel } from "../../database/model/telegram";
+import { UserModel } from "../../database/model/user";
+import { User } from "../../database/user";
 
-let driver: Sequelize, dao: UserDAO;
+let driver: Sequelize, dao: User;
 
 describe("database:dao:user", () => {
   beforeEach(async () => {
     driver = await database.connect({ force: true });
-    dao = new UserDAO(driver);
+    dao = new User(driver);
   });
 
   test("success: findUserByTelegramUserIdOrCreateUser", async () => {
@@ -24,7 +24,7 @@ describe("database:dao:user", () => {
     expect(create_result.telegramUsername).toEqual(telegram_username);
     expect(create_result.telegramFromUserId).toEqual(telegram_from_user_id);
     expect(create_result.telegramUserId).toBeTruthy();
-    expect(create_result.telegramPrivateChatId).toBeUndefined();
+    expect(create_result.telegramPrivateChatId).toBeNull();
     expect(create_result.userId).toBeTruthy();
 
     const telegram_private_chat_id = 234;
@@ -35,9 +35,7 @@ describe("database:dao:user", () => {
       telegram_private_chat_id,
     });
 
-    expect(update_result.telegramPrivateChatId).toEqual(
-      telegram_private_chat_id
-    );
+    expect(update_result.telegramPrivateChatId).toEqual(telegram_private_chat_id);
 
     const telegram_records = await driver
       .model(TelegramModel.tableName)
@@ -67,9 +65,7 @@ describe("database:dao:user", () => {
 
     expect(get_user_result.userId).toEqual(user_id);
     expect(get_user_result.telegramUsername).toEqual(telegram_username);
-    expect(get_user_result.telegramPrivateChatId).toEqual(
-      telegram_private_chat_id
-    );
+    expect(get_user_result.telegramPrivateChatId).toEqual(telegram_private_chat_id);
     expect(get_user_result.telegramFromUserId).toEqual(telegram_from_user_id);
   });
 
@@ -89,13 +85,11 @@ describe("database:dao:user", () => {
 
     const result = [];
     for (const user of users) {
-      const create_user_result = await dao.findUserByTelegramUserIdOrCreateUser(
-        {
-          telegram_username: user.telegram_username,
-          telegram_private_chat_id: user.telegram_private_chat_id,
-          telegram_from_user_id: user.telegram_from_user_id,
-        }
-      );
+      const create_user_result = await dao.findUserByTelegramUserIdOrCreateUser({
+        telegram_username: user.telegram_username,
+        telegram_private_chat_id: user.telegram_private_chat_id,
+        telegram_from_user_id: user.telegram_from_user_id,
+      });
 
       result.push(create_user_result);
     }

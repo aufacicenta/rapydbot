@@ -1,5 +1,5 @@
 import { DataTypes, Model, ModelOptions } from "sequelize";
-import { TelegramModel } from "./TelegramModel";
+import { TelegramModel } from "./telegram";
 
 export class UserModel extends Model<{
   id?: string;

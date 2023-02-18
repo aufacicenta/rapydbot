@@ -5,12 +5,12 @@ import {
   GetUserIdByTelegramUsernameReply,
   GetUserReply,
   GetUserTelegramChatIdRequest,
-} from "../../server/protos/schema_pb";
-import { UserServiceErrorCodes } from "../../service/error";
-import { TelegramModel, TelegramModelArgs } from "../model/TelegramModel";
-import { UserModel } from "../model/UserModel";
+} from "../server/protos/schema_pb";
+import { UserServiceErrorCodes } from "../service/error";
+import { TelegramModel, TelegramModelArgs } from "./model/telegram";
+import { UserModel } from "./model/user";
 
-export class UserDAO {
+export class User {
   private driver: Sequelize;
   private user: ModelCtor<UserModel>;
   private telegram: ModelCtor<TelegramModel>;
@@ -100,10 +100,7 @@ export class UserDAO {
 
   async findUserByTelegramUsername({
     username,
-  }: Pick<
-    TelegramModelArgs,
-    "username"
-  >): Promise<GetUserIdByTelegramUsernameReply.AsObject> {
+  }: Pick<TelegramModelArgs, "username">): Promise<GetUserIdByTelegramUsernameReply.AsObject> {
     const telegram_result = await this.telegram.findOne({
       where: {
         username,
@@ -125,11 +122,7 @@ export class UserDAO {
     };
   }
 
-  async getUser({
-    user_id,
-  }: {
-    user_id: string;
-  }): Promise<GetUserReply.AsObject> {
+  async getUser({ user_id }: { user_id: string }): Promise<GetUserReply.AsObject> {
     const result = await this.user.findOne({
       where: { id: user_id },
       include: {
@@ -165,9 +158,7 @@ export class UserDAO {
     return result.map((r) => this.getUserReplyObject(r));
   }
 
-  async getUserTelegramChatId({
-    userId,
-  }: Pick<GetUserTelegramChatIdRequest.AsObject, "userId">) {
+  async getUserTelegramChatId({ userId }: Pick<GetUserTelegramChatIdRequest.AsObject, "userId">) {
     const user = await this.user.findOne({
       where: { id: userId },
       include: {

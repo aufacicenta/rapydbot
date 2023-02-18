@@ -1,11 +1,11 @@
-import grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
 import { IContext } from "./interface/IContext";
-import { IUserServer, UserService } from "./protos/schema_grpc_pb";
+import { UserService } from "./protos/schema_grpc_pb";
 
 export default (context: IContext) => {
   const server = new grpc.Server();
 
-  server.addService<IUserServer>(UserService, {
+  server.addService(UserService, {
     findUserByTelegramUserIdOrCreateUser: (call, callback) =>
       context.controller.findUserByTelegramUserIdOrCreateUser(
         { call, callback },

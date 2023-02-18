@@ -1,2 +1,2 @@
-export * from "./TelegramModel";
-export * from "./UserModel";
+export * from "./telegram";
+export * from "./user";

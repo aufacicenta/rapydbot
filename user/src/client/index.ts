@@ -1,7 +1,7 @@
 export * from "../server/protos/schema_grpc_pb";
 export * from "../server/protos/schema_pb";
 
-import grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
 import { UserClient } from "../server/protos/schema_grpc_pb";
 
 export class USER_ClientGenerator {
