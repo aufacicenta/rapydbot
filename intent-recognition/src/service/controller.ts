@@ -41,6 +41,7 @@ export class Controller {
 
       callback(null, reply);
     } catch (error) {
+      // @TODO return error code with the reason of failure to be handled by the client
       callback(error, null);
     }
   }

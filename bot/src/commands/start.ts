@@ -1,10 +1,10 @@
 import { CreateUserRequest } from "@rapydbot/user/client";
-import { Message } from "node-telegram-bot-api";
 
 import { Bot } from "../Bot";
 import { translationKeys } from "../i18n";
+import { CustomMessage } from "../types";
 
-import { IBotCommand } from "./IBotCommand";
+import { IBotCommand } from "./types";
 
 export class StartCommand implements IBotCommand {
   private bot: Bot;
@@ -13,7 +13,7 @@ export class StartCommand implements IBotCommand {
     this.bot = bot;
   }
 
-  async onText(msg: Message) {
+  async onText(msg: CustomMessage) {
     try {
       await this.findUserByTelegramUserIdOrCreateUser(msg);
     } catch (error) {
@@ -21,7 +21,7 @@ export class StartCommand implements IBotCommand {
     }
   }
 
-  private async findUserByTelegramUserIdOrCreateUser(msg: Message): Promise<void> {
+  private async findUserByTelegramUserIdOrCreateUser(msg: CustomMessage): Promise<void> {
     return new Promise((resolve, reject) => {
       const createUserRequest = new CreateUserRequest();
 
@@ -45,7 +45,7 @@ export class StartCommand implements IBotCommand {
     });
   }
 
-  private handleErrorReply(error: Error, msg: Message) {
+  private handleErrorReply(error: Error, msg: CustomMessage) {
     return this.bot.replyWithTranslation(msg, translationKeys.start_command_error);
   }
 }

@@ -1,7 +1,7 @@
-import { Message } from "node-telegram-bot-api";
 import { ClassifyRequest } from "@rapydbot/intent-recognition/client";
 
 import { Bot } from "../Bot";
+import { CustomMessage } from "../types";
 
 export class IntentRecognitionHandler {
   private bot: Bot;
@@ -10,12 +10,12 @@ export class IntentRecognitionHandler {
     this.bot = bot;
   }
 
-  async classify(msg: Message) {
+  async classify(msg: CustomMessage) {
+    const request = new ClassifyRequest();
+
+    request.setInput(msg.text);
+
     return new Promise((resolve, reject) => {
-      const request = new ClassifyRequest();
-
-      request.setInput(msg.text);
-
       this.bot.clients.intentRecognition.classify(request, (error, reply) => {
         if (Boolean(error)) {
           return reject(error);

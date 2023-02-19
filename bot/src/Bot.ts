@@ -1,3 +1,4 @@
+import { Channel, DefaultGenerics, StreamChat } from "stream-chat";
 import { UserClient, UserClientGenerator } from "@rapydbot/user/client";
 import { WalletClient, WalletClientGenerator } from "@rapydbot/wallet/client";
 import {
@@ -5,7 +6,7 @@ import {
   IntentRecognitionClientGenerator,
 } from "@rapydbot/intent-recognition/client";
 import moment, { Moment } from "moment";
-import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
+import TelegramBotApi, { SendMessageOptions } from "node-telegram-bot-api";
 
 import {
   BotLanguageHandler,
@@ -13,12 +14,13 @@ import {
   BotReplyToMessageIdHandlerStorageKeys,
 } from "./handler";
 import { translationKeys } from "./i18n";
-import { Commands } from "./types";
+import { Commands, CustomMessage } from "./types";
 import { IntentRecognitionHandler } from "./handler/intent-recognition";
 import { StartCommand } from "./commands";
 
 export class Bot {
   public api: TelegramBotApi;
+
   public moment: Moment;
 
   public handlers: {
@@ -34,6 +36,11 @@ export class Bot {
 
   public commands: Commands = {};
 
+  public context: {
+    chat?: StreamChat<DefaultGenerics>;
+    channel?: Channel<DefaultGenerics>;
+  } = {};
+
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
   constructor() {
@@ -46,9 +53,11 @@ export class Bot {
 
     this.clients.user = new UserClientGenerator(process.env.USER_SERVICE_URL).create();
     this.clients.wallet = new WalletClientGenerator(process.env.WALLET_SERVICE_URL).create();
+
     this.clients.intentRecognition = new IntentRecognitionClientGenerator(
       process.env.INTENT_RECOGNITION_SERVICE_URL,
     ).create();
+    // this.clients.intentRecognition.classify.bind(this.clients.intentRecognition);
 
     this.commands.start = new StartCommand(this);
     this.commands.start.onText.bind(this.commands.start);
@@ -56,6 +65,18 @@ export class Bot {
 
   async prepare(): Promise<Bot> {
     await this.handlers.language.init();
+
+    // leverage stream-chat to store the context of a conversation
+    const streamChat = StreamChat.getInstance(
+      "ms9ftjmh25rd",
+      "3yrjqve2k669njd4q9ked9qy7e8g5kjsyrbquw6kemaas88mdzehnvpwwdanz7g3",
+    );
+
+    const channel = streamChat.channel("messaging", "bot-context", { created_by_id: "bot" });
+    await channel.create();
+
+    this.context.chat = streamChat;
+    this.context.channel = channel;
 
     return this;
   }
@@ -69,14 +90,51 @@ export class Bot {
       console.log(msg);
     });
 
-    this.api.on("message", async (_msg) => {
-      // @TODO record every message for training purposes, async
-      // @TODO detect message intent with the classify service and execute the command
-      // @TODO extract the entities from the text message and create a data request record, if values are missing, let the bot ask for them
+    this.api.on("message", async (msg) => {
+      // @TODO record every message for training purposes
+      try {
+        const { message } = await this.context.channel.sendMessage({
+          text: msg.text,
+          // parent_id: msg.chat.id.toString(),
+          user_id: msg.from.id.toString(),
+          silent: true,
+          skip_push: true,
+        });
+        // @TODO search stream messages by user.id
+        // const userMessages = await this.context.chat.search(
+        //   {
+        //     cid: "messaging:bot-context",
+        //   },
+        //   {
+        //     "user.id": { $eq: msg.from.id.toString() },
+        //   },
+        // );
+        // @TODO detect message intent with the classify service and execute the command
+        const context = { chat: { message: { id: message.id } } };
+        const command = await this.handlers.intentRecognition.classify({ ...msg, context });
+
+        await this.context.chat.updateMessage({
+          id: message.id,
+          user_id: msg.from.id.toString(),
+          silent: true,
+          text: message.text,
+          html: message.html,
+          attachments: [
+            { type: "text", fields: [{ title: "intent", value: command, short: true }] },
+          ],
+        });
+
+        // @TODO map command to the corresponding class,
+        // extract the entities from the text message and
+        // create a data request record, if values are missing, let the bot ask for them with ChatGPT
+      } catch (error) {
+        // @TODO handle error reply from error reason send by the servers
+        console.error(error);
+      }
     });
   }
 
-  reply(msg: Message, text: string, options?: SendMessageOptions) {
+  reply(msg: CustomMessage, text: string, options?: SendMessageOptions) {
     // @TODO text should be a ChatGPT response by using the reponse params
 
     this.api.sendMessage(msg.chat.id, text, {
@@ -87,7 +145,7 @@ export class Bot {
   }
 
   replyWithTranslation(
-    msg: Message,
+    msg: CustomMessage,
     translationKey: translationKeys,
     options?: SendMessageOptions,
     args?: Record<string, unknown>,
@@ -100,7 +158,7 @@ export class Bot {
   }
 
   replyWithMessageID(
-    msg: Message,
+    msg: CustomMessage,
     translationKey: translationKeys,
     command: Commands,
     handlerData?: Record<string, unknown>,
@@ -137,7 +195,7 @@ export class Bot {
   }
 
   replyWithHandler(
-    msg: Message,
+    msg: CustomMessage,
     translationKey: translationKeys,
     command: Commands,
     handlerData?: Record<string, unknown>,
@@ -170,7 +228,11 @@ export class Bot {
     );
   }
 
-  getTranslation(msg: Message, translationKey: translationKeys, args?: Record<string, unknown>) {
+  getTranslation(
+    msg: CustomMessage,
+    translationKey: translationKeys,
+    args?: Record<string, unknown>,
+  ) {
     return this.handlers.language.getTranslation(msg, translationKey, args);
   }
 

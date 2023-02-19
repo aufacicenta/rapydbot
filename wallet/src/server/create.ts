@@ -1,6 +1,7 @@
 import * as grpc from "@grpc/grpc-js";
+
 import { IContext } from "./interface/IContext";
-import { IWalletServer, WalletService } from "./protos/schema_grpc_pb";
+import { WalletService } from "./protos/schema_grpc_pb";
 
 export default (context: IContext) => {
   const server = new grpc.Server();
