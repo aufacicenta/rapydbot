@@ -1,11 +1,13 @@
-import { ModelCtor, Sequelize } from "sequelize";
+import { ModelStatic, Sequelize } from "sequelize";
+
 import { WalletServiceErrorCodes } from "../service/error";
+
 import { WalletModel, WalletModelAttributes } from "./model";
 
 export class Wallet {
   private driver: Sequelize;
 
-  private model: ModelCtor<WalletModel>;
+  private model: ModelStatic<WalletModel>;
 
   constructor(driver: Sequelize) {
     this.driver = driver;
@@ -18,7 +20,7 @@ export class Wallet {
       rapyd_ewallet_address,
     });
 
-    return !Boolean(result) ? null : result.getDataValue("id");
+    return Boolean(result) ? result.getDataValue("id") : null;
   }
 
   async getWalletIdByUserId({

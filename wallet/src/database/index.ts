@@ -1,4 +1,5 @@
 import { Sequelize, SyncOptions } from "sequelize";
+
 import { WalletModel } from "./model";
 
 export default {
@@ -19,6 +20,7 @@ export default {
       await sequelize.sync(options);
 
       console.log("Database Connection success");
+
       return sequelize;
     } catch (error) {
       console.error(error);
