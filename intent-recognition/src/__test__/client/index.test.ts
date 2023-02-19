@@ -1,10 +1,4 @@
 import {
-  IntentRecognitionClientGenerator,
-  ClassifyRequest,
-  ClassifyReply,
-  IntentRecognitionClient,
-} from "../../client";
-import {
   CreateWalletReply,
   CreateWalletRequest,
   WalletClient,
@@ -12,12 +6,17 @@ import {
 } from "@rapydbot/wallet/client";
 import { WalletObjectResponse } from "@rapydbot/wallet/providers/rapyd/types";
 
+import {
+  IntentRecognitionClientGenerator,
+  ClassifyRequest,
+  ClassifyReply,
+  IntentRecognitionClient,
+} from "../../client";
+
 let client: IntentRecognitionClient,
   wallet: WalletClientGenerator,
   walletGRPC: WalletClient,
-  users: string[],
-  sender: string,
-  recipient: string;
+  users: string[];
 
 describe("controller", () => {
   beforeAll(async () => {
@@ -29,7 +28,6 @@ describe("controller", () => {
     ).create();
 
     users = [wallet.getRandomUsername(), wallet.getRandomUsername()];
-    [sender, recipient] = users;
   });
 
   test("success: call cohere classify API, then create a wallet", async () => {
@@ -71,14 +69,12 @@ describe("controller", () => {
         });
       });
 
-    const wallets = await Promise.all(users.map(createWallet));
+    const wallets = await Promise.all(users.map((user) => createWallet(user)));
 
-    for (const [i, rapyd_ewallet_address] of wallets.entries()) {
-      const { id, ewallet_reference_id } = await wallet
-        .rapydHTTPClient()
-        .get<WalletObjectResponse>({
-          path: `/v1/user/${rapyd_ewallet_address}`,
-        });
+    for (const [_, rapyd_ewallet_address] of wallets.entries()) {
+      const { id } = await wallet.rapydHTTPClient().get<WalletObjectResponse>({
+        path: `/v1/user/${rapyd_ewallet_address}`,
+      });
 
       expect(id).toEqual(rapyd_ewallet_address);
     }

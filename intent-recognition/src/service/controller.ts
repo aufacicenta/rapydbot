@@ -1,7 +1,6 @@
 import * as grpc from "@grpc/grpc-js";
-import { classifyBaseRequest } from "cohere-ai/dist/models";
-import cohere from "../providers/cohere";
 
+import cohere from "../providers/cohere";
 import { IContext } from "../server/interface/IContext";
 import { ClassifyRequest, ClassifyReply } from "../server/protos/schema_pb";
 
@@ -20,9 +19,9 @@ export class Controller {
     try {
       const input = call.request.getInput();
 
-      const {
-        body: { results },
-      } = await cohere.client.detectLanguage({ texts: [input] });
+      // const {
+      //   body: { results },
+      // } = await cohere.client.detectLanguage({ texts: [input] });
 
       // @TODO resolce to model ID by language code
       // const [language] = results;

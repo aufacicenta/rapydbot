@@ -16,6 +16,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["./src/client", "./src/providers/rapyd/types"],
+  "include": ["./src/**/*"],
   "exclude": ["node_modules", "build"]
 }

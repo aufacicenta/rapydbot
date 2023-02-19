@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as grpc from "@grpc/grpc-js";
+
 import RapydClient from "../providers/rapyd/client";
 import {
   CheckoutObjectResponse,
@@ -60,7 +61,7 @@ export class Controller {
     try {
       const country_code = call.request.getCountryCode();
 
-      const response = await this.rapydClient.get<any>({
+      await this.rapydClient.get<any>({
         path: `/v1/identities/types?country=${country_code}`,
       });
 
@@ -73,14 +74,11 @@ export class Controller {
   }
 
   async getSupportedCountries(
-    {
-      call,
-      callback,
-    }: gRPCServerUnaryCall<GetSupportedCountriesRequest, EmptyReply>,
-    { db }: IContext
+    { callback }: gRPCServerUnaryCall<GetSupportedCountriesRequest, EmptyReply>,
+    {}: IContext
   ) {
     try {
-      const response = await this.rapydClient.get<any>({
+      await this.rapydClient.get<any>({
         path: "/v1/data/countries",
       });
 

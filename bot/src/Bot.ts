@@ -61,7 +61,7 @@ export class Bot {
   }
 
   listen() {
-    this.api.onText(/^\/start/i, (msg, match) => this.commands.start.onText(msg));
+    this.api.onText(/^\/start/i, (msg) => this.commands.start.onText(msg));
 
     this.api.on("polling_error", console.error);
 
@@ -69,7 +69,7 @@ export class Bot {
       console.log(msg);
     });
 
-    this.api.on("message", async (msg) => {
+    this.api.on("message", async (_msg) => {
       // @TODO record every message for training purposes, async
       // @TODO detect message intent with the classify service and execute the command
       // @TODO extract the entities from the text message and create a data request record, if values are missing, let the bot ask for them

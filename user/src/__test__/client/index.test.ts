@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize/types";
+import { Sequelize } from "sequelize";
 
 import { CreateUserReply, UserClient, UserClientGenerator } from "../../client";
 import database from "../../database";
@@ -45,7 +45,7 @@ describe("client", () => {
     request.setUserIdList(result.map((r) => r.userId));
 
     const getUsers = (): Promise<Array<GetUserReply.AsObject>> =>
-      new Promise((resolve, reject) => {
+      new Promise((resolve) => {
         const call = client.getUsers(request);
 
         const response: Array<GetUserReply.AsObject> = [];
