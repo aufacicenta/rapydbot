@@ -2,6 +2,7 @@ import { Message as TelegramMessage } from "node-telegram-bot-api";
 import { Message as StreamChat } from "stream-chat";
 
 import { StartCommand } from "./commands";
+import { TrainCommand } from "./commands/train";
 
 export type CustomMessage = TelegramMessage & {
   context?: {
@@ -15,4 +16,5 @@ export type CustomMessage = TelegramMessage & {
 
 export type Commands = {
   start?: StartCommand;
+  train?: TrainCommand;
 };

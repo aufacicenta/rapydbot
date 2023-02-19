@@ -17,6 +17,7 @@ import { translationKeys } from "./i18n";
 import { Commands, CustomMessage } from "./types";
 import { IntentRecognitionHandler } from "./handler/intent-recognition";
 import { StartCommand } from "./commands";
+import { TrainCommand } from "./commands/train";
 
 export class Bot {
   public api: TelegramBotApi;
@@ -43,6 +44,8 @@ export class Bot {
 
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
+  private trainingMap = new Map<number, boolean>();
+
   constructor() {
     this.api = new TelegramBotApi(process.env.BOT_TOKEN, { polling: true });
 
@@ -61,6 +64,8 @@ export class Bot {
 
     this.commands.start = new StartCommand(this);
     this.commands.start.onText.bind(this.commands.start);
+    this.commands.train = new TrainCommand(this);
+    this.commands.train.onText.bind(this.commands.train);
   }
 
   async prepare(): Promise<Bot> {
@@ -68,8 +73,8 @@ export class Bot {
 
     // leverage stream-chat to store the context of a conversation
     const streamChat = StreamChat.getInstance(
-      "ms9ftjmh25rd",
-      "3yrjqve2k669njd4q9ked9qy7e8g5kjsyrbquw6kemaas88mdzehnvpwwdanz7g3",
+      process.env.STREAM_CHAT_API_KEY,
+      process.env.STREAM_CHAT_API_SECRET,
     );
 
     const channel = streamChat.channel("messaging", "bot-context", { created_by_id: "bot" });
@@ -83,6 +88,10 @@ export class Bot {
 
   listen() {
     this.api.onText(/^\/start/i, (msg) => this.commands.start.onText(msg));
+    this.api.onText(/^\/(train|entrenar)/i, (msg) => {
+      this.trainingMap.set(msg.from.id, true);
+      this.commands.train.runTrainingQueue(msg);
+    });
 
     this.api.on("polling_error", console.error);
 
@@ -91,7 +100,15 @@ export class Bot {
     });
 
     this.api.on("message", async (msg) => {
-      // @TODO record every message for training purposes
+      // const isTraining = this.trainingMap.get(msg.from.id);
+      const isTraining = true;
+
+      if (isTraining) {
+        this.commands.train.onText(msg);
+
+        return;
+      }
+
       try {
         const { message } = await this.context.channel.sendMessage({
           text: msg.text,
