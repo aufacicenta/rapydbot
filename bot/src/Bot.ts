@@ -88,7 +88,8 @@ export class Bot {
 
   listen() {
     this.api.onText(/^\/start/i, (msg) => this.commands.start.onText(msg));
-    this.api.onText(/^\/(train|entrenar)/i, (msg) => {
+
+    this.api.onText(/^\/?(train|entrenar)/i, (msg) => {
       this.trainingMap.set(msg.from.id, true);
       this.commands.train.runTrainingQueue(msg);
     });
