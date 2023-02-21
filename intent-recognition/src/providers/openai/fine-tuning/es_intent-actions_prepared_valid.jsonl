@@ -1,0 +1,58 @@
+{"prompt":"nueva tarjeta debito con 10k gtq::END::","completion":" cards_create"}
+{"prompt":"nueva tarjeta visa con 5000 usd con etiqueta hogar::END::","completion":" cards_create"}
+{"prompt":"elimina tarj mastercard verde::END::","completion":" cards_delete"}
+{"prompt":"ultimos digitos tarjeta hogar::END::","completion":" cards_read"}
+{"prompt":"desbloquea mi tarjeta roja::END::","completion":" cards_unblock"}
+{"prompt":"desbloquear tarj morada::END::","completion":" cards_unblock"}
+{"prompt":"borra a edson ortiz::END::","completion":" contacts_delete"}
+{"prompt":"prestamo de 235 usd?::END::","completion":" loans_request"}
+{"prompt":"prestamo de 50k mxn::END::","completion":" loans_request"}
+{"prompt":"crea un link de pago por 150 q::END::","completion":" payments_link"}
+{"prompt":"link 2090 gtq::END::","completion":" payments_link"}
+{"prompt":"link 34 mxn::END::","completion":" payments_link"}
+{"prompt":"2500 gtq de julio portilla::END::","completion":" payments_request"}
+{"prompt":"345 usd de mario marinez::END::","completion":" payments_request"}
+{"prompt":"gasto en café 2022::END::","completion":" transactions_in"}
+{"prompt":"gastos en gasolina::END::","completion":" transactions_in"}
+{"prompt":"txs navidad ago 2023::END::","completion":" transactions_in"}
+{"prompt":"txs netflix nov 2023::END::","completion":" transactions_in"}
+{"prompt":"cuanto gasté en hogar mar 2023::END::","completion":" transactions_in"}
+{"prompt":"cuanto gasté en super abr 2023::END::","completion":" transactions_in"}
+{"prompt":"cuanto gasté en jardin may 2023::END::","completion":" transactions_in"}
+{"prompt":"cuanto gasté en taller jul 2023::END::","completion":" transactions_in"}
+{"prompt":"ultimas txs::END::","completion":" transactions_when"}
+{"prompt":"tx a empresa A::END::","completion":" transactions_to"}
+{"prompt":"pagos a empresa A::END::","completion":" transactions_to"}
+{"prompt":"transacciones de enero 2023::END::","completion":" transactions_when"}
+{"prompt":"transacciones de mayo 2023::END::","completion":" transactions_when"}
+{"prompt":"tx de abril 2023::END::","completion":" transactions_when"}
+{"prompt":"tx de diciembre 2023::END::","completion":" transactions_when"}
+{"prompt":"txs enero 2023::END::","completion":" transactions_when"}
+{"prompt":"txs febrero 2023::END::","completion":" transactions_when"}
+{"prompt":"txs mayo 2023::END::","completion":" transactions_when"}
+{"prompt":"txs ago 2023::END::","completion":" transactions_when"}
+{"prompt":"txs oct 2023::END::","completion":" transactions_when"}
+{"prompt":"txs jul::END::","completion":" transactions_when"}
+{"prompt":"txs oct::END::","completion":" transactions_when"}
+{"prompt":"depósitos de enero 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de abril 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de junio 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de septiembre 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos oct 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos nov 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos dic 2023::END::","completion":" transactions_when"}
+{"prompt":"txs ropa feb mayo 2023::END::","completion":" transactions_when"}
+{"prompt":"txs regalos sep dic 2023::END::","completion":" transactions_when"}
+{"prompt":"cuanto gasté en super abr julio 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de enero febrero 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos oct nov 2023::END::","completion":" transactions_when"}
+{"prompt":"txs no de ref 23456 abr 2021::END::","completion":" transactions_when"}
+{"prompt":"txs no de ref 23456 jun 2021::END::","completion":" transactions_when"}
+{"prompt":"txs no de ref 23456 4 tri 2019::END::","completion":" transactions_when"}
+{"prompt":"crea una nueva wallet::END::","completion":" wallet_create"}
+{"prompt":"nueva wallet mxn::END::","completion":" wallet_create"}
+{"prompt":"swift de mi wallet roja::END::","completion":" wallet_read"}
+{"prompt":"envía 50 a gaby::END::","completion":" wallet_transfer"}
+{"prompt":"50 a miguel vázquez::END::","completion":" wallet_transfer"}
+{"prompt":"envia 100 USD a mi mamá::END::","completion":" wallet_transfer"}
+{"prompt":"enviar 4000 YEN a jonathan::END::","completion":" wallet_transfer"}

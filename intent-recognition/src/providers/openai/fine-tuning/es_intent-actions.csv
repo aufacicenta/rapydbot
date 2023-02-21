@@ -1,0 +1,289 @@
+prompt,completion
+bloquea mi tarjeta roja::END::,cards_block
+bloquear tarj morada::END::,cards_block
+bloquea mi tarjeta premium::END::,cards_block
+bloquea mi tarjeta debito::END::,cards_block
+bloquea mi tarjeta::END::,cards_block
+crear tarjeta::END::,cards_create
+crear tarjeta debito con 1000 precargardos::END::,cards_create
+nueva tarjeta debito con 10k gtq::END::,cards_create
+nueva tarjeta visa con 5000 usd con etiqueta hogar::END::,cards_create
+"nueva tarjeta virtual ""compras en línea"" con 6000 mxn::END::",cards_create
+borra mi tarjeta roja::END::,cards_create
+elimina mi tarjeta debito::END::,cards_delete
+elimina mi tarjeta visa hogar::END::,cards_delete
+elimina tarj mastercard verde::END::,cards_delete
+eliminar tarj empresa::END::,cards_delete
+tarjeta roja::END::,cards_read
+dígitos de mi tarjeta::END::,cards_read
+ultimos digitos tarjeta hogar::END::,cards_read
+ultimos digitos tarjeta debito::END::,cards_read
+ultimos digitos visa platinum::END::,cards_read
+desbloquea mi tarjeta roja::END::,cards_unblock
+desbloquear tarj morada::END::,cards_unblock
+desbloquea mi tarjeta premium::END::,cards_unblock
+desbloquea mi tarjeta debito::END::,cards_unblock
+desbloquea mi tarjeta::END::,cards_unblock
+agrega a liviere perera::END::,contacts_add
+añadir a Julio Rosales::END::,contacts_add
+agregar a Hug Frieser con cuenta Bi monetaria 123456 gtq::END::,contacts_add
+agrega a byron lópez con cuenta mxn bancomer 2345667::END::,contacts_add
+añade a carlos palomino cuenta banamex clabe 34567684839294738374::END::,contacts_add
+quita a Flor Camacho::END::,contacts_delete
+quitar a empresa C::END::,contacts_delete
+quitar a karen padilla::END::,contacts_delete
+remover a manuel pérez de mis contactos::END::,contacts_delete
+borra a edson ortiz::END::,contacts_delete
+actualiza a Pedro Molina con Pedro Molina Fierro::END::,contacts_edit
+123456789 monetaria quetzales banco industrial::END::,contacts_edit
+123456789 monetaria dólares banco industrial::END::,contacts_edit
+123456789 ahorro quetzales banco industrial::END::,contacts_edit
+123456789 ahorro dólares banco industrial::END::,contacts_edit
+cuánto debo del prestamo?::END::,loans_inquiry
+en qué pago voy del préstamo?::END::,loans_inquiry
+hay cargos por pagar antes?::END::,loans_inquiry
+paga el prestamo verde con mi wallet roja::END::,loans_inquiry
+paga la cuota de este mes de mi prestamo azul con la wallet plateada::END::,loans_inquiry
+aplico para un prestamo?::END::,loans_request
+quiero un préstamo de 100k::END::,loans_request
+prestamo de 1000?::END::,loans_request
+prestamo de 235 usd?::END::,loans_request
+prestamo de 50k mxn::END::,loans_request
+crea un link de pago por 150 q::END::,payments_link
+link de pago 200::END::,payments_link
+link 2090 gtq::END::,payments_link
+link 903 usd::END::,payments_link
+link 34 mxn::END::,payments_link
+100 de juan::END::,payments_request
+50 de maría::END::,payments_request
+1500 de empresa A::END::,payments_request
+2500 gtq de julio portilla::END::,payments_request
+345 usd de mario marinez::END::,payments_request
+456 mxn de beto cueva::END::,payments_request
+gastos de mi tarjeta roja::END::,transactions_card
+cuanto gasté hoy en mi tarjeta roja::END::,transactions_card
+cuanto gasté hoy en mi tarjeta::END::,transactions_card
+cuanto gasté ayer en mi tarjeta::END::,transactions_card
+transacciones de empresa A::END::,transactions_from
+txs de empresa A::END::,transactions_from
+tx de empresa A::END::,transactions_from
+pagos de empresa A::END::,transactions_from
+depositos de empresa A::END::,transactions_from
+creditos de empresa A::END::,transactions_from
+gasto en café 2022::END::,transactions_in
+gastos en gasolina::END::,transactions_in
+txs gasolina ene 2023::END::,transactions_in
+txs ropa feb 2023::END::,transactions_in
+txs hogar mar 2023::END::,transactions_in
+txs super abr 2023::END::,transactions_in
+txs jardin may 2023::END::,transactions_in
+txs carro jun 2023::END::,transactions_in
+txs taller jul 2023::END::,transactions_in
+txs navidad ago 2023::END::,transactions_in
+txs regalos sep 2023::END::,transactions_in
+txs suscripciones oct 2023::END::,transactions_in
+txs netflix nov 2023::END::,transactions_in
+txs tv dic 2023::END::,transactions_in
+cuanto gasté en gasolina ene 2023::END::,transactions_in
+cuanto gasté en ropa feb 2023::END::,transactions_in
+cuanto gasté en hogar mar 2023::END::,transactions_in
+cuanto gasté en super abr 2023::END::,transactions_in
+cuanto gasté en jardin may 2023::END::,transactions_in
+cuanto gasté en carro jun 2023::END::,transactions_in
+cuanto gasté en taller jul 2023::END::,transactions_in
+cuanto gasté en navidad ago 2023::END::,transactions_in
+cuanto gasté en regalos sep 2023::END::,transactions_in
+cuanto gasté en suscripciones oct 2023::END::,transactions_in
+cuanto gasté en netflix nov 2023::END::,transactions_in
+cuanto gasté en tv dic 2023::END::,transactions_in
+ultimas transacciones::END::,transactions_when
+ultimas tx::END::,transactions_when
+ultimas txs::END::,transactions_when
+transacciones a empresa A::END::,transactions_to
+txs a empresa A::END::,transactions_to
+tx a empresa A::END::,transactions_to
+pagos a empresa A::END::,transactions_to
+depositos a empresa A::END::,transactions_to
+creditos a empresa A::END::,transactions_to
+transacciones de enero 2023::END::,transactions_when
+transacciones de febrero 2023::END::,transactions_when
+transacciones de marzo 2023::END::,transactions_when
+transacciones de abril 2023::END::,transactions_when
+transacciones de mayo 2023::END::,transactions_when
+transacciones de junio 2023::END::,transactions_when
+transacciones de julio 2023::END::,transactions_when
+transacciones de agosto 2023::END::,transactions_when
+transacciones de septiembre 2023::END::,transactions_when
+transacciones de octubre 2023::END::,transactions_when
+transacciones de noviembre 2023::END::,transactions_when
+transacciones de diciembre 2023::END::,transactions_when
+tx de enero 2023::END::,transactions_when
+tx de febrero 2023::END::,transactions_when
+tx de marzo 2023::END::,transactions_when
+tx de abril 2023::END::,transactions_when
+tx de mayo 2023::END::,transactions_when
+tx de junio 2023::END::,transactions_when
+tx de julio 2023::END::,transactions_when
+tx de agosto 2023::END::,transactions_when
+tx de septiembre 2023::END::,transactions_when
+tx de octubre 2023::END::,transactions_when
+tx de noviembre 2023::END::,transactions_when
+tx de diciembre 2023::END::,transactions_when
+txs enero 2023::END::,transactions_when
+txs febrero 2023::END::,transactions_when
+txs marzo 2023::END::,transactions_when
+txs abril 2023::END::,transactions_when
+txs mayo 2023::END::,transactions_when
+txs junio 2023::END::,transactions_when
+txs julio 2023::END::,transactions_when
+txs agosto 2023::END::,transactions_when
+txs septiembre 2023::END::,transactions_when
+txs octubre 2023::END::,transactions_when
+txs noviembre 2023::END::,transactions_when
+txs diciembre 2023::END::,transactions_when
+txs ene 2023::END::,transactions_when
+txs feb 2023::END::,transactions_when
+txs mar 2023::END::,transactions_when
+txs abr 2023::END::,transactions_when
+txs may 2023::END::,transactions_when
+txs jun 2023::END::,transactions_when
+txs jul 2023::END::,transactions_when
+txs ago 2023::END::,transactions_when
+txs sep 2023::END::,transactions_when
+txs oct 2023::END::,transactions_when
+txs nov 2023::END::,transactions_when
+txs dic 2023::END::,transactions_when
+txs ene::END::,transactions_when
+txs feb::END::,transactions_when
+txs mar::END::,transactions_when
+txs abr::END::,transactions_when
+txs may::END::,transactions_when
+txs jun::END::,transactions_when
+txs jul::END::,transactions_when
+txs ago::END::,transactions_when
+txs sep::END::,transactions_when
+txs oct::END::,transactions_when
+txs nov::END::,transactions_when
+txs dic::END::,transactions_when
+depósitos de enero 2023::END::,transactions_when
+depósitos de febrero 2023::END::,transactions_when
+depósitos de marzo 2023::END::,transactions_when
+depósitos de abril 2023::END::,transactions_when
+depósitos de mayo 2023::END::,transactions_when
+depósitos de junio 2023::END::,transactions_when
+depósitos de julio 2023::END::,transactions_when
+depósitos de agosto 2023::END::,transactions_when
+depósitos de septiembre 2023::END::,transactions_when
+depósitos de octubre 2023::END::,transactions_when
+depósitos de noviembre 2023::END::,transactions_when
+depósitos de diciembre 2023::END::,transactions_when
+gastos ene 2023::END::,transactions_when
+gastos feb 2023::END::,transactions_when
+gastos mar 2023::END::,transactions_when
+gastos abr 2023::END::,transactions_when
+gastos may 2023::END::,transactions_when
+gastos jun 2023::END::,transactions_when
+gastos jul 2023::END::,transactions_when
+gastos ago 2023::END::,transactions_when
+gastos sep 2023::END::,transactions_when
+gastos oct 2023::END::,transactions_when
+gastos nov 2023::END::,transactions_when
+gastos dic 2023::END::,transactions_when
+txs gasolina ene mar 2023::END::,transactions_when
+txs ropa feb mayo 2023::END::,transactions_when
+txs hogar mar junio 2023::END::,transactions_when
+txs super abr julio 2023::END::,transactions_when
+txs jardin may agosto 2023::END::,transactions_when
+txs carro jun sept 2023::END::,transactions_when
+txs taller jul oct 2023::END::,transactions_when
+txs navidad ago nov 2023::END::,transactions_when
+txs regalos sep dic 2023::END::,transactions_when
+txs suscripciones oct dic 2023::END::,transactions_when
+txs netflix nov dic 2023::END::,transactions_when
+txs tv dic 2022 ene 2023::END::,transactions_when
+cuanto gasté en gasolina ene mar 2023::END::,transactions_when
+cuanto gasté en ropa feb abr 2023::END::,transactions_when
+cuanto gasté en hogar mar junio 2023::END::,transactions_when
+cuanto gasté en super abr julio 2023::END::,transactions_when
+cuanto gasté en jardin may ago 2023::END::,transactions_when
+cuanto gasté en carro jun sept 2023::END::,transactions_when
+cuanto gasté en taller jul oct 2023::END::,transactions_when
+cuanto gasté en navidad ago nov 2023::END::,transactions_when
+cuanto gasté en regalos sep dic 2023::END::,transactions_when
+cuanto gasté en suscripciones oct dic 2023::END::,transactions_when
+cuanto gasté en netflix nov dic 2023::END::,transactions_when
+cuanto gasté en tv dic 2023 ene 2024::END::,transactions_when
+depósitos de enero febrero 2023::END::,transactions_when
+depósitos de febrero marzo 2023::END::,transactions_when
+depósitos de marzo abril 2023::END::,transactions_when
+depósitos de abril mayo 2023::END::,transactions_when
+depósitos de mayo junio 2023::END::,transactions_when
+depósitos de junio julio 2023::END::,transactions_when
+depósitos de julio agosto 2023::END::,transactions_when
+depósitos de agosto septiembre 2023::END::,transactions_when
+depósitos de septiembre octubre 2023::END::,transactions_when
+depósitos de octubre novimebre 2023::END::,transactions_when
+depósitos de noviembre diciembre 2023::END::,transactions_when
+depósitos de diciembre 2023 enero 2024::END::,transactions_when
+gastos ene feb 2023::END::,transactions_when
+gastos feb mar 2023::END::,transactions_when
+gastos mar abr 2023::END::,transactions_when
+gastos abr may 2023::END::,transactions_when
+gastos may jun 2023::END::,transactions_when
+gastos jun jul 2023::END::,transactions_when
+gastos jul ago 2023::END::,transactions_when
+gastos ago sept 2023::END::,transactions_when
+gastos sep oct 2023::END::,transactions_when
+gastos oct nov 2023::END::,transactions_when
+gastos nov dic 2023::END::,transactions_when
+gastos dic 2023 ene 2024::END::,transactions_when
+txs no de ref 23456 ene 2021::END::,transactions_when
+txs no de ref 23456 feb 2021::END::,transactions_when
+txs no de ref 23456 mar 2021::END::,transactions_when
+txs no de ref 23456 abr 2021::END::,transactions_when
+txs no de ref 23456 may 2021::END::,transactions_when
+txs no de ref 23456 jun 2021::END::,transactions_when
+txs no de ref 23456 ago 2021::END::,transactions_when
+txs no de ref 23456 sept 2021::END::,transactions_when
+txs no de ref 23456 oct 2021::END::,transactions_when
+txs no de ref 23456 nov 2021::END::,transactions_when
+txs no de ref 23456 dic 2021::END::,transactions_when
+txs no de ref 23456 1er trimestre 2019::END::,transactions_when
+txs no de ref 23456 2do tr 2019::END::,transactions_when
+txs no de ref 23456 3er trim 2019::END::,transactions_when
+txs no de ref 23456 4 tri 2019::END::,transactions_when
+txs 1er trimestre 2019::END::,transactions_when
+txs 2do tr 2019::END::,transactions_when
+txs 3er trim 2019::END::,transactions_when
+txs 4 tri 2019::END::,transactions_when
+crea una nueva wallet::END::,wallet_create
+nueva wallet::END::,wallet_create
+nueva billetera dólares::END::,wallet_create
+nueva billetera usd::END::,wallet_create
+nueva billetera pesos mexicanos::END::,wallet_create
+nueva wallet mxn::END::,wallet_create
+iban de mi wallet negra::END::,wallet_read
+swift de mi wallet roja::END::,wallet_read
+iban de mi wallet hogar::END::,wallet_read
+swift de mi wallet trabajo::END::,wallet_read
+envia 100 a juan::END::,wallet_transfer
+envia 100 a mi mamá::END::,wallet_transfer
+envía 350 a gisella::END::,wallet_transfer
+envía 50 a gaby::END::,wallet_transfer
+envía 10 a andrés ibarra::END::,wallet_transfer
+enviar 200 a pedro gómez::END::,wallet_transfer
+enviar 4000 a jonathan::END::,wallet_transfer
+30 a lulo::END::,wallet_transfer
+50 a miguel vázquez::END::,wallet_transfer
+1500 a ricardo palomares::END::,wallet_transfer
+transfiere 100 a esta cuenta: 123456789 monetaria banco industrial::END::,wallet_transfer
+transfiere 20000 a la cuenta 123456789 monetaria banco industrial::END::,wallet_transfer
+transfiere 345 a esta cuenta: 123456789 ahorro banco industrial::END::,wallet_transfer
+transfiere 2345.60 a la cuenta 123456789 ahorro banco industrial::END::,wallet_transfer
+envia 100 GTQ a juan::END::,wallet_transfer
+envia 100 USD a mi mamá::END::,wallet_transfer
+envía 350 MXN a gisella::END::,wallet_transfer
+envía 50 PEN a gaby::END::,wallet_transfer
+envía 10 SVC a andrés ibarra::END::,wallet_transfer
+enviar 200 EUR a pedro gómez::END::,wallet_transfer
+enviar 4000 YEN a jonathan::END::,wallet_transfer

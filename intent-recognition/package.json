@@ -17,7 +17,8 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.8.9",
-    "cohere-ai": "^5.0.2"
+    "cohere-ai": "^5.0.2",
+    "openai": "^3.1.0"
   },
   "devDependencies": {
     "@grpc/proto-loader": "^0.7.5",

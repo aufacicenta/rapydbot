@@ -1,0 +1,230 @@
+{"prompt":"aplico para un prestamo?::END::","completion":" loans_request"}
+{"prompt":"txs abr::END::","completion":" transactions_when"}
+{"prompt":"txs 4 tri 2019::END::","completion":" transactions_when"}
+{"prompt":"hay cargos por pagar antes?::END::","completion":" loans_inquiry"}
+{"prompt":"gastos abr 2023::END::","completion":" transactions_when"}
+{"prompt":"nueva tarjeta virtual \"compras en línea\" con 6000 mxn::END::","completion":" cards_create"}
+{"prompt":"quiero un préstamo de 100k::END::","completion":" loans_request"}
+{"prompt":"depósitos de julio 2023::END::","completion":" transactions_when"}
+{"prompt":"txs jardin may 2023::END::","completion":" transactions_in"}
+{"prompt":"txs carro jun sept 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de septiembre octubre 2023::END::","completion":" transactions_when"}
+{"prompt":"remover a manuel pérez de mis contactos::END::","completion":" contacts_delete"}
+{"prompt":"transacciones de noviembre 2023::END::","completion":" transactions_when"}
+{"prompt":"transfiere 345 a esta cuenta: 123456789 ahorro banco industrial::END::","completion":" wallet_transfer"}
+{"prompt":"50 de maría::END::","completion":" payments_request"}
+{"prompt":"depósitos de marzo abril 2023::END::","completion":" transactions_when"}
+{"prompt":"crear tarjeta::END::","completion":" cards_create"}
+{"prompt":"depósitos de noviembre diciembre 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos dic 2023 ene 2024::END::","completion":" transactions_when"}
+{"prompt":"txs hogar mar 2023::END::","completion":" transactions_in"}
+{"prompt":"envia 100 a juan::END::","completion":" wallet_transfer"}
+{"prompt":"txs tv dic 2023::END::","completion":" transactions_in"}
+{"prompt":"transacciones de agosto 2023::END::","completion":" transactions_when"}
+{"prompt":"enviar 200 EUR a pedro gómez::END::","completion":" wallet_transfer"}
+{"prompt":"txs gasolina ene 2023::END::","completion":" transactions_in"}
+{"prompt":"txs no de ref 23456 2do tr 2019::END::","completion":" transactions_when"}
+{"prompt":"txs noviembre 2023::END::","completion":" transactions_when"}
+{"prompt":"txs jun 2023::END::","completion":" transactions_when"}
+{"prompt":"transacciones de junio 2023::END::","completion":" transactions_when"}
+{"prompt":"456 mxn de beto cueva::END::","completion":" payments_request"}
+{"prompt":"txs a empresa A::END::","completion":" transactions_to"}
+{"prompt":"gastos ago 2023::END::","completion":" transactions_when"}
+{"prompt":"txs ene::END::","completion":" transactions_when"}
+{"prompt":"gastos nov dic 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos jun 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de marzo 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos jun jul 2023::END::","completion":" transactions_when"}
+{"prompt":"txs feb 2023::END::","completion":" transactions_when"}
+{"prompt":"cuanto gasté en gasolina ene mar 2023::END::","completion":" transactions_when"}
+{"prompt":"transacciones de diciembre 2023::END::","completion":" transactions_when"}
+{"prompt":"txs dic::END::","completion":" transactions_when"}
+{"prompt":"txs 2do tr 2019::END::","completion":" transactions_when"}
+{"prompt":"txs feb::END::","completion":" transactions_when"}
+{"prompt":"txs marzo 2023::END::","completion":" transactions_when"}
+{"prompt":"quita a Flor Camacho::END::","completion":" contacts_delete"}
+{"prompt":"desbloquea mi tarjeta premium::END::","completion":" cards_unblock"}
+{"prompt":"desbloquea mi tarjeta::END::","completion":" cards_unblock"}
+{"prompt":"txs may::END::","completion":" transactions_when"}
+{"prompt":"txs mar 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de febrero 2023::END::","completion":" transactions_when"}
+{"prompt":"txs no de ref 23456 feb 2021::END::","completion":" transactions_when"}
+{"prompt":"txs 1er trimestre 2019::END::","completion":" transactions_when"}
+{"prompt":"ultimas transacciones::END::","completion":" transactions_when"}
+{"prompt":"cuanto gasté en carro jun sept 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de agosto 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos feb 2023::END::","completion":" transactions_when"}
+{"prompt":"transfiere 100 a esta cuenta: 123456789 monetaria banco industrial::END::","completion":" wallet_transfer"}
+{"prompt":"crear tarjeta debito con 1000 precargardos::END::","completion":" cards_create"}
+{"prompt":"cuanto gasté en regalos sep 2023::END::","completion":" transactions_in"}
+{"prompt":"txs de empresa A::END::","completion":" transactions_from"}
+{"prompt":"cuanto gasté hoy en mi tarjeta::END::","completion":" transactions_card"}
+{"prompt":"txs taller jul 2023::END::","completion":" transactions_in"}
+{"prompt":"agrega a liviere perera::END::","completion":" contacts_add"}
+{"prompt":"txs jardin may agosto 2023::END::","completion":" transactions_when"}
+{"prompt":"txs may 2023::END::","completion":" transactions_when"}
+{"prompt":"txs 3er trim 2019::END::","completion":" transactions_when"}
+{"prompt":"ultimos digitos visa platinum::END::","completion":" cards_read"}
+{"prompt":"transfiere 2345.60 a la cuenta 123456789 ahorro banco industrial::END::","completion":" wallet_transfer"}
+{"prompt":"cuanto gasté en navidad ago 2023::END::","completion":" transactions_in"}
+{"prompt":"tarjeta roja::END::","completion":" cards_read"}
+{"prompt":"borra mi tarjeta roja::END::","completion":" cards_create"}
+{"prompt":"cuanto gasté en jardin may ago 2023::END::","completion":" transactions_when"}
+{"prompt":"pagos de empresa A::END::","completion":" transactions_from"}
+{"prompt":"transacciones de marzo 2023::END::","completion":" transactions_when"}
+{"prompt":"123456789 monetaria dólares banco industrial::END::","completion":" contacts_edit"}
+{"prompt":"dígitos de mi tarjeta::END::","completion":" cards_read"}
+{"prompt":"cuanto gasté en tv dic 2023 ene 2024::END::","completion":" transactions_when"}
+{"prompt":"30 a lulo::END::","completion":" wallet_transfer"}
+{"prompt":"nueva billetera usd::END::","completion":" wallet_create"}
+{"prompt":"tx de empresa A::END::","completion":" transactions_from"}
+{"prompt":"txs suscripciones oct 2023::END::","completion":" transactions_in"}
+{"prompt":"tx de enero 2023::END::","completion":" transactions_when"}
+{"prompt":"cuanto gasté en navidad ago nov 2023::END::","completion":" transactions_when"}
+{"prompt":"transacciones de abril 2023::END::","completion":" transactions_when"}
+{"prompt":"cuanto gasté en hogar mar junio 2023::END::","completion":" transactions_when"}
+{"prompt":"cuanto gasté en carro jun 2023::END::","completion":" transactions_in"}
+{"prompt":"ultimos digitos tarjeta debito::END::","completion":" cards_read"}
+{"prompt":"gastos jul ago 2023::END::","completion":" transactions_when"}
+{"prompt":"cuanto gasté en ropa feb 2023::END::","completion":" transactions_in"}
+{"prompt":"depósitos de octubre novimebre 2023::END::","completion":" transactions_when"}
+{"prompt":"txs no de ref 23456 ago 2021::END::","completion":" transactions_when"}
+{"prompt":"transacciones de julio 2023::END::","completion":" transactions_when"}
+{"prompt":"envía 10 SVC a andrés ibarra::END::","completion":" wallet_transfer"}
+{"prompt":"gastos sep 2023::END::","completion":" transactions_when"}
+{"prompt":"100 de juan::END::","completion":" payments_request"}
+{"prompt":"tx de julio 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos mar abr 2023::END::","completion":" transactions_when"}
+{"prompt":"123456789 ahorro quetzales banco industrial::END::","completion":" contacts_edit"}
+{"prompt":"depósitos de octubre 2023::END::","completion":" transactions_when"}
+{"prompt":"tx de febrero 2023::END::","completion":" transactions_when"}
+{"prompt":"1500 de empresa A::END::","completion":" payments_request"}
+{"prompt":"transacciones de septiembre 2023::END::","completion":" transactions_when"}
+{"prompt":"1500 a ricardo palomares::END::","completion":" wallet_transfer"}
+{"prompt":"enviar 200 a pedro gómez::END::","completion":" wallet_transfer"}
+{"prompt":"txs no de ref 23456 ene 2021::END::","completion":" transactions_when"}
+{"prompt":"quitar a empresa C::END::","completion":" contacts_delete"}
+{"prompt":"swift de mi wallet trabajo::END::","completion":" wallet_read"}
+{"prompt":"txs carro jun 2023::END::","completion":" transactions_in"}
+{"prompt":"cuanto gasté en ropa feb abr 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de diciembre 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de diciembre 2023 enero 2024::END::","completion":" transactions_when"}
+{"prompt":"nueva billetera pesos mexicanos::END::","completion":" wallet_create"}
+{"prompt":"cuanto gasté en tv dic 2023::END::","completion":" transactions_in"}
+{"prompt":"iban de mi wallet hogar::END::","completion":" wallet_read"}
+{"prompt":"tx de agosto 2023::END::","completion":" transactions_when"}
+{"prompt":"txs hogar mar junio 2023::END::","completion":" transactions_when"}
+{"prompt":"tx de septiembre 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de noviembre 2023::END::","completion":" transactions_when"}
+{"prompt":"depositos de empresa A::END::","completion":" transactions_from"}
+{"prompt":"envía 10 a andrés ibarra::END::","completion":" wallet_transfer"}
+{"prompt":"bloquea mi tarjeta premium::END::","completion":" cards_block"}
+{"prompt":"depositos a empresa A::END::","completion":" transactions_to"}
+{"prompt":"txs super abr 2023::END::","completion":" transactions_in"}
+{"prompt":"transacciones de octubre 2023::END::","completion":" transactions_when"}
+{"prompt":"txs nov::END::","completion":" transactions_when"}
+{"prompt":"txs octubre 2023::END::","completion":" transactions_when"}
+{"prompt":"txs jun::END::","completion":" transactions_when"}
+{"prompt":"tx de marzo 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de agosto septiembre 2023::END::","completion":" transactions_when"}
+{"prompt":"txs no de ref 23456 may 2021::END::","completion":" transactions_when"}
+{"prompt":"tx de octubre 2023::END::","completion":" transactions_when"}
+{"prompt":"txs ropa feb 2023::END::","completion":" transactions_in"}
+{"prompt":"añade a carlos palomino cuenta banamex clabe 34567684839294738374::END::","completion":" contacts_add"}
+{"prompt":"nueva billetera dólares::END::","completion":" wallet_create"}
+{"prompt":"depósitos de mayo junio 2023::END::","completion":" transactions_when"}
+{"prompt":"transacciones de febrero 2023::END::","completion":" transactions_when"}
+{"prompt":"txs agosto 2023::END::","completion":" transactions_when"}
+{"prompt":"txs jul 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos feb mar 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de mayo 2023::END::","completion":" transactions_when"}
+{"prompt":"txs taller jul oct 2023::END::","completion":" transactions_when"}
+{"prompt":"transacciones de empresa A::END::","completion":" transactions_from"}
+{"prompt":"gastos ene 2023::END::","completion":" transactions_when"}
+{"prompt":"cuanto gasté en gasolina ene 2023::END::","completion":" transactions_in"}
+{"prompt":"txs super abr julio 2023::END::","completion":" transactions_when"}
+{"prompt":"elimina mi tarjeta visa hogar::END::","completion":" cards_delete"}
+{"prompt":"actualiza a Pedro Molina con Pedro Molina Fierro::END::","completion":" contacts_edit"}
+{"prompt":"agrega a byron lópez con cuenta mxn bancomer 2345667::END::","completion":" contacts_add"}
+{"prompt":"txs ene 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos abr may 2023::END::","completion":" transactions_when"}
+{"prompt":"txs nov 2023::END::","completion":" transactions_when"}
+{"prompt":"link de pago 200::END::","completion":" payments_link"}
+{"prompt":"cuanto gasté en netflix nov 2023::END::","completion":" transactions_in"}
+{"prompt":"envía 350 MXN a gisella::END::","completion":" wallet_transfer"}
+{"prompt":"txs netflix nov dic 2023::END::","completion":" transactions_when"}
+{"prompt":"en qué pago voy del préstamo?::END::","completion":" loans_inquiry"}
+{"prompt":"txs no de ref 23456 oct 2021::END::","completion":" transactions_when"}
+{"prompt":"txs navidad ago nov 2023::END::","completion":" transactions_when"}
+{"prompt":"txs julio 2023::END::","completion":" transactions_when"}
+{"prompt":"añadir a Julio Rosales::END::","completion":" contacts_add"}
+{"prompt":"envia 100 GTQ a juan::END::","completion":" wallet_transfer"}
+{"prompt":"txs diciembre 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos mar 2023::END::","completion":" transactions_when"}
+{"prompt":"bloquea mi tarjeta roja::END::","completion":" cards_block"}
+{"prompt":"nueva wallet::END::","completion":" wallet_create"}
+{"prompt":"transacciones a empresa A::END::","completion":" transactions_to"}
+{"prompt":"envia 100 a mi mamá::END::","completion":" wallet_transfer"}
+{"prompt":"gastos may jun 2023::END::","completion":" transactions_when"}
+{"prompt":"ultimas tx::END::","completion":" transactions_when"}
+{"prompt":"123456789 monetaria quetzales banco industrial::END::","completion":" contacts_edit"}
+{"prompt":"gastos de mi tarjeta roja::END::","completion":" transactions_card"}
+{"prompt":"txs sep 2023::END::","completion":" transactions_when"}
+{"prompt":"cuanto gasté en netflix nov dic 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos may 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de junio julio 2023::END::","completion":" transactions_when"}
+{"prompt":"elimina mi tarjeta debito::END::","completion":" cards_delete"}
+{"prompt":"envía 50 PEN a gaby::END::","completion":" wallet_transfer"}
+{"prompt":"enviar 4000 a jonathan::END::","completion":" wallet_transfer"}
+{"prompt":"agregar a Hug Frieser con cuenta Bi monetaria 123456 gtq::END::","completion":" contacts_add"}
+{"prompt":"cuanto gasté en regalos sep dic 2023::END::","completion":" transactions_when"}
+{"prompt":"bloquea mi tarjeta::END::","completion":" cards_block"}
+{"prompt":"tx de mayo 2023::END::","completion":" transactions_when"}
+{"prompt":"quitar a karen padilla::END::","completion":" contacts_delete"}
+{"prompt":"gastos jul 2023::END::","completion":" transactions_when"}
+{"prompt":"txs sep::END::","completion":" transactions_when"}
+{"prompt":"cuanto gasté en taller jul oct 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos ago sept 2023::END::","completion":" transactions_when"}
+{"prompt":"txs septiembre 2023::END::","completion":" transactions_when"}
+{"prompt":"cuanto gasté hoy en mi tarjeta roja::END::","completion":" transactions_card"}
+{"prompt":"txs junio 2023::END::","completion":" transactions_when"}
+{"prompt":"tx de noviembre 2023::END::","completion":" transactions_when"}
+{"prompt":"transfiere 20000 a la cuenta 123456789 monetaria banco industrial::END::","completion":" wallet_transfer"}
+{"prompt":"txs no de ref 23456 nov 2021::END::","completion":" transactions_when"}
+{"prompt":"creditos de empresa A::END::","completion":" transactions_from"}
+{"prompt":"txs no de ref 23456 3er trim 2019::END::","completion":" transactions_when"}
+{"prompt":"cuanto gasté ayer en mi tarjeta::END::","completion":" transactions_card"}
+{"prompt":"paga la cuota de este mes de mi prestamo azul con la wallet plateada::END::","completion":" loans_inquiry"}
+{"prompt":"cuanto gasté en suscripciones oct dic 2023::END::","completion":" transactions_when"}
+{"prompt":"txs mar::END::","completion":" transactions_when"}
+{"prompt":"cuánto debo del prestamo?::END::","completion":" loans_inquiry"}
+{"prompt":"tx de junio 2023::END::","completion":" transactions_when"}
+{"prompt":"txs no de ref 23456 mar 2021::END::","completion":" transactions_when"}
+{"prompt":"txs dic 2023::END::","completion":" transactions_when"}
+{"prompt":"desbloquea mi tarjeta debito::END::","completion":" cards_unblock"}
+{"prompt":"txs no de ref 23456 sept 2021::END::","completion":" transactions_when"}
+{"prompt":"txs no de ref 23456 dic 2021::END::","completion":" transactions_when"}
+{"prompt":"txs regalos sep 2023::END::","completion":" transactions_in"}
+{"prompt":"123456789 ahorro dólares banco industrial::END::","completion":" contacts_edit"}
+{"prompt":"depósitos de febrero marzo 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos sep oct 2023::END::","completion":" transactions_when"}
+{"prompt":"txs suscripciones oct dic 2023::END::","completion":" transactions_when"}
+{"prompt":"eliminar tarj empresa::END::","completion":" cards_delete"}
+{"prompt":"prestamo de 1000?::END::","completion":" loans_request"}
+{"prompt":"cuanto gasté en suscripciones oct 2023::END::","completion":" transactions_in"}
+{"prompt":"txs no de ref 23456 1er trimestre 2019::END::","completion":" transactions_when"}
+{"prompt":"iban de mi wallet negra::END::","completion":" wallet_read"}
+{"prompt":"txs tv dic 2022 ene 2023::END::","completion":" transactions_when"}
+{"prompt":"txs ago::END::","completion":" transactions_when"}
+{"prompt":"paga el prestamo verde con mi wallet roja::END::","completion":" loans_inquiry"}
+{"prompt":"depósitos de abril mayo 2023::END::","completion":" transactions_when"}
+{"prompt":"txs abr 2023::END::","completion":" transactions_when"}
+{"prompt":"txs gasolina ene mar 2023::END::","completion":" transactions_when"}
+{"prompt":"depósitos de julio agosto 2023::END::","completion":" transactions_when"}
+{"prompt":"gastos ene feb 2023::END::","completion":" transactions_when"}
+{"prompt":"bloquea mi tarjeta debito::END::","completion":" cards_block"}
+{"prompt":"creditos a empresa A::END::","completion":" transactions_to"}
+{"prompt":"link 903 usd::END::","completion":" payments_link"}
+{"prompt":"txs abril 2023::END::","completion":" transactions_when"}
+{"prompt":"bloquear tarj morada::END::","completion":" cards_block"}
+{"prompt":"envía 350 a gisella::END::","completion":" wallet_transfer"}
