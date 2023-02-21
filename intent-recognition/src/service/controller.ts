@@ -23,10 +23,10 @@ export class Controller {
       const input = call.request.getInput();
 
       // @TODO set this in env
-      const engine = "cohere";
+      const engines = ["openai"];
       let prediction: string;
 
-      if (engine === "cohere") {
+      if (engines.includes("cohere")) {
         const response = await cohere.client.classify({
           model: "60a0705a-5231-4d4a-b62f-8be55def74a5-ft",
           inputs: [input],
@@ -39,16 +39,17 @@ export class Controller {
         prediction = cohere.classify.getHighestConfidenceIntent(response);
       } else {
         const response = await openai.client.createCompletion({
-          model: "ft-sIrndHIT8stFP7vSWQKxkwqx",
-          prompt: input,
-          max_tokens: 1,
+          model: "ada:ft-aufacicenta-2023-02-21-22-08-39",
+          prompt: `${input}::END::`,
+          temperature: 0,
+          max_tokens: 3,
         });
 
         if (response.status !== 200) {
           throw new Error(IntentRecognitionServiceErrorCodes.classify_invalid_response);
         }
 
-        response.data.choices[0].text;
+        prediction = response.data.choices[0].text.trim();
       }
 
       const reply = new ClassifyReply();
