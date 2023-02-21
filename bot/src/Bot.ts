@@ -1,12 +1,10 @@
-import { Channel, DefaultGenerics, StreamChat } from "stream-chat";
-import { UserClient, UserClientGenerator } from "@rapydbot/user/client";
-import { WalletClient, WalletClientGenerator } from "@rapydbot/wallet/client";
-import {
-  IntentRecognitionClient,
-  IntentRecognitionClientGenerator,
-} from "@rapydbot/intent-recognition/client";
+import { StreamChat } from "stream-chat";
+import { UserClientGenerator } from "@rapydbot/user/client";
+import { WalletClientGenerator } from "@rapydbot/wallet/client";
+import { IntentAction } from "@rapydbot/intent-recognition/providers/cohere/types";
 import moment, { Moment } from "moment";
 import TelegramBotApi, { SendMessageOptions } from "node-telegram-bot-api";
+import IntentRecognitionClientGenerator from "@rapydbot/intent-recognition/client";
 
 import {
   BotLanguageHandler,
@@ -14,74 +12,60 @@ import {
   BotReplyToMessageIdHandlerStorageKeys,
 } from "./handler";
 import { translationKeys } from "./i18n";
-import { Commands, CustomMessage } from "./types";
+import { Clients, Commands, Context, CustomMessage, Handlers } from "./types";
 import { IntentRecognitionHandler } from "./handler/intent-recognition";
 import { StartCommand } from "./commands";
 import { TrainCommand } from "./commands/train";
+import { IBotCommand } from "./commands/types";
+import { CreateWalletCommand } from "./commands/wallet/create";
+
+const {
+  BOT_TOKEN,
+  USER_SERVICE_URL,
+  WALLET_SERVICE_URL,
+  INTENT_RECOGNITION_SERVICE_URL,
+  STREAM_CHAT_API_KEY,
+  STREAM_CHAT_API_SECRET,
+} = process.env;
 
 export class Bot {
   public api: TelegramBotApi;
 
   public moment: Moment;
 
-  public handlers: {
-    language?: BotLanguageHandler;
-    intentRecognition?: IntentRecognitionHandler;
-  } = {};
+  // Handle text messages, but won't produce replies
+  public handlers: Handlers = {};
 
-  public clients: {
-    user?: UserClient;
-    wallet?: WalletClient;
-    intentRecognition?: IntentRecognitionClient;
-  } = {};
+  // Communicate to gRPC servers
+  public clients: Clients = {};
 
+  // Commands send replies
   public commands: Commands = {};
 
-  public context: {
-    chat?: StreamChat<DefaultGenerics>;
-    channel?: Channel<DefaultGenerics>;
-  } = {};
+  public context: Context = {};
 
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
-  private trainingMap = new Map<number, boolean>();
+  public intentActionsToCommandsMap = new Map<IntentAction, IBotCommand>();
 
   constructor() {
-    this.api = new TelegramBotApi(process.env.BOT_TOKEN, { polling: true });
-
-    this.handlers.language = new BotLanguageHandler();
-    this.handlers.intentRecognition = new IntentRecognitionHandler(this);
+    this.api = new TelegramBotApi(BOT_TOKEN, { polling: true });
 
     this.moment = moment();
 
-    this.clients.user = new UserClientGenerator(process.env.USER_SERVICE_URL).create();
-    this.clients.wallet = new WalletClientGenerator(process.env.WALLET_SERVICE_URL).create();
+    this.setHandlers();
 
-    this.clients.intentRecognition = new IntentRecognitionClientGenerator(
-      process.env.INTENT_RECOGNITION_SERVICE_URL,
-    ).create();
-    // this.clients.intentRecognition.classify.bind(this.clients.intentRecognition);
+    this.setClients();
 
-    this.commands.start = new StartCommand(this);
-    this.commands.start.onText.bind(this.commands.start);
-    this.commands.train = new TrainCommand(this);
-    this.commands.train.onText.bind(this.commands.train);
+    this.setCommands();
   }
 
   async prepare(): Promise<Bot> {
     await this.handlers.language.init();
 
-    // leverage stream-chat to store the context of a conversation
-    const streamChat = StreamChat.getInstance(
-      process.env.STREAM_CHAT_API_KEY,
-      process.env.STREAM_CHAT_API_SECRET,
-    );
+    await this.prepareContext();
 
-    const channel = streamChat.channel("messaging", "bot-context", { created_by_id: "bot" });
-    await channel.create();
-
-    this.context.chat = streamChat;
-    this.context.channel = channel;
+    this.mapIntentActionsToCommands();
 
     return this;
   }
@@ -90,7 +74,6 @@ export class Bot {
     this.api.onText(/^\/start/i, (msg) => this.commands.start.onText(msg));
 
     this.api.onText(/^\/?(train|entrenar)/i, (msg) => {
-      this.trainingMap.set(msg.from.id, true);
       this.commands.train.runTrainingQueue(msg);
     });
 
@@ -101,8 +84,7 @@ export class Bot {
     });
 
     this.api.on("message", async (msg) => {
-      // const isTraining = this.trainingMap.get(msg.from.id);
-      const isTraining = true;
+      const isTraining = false;
 
       if (isTraining) {
         this.commands.train.onText(msg);
@@ -141,6 +123,9 @@ export class Bot {
             { type: "text", fields: [{ title: "intent", value: command, short: true }] },
           ],
         });
+
+        const action = this.intentActionsToCommandsMap.get(command);
+        action.onText(msg);
 
         // @TODO map command to the corresponding class,
         // extract the entities from the text message and
@@ -254,11 +239,54 @@ export class Bot {
     return this.handlers.language.getTranslation(msg, translationKey, args);
   }
 
-  public clearCommandHandler(chat_id: number) {
+  clearCommandHandler(chat_id: number) {
     return this.replyToMessageIDMap.delete(chat_id);
   }
 
-  public getReplyToMessageIdHandler(chat_id: number) {
+  getReplyToMessageIdHandler(chat_id: number) {
     return this.replyToMessageIDMap.get(chat_id);
+  }
+
+  private setHandlers() {
+    this.handlers.language = new BotLanguageHandler();
+    this.handlers.intentRecognition = new IntentRecognitionHandler(this);
+  }
+
+  private setClients() {
+    this.clients.user = new UserClientGenerator(USER_SERVICE_URL).create();
+
+    this.clients.wallet = new WalletClientGenerator(WALLET_SERVICE_URL).create();
+
+    this.clients.intentRecognition = new IntentRecognitionClientGenerator(
+      INTENT_RECOGNITION_SERVICE_URL,
+    ).create();
+    // this.clients.intentRecognition.classify.bind(this.clients.intentRecognition);
+  }
+
+  private setCommands() {
+    this.commands.start = new StartCommand(this);
+    this.commands.start.onText.bind(this.commands.start);
+
+    this.commands.train = new TrainCommand(this);
+    this.commands.train.onText.bind(this.commands.train);
+
+    this.commands.createWallet = new CreateWalletCommand(this);
+    this.commands.createWallet.onText.bind(this.commands.createWallet);
+  }
+
+  private async prepareContext() {
+    // leverage stream-chat to store the context of a conversation
+    const streamChat = StreamChat.getInstance(STREAM_CHAT_API_KEY, STREAM_CHAT_API_SECRET);
+
+    const channel = streamChat.channel("messaging", "bot-context", { created_by_id: "bot" });
+    await channel.create();
+
+    // @TODO abstract to local class to control methods
+    this.context.chat = streamChat;
+    this.context.channel = channel;
+  }
+
+  private async mapIntentActionsToCommands() {
+    this.intentActionsToCommandsMap.set(IntentAction.WalletCreate, this.commands.createWallet);
   }
 }

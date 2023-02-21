@@ -23,7 +23,7 @@ export function generateButtonGroups({
 }
 
 export function generateCountryFlagEmoji(twoLettersCountryCode: string) {
-  const rootUnicodeFlagsIndex = 127397;
+  const rootUnicodeFlagsIndex = 127_397;
 
   const codePoints = twoLettersCountryCode
     .split("")

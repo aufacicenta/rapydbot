@@ -1,7 +1,7 @@
 import {
   generateButtonGroups,
   generateCountryFlagEmoji,
-} from "../../../../commands/util/buttons/button-groups";
+} from "../../../../util/buttons/button-groups";
 import { generateTelegramButtons } from "../../../util";
 
 describe("Button Utilities", () => {

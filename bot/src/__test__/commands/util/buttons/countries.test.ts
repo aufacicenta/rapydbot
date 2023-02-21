@@ -1,7 +1,4 @@
-import {
-  getCountryButtons,
-  getCountryFromName,
-} from "../../../../commands/util/buttons/countries";
+import { getCountryButtons, getCountryFromName } from "../../../../util/buttons/countries";
 
 describe("Country Utilities", () => {
   test("Country Utilities: Get Country Buttons", () => {

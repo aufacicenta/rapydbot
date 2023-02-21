@@ -1,4 +1,5 @@
 import { ClassifyRequest } from "@rapydbot/intent-recognition/client";
+import { IntentAction } from "@rapydbot/intent-recognition/providers/cohere/types";
 
 import { Bot } from "../Bot";
 import { CustomMessage } from "../types";
@@ -10,7 +11,7 @@ export class IntentRecognitionHandler {
     this.bot = bot;
   }
 
-  async classify(msg: CustomMessage) {
+  async classify(msg: CustomMessage): Promise<IntentAction> {
     const request = new ClassifyRequest();
 
     request.setInput(msg.text);
@@ -23,7 +24,7 @@ export class IntentRecognitionHandler {
 
         const action = reply.getAction();
 
-        resolve(action);
+        resolve(action as IntentAction);
       });
     });
   }

@@ -1,4 +1,4 @@
-import { getCommandButtons } from "../../../../commands/util/buttons/commands";
+import { getCommandButtons } from "../../../../util/buttons/commands";
 
 describe("Command Buttons Utility", () => {
   test("Command Buttons: Get Command Buttons", () => {

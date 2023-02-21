@@ -43,6 +43,8 @@ export class TrainCommand implements IBotCommand {
   }
 
   async runTrainingQueue(msg: CustomMessage): Promise<void> {
+    // @TODO check if user has already trained by storing their id in the database of by checking the stream-chat messages
+
     const actions = {
       [this.walletCreate.name]: {
         isTimeoutSet: false,
@@ -97,12 +99,16 @@ export class TrainCommand implements IBotCommand {
       if (isNotCurrent && next.isTimeoutSet === false) {
         setTimeout(() => {
           this.currentAction.set(msg.from.id, next);
+
           this.bot.reply(msg, next.initialInstruction);
 
           if (next.isLast) {
             setTimeout(() => {
               this.currentAction.set(msg.from.id, undefined);
 
+              // @TODO send final stream-chat message attachment to identify completion
+
+              // @TODO ETH address command
               this.bot.reply(
                 msg,
                 `La sesión de entrenamiento ha finalizado. 🥳

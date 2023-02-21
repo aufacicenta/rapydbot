@@ -1,7 +1,4 @@
-import {
-  getCurrencyButtons,
-  getCurrencyCode,
-} from "../../../../commands/util/buttons/currencies";
+import { getCurrencyButtons, getCurrencyCode } from "../../../../util/buttons/currencies";
 
 describe("Currency Utilities", () => {
   test("Currency Utilities: Get Currency Buttons", () => {
