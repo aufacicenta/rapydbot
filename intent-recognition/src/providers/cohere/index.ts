@@ -1,9 +1,12 @@
+import cohere from "cohere-ai";
+
 import { getHighestConfidenceIntent } from "./classify/labels";
-import client from "./client";
 import { getExamplesByLanguageCode } from "./examples/get";
 
+cohere.init(process.env.COHERE_API_KEY!);
+
 export default {
-  client,
+  client: cohere,
   examples: { getExamplesByLanguageCode },
   classify: { getHighestConfidenceIntent },
 };

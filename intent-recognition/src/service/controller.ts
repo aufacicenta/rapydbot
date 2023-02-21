@@ -4,6 +4,8 @@ import cohere from "../providers/cohere";
 import { IContext } from "../server/interface/IContext";
 import { ClassifyRequest, ClassifyReply } from "../server/protos/schema_pb";
 
+import { IntentRecognitionServiceErrorCodes } from "./error";
+
 type gRPCServerUnaryCall<Request, Reply> = {
   call: grpc.ServerUnaryCall<Request, Reply>;
   callback: grpc.sendUnaryData<Reply>;
@@ -32,6 +34,10 @@ export class Controller {
         model: "60a0705a-5231-4d4a-b62f-8be55def74a5-ft",
         inputs: [input],
       });
+
+      if (response.statusCode !== 200) {
+        throw new Error(IntentRecognitionServiceErrorCodes.classify_invalid_response);
+      }
 
       const prediction = cohere.classify.getHighestConfidenceIntent(response);
 
