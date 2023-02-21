@@ -18,6 +18,7 @@ import { StartCommand } from "./commands";
 import { TrainCommand } from "./commands/train";
 import { IBotCommand } from "./commands/types";
 import { CreateWalletCommand } from "./commands/wallet/create";
+import { ContextHandler } from "./handler/context";
 
 const {
   BOT_TOKEN,
@@ -93,13 +94,7 @@ export class Bot {
       }
 
       try {
-        const { message } = await this.context.channel.sendMessage({
-          text: msg.text,
-          // parent_id: msg.chat.id.toString(),
-          user_id: msg.from.id.toString(),
-          silent: true,
-          skip_push: true,
-        });
+        const message = await this.handlers.context.sendMessage(msg);
         // @TODO search stream messages by user.id
         // const userMessages = await this.context.chat.search(
         //   {
@@ -110,22 +105,14 @@ export class Bot {
         //   },
         // );
         // @TODO detect message intent with the classify service and execute the command
-        const context = { chat: { message: { id: message.id } } };
-        const command = await this.handlers.intentRecognition.classify({ ...msg, context });
+        const context = { chat: { message } };
+        const customMessage = { ...msg, context };
 
-        await this.context.chat.updateMessage({
-          id: message.id,
-          user_id: msg.from.id.toString(),
-          silent: true,
-          text: message.text,
-          html: message.html,
-          attachments: [
-            { type: "text", fields: [{ title: "intent", value: command, short: true }] },
-          ],
-        });
+        const command = await this.handlers.intentRecognition.classify(customMessage);
 
-        const action = this.intentActionsToCommandsMap.get(command);
-        action.onText(msg);
+        await this.handlers.context.updateMessage(customMessage);
+
+        this.handlers.intentRecognition.onCommand(command, customMessage);
 
         // @TODO map command to the corresponding class,
         // extract the entities from the text message and
@@ -250,6 +237,7 @@ export class Bot {
   private setHandlers() {
     this.handlers.language = new BotLanguageHandler();
     this.handlers.intentRecognition = new IntentRecognitionHandler(this);
+    this.handlers.context = new ContextHandler(this);
   }
 
   private setClients() {

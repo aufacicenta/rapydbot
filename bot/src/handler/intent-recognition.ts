@@ -11,6 +11,17 @@ export class IntentRecognitionHandler {
     this.bot = bot;
   }
 
+  onCommand(command: IntentAction, msg: CustomMessage) {
+    try {
+      const action = this.bot.intentActionsToCommandsMap.get(command);
+
+      action.onText(msg);
+    } catch (error) {
+      console.log(error);
+      throw new Error("IntentRecognitionHandler UNRESOLVED_COMMAND");
+    }
+  }
+
   async classify(msg: CustomMessage): Promise<IntentAction> {
     const request = new ClassifyRequest();
 

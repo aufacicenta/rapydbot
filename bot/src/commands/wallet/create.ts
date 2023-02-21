@@ -67,11 +67,11 @@ export class CreateWalletCommand implements IBotCommand {
       util
         .getUserId(msg, this.bot.clients.user)
         .then((userId) => {
-          const createWalletRequest = new CreateWalletRequest();
+          const request = new CreateWalletRequest();
 
-          createWalletRequest.setUserId(userId);
+          request.setUserId(userId);
 
-          this.bot.clients.wallet.createWallet(createWalletRequest, (error, reply) => {
+          this.bot.clients.wallet.createWallet(request, (error, reply) => {
             if (Boolean(error)) {
               return reject(error);
             }
@@ -81,7 +81,9 @@ export class CreateWalletCommand implements IBotCommand {
             resolve(eWalletAddress);
           });
         })
-        .catch((error) => reject(error));
+        .catch((error) => {
+          reject(error);
+        });
     });
   }
 
