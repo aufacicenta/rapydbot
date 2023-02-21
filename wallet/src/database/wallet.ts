@@ -32,13 +32,7 @@ export class Wallet {
       },
     });
 
-    if (!Boolean(result) || !result.getDataValue("id")) {
-      throw new Error(
-        WalletServiceErrorCodes.rapyd_ewallet_does_not_exist_for_user_id
-      );
-    }
-
-    return result.getDataValue("id")!;
+    return result ? result.getDataValue("id") : null;
   }
 
   async getRapydWalletAddressByUserId({

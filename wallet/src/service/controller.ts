@@ -104,7 +104,7 @@ export class Controller {
         user_id,
       });
 
-      if (Boolean(wallet_id)) {
+      if (wallet_id) {
         throw new Error(
           WalletServiceErrorCodes.rapyd_ewallet_exists_for_user_id
         );
