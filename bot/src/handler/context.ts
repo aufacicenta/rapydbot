@@ -18,17 +18,18 @@ export class ContextHandler implements IBotHandler {
     return;
   }
 
-  async sendMessage(msg: Message) {
+  async sendMessage(msg: Message, attachments: Attachment[] = []) {
     console.log("context.sendMessage", msg.text);
 
     return { id: "123" };
 
-    // const { message } = await this.bot.context.channel.sendMessage({
-    //   text: msg.text,
-    //   user_id: msg.from.id.toString(),
-    //   silent: true,
-    //   skip_push: true,
-    // });
+    const { message } = await this.bot.context.channel.sendMessage({
+      text: msg.text,
+      user_id: msg.from.id.toString(),
+      silent: true,
+      skip_push: true,
+      attachments,
+    });
 
     // return message;
 
@@ -47,7 +48,7 @@ export class ContextHandler implements IBotHandler {
   ) {
     console.log("context.updateMessage", text);
 
-    // this.bot.context.chat.updateMessage({
+    // const response = await this.bot.context.chat.updateMessage({
     //   id: message.id,
     //   user_id: user_id.toString(),
     //   silent: true,
@@ -55,6 +56,8 @@ export class ContextHandler implements IBotHandler {
     //   html: message.html,
     //   attachments,
     // });
+
+    // return response.message;
 
     // @TODO handle error codes
   }

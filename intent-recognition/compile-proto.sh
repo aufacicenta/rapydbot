@@ -5,9 +5,9 @@ ROOT=`pwd`
 IN_DIR=$ROOT/src/server/protos
 OUT_DIR=$IN_DIR
 TS_OUT_DIR=$OUT_DIR
-PROTOC="$(npm bin)/grpc_tools_node_protoc"
-PROTOC_GEN_TS_PATH="$(npm bin)/protoc-gen-ts"
-PROTOC_GEN_GRPC_PATH="$(npm bin)/grpc_tools_node_protoc_plugin"
+PROTOC="./node_modules/.bin/grpc_tools_node_protoc"
+PROTOC_GEN_TS_PATH="./node_modules/.bin/protoc-gen-ts"
+PROTOC_GEN_GRPC_PATH="./node_modules/.bin/grpc_tools_node_protoc_plugin"
 
 $PROTOC \
     -I="$IN_DIR" \

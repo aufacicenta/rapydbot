@@ -1,3 +1,5 @@
+import { IntentAction } from "@rapydbot/intent-recognition/providers/cohere/types";
+
 import { Bot } from "../../Bot";
 import { translationKeys } from "../../i18n";
 import { CustomMessage } from "../../types";
@@ -130,7 +132,9 @@ A qué dirección de ETH enviamos tus USDT? 🤑`,
   }
 
   private async walletCreate(msg: CustomMessage): Promise<void> {
-    this.sendMessage(msg, "wallet_create");
+    this.bot.handlers.context.sendMessage(msg, [
+      { type: "text", value: IntentAction.WalletCreate },
+    ]);
 
     this.bot.reply(
       msg,
@@ -141,7 +145,9 @@ Continúa enviando instrucciones para: <strong>crear una billetera</strong>.`,
   }
 
   private async transactionsFrom(msg: CustomMessage): Promise<void> {
-    this.sendMessage(msg, "transactions_from");
+    this.bot.handlers.context.sendMessage(msg, [
+      { type: "text", value: IntentAction.TransactionsFrom },
+    ]);
 
     this.bot.reply(
       msg,
@@ -152,7 +158,9 @@ Continúa enviando instrucciones para <strong>saber sobre transacciones de algui
   }
 
   private async transactionsWhen(msg: CustomMessage): Promise<void> {
-    this.sendMessage(msg, "transactions_when");
+    this.bot.handlers.context.sendMessage(msg, [
+      { type: "text", value: IntentAction.TransactionsWhen },
+    ]);
 
     this.bot.reply(
       msg,
@@ -163,7 +171,9 @@ Continúa enviando instrucciones para: <strong>saber sobre transacciones del pas
   }
 
   private async transactionsAmount(msg: CustomMessage): Promise<void> {
-    this.sendMessage(msg, "transactions_amount");
+    this.bot.handlers.context.sendMessage(msg, [
+      { type: "text", value: IntentAction.TransactionsAmount },
+    ]);
 
     this.bot.reply(
       msg,
@@ -174,7 +184,9 @@ Continúa enviando instrucciones para: <strong>saber sobre transacciones de un m
   }
 
   private async cardsNew(msg: CustomMessage): Promise<void> {
-    this.sendMessage(msg, "cards_new");
+    this.bot.handlers.context.sendMessage(msg, [
+      { type: "text", value: IntentAction.CardsCreate },
+    ]);
 
     this.bot.reply(
       msg,
@@ -185,7 +197,7 @@ Continúa enviando instrucciones para: <strong>crear una tarjeta</strong>.`,
   }
 
   private async cardsBalance(msg: CustomMessage): Promise<void> {
-    this.sendMessage(msg, "cards_balance");
+    this.bot.handlers.context.sendMessage(msg, [{ type: "text", value: IntentAction.CardsRead }]);
 
     this.bot.reply(
       msg,
@@ -196,7 +208,9 @@ Continúa enviando instrucciones para: <strong>saber el balance de una tarjeta</
   }
 
   private async contactsAdd(msg: CustomMessage): Promise<void> {
-    this.sendMessage(msg, "contacts_add");
+    this.bot.handlers.context.sendMessage(msg, [
+      { type: "text", value: IntentAction.ContactsAdd },
+    ]);
 
     this.bot.reply(
       msg,
@@ -204,21 +218,6 @@ Continúa enviando instrucciones para: <strong>saber el balance de una tarjeta</
 
 Continúa enviando instrucciones para: <strong>agregar un contacto</strong>.`,
     );
-  }
-
-  private async sendMessage(msg: CustomMessage, value: string): Promise<void> {
-    console.log("sending message", value);
-    // const msgOptions = {
-    //   silent: true,
-    //   skip_push: true,
-    // };
-
-    // await this.bot.context.channel.sendMessage({
-    //   text: msg.text,
-    //   user_id: msg.from.id.toString(),
-    //   attachments: [{ type: "text", fields: [{ title: "intent", value, short: true }] }],
-    //   ...msgOptions,
-    // });
   }
 
   private handleErrorReply(error: Error, msg: CustomMessage) {

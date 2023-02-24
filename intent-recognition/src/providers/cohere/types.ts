@@ -16,6 +16,7 @@ export enum IntentAction {
   TransactionsWhen = "transactions_when",
   TransactionsCard = "transactions_card",
   TransactionsIn = "transactions_in",
+  TransactionsAmount = "transactions_in",
 
   CardsCreate = "cards_create",
   CardsRead = "cards_read",

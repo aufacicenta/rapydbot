@@ -85,7 +85,7 @@ export class Bot {
     });
 
     this.api.on("message", async (msg) => {
-      const isTraining = false;
+      const isTraining = true;
 
       if (isTraining) {
         this.commands.train.onText(msg);
@@ -94,31 +94,27 @@ export class Bot {
       }
 
       try {
+        // Record the message in the database
         const message = await this.handlers.context.sendMessage(msg);
-        // @TODO search stream messages by user.id
-        // const userMessages = await this.context.chat.search(
-        //   {
-        //     cid: "messaging:bot-context",
-        //   },
-        //   {
-        //     "user.id": { $eq: msg.from.id.toString() },
-        //   },
-        // );
-        // @TODO detect message intent with the classify service and execute the command
+
         const context = { chat: { message } };
         const customMessage = { ...msg, context };
 
+        // Identify the IntentAction from the message text
         const command = await this.handlers.intentRecognition.classify(customMessage);
 
-        await this.handlers.context.updateMessage(customMessage);
+        // Update the message with the IntentAction as an attachment
+        await this.handlers.context.updateMessage(customMessage, [
+          { type: "text", fields: [{ title: "intent", value: command, short: true }] },
+        ]);
 
+        // Execute the command
         this.handlers.intentRecognition.onCommand(command, customMessage);
 
-        // @TODO map command to the corresponding class,
-        // extract the entities from the text message and
+        // @TODO extract the entities from the text message and
         // create a data request record, if values are missing, let the bot ask for them with ChatGPT
       } catch (error) {
-        // @TODO handle error reply from error reason send by the servers
+        // @TODO handle error reply from error reason sent by the servers, handlers or commands
         console.error(error);
       }
     });
