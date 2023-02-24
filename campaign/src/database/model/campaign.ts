@@ -4,7 +4,7 @@ import { CampaignActionsModel } from "./campaign-actions";
 
 export type CampaignModelArgs = {
   id?: string;
-  user_id: string;
+  issuer_id: string;
   message_id: string;
   created_at: Date;
   updated_at: Date;
@@ -22,7 +22,7 @@ export class CampaignModel extends Model<CampaignModelArgs> {
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    user_id: {
+    issuer_id: {
       type: DataTypes.UUID,
       allowNull: false,
       unique: true,

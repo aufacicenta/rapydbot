@@ -10,7 +10,7 @@ service Campaign {
 }
 
 message CreateCampaignRequest {
-  string user_id = 1;
+  string issuer_id = 1;
   string message_id = 2;
 }
 

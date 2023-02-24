@@ -21,10 +21,10 @@ export class Controller {
     { db }: IContext,
   ) {
     try {
-      const user_id = call.request.getUserId();
-      const message_id = call.request.getMessageId();
+      const issuerId = call.request.getIssuerId();
+      const messageId = call.request.getMessageId();
 
-      const { campaignId } = await db.campaign.create({ user_id, message_id });
+      const { campaignId } = await db.campaign.create({ issuerId, messageId });
 
       const reply = new CreateCampaignReply();
 

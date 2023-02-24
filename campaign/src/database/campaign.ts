@@ -1,6 +1,6 @@
 import { Sequelize, ModelStatic } from "sequelize";
 
-import { CreateCampaignReply } from "../client";
+import { CreateCampaignReply, CreateCampaignRequest } from "../client";
 
 import { CampaignModel } from "./model";
 
@@ -14,14 +14,11 @@ export class Campaign {
   }
 
   async create({
-    user_id,
-    message_id,
-  }: {
-    user_id: string;
-    message_id: string;
-  }): Promise<CreateCampaignReply.AsObject> {
+    issuerId: issuer_id,
+    messageId: message_id,
+  }: CreateCampaignRequest.AsObject): Promise<CreateCampaignReply.AsObject> {
     const result = await this.model.create({
-      user_id,
+      issuer_id,
       message_id,
     });
 
