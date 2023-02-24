@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option objc_class_prefix = "aufax";
+
+package campaign;
+
+service Campaign {
+  rpc CreateCampaign (CreateCampaignRequest) returns (CreateCampaignReply) {}
+  rpc CreateCampaignAction (CreateCampaignActionRequest) returns (CreateCampaignActionReply) {}
+}
+
+message CreateCampaignRequest {
+  string user_id = 1;
+  string message_id = 2;
+}
+
+message CreateCampaignReply {
+  string campaign_id = 1;
+}
+
+message CreateCampaignActionRequest {
+  string campaign_id = 1;
+  string initial_instruction = 2;
+  string reply = 3;
+  string intent_action = 4;
+}
+
+message CreateCampaignActionReply {
+  string campaign_action_id = 1;
+}
+
