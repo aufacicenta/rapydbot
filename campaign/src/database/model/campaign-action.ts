@@ -1,6 +1,6 @@
 import { DataTypes, Model, ModelOptions } from "sequelize";
 
-export type CampaignActionsModelArgs = {
+export type CampaignActionModelArgs = {
   id?: string;
   campaign_id: string;
   initial_instruction: string;
@@ -8,8 +8,8 @@ export type CampaignActionsModelArgs = {
   intent_action: string;
 };
 
-export class CampaignActionsModel extends Model<CampaignActionsModelArgs> {
-  public static tableName = "campaign_actions";
+export class CampaignActionModel extends Model<CampaignActionModelArgs> {
+  public static tableName = "campaign_action";
 
   public static rawAttributes = {
     id: {
@@ -53,6 +53,6 @@ export class CampaignActionsModel extends Model<CampaignActionsModelArgs> {
   public static config: ModelOptions = {
     paranoid: true,
     underscored: true,
-    tableName: CampaignActionsModel.tableName,
+    tableName: CampaignActionModel.tableName,
   };
 }

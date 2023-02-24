@@ -2,7 +2,8 @@ import * as grpc from "@grpc/grpc-js";
 
 import database from "./database";
 import { Campaign } from "./database/campaign";
-import { CampaignActions } from "./database/campaign-actions";
+import { CampaignAction } from "./database/campaign-action";
+import { CampaignUser } from "./database/campaign-user";
 import server from "./server";
 import { IContext } from "./server/interface/IContext";
 import { Controller } from "./service/controller";
@@ -15,7 +16,8 @@ const run = async () => {
     db: {
       driver,
       campaign: new Campaign(driver),
-      campaignActions: new CampaignActions(driver),
+      campaignActions: new CampaignAction(driver),
+      campaignUser: new CampaignUser(driver),
     },
   };
 

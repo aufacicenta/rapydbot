@@ -2,18 +2,18 @@ import { Sequelize, ModelStatic } from "sequelize";
 
 import { CreateCampaignActionReply } from "../client";
 
-import { CampaignActionsModel, CampaignActionsModelArgs } from "./model";
+import { CampaignActionModel, CampaignActionModelArgs } from "./model";
 
-export class CampaignActions {
+export class CampaignAction {
   private driver: Sequelize;
-  private model: ModelStatic<CampaignActionsModel>;
+  private model: ModelStatic<CampaignActionModel>;
 
   constructor(driver: Sequelize) {
     this.driver = driver;
-    this.model = driver.model(CampaignActionsModel.tableName);
+    this.model = driver.model(CampaignActionModel.tableName);
   }
 
-  async create(args: CampaignActionsModelArgs): Promise<CreateCampaignActionReply.AsObject> {
+  async create(args: CampaignActionModelArgs): Promise<CreateCampaignActionReply.AsObject> {
     const result = await this.model.create(args);
 
     const campaignActionId = result.getDataValue("id");

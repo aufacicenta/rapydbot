@@ -7,11 +7,11 @@ package campaign;
 service Campaign {
   rpc CreateCampaign (CreateCampaignRequest) returns (CreateCampaignReply) {}
   rpc CreateCampaignAction (CreateCampaignActionRequest) returns (CreateCampaignActionReply) {}
+  rpc CreateCampaignUser (CreateCampaignUserRequest) returns (CreateCampaignUserReply) {}
 }
 
 message CreateCampaignRequest {
   string issuer_id = 1;
-  string message_id = 2;
 }
 
 message CreateCampaignReply {
@@ -27,5 +27,17 @@ message CreateCampaignActionRequest {
 
 message CreateCampaignActionReply {
   string campaign_action_id = 1;
+}
+
+message CreateCampaignUserRequest {
+  string campaign_id = 1;
+  string user_id = 2;
+  string message_id = 3;
+}
+
+message CreateCampaignUserReply {
+  string campaign_id = 1;
+  string user_id = 2;
+  string message_id = 3;
 }
 

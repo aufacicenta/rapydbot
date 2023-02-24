@@ -3,6 +3,7 @@ import getRandomUsername from "@rapydbot/wallet/__test__/util/getRandomUsername"
 import { CampaignClientGenerator, CampaignClient } from "../../client";
 import { createCampaign } from "../../client/create-campaign";
 import { createCampaignAction } from "../../client/create-campaign-action";
+import { createCampaignUser } from "../../client/create-campaign-user";
 import { instructions } from "../util/instructions";
 
 let client: CampaignClient;
@@ -21,13 +22,13 @@ describe("client", () => {
   });
 
   test("success: createCampaign", async () => {
-    const campaignId = await createCampaign(client, { issuerId, messageId: getRandomUsername() });
+    const campaignId = await createCampaign(client, { issuerId });
 
     expect(campaignId).toBeDefined();
   });
 
   test("success: create campaign actions", async () => {
-    const campaignId = await createCampaign(client, { issuerId, messageId: getRandomUsername() });
+    const campaignId = await createCampaign(client, { issuerId });
 
     for (const key in instructions) {
       const initialInstruction = instructions[key].initialInstruction;
@@ -42,5 +43,24 @@ describe("client", () => {
 
       expect(campaignActionId).toBeDefined();
     }
+  });
+
+  test("success: create campaign user", async () => {
+    const campaignId = await createCampaign(client, { issuerId });
+    const messageId = getRandomUsername();
+
+    const {
+      campaignId: linkedCampaignId,
+      userId,
+      messageId: linkedMessageId,
+    } = await createCampaignUser(client, {
+      campaignId,
+      userId: user1,
+      messageId,
+    });
+
+    expect(campaignId).toEqual(linkedCampaignId);
+    expect(userId).toEqual(user1);
+    expect(messageId).toEqual(linkedMessageId);
   });
 });

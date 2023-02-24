@@ -1,2 +1,2 @@
-export * from "./campaign-actions";
+export * from "./campaign-action";
 export * from "./campaign";

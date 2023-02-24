@@ -1,15 +1,14 @@
 import { DataTypes, Model, ModelOptions } from "sequelize";
 
-import { CampaignActionsModel } from "./campaign-actions";
+import { CampaignActionModel } from "./campaign-action";
 
 export type CampaignModelArgs = {
   id?: string;
   issuer_id: string;
-  message_id: string;
   created_at: Date;
   updated_at: Date;
   closed_at: Date;
-  actions: CampaignActionsModel;
+  actions: CampaignActionModel;
 };
 
 export class CampaignModel extends Model<CampaignModelArgs> {
@@ -26,10 +25,6 @@ export class CampaignModel extends Model<CampaignModelArgs> {
       type: DataTypes.UUID,
       allowNull: false,
       unique: true,
-    },
-    message_id: {
-      type: DataTypes.UUID,
-      allowNull: true,
     },
     created_at: {
       type: DataTypes.DATE,

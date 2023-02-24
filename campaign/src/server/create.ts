@@ -11,6 +11,8 @@ export default (context: IContext) => {
       context.controller.createCampaign({ call, callback }, context),
     createCampaignAction: (call, callback) =>
       context.controller.createCampaignAction({ call, callback }, context),
+    createCampaignUser: (call, callback) =>
+      context.controller.createCampaignUser({ call, callback }, context),
   });
 
   return server;

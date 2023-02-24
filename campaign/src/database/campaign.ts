@@ -15,11 +15,9 @@ export class Campaign {
 
   async create({
     issuerId: issuer_id,
-    messageId: message_id,
   }: CreateCampaignRequest.AsObject): Promise<CreateCampaignReply.AsObject> {
     const result = await this.model.create({
       issuer_id,
-      message_id,
     });
 
     const campaignId = result.getDataValue("id");

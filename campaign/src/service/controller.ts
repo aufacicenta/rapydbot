@@ -6,6 +6,8 @@ import {
   CreateCampaignActionRequest,
   CreateCampaignReply,
   CreateCampaignRequest,
+  CreateCampaignUserReply,
+  CreateCampaignUserRequest,
 } from "../server/protos/schema_pb";
 
 type GRPCUnaryCall<Request, Reply> = {
@@ -22,9 +24,8 @@ export class Controller {
   ) {
     try {
       const issuerId = call.request.getIssuerId();
-      const messageId = call.request.getMessageId();
 
-      const { campaignId } = await db.campaign.create({ issuerId, messageId });
+      const { campaignId } = await db.campaign.create({ issuerId });
 
       const reply = new CreateCampaignReply();
 
@@ -58,6 +59,33 @@ export class Controller {
       r.setCampaignActionId(campaignActionId);
 
       callback(null, r);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async createCampaignUser(
+    { call, callback }: GRPCUnaryCall<CreateCampaignUserRequest, CreateCampaignUserReply>,
+    { db }: IContext,
+  ) {
+    try {
+      const campaignId = call.request.getCampaignId();
+      const userId = call.request.getUserId();
+      const messageId = call.request.getMessageId();
+
+      await db.campaignUser.create({
+        campaignId,
+        userId,
+        messageId,
+      });
+
+      const reply = new CreateCampaignUserReply();
+
+      reply.setCampaignId(campaignId);
+      reply.setUserId(userId);
+      reply.setMessageId(messageId);
+
+      callback(null, reply);
     } catch (error) {
       callback(error, null);
     }
