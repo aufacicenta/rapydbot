@@ -1,3 +1,4 @@
+import { CampaignClient } from "@rapydbot/campaign";
 import { IntentRecognitionClient } from "@rapydbot/intent-recognition/client";
 import { UserClient } from "@rapydbot/user/client";
 import { WalletClient } from "@rapydbot/wallet/client";
@@ -29,6 +30,7 @@ export type Clients = {
   user?: UserClient;
   wallet?: WalletClient;
   intentRecognition?: IntentRecognitionClient;
+  campaign?: CampaignClient;
 };
 
 export type Handlers = {

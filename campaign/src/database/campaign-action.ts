@@ -33,6 +33,7 @@ export class CampaignAction {
       where: {
         campaign_id,
       },
+      order: [["created_at", "ASC"]],
     });
 
     if (result.length === 0) {

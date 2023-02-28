@@ -1,11 +1,9 @@
-import { CustomMessage } from "../../types";
+import { GetCampaignActionsReply } from "@rapydbot/campaign";
 
 export type Action = {
-  action: (msg: CustomMessage) => Promise<void>;
-  initialInstruction: string;
   isTimeoutSet: boolean;
   isLast?: boolean;
-};
+} & GetCampaignActionsReply.AsObject;
 
 export type Actions = {
   [key: string]: Action;

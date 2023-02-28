@@ -5,6 +5,7 @@ import { IntentAction } from "@rapydbot/intent-recognition/providers/cohere/type
 import moment, { Moment } from "moment";
 import TelegramBotApi, { SendMessageOptions } from "node-telegram-bot-api";
 import IntentRecognitionClientGenerator from "@rapydbot/intent-recognition/client";
+import { CampaignClientGenerator } from "@rapydbot/campaign";
 
 import {
   BotLanguageHandler,
@@ -25,6 +26,7 @@ const {
   USER_SERVICE_URL,
   WALLET_SERVICE_URL,
   INTENT_RECOGNITION_SERVICE_URL,
+  CAMPAIGN_SERVICE_URL,
   STREAM_CHAT_API_KEY,
   STREAM_CHAT_API_SECRET,
 } = process.env;
@@ -244,7 +246,8 @@ export class Bot {
     this.clients.intentRecognition = new IntentRecognitionClientGenerator(
       INTENT_RECOGNITION_SERVICE_URL,
     ).create();
-    // this.clients.intentRecognition.classify.bind(this.clients.intentRecognition);
+
+    this.clients.campaign = new CampaignClientGenerator(CAMPAIGN_SERVICE_URL).create();
   }
 
   private setCommands() {

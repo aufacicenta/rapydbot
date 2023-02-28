@@ -39,6 +39,24 @@
     },
     {
       "type": "node",
+      "request": "attach",
+      "name": "CAMPAIGN: Attach by Process ID",
+      "cwd": "${workspaceRoot}/campaign/src",
+      "trace": true,
+      "port": 9223,
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "SCRAPER: Attach by Process ID",
+      "cwd": "${workspaceRoot}/scraper/src",
+      "trace": true,
+      "port": 9227,
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]
+    },
+    {
+      "type": "node",
       "request": "launch",
       "name": "WALLET: Jest Current File",
       "program": "${workspaceFolder}/wallet/node_modules/.bin/jest",

@@ -1,11 +1,10 @@
-import { IntentAction } from "@rapydbot/intent-recognition/providers/cohere/types";
+import { getCampaignActions } from "@rapydbot/campaign";
 
 import { Bot } from "../../Bot";
 import { translationKeys } from "../../i18n";
 import { CustomMessage } from "../../types";
 import { IBotCommand } from "../types";
 
-import { instructions } from "./instructions";
 import { Action, Actions } from "./types";
 
 const DEFAULT_TIMEOUT = 5000;
@@ -24,7 +23,7 @@ export class TrainCommand implements IBotCommand {
     const currentAction = this.currentAction.get(msg.from.id);
 
     if (currentAction) {
-      currentAction.action.call(this, msg);
+      this.callAction(msg, currentAction);
 
       if (!currentAction.isTimeoutSet) {
         this.setActionTimeout(msg, currentAction);
@@ -45,50 +44,32 @@ export class TrainCommand implements IBotCommand {
   }
 
   async runTrainingQueue(msg: CustomMessage): Promise<void> {
+    // @TODO get campaignId from database after a message is sent to the user by the bot and they accept the campaign
+    const campaignId = "d8905b8f-c53a-42f5-9629-7afa5d6dae43";
+
     // @TODO check if user has already trained by storing their id in the database of by checking the stream-chat messages
 
-    const actions = {
-      [this.walletCreate.name]: {
+    const campaignActions = await getCampaignActions(this.bot.clients.campaign, { campaignId });
+
+    const actions: Actions = {};
+
+    for (const action of campaignActions) {
+      const isLast =
+        action.intentAction === campaignActions[campaignActions.length - 1].intentAction;
+
+      actions[action.intentAction] = {
         isTimeoutSet: false,
-        initialInstruction: instructions[this.walletCreate.name],
-        action: this.walletCreate,
-      },
-      [this.transactionsFrom.name]: {
-        isTimeoutSet: false,
-        initialInstruction: instructions[this.transactionsFrom.name],
-        action: this.transactionsFrom,
-      },
-      [this.transactionsWhen.name]: {
-        isTimeoutSet: false,
-        initialInstruction: instructions[this.transactionsWhen.name],
-        action: this.transactionsWhen,
-      },
-      [this.transactionsAmount.name]: {
-        isTimeoutSet: false,
-        initialInstruction: instructions[this.transactionsAmount.name],
-        action: this.transactionsAmount,
-      },
-      [this.cardsNew.name]: {
-        isTimeoutSet: false,
-        initialInstruction: instructions[this.cardsNew.name],
-        action: this.cardsNew,
-      },
-      [this.cardsBalance.name]: {
-        isTimeoutSet: false,
-        initialInstruction: instructions[this.cardsBalance.name],
-        action: this.cardsBalance,
-      },
-      [this.contactsAdd.name]: {
-        isTimeoutSet: false,
-        initialInstruction: instructions[this.contactsAdd.name],
-        action: this.contactsAdd,
-        isLast: true,
-      },
-    };
+        isLast,
+        initialInstruction: action.initialInstruction,
+        reply: action.reply,
+        intentAction: action.intentAction,
+        campaignId: action.campaignId,
+      };
+    }
 
     this.actions.set(msg.from.id, actions);
-    this.currentAction.set(msg.from.id, actions[this.walletCreate.name]);
-    this.bot.reply(msg, actions[this.walletCreate.name].initialInstruction);
+    this.currentAction.set(msg.from.id, actions[campaignActions[0].intentAction]);
+    this.bot.reply(msg, actions[campaignActions[0].intentAction].initialInstruction);
   }
 
   private setActionTimeout(msg: CustomMessage, current: Action): void {
@@ -96,7 +77,7 @@ export class TrainCommand implements IBotCommand {
 
     for (const key in actions) {
       const next = actions[key];
-      const isNotCurrent = next.action.name !== current.action.name;
+      const isNotCurrent = next.intentAction !== current.intentAction;
 
       if (isNotCurrent && next.isTimeoutSet === false) {
         setTimeout(() => {
@@ -127,97 +108,14 @@ A qué dirección de ETH enviamos tus USDT? 🤑`,
       }
     }
 
-    actions[current.action.name].isTimeoutSet = true;
+    actions[current.intentAction].isTimeoutSet = true;
     this.actions.set(msg.from.id, actions);
   }
 
-  private async walletCreate(msg: CustomMessage): Promise<void> {
-    this.bot.handlers.context.sendMessage(msg, [
-      { type: "text", value: IntentAction.WalletCreate },
-    ]);
+  private async callAction(msg: CustomMessage, action: Action): Promise<void> {
+    this.bot.handlers.context.sendMessage(msg, [{ type: "text", value: action.intentAction }]);
 
-    this.bot.reply(
-      msg,
-      `¡Mensaje recibido!
-
-Continúa enviando instrucciones para: <strong>crear una billetera</strong>.`,
-    );
-  }
-
-  private async transactionsFrom(msg: CustomMessage): Promise<void> {
-    this.bot.handlers.context.sendMessage(msg, [
-      { type: "text", value: IntentAction.TransactionsFrom },
-    ]);
-
-    this.bot.reply(
-      msg,
-      `¡Mensaje recibido!
-
-Continúa enviando instrucciones para <strong>saber sobre transacciones de alguien hacia ti</strong>.`,
-    );
-  }
-
-  private async transactionsWhen(msg: CustomMessage): Promise<void> {
-    this.bot.handlers.context.sendMessage(msg, [
-      { type: "text", value: IntentAction.TransactionsWhen },
-    ]);
-
-    this.bot.reply(
-      msg,
-      `¡Mensaje recibido!
-
-Continúa enviando instrucciones para: <strong>saber sobre transacciones del pasado</strong>.`,
-    );
-  }
-
-  private async transactionsAmount(msg: CustomMessage): Promise<void> {
-    this.bot.handlers.context.sendMessage(msg, [
-      { type: "text", value: IntentAction.TransactionsAmount },
-    ]);
-
-    this.bot.reply(
-      msg,
-      `¡Mensaje recibido!
-
-Continúa enviando instrucciones para: <strong>saber sobre transacciones de un monto específico</strong>.`,
-    );
-  }
-
-  private async cardsNew(msg: CustomMessage): Promise<void> {
-    this.bot.handlers.context.sendMessage(msg, [
-      { type: "text", value: IntentAction.CardsCreate },
-    ]);
-
-    this.bot.reply(
-      msg,
-      `¡Mensaje recibido!
-
-Continúa enviando instrucciones para: <strong>crear una tarjeta</strong>.`,
-    );
-  }
-
-  private async cardsBalance(msg: CustomMessage): Promise<void> {
-    this.bot.handlers.context.sendMessage(msg, [{ type: "text", value: IntentAction.CardsRead }]);
-
-    this.bot.reply(
-      msg,
-      `¡Mensaje recibido!
-
-Continúa enviando instrucciones para: <strong>saber el balance de una tarjeta</strong>.`,
-    );
-  }
-
-  private async contactsAdd(msg: CustomMessage): Promise<void> {
-    this.bot.handlers.context.sendMessage(msg, [
-      { type: "text", value: IntentAction.ContactsAdd },
-    ]);
-
-    this.bot.reply(
-      msg,
-      `¡Mensaje recibido!
-
-Continúa enviando instrucciones para: <strong>agregar un contacto</strong>.`,
-    );
+    this.bot.reply(msg, action.reply);
   }
 
   private handleErrorReply(error: Error, msg: CustomMessage) {
