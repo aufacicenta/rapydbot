@@ -1,1 +1,1 @@
-export * from "./StartCommand";
+export * from "./start";

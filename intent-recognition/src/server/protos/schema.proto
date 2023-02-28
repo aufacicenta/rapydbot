@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option objc_class_prefix = "rapydbot";
+
+package intent_recognition;
+
+service IntentRecognition {
+  rpc Classify (ClassifyRequest) returns (ClassifyReply) {}
+}
+
+message ClassifyRequest {
+  string input = 1;
+}
+
+message ClassifyReply {
+  string action = 1;
+}
+
+message EmptyReply {}

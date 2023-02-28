@@ -1,5 +1,8 @@
+/* eslint-disable jest/no-commented-out-tests */
 import { Sequelize } from "sequelize";
-import WalletClientGenerator, {
+
+import {
+  WalletClientGenerator,
   CreateWalletRequest,
   SetTransferFromWalletResponseReply,
   SetTransferFromWalletResponseRequest,
@@ -13,29 +16,182 @@ import WalletClientGenerator, {
   WalletClient,
 } from "../../client";
 import database from "../../database";
-import { WalletDAO } from "../../database/dao/WalletDAO";
-import RapydClient from "../../lib/rapyd/RapydClient";
-import { WalletObjectResponse } from "../../lib/rapyd/types";
+import { Wallet } from "../../database/wallet";
+import RapydClient from "../../providers/rapyd/client";
+import { WalletObjectResponse } from "../../providers/rapyd/types";
 import { WalletServiceErrorCodes } from "../../service/error";
 import getRandomUsername from "../util/getRandomUsername";
 
 let driver: Sequelize,
-  dao: WalletDAO,
+  dao: Wallet,
   walletClient: WalletClient,
   rapydClient: RapydClient;
+
+const setDefaultCurrencyCode = ({
+  userId,
+  currencyCode,
+}: SetWalletCurrencyCodeRequest.AsObject): Promise<string> =>
+  new Promise((resolve) => {
+    const request = new SetWalletCurrencyCodeRequest();
+    request.setUserId(userId);
+    request.setCurrencyCode(currencyCode);
+
+    walletClient.setWalletCurrencyCode(request, (error, reply) => {
+      if (error) {
+        throw error;
+      }
+
+      resolve(reply.getCurrencyCode());
+    });
+  });
+
+const setDefaultCountryCode = ({
+  userId,
+  countryCode,
+}: SetWalletCountryCodeRequest.AsObject): Promise<string> =>
+  new Promise((resolve) => {
+    const request = new SetWalletCountryCodeRequest();
+    request.setUserId(userId);
+    request.setCountryCode(countryCode);
+
+    walletClient.setWalletCountryCode(request, (error, reply) => {
+      if (error) {
+        throw error;
+      }
+
+      resolve(reply.getCountryCode());
+    });
+  });
+
+const transferFromWallet = ({
+  senderUserId,
+  recipientUserId,
+  amount,
+  msg,
+}: TransferFromWalletRequest.AsObject): Promise<TransferFromWalletReply.AsObject> =>
+  new Promise((resolve) => {
+    const request = new TransferFromWalletRequest();
+
+    request.setAmount(amount);
+    request.setSenderUserId(senderUserId);
+    request.setRecipientUserId(recipientUserId);
+    request.setMsg(msg);
+
+    walletClient.transferFromWallet(request, (error, reply) => {
+      if (error) {
+        throw error;
+      }
+
+      resolve({
+        pendingTransactionId: reply.getPendingTransactionId(),
+        senderUserId: reply.getSenderUserId(),
+        recipientUserId: reply.getRecipientUserId(),
+        currencyCode: reply.getCurrencyCode(),
+      });
+    });
+  });
+
+const setTransferFromWalletResponse = ({
+  senderUserId,
+  recipientUserId,
+  responseStatus,
+  pendingTransactionId,
+}: SetTransferFromWalletResponseRequest.AsObject): Promise<SetTransferFromWalletResponseReply.AsObject> =>
+  new Promise((resolve) => {
+    const request = new SetTransferFromWalletResponseRequest();
+
+    request.setSenderUserId(senderUserId);
+    request.setRecipientUserId(recipientUserId);
+    request.setPendingTransactionId(pendingTransactionId);
+    request.setResponseStatus(responseStatus);
+
+    walletClient.setTransferFromWalletResponse(request, (error, reply) => {
+      if (error) {
+        throw error;
+      }
+
+      resolve({
+        amount: reply.getAmount(),
+        currencyCode: reply.getCurrencyCode(),
+        senderUserId: reply.getSenderUserId(),
+      });
+    });
+  });
+
+const getBalance = ({
+  userId,
+  currencyCode,
+}: GetWalletBalanceRequest.AsObject): Promise<GetWalletBalanceReply.AsObject> =>
+  new Promise((resolve, _) => {
+    const request = new GetWalletBalanceRequest();
+    request.setUserId(userId);
+    request.setCurrencyCode(currencyCode);
+
+    walletClient.getWalletBalance(request, (error, reply) => {
+      if (error) {
+        throw error;
+      }
+
+      resolve({
+        currencyCode: reply.getCurrencyCode(),
+        balance: reply.getBalance(),
+        onHoldBalance: reply.getOnHoldBalance(),
+        receivedBalance: reply.getReceivedBalance(),
+        reserveBalance: reply.getReserveBalance(),
+      });
+    });
+  });
 
 describe("controller", () => {
   const users = [getRandomUsername(), getRandomUsername()];
   const [sender, recipient] = users;
+  const defaultCountryCode = "MX";
+  const defaultCurrencyCode = "MXN";
 
   beforeAll(async () => {
     driver = await database.connect({ force: true });
-    dao = new WalletDAO(driver);
+    dao = new Wallet(driver);
     walletClient = new WalletClientGenerator(
       `${process.env.IP_ADDRESS}:${process.env.HTTP_PORT}`
     ).create();
     rapydClient = new RapydClient();
   });
+
+  // test("success: get a list of all Rapyd official identification documents", async () => {
+  //   const request = new GetOfficialIdDocumentsRequest();
+
+  //   const getOfficialIdDocuments = (): Promise<void> =>
+  //     new Promise((resolve) => {
+  //       request.setCountryCode(defaultCountryCode);
+
+  //       walletClient.getOfficialIdDocuments(request, (error, reply) => {
+  //         if (error) {
+  //           throw error;
+  //         }
+
+  //         resolve();
+  //       });
+  //     });
+
+  //   await getOfficialIdDocuments();
+  // });
+
+  // test("success: get a list of all Rapyd supported countries", async () => {
+  //   const request = new GetSupportedCountriesRequest();
+
+  //   const getSupportedCountries = (): Promise<void> =>
+  //     new Promise((resolve) => {
+  //       walletClient.getSupportedCountries(request, (error, reply) => {
+  //         if (error) {
+  //           throw error;
+  //         }
+
+  //         resolve();
+  //       });
+  //     });
+
+  //   await getSupportedCountries();
+  // });
 
   test("success: creates a real Rapyd wallet per user and stores it in the database and in Rapyd", async () => {
     const request = new CreateWalletRequest();
@@ -53,7 +209,7 @@ describe("controller", () => {
         });
       });
 
-    const wallets = await Promise.all(users.map(createWallet));
+    const wallets = await Promise.all(users.map((user) => createWallet(user)));
 
     for (const [i, rapyd_ewallet_address] of wallets.entries()) {
       const userId = await dao.getUserIdByRapydEwalletAddress({
@@ -73,44 +229,8 @@ describe("controller", () => {
   });
 
   test("success: sets a default country and currency code", async () => {
-    const setDefaultCurrencyCode = ({
-      userId,
-      currencyCode,
-    }: SetWalletCurrencyCodeRequest.AsObject): Promise<string> =>
-      new Promise((resolve) => {
-        const request = new SetWalletCurrencyCodeRequest();
-        request.setUserId(userId);
-        request.setCurrencyCode(currencyCode);
-
-        walletClient.setWalletCurrencyCode(request, (error, reply) => {
-          if (error) {
-            throw error;
-          }
-
-          resolve(reply.getCurrencyCode());
-        });
-      });
-
-    const setDefaultCountryCode = ({
-      userId,
-      countryCode,
-    }: SetWalletCountryCodeRequest.AsObject): Promise<string> =>
-      new Promise((resolve) => {
-        const request = new SetWalletCountryCodeRequest();
-        request.setUserId(userId);
-        request.setCountryCode(countryCode);
-
-        walletClient.setWalletCountryCode(request, (error, reply) => {
-          if (error) {
-            throw error;
-          }
-
-          resolve(reply.getCountryCode());
-        });
-      });
-
-    const sender_currency_code = "MXN";
-    const sender_country_code = "MX";
+    const sender_currency_code = defaultCurrencyCode;
+    const sender_country_code = defaultCountryCode;
 
     const sender_currency_code_response = await setDefaultCurrencyCode({
       userId: sender,
@@ -168,43 +288,14 @@ describe("controller", () => {
 
     const url = await topUpWallet({
       userId: sender,
-      amount: 1000.0,
+      amount: 1000,
     });
 
     expect(url).toBeTruthy(); // PAUSE the debugger here to get the URL and top up wallet manually
   });
 
   test("success: transfers an amount from a Rapyd ewallet balance to another Rapyd ewallet", async () => {
-    const requestCurrency = "MXN";
-    const requestAmount = 500.0;
-
-    const transferFromWallet = ({
-      senderUserId,
-      recipientUserId,
-      amount,
-      msg,
-    }: TransferFromWalletRequest.AsObject): Promise<TransferFromWalletReply.AsObject> =>
-      new Promise((resolve) => {
-        const request = new TransferFromWalletRequest();
-
-        request.setAmount(amount);
-        request.setSenderUserId(senderUserId);
-        request.setRecipientUserId(recipientUserId);
-        request.setMsg(msg);
-
-        walletClient.transferFromWallet(request, (error, reply) => {
-          if (error) {
-            throw error;
-          }
-
-          resolve({
-            pendingTransactionId: reply.getPendingTransactionId(),
-            senderUserId: reply.getSenderUserId(),
-            recipientUserId: reply.getRecipientUserId(),
-            currencyCode: reply.getCurrencyCode(),
-          });
-        });
-      });
+    const requestAmount = 500;
 
     const {
       pendingTransactionId,
@@ -217,33 +308,6 @@ describe("controller", () => {
       amount: requestAmount,
       msg: "{}",
     });
-
-    const setTransferFromWalletResponse = ({
-      senderUserId,
-      recipientUserId,
-      responseStatus,
-      pendingTransactionId,
-    }: SetTransferFromWalletResponseRequest.AsObject): Promise<SetTransferFromWalletResponseReply.AsObject> =>
-      new Promise((resolve) => {
-        const request = new SetTransferFromWalletResponseRequest();
-
-        request.setSenderUserId(senderUserId);
-        request.setRecipientUserId(recipientUserId);
-        request.setPendingTransactionId(pendingTransactionId);
-        request.setResponseStatus(responseStatus);
-
-        walletClient.setTransferFromWalletResponse(request, (error, reply) => {
-          if (error) {
-            throw error;
-          }
-
-          resolve({
-            amount: reply.getAmount(),
-            currencyCode: reply.getCurrencyCode(),
-            senderUserId: reply.getSenderUserId(),
-          });
-        });
-      });
 
     const setTransferFromWalletResponseReply =
       await setTransferFromWalletResponse({
@@ -261,32 +325,7 @@ describe("controller", () => {
   });
 
   test("success: gets wallet balance", async () => {
-    const requestCurrency = "MXN";
-
-    const getBalance = ({
-      userId,
-      currencyCode,
-    }: GetWalletBalanceRequest.AsObject): Promise<GetWalletBalanceReply.AsObject> => {
-      return new Promise((resolve, _) => {
-        const request = new GetWalletBalanceRequest();
-        request.setUserId(userId);
-        request.setCurrencyCode(currencyCode);
-
-        walletClient.getWalletBalance(request, (error, reply) => {
-          if (error) {
-            throw error;
-          }
-
-          resolve({
-            currencyCode: reply.getCurrencyCode(),
-            balance: reply.getBalance(),
-            onHoldBalance: reply.getOnHoldBalance(),
-            receivedBalance: reply.getReceivedBalance(),
-            reserveBalance: reply.getReserveBalance(),
-          });
-        });
-      });
-    };
+    const requestCurrency = defaultCurrencyCode;
 
     const {
       balance,
@@ -307,38 +346,13 @@ describe("controller", () => {
   });
 
   test("fail: wallet doesn't have balances", async () => {
-    const requestCurrency = "MXN";
+    const requestCurrency = defaultCurrencyCode;
 
-    const getBalance = ({
-      userId,
-      currencyCode,
-    }: GetWalletBalanceRequest.AsObject): Promise<GetWalletBalanceReply.AsObject> => {
-      return new Promise((resolve, _) => {
-        const request = new GetWalletBalanceRequest();
-        request.setUserId(userId);
-        request.setCurrencyCode(currencyCode);
-
-        walletClient.getWalletBalance(request, (error, reply) => {
-          if (error) {
-            throw error;
-          }
-
-          resolve({
-            currencyCode: reply.getCurrencyCode(),
-            balance: reply.getBalance(),
-            onHoldBalance: reply.getOnHoldBalance(),
-            receivedBalance: reply.getReceivedBalance(),
-            reserveBalance: reply.getReserveBalance(),
-          });
-        });
-      });
-    };
-
-    getBalance({
+    await getBalance({
       userId: sender,
       currencyCode: requestCurrency,
-    }).catch((err) => {
-      expect(err).toMatch(
+    }).catch((error) => {
+      expect(error).toMatch(
         WalletServiceErrorCodes.rapyd_ewallet_does_not_have_balances
       );
     });

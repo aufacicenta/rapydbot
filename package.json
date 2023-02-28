@@ -1,5 +1,4 @@
 {
-  "dependencies": {
-    "@aufacicenta/microservice-generator": "^1.0.7"
-  }
+  "name": "@aufacicenta/root",
+  "version": "0.1.0"
 }

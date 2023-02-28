@@ -1,8 +1,7 @@
 import axios from "axios";
-import grpc from "grpc";
-import { injectable } from "inversify";
-import "reflect-metadata";
-import RapydClient from "../lib/rapyd/RapydClient";
+import * as grpc from "@grpc/grpc-js";
+
+import RapydClient from "../providers/rapyd/client";
 import {
   CheckoutObjectResponse,
   CreateCheckoutPageParams,
@@ -13,11 +12,14 @@ import {
   TransferFundsBetweenWalletsParams,
   TransferFundsBetweenWalletsResponse,
   WalletObjectResponse,
-} from "../lib/rapyd/types";
+} from "../providers/rapyd/types";
 import { IContext } from "../server/interface/IContext";
 import {
   CreateWalletReply,
   CreateWalletRequest,
+  EmptyReply,
+  GetOfficialIdDocumentsRequest,
+  GetSupportedCountriesRequest,
   GetUserIdFromWalletAddressReply,
   GetUserIdFromWalletAddressRequest,
   GetWalletBalanceReply,
@@ -40,31 +42,69 @@ import {
 import { WalletServiceErrorCodes } from "../service/error";
 
 type gRPCServerUnaryCall<Request, Reply> = {
-  call: grpc.ServerUnaryCall<Request>;
+  call: grpc.ServerUnaryCall<Request, Reply>;
   callback: grpc.sendUnaryData<Reply>;
 };
 
-@injectable()
 export class Controller {
   public static type: string = "Controller";
 
   private rapydClient = new RapydClient();
+
+  async getOfficialIdDocuments(
+    {
+      call,
+      callback,
+    }: gRPCServerUnaryCall<GetOfficialIdDocumentsRequest, EmptyReply>,
+    {}: IContext
+  ) {
+    try {
+      const country_code = call.request.getCountryCode();
+
+      await this.rapydClient.get<any>({
+        path: `/v1/identities/types?country=${country_code}`,
+      });
+
+      const reply = new EmptyReply();
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async getSupportedCountries(
+    { callback }: gRPCServerUnaryCall<GetSupportedCountriesRequest, EmptyReply>,
+    {}: IContext
+  ) {
+    try {
+      await this.rapydClient.get<any>({
+        path: "/v1/data/countries",
+      });
+
+      const reply = new EmptyReply();
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
 
   async createWallet(
     {
       call,
       callback,
     }: gRPCServerUnaryCall<CreateWalletRequest, CreateWalletReply>,
-    { dao }: IContext
+    { db }: IContext
   ) {
     try {
       const user_id = call.request.getUserId();
 
-      const wallet_id = await dao.WalletDAO.getWalletIdByUserId({
+      const wallet_id = await db.wallet.getWalletIdByUserId({
         user_id,
       });
 
-      if (Boolean(wallet_id)) {
+      if (wallet_id) {
         throw new Error(
           WalletServiceErrorCodes.rapyd_ewallet_exists_for_user_id
         );
@@ -80,7 +120,7 @@ export class Controller {
         },
       });
 
-      await dao.WalletDAO.createWallet({
+      await db.wallet.create({
         user_id,
         rapyd_ewallet_address,
       });
@@ -100,42 +140,24 @@ export class Controller {
       call,
       callback,
     }: gRPCServerUnaryCall<TopUpWalletRequest, TopUpWalletReply>,
-    { dao }: IContext
+    { db }: IContext
   ) {
     try {
       const user_id = call.request.getUserId();
       const amount = call.request.getAmount();
 
       const rapyd_ewallet_address =
-        await dao.WalletDAO.getRapydWalletAddressByUserId({
+        await db.wallet.getRapydWalletAddressByUserId({
           user_id,
         });
 
-      if (!Boolean(rapyd_ewallet_address)) {
-        throw new Error(
-          WalletServiceErrorCodes.rapyd_ewallet_does_not_exist_for_user_id
-        );
-      }
-
-      const country_code = await dao.WalletDAO.getWalletCountryCode({
+      const country_code = await db.wallet.getCountryCode({
         user_id,
       });
 
-      if (!Boolean(country_code)) {
-        throw new Error(
-          WalletServiceErrorCodes.rapyd_ewallet_does_not_have_an_established_country
-        );
-      }
-
-      const currency_code = await dao.WalletDAO.getWalletCurrencyCode({
+      const currency_code = await db.wallet.getCurrencyCode({
         user_id,
       });
-
-      if (!Boolean(currency_code)) {
-        throw new Error(
-          WalletServiceErrorCodes.rapyd_ewallet_does_not_have_an_established_currency
-        );
-      }
 
       const msg = call.request.getMsg();
 
@@ -171,7 +193,7 @@ export class Controller {
       call,
       callback,
     }: gRPCServerUnaryCall<TransferFromWalletRequest, TransferFromWalletReply>,
-    { dao }: IContext
+    { db }: IContext
   ) {
     try {
       const sender_user_id = call.request.getSenderUserId();
@@ -179,38 +201,21 @@ export class Controller {
       const recipient_user_id = call.request.getRecipientUserId();
 
       const sender_rapyd_ewallet_address =
-        await dao.WalletDAO.getRapydWalletAddressByUserId({
+        await db.wallet.getRapydWalletAddressByUserId({
           user_id: sender_user_id,
         });
 
-      if (!Boolean(sender_rapyd_ewallet_address)) {
-        throw new Error(
-          WalletServiceErrorCodes.rapyd_ewallet_does_not_exist_for_sender_user_id
-        );
-      }
-
       const recipient_rapyd_ewallet_address =
-        await dao.WalletDAO.getRapydWalletAddressByUserId({
+        await db.wallet.getRapydWalletAddressByUserId({
           user_id: recipient_user_id,
         });
 
-      if (!Boolean(recipient_rapyd_ewallet_address)) {
-        throw new Error(
-          WalletServiceErrorCodes.rapyd_ewallet_does_not_exist_for_recipient_user_id
-        );
-      }
-
-      const currency_code = await dao.WalletDAO.getWalletCurrencyCode({
+      const currency_code = await db.wallet.getCurrencyCode({
         user_id: sender_user_id,
       });
 
-      if (!Boolean(currency_code)) {
-        throw new Error(
-          WalletServiceErrorCodes.rapyd_ewallet_does_not_have_an_established_currency
-        );
-      }
-
       const msg = call.request.getMsg();
+
       const metadata = {
         senderUserId: sender_user_id,
         recipientUserId: recipient_user_id,
@@ -250,7 +255,7 @@ export class Controller {
       };
 
       axios
-        .post(process.env.RAPYDBOT_WEBHOOKS_ENDPOINT, body, {
+        .post(process.env.RAPYDBOT_WEBHOOKS_ENDPOINT!, body, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -276,7 +281,7 @@ export class Controller {
       SetTransferFromWalletResponseRequest,
       SetTransferFromWalletResponseReply
     >,
-    { dao }: IContext
+    { db }: IContext
   ) {
     try {
       const pending_transaction_id = call.request.getPendingTransactionId();
@@ -285,7 +290,7 @@ export class Controller {
       const response_status = call.request.getResponseStatus();
 
       const recipient_rapyd_ewallet_address =
-        await dao.WalletDAO.getRapydWalletAddressByUserId({
+        await db.wallet.getRapydWalletAddressByUserId({
           user_id: recipient_user_id,
         });
 
@@ -329,28 +334,16 @@ export class Controller {
       call,
       callback,
     }: gRPCServerUnaryCall<GetWalletBalanceRequest, GetWalletBalanceReply>,
-    { dao }: IContext
+    { db }: IContext
   ) {
     try {
       const user_id = call.request.getUserId();
       const rapyd_ewallet_address =
-        await dao.WalletDAO.getRapydWalletAddressByUserId({ user_id });
+        await db.wallet.getRapydWalletAddressByUserId({ user_id });
 
-      if (!Boolean(rapyd_ewallet_address)) {
-        throw new Error(
-          WalletServiceErrorCodes.rapyd_ewallet_does_not_exist_for_user_id
-        );
-      }
-
-      const currency_code = await dao.WalletDAO.getWalletCurrencyCode({
+      const currency_code = await db.wallet.getCurrencyCode({
         user_id,
       });
-
-      if (!Boolean(currency_code)) {
-        throw new Error(
-          WalletServiceErrorCodes.rapyd_ewallet_does_not_have_an_established_currency
-        );
-      }
 
       const balances = await this.rapydClient.get<
         Array<GetWalletBalanceResponse>
@@ -364,26 +357,21 @@ export class Controller {
         );
       }
 
-      let balanceBySelectedCurrency = balances
-        .filter(({ currency }) => currency === currency_code)
-        .shift();
-
-      if (!Boolean(balanceBySelectedCurrency)) {
-        /*
-         * If there's no balance for the specified currency we will return
-         * a general one.
-         */
-
-        balanceBySelectedCurrency = balances.shift();
-      }
+      /*
+       * If there's no balance for the specified currency we will return
+       * a general one.
+       */
+      let balanceBySelectedCurrency =
+        balances.filter(({ currency }) => currency === currency_code).shift() ||
+        balances.shift();
 
       const reply = new GetWalletBalanceReply();
 
-      reply.setBalance(balanceBySelectedCurrency.balance);
-      reply.setCurrencyCode(balanceBySelectedCurrency.currency);
-      reply.setOnHoldBalance(balanceBySelectedCurrency.on_hold_balance);
-      reply.setReceivedBalance(balanceBySelectedCurrency.received_balance);
-      reply.setReserveBalance(balanceBySelectedCurrency.reserve_balance);
+      reply.setBalance(balanceBySelectedCurrency!.balance);
+      reply.setCurrencyCode(balanceBySelectedCurrency!.currency);
+      reply.setOnHoldBalance(balanceBySelectedCurrency!.on_hold_balance);
+      reply.setReceivedBalance(balanceBySelectedCurrency!.received_balance);
+      reply.setReserveBalance(balanceBySelectedCurrency!.reserve_balance);
 
       callback(null, reply);
     } catch (error) {
@@ -399,32 +387,20 @@ export class Controller {
       SetWalletCurrencyCodeRequest,
       SetWalletCurrencyCodeReply
     >,
-    { dao }: IContext
+    { db }: IContext
   ) {
     try {
       const user_id = call.request.getUserId();
       const rapyd_ewallet_currency_code = call.request.getCurrencyCode();
 
-      const wallet_id = await dao.WalletDAO.getWalletIdByUserId({
+      const wallet_id = await db.wallet.getWalletIdByUserId({
         user_id,
       });
 
-      if (!Boolean(wallet_id)) {
-        throw new Error(
-          WalletServiceErrorCodes.rapyd_ewallet_does_not_exist_for_user_id
-        );
-      }
-
-      const currency_code = await dao.WalletDAO.setWalletCurrencyCode({
+      const currency_code = await db.wallet.setCurrencyCode({
         id: wallet_id,
         rapyd_ewallet_currency_code,
       });
-
-      if (!Boolean(currency_code)) {
-        throw new Error(
-          WalletServiceErrorCodes.ERROR_CANNOT_SET_USER_EWALLET_DEFAULT_CURRENCY
-        );
-      }
 
       const reply = new SetWalletCurrencyCodeReply();
 
@@ -444,12 +420,12 @@ export class Controller {
       GetWalletCurrencyCodeRequest,
       GetWalletCurrencyCodeReply
     >,
-    { dao }: IContext
+    { db }: IContext
   ) {
     try {
       const user_id = call.request.getUserId();
       const rapyd_ewallet_address =
-        await dao.WalletDAO.getRapydWalletAddressByUserId({ user_id });
+        await db.wallet.getRapydWalletAddressByUserId({ user_id });
 
       if (!Boolean(rapyd_ewallet_address)) {
         throw new Error(
@@ -457,7 +433,7 @@ export class Controller {
         );
       }
 
-      const currency_code = await dao.WalletDAO.getWalletCurrencyCode({
+      const currency_code = await db.wallet.getCurrencyCode({
         user_id,
       });
 
@@ -479,32 +455,20 @@ export class Controller {
       SetWalletCountryCodeRequest,
       SetWalletCountryCodeReply
     >,
-    { dao }: IContext
+    { db }: IContext
   ) {
     try {
       const user_id = call.request.getUserId();
       const rapyd_ewallet_country_code = call.request.getCountryCode();
 
-      const wallet_id = await dao.WalletDAO.getWalletIdByUserId({
+      const wallet_id = await db.wallet.getWalletIdByUserId({
         user_id,
       });
 
-      if (!Boolean(wallet_id)) {
-        throw new Error(
-          WalletServiceErrorCodes.rapyd_ewallet_does_not_exist_for_user_id
-        );
-      }
-
-      const country_code = await dao.WalletDAO.setWalletCountryCode({
+      const country_code = await db.wallet.setCountryCode({
         id: wallet_id,
         rapyd_ewallet_country_code,
       });
-
-      if (!Boolean(country_code)) {
-        throw new Error(
-          WalletServiceErrorCodes.ERROR_CANNOT_SET_USER_EWALLET_DEFAULT_COUNTRY
-        );
-      }
 
       const reply = new SetWalletCountryCodeReply();
 
@@ -524,11 +488,11 @@ export class Controller {
       GetWalletCountryCodeRequest,
       GetWalletCountryCodeReply
     >,
-    { dao }: IContext
+    { db }: IContext
   ) {
     try {
       const user_id = call.request.getUserId();
-      const country_code = await dao.WalletDAO.getWalletCountryCode({
+      const country_code = await db.wallet.getCountryCode({
         user_id,
       });
 
@@ -556,19 +520,14 @@ export class Controller {
       GetUserIdFromWalletAddressRequest,
       GetUserIdFromWalletAddressReply
     >,
-    { dao }: IContext
+    { db }: IContext
   ) {
     try {
       const rapyd_ewallet_address = call.request.getRapydEwalletAddress();
-      const user_id = await dao.WalletDAO.getUserIdByRapydEwalletAddress({
+
+      const user_id = await db.wallet.getUserIdByRapydEwalletAddress({
         rapyd_ewallet_address,
       });
-
-      if (!Boolean(user_id)) {
-        throw new Error(
-          WalletServiceErrorCodes.rapyd_ewallet_cannot_get_user_id
-        );
-      }
 
       const reply = new GetUserIdFromWalletAddressReply();
 

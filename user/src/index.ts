@@ -1,24 +1,39 @@
-import grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
+
 import database from "./database";
-import { UserDAO } from "./database/dao/UserDAO";
-import configuration from "./server/config";
-import context from "./server/context";
-import create from "./server/create";
+import { User } from "./database/user";
+import server from "./server";
+import { IContext } from "./server/interface/IContext";
+import { Controller } from "./service/controller";
 
-(async () => {
+const run = async () => {
   const driver = await database.connect();
-  context.database = driver;
-  context.dao.UserDAO = new UserDAO(driver);
 
-  const { address, port } = configuration.get("server");
+  const context: IContext = {
+    controller: new Controller(),
+    db: {
+      driver,
+      user: new User(driver),
+    },
+  };
 
-  const gRPCServer = create(context);
+  const gRPCServer = server.create(context);
 
-  const URL = `${address}:${port}`;
+  const URL = `${process.env.IP_ADDRESS}:${process.env.HTTP_PORT}`;
 
-  gRPCServer.bind(URL, grpc.ServerCredentials.createInsecure());
+  gRPCServer.bindAsync(
+    URL,
+    grpc.ServerCredentials.createInsecure(),
+    (err: Error | null, port: number) => {
+      if (err) {
+        console.error(`Server error: ${err.message}`);
+      } else {
+        console.log(`Starting gRPC server on: ${port}`);
 
-  console.log(`Starting gRPC server on: ${URL}`);
+        gRPCServer.start();
+      }
+    },
+  );
+};
 
-  gRPCServer.start();
-})();
+run();

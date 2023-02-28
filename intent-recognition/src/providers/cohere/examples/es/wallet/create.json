@@ -1,0 +1,26 @@
+[
+    {
+        "text": "crea una nueva wallet",
+        "label": "wallet_create_new"
+    },
+    {
+        "text": "nueva wallet",
+        "label": "wallet_create_new"
+    },
+    {
+        "text": "nueva billetera dólares",
+        "label": "wallet_create_new"
+    },
+    {
+        "text": "nueva billetera usd",
+        "label": "wallet_create_new"
+    },
+    {
+        "text": "nueva billetera pesos mexicanos",
+        "label": "wallet_create_new"
+    },
+    {
+        "text": "nueva wallet mxn",
+        "label": "wallet_create_new"
+    }
+]

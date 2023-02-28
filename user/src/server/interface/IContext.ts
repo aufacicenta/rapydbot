@@ -1,11 +1,12 @@
-import { Sequelize } from "sequelize/types";
-import { UserDAO } from "../../database/dao/UserDAO";
+import { Sequelize } from "sequelize";
+
+import { User } from "../../database/user";
 import { Controller } from "../../service/controller";
 
-export interface IContext {
+export type IContext = {
   controller: Controller;
-  database?: Sequelize;
-  dao?: {
-    UserDAO: UserDAO;
+  db: {
+    driver: Sequelize;
+    user: User;
   };
-}
+};

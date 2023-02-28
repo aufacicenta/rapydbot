@@ -1,6 +1,4 @@
-import grpc from "grpc";
-import { injectable } from "inversify";
-import "reflect-metadata";
+import * as grpc from "@grpc/grpc-js";
 import { IContext } from "../server/interface/IContext";
 import {
   CreateUserReply,
@@ -17,28 +15,27 @@ import {
 } from "../server/protos/schema_pb";
 
 type GRPCUnaryCall<Request, Reply> = {
-  call: grpc.ServerUnaryCall<Request>;
+  call: grpc.ServerUnaryCall<Request, Reply>;
   callback: grpc.sendUnaryData<Reply>;
 };
 
 type gRPCServerStreamingCall<Request, Reply> = {
-  call: grpc.ServerWritableStream<Request>;
+  call: grpc.ServerWritableStream<Request, Reply>;
 };
 
-@injectable()
 export class Controller {
   public static type: string = "Controller";
 
   async findUserByTelegramUserIdOrCreateUser(
     { call, callback }: GRPCUnaryCall<CreateUserRequest, CreateUserReply>,
-    { dao }: IContext
+    { db: dao }: IContext,
   ) {
     try {
       const telegram_from_user_id = call.request.getTelegramFromUserId();
       const telegram_username = call.request.getTelegramUsername();
       const telegram_private_chat_id = call.request.getTelegramPrivateChatId();
 
-      const result = await dao.UserDAO.findUserByTelegramUserIdOrCreateUser({
+      const result = await dao.user.findUserByTelegramUserIdOrCreateUser({
         telegram_from_user_id,
         telegram_username,
         telegram_private_chat_id,
@@ -59,12 +56,12 @@ export class Controller {
 
   async getUser(
     { call, callback }: GRPCUnaryCall<GetUserRequest, GetUserReply>,
-    { dao }: IContext
+    { db: dao }: IContext,
   ) {
     try {
       const user_id = call.request.getUserId();
 
-      const result = await dao.UserDAO.getUser({
+      const result = await dao.user.getUser({
         user_id,
       });
 
@@ -83,11 +80,11 @@ export class Controller {
 
   async getUsers(
     { call }: gRPCServerStreamingCall<GetUsersRequest, GetUserReply>,
-    { dao }: IContext
+    { db: dao }: IContext,
   ) {
     const user_ids = call.request.getUserIdList();
 
-    const result = await dao.UserDAO.getUsers({
+    const result = await dao.user.getUsers({
       user_ids,
     });
 
@@ -113,12 +110,12 @@ export class Controller {
       call,
       callback,
     }: GRPCUnaryCall<FindUserByTelegramUserIdRequest, FindUserByTelegramUserIdReply>,
-    { dao }: IContext
+    { db: dao }: IContext,
   ) {
     try {
       const telegram_from_user_id = call.request.getTelegramFromUserId();
 
-      const result = await dao.UserDAO.findUserByTelegramUserId({
+      const result = await dao.user.findUserByTelegramUserId({
         telegram_from_user_id,
       });
 
@@ -137,12 +134,12 @@ export class Controller {
       call,
       callback,
     }: GRPCUnaryCall<GetUserIdByTelegramUsernameRequest, GetUserIdByTelegramUsernameReply>,
-    { dao }: IContext
+    { db: dao }: IContext,
   ) {
     try {
       const username = call.request.getTelegramUsername();
 
-      const result = await dao.UserDAO.findUserByTelegramUsername({
+      const result = await dao.user.findUserByTelegramUsername({
         username,
       });
 
@@ -158,12 +155,12 @@ export class Controller {
 
   async getUserTelegramChatId(
     { call, callback }: GRPCUnaryCall<GetUserTelegramChatIdRequest, GetUserTelegramChatIdReply>,
-    { dao }: IContext
+    { db: dao }: IContext,
   ) {
     try {
       const user_id = call.request.getUserId();
 
-      const private_chat_id = await dao.UserDAO.getUserTelegramChatId({
+      const private_chat_id = await dao.user.getUserTelegramChatId({
         userId: user_id,
       });
 

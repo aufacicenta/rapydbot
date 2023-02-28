@@ -1,8 +1,10 @@
 export * from "../server/protos/schema_grpc_pb";
 export * from "../server/protos/schema_pb";
 
-import grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
+import RapydClient from "../providers/rapyd/client";
 import { WalletClient } from "../server/protos/schema_grpc_pb";
+import getRandomUsername from "../__test__/util/getRandomUsername";
 
 export class WalletClientGenerator {
   public url: string;
@@ -13,6 +15,7 @@ export class WalletClientGenerator {
 
   setURL(url: string): WalletClientGenerator {
     this.url = url;
+
     return this;
   }
 
@@ -23,6 +26,14 @@ export class WalletClientGenerator {
     ) as WalletClient;
 
     return client;
+  }
+
+  getRandomUsername(): string {
+    return getRandomUsername();
+  }
+
+  rapydHTTPClient() {
+    return new RapydClient();
   }
 }
 

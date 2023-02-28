@@ -1,23 +1,19 @@
-import { Sequelize } from "sequelize/types";
-import {
-  CreateUserReply,
-  UserClient,
-  USER_ClientGenerator,
-} from "../../client";
+import { Sequelize } from "sequelize";
+
+import { CreateUserReply, UserClient, UserClientGenerator } from "../../client";
 import database from "../../database";
-import { UserDAO } from "../../database/dao/UserDAO";
-import configuration from "../../server/config";
+import { User } from "../../database/user";
 import { GetUserReply, GetUsersRequest } from "../../server/protos/schema_pb";
 
-let driver: Sequelize, dao: UserDAO, client: UserClient;
+let driver: Sequelize, dao: User, client: UserClient;
 
-const { address, port } = configuration.get("server");
+const { IP_ADDRESS: address, HTTP_PORT: port } = process.env;
 
 describe("client", () => {
   beforeAll(async () => {
     driver = await database.connect({ force: true });
-    dao = new UserDAO(driver);
-    client = new USER_ClientGenerator(`${address}:${port}`).create();
+    dao = new User(driver);
+    client = new UserClientGenerator(`${address}:${port}`).create();
   });
 
   test("success: getUsers", async () => {
@@ -36,13 +32,11 @@ describe("client", () => {
 
     const result: Array<CreateUserReply.AsObject> = [];
     for (const user of users) {
-      const create_user_result = await dao.findUserByTelegramUserIdOrCreateUser(
-        {
-          telegram_username: user.telegram_username,
-          telegram_private_chat_id: user.telegram_private_chat_id,
-          telegram_from_user_id: user.telegram_from_user_id,
-        }
-      );
+      const create_user_result = await dao.findUserByTelegramUserIdOrCreateUser({
+        telegram_username: user.telegram_username,
+        telegram_private_chat_id: user.telegram_private_chat_id,
+        telegram_from_user_id: user.telegram_from_user_id,
+      });
 
       result.push(create_user_result);
     }
@@ -51,7 +45,7 @@ describe("client", () => {
     request.setUserIdList(result.map((r) => r.userId));
 
     const getUsers = (): Promise<Array<GetUserReply.AsObject>> =>
-      new Promise((resolve, reject) => {
+      new Promise((resolve) => {
         const call = client.getUsers(request);
 
         const response: Array<GetUserReply.AsObject> = [];

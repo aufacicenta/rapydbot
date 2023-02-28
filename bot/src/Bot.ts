@@ -1,72 +1,85 @@
-import USER_ClientGenerator, { UserClient } from "@rapydbot/user/client";
-import WALLET_ClientGenerator, { WalletClient } from "@rapydbot/wallet/client";
+import { StreamChat } from "stream-chat";
+import { UserClientGenerator } from "@rapydbot/user/client";
+import { WalletClientGenerator } from "@rapydbot/wallet/client";
+import { IntentAction } from "@rapydbot/intent-recognition/providers/cohere/types";
 import moment, { Moment } from "moment";
-import TelegramBotApi, { Message, SendMessageOptions } from "node-telegram-bot-api";
-import { StartCommand } from "./commands";
-import { HelpCommand } from "./commands/HelpCommand";
-import {
-  BalanceCommand,
-  CreateWalletCommand,
-  SetCountryCodeCommand,
-  SetCurrencyCodeCommand,
-  TopUpCommand,
-  TransferCommand,
-} from "./commands/wallet";
+import TelegramBotApi, { SendMessageOptions } from "node-telegram-bot-api";
+import IntentRecognitionClientGenerator from "@rapydbot/intent-recognition/client";
+import { CampaignClientGenerator } from "@rapydbot/campaign";
+
 import {
   BotLanguageHandler,
   BotReplyToMessageIdHandler,
   BotReplyToMessageIdHandlerStorageKeys,
 } from "./handler";
 import { translationKeys } from "./i18n";
-import { Commands } from "./types";
+import { Clients, Commands, Context, CustomMessage, Handlers } from "./types";
+import { IntentRecognitionHandler } from "./handler/intent-recognition";
+import { StartCommand } from "./commands";
+import { TrainCommand } from "./commands/train";
+import { IBotCommand } from "./commands/types";
+import { CreateWalletCommand } from "./commands/wallet/create";
+import { ContextHandler } from "./handler/context";
+
+const {
+  BOT_TOKEN,
+  USER_SERVICE_URL,
+  WALLET_SERVICE_URL,
+  INTENT_RECOGNITION_SERVICE_URL,
+  CAMPAIGN_SERVICE_URL,
+  STREAM_CHAT_API_KEY,
+  STREAM_CHAT_API_SECRET,
+} = process.env;
 
 export class Bot {
   public api: TelegramBotApi;
+
   public moment: Moment;
 
-  public languageHandler: BotLanguageHandler;
+  // Handle text messages, but won't produce replies
+  public handlers: Handlers = {};
 
-  private startCommand: StartCommand;
-  private createWalletCommand: CreateWalletCommand;
-  private topUpCommand: TopUpCommand;
-  private setCountryCodeCommand: SetCountryCodeCommand;
-  private setCurrencyCodeCommand: SetCurrencyCodeCommand;
-  private helpCommand: HelpCommand;
-  public balanceCommand: BalanceCommand;
-  public transferCommand: TransferCommand;
+  // Communicate to gRPC servers
+  public clients: Clients = {};
 
-  public UserServiceClient: UserClient;
-  public WalletServiceClient: WalletClient;
+  // Commands send replies
+  public commands: Commands = {};
+
+  public context: Context = {};
 
   public replyToMessageIDMap = new Map<number, BotReplyToMessageIdHandler>();
 
-  constructor() {
-    this.api = new TelegramBotApi(process.env.BOT_TOKEN, { polling: true });
-    this.languageHandler = new BotLanguageHandler();
+  public intentActionsToCommandsMap = new Map<IntentAction, IBotCommand>();
 
-    this.startCommand = new StartCommand(this);
-    this.createWalletCommand = new CreateWalletCommand(this);
-    this.topUpCommand = new TopUpCommand(this);
-    this.setCountryCodeCommand = new SetCountryCodeCommand(this);
-    this.setCurrencyCodeCommand = new SetCurrencyCodeCommand(this);
-    this.helpCommand = new HelpCommand(this);
-    this.balanceCommand = new BalanceCommand(this);
-    this.transferCommand = new TransferCommand(this);
+  constructor() {
+    this.api = new TelegramBotApi(BOT_TOKEN, { polling: true });
 
     this.moment = moment();
 
-    this.UserServiceClient = new USER_ClientGenerator(process.env.USER_SERVICE_URL).create();
-    this.WalletServiceClient = new WALLET_ClientGenerator(
-      process.env.WALLET_SERVICE_URL
-    ).create();
+    this.setHandlers();
+
+    this.setClients();
+
+    this.setCommands();
   }
 
   async prepare(): Promise<Bot> {
-    await this.languageHandler.init();
+    await this.handlers.language.init();
+
+    await this.prepareContext();
+
+    this.mapIntentActionsToCommands();
+
     return this;
   }
 
   listen() {
+    this.api.onText(/^\/start/i, (msg) => this.commands.start.onText(msg));
+
+    this.api.onText(/^\/?(train|entrenar)/i, (msg) => {
+      this.commands.train.runTrainingQueue(msg);
+    });
+
     this.api.on("polling_error", console.error);
 
     this.api.on("inline_query", (msg) => {
@@ -74,52 +87,72 @@ export class Bot {
     });
 
     this.api.on("message", async (msg) => {
-      const handler = this.getReplyToMessageIdHandler(msg.chat.id);
+      const isTraining = true;
 
-      if (handler) {
-        const command = handler?.command;
+      if (isTraining) {
+        this.commands.train.onText(msg);
 
-        if (!Boolean(command)) {
-          return;
-        }
+        return;
+      }
 
-        this.clearCommandHandler(msg.chat.id);
-        return command.onReplyFromMessageID(msg, handler);
+      try {
+        // Record the message in the database
+        const message = await this.handlers.context.sendMessage(msg);
+
+        const context = { chat: { message } };
+        const customMessage = { ...msg, context };
+
+        // Identify the IntentAction from the message text
+        const command = await this.handlers.intentRecognition.classify(customMessage);
+
+        // Update the message with the IntentAction as an attachment
+        await this.handlers.context.updateMessage(customMessage, [
+          { type: "text", fields: [{ title: "intent", value: command, short: true }] },
+        ]);
+
+        // Execute the command
+        this.handlers.intentRecognition.onCommand(command, customMessage);
+
+        // @TODO extract the entities from the text message and
+        // create a data request record, if values are missing, let the bot ask for them with ChatGPT
+      } catch (error) {
+        // @TODO handle error reply from error reason sent by the servers, handlers or commands
+        console.error(error);
       }
     });
-
-    this.api.onText(/^\/start/i, (msg, match) => this.startCommand.onText(msg));
-    this.api.onText(/^\/(createwallet|crearbilletera)/i, (msg, match) =>
-      this.createWalletCommand.onText(msg)
-    );
-    this.api.onText(/^\/(topup|recarga)/i, (msg, match) => this.topUpCommand.onText(msg));
-    this.api.onText(/^\/(setcountry|fijarpais)/, (msg, match) =>
-      this.setCountryCodeCommand.onText(msg)
-    );
-    this.api.onText(/^\/(setcurrency|fijarmoneda)/i, (msg, match) =>
-      this.setCurrencyCodeCommand.onText(msg)
-    );
-    this.api.onText(/^\/balance/i, (msg, match) => this.balanceCommand.onText(msg));
-    this.api.onText(/^\/(transfer|enviar)/i, (msg, match) => this.transferCommand.onText(msg));
-    this.api.onText(/^\/(help|ayuda)/i, (msg, match) => this.helpCommand.onText(msg));
   }
 
-  reply(msg: Message, translationKey: translationKeys, options?: SendMessageOptions, args?: {}) {
+  reply(msg: CustomMessage, text: string, options?: SendMessageOptions) {
+    // @TODO text should be a ChatGPT response by using the reponse params
+
+    this.api.sendMessage(msg.chat.id, text, {
+      parse_mode: "HTML",
+      disable_web_page_preview: true,
+      ...options,
+    });
+  }
+
+  replyWithTranslation(
+    msg: CustomMessage,
+    translationKey: translationKeys,
+    options?: SendMessageOptions,
+    args?: Record<string, unknown>,
+  ) {
     this.api.sendMessage(
       msg.chat.id,
-      this.languageHandler.getTranslation(msg, translationKey, args),
-      { parse_mode: "HTML", disable_web_page_preview: true, ...options }
+      this.handlers.language.getTranslation(msg, translationKey, args),
+      { parse_mode: "HTML", disable_web_page_preview: true, ...options },
     );
   }
 
   replyWithMessageID(
-    msg: Message,
+    msg: CustomMessage,
     translationKey: translationKeys,
     command: Commands,
-    handlerData?: Record<string, any>,
+    handlerData?: Record<string, unknown>,
     reply_to_message_id?: number,
     options?: SendMessageOptions,
-    args?: {}
+    args?: Record<string, unknown>,
   ) {
     const chat_id = msg.chat.id;
 
@@ -137,7 +170,7 @@ export class Bot {
       });
     }
 
-    this.reply(
+    this.replyWithTranslation(
       msg,
       translationKey,
       {
@@ -145,17 +178,17 @@ export class Bot {
         reply_markup: { force_reply: true },
         ...options,
       },
-      args
+      args,
     );
   }
 
   replyWithHandler(
-    msg: Message,
+    msg: CustomMessage,
     translationKey: translationKeys,
     command: Commands,
-    handlerData?: Record<string, any>,
+    handlerData?: Record<string, unknown>,
     options?: SendMessageOptions,
-    args?: {}
+    args?: Record<string, unknown>,
   ) {
     const chat_id = msg.chat.id;
 
@@ -173,25 +206,74 @@ export class Bot {
       });
     }
 
-    this.reply(
+    this.replyWithTranslation(
       msg,
       translationKey,
       {
         ...options,
       },
-      args
+      args,
     );
   }
 
-  getTranslation(msg: Message, translationKey: translationKeys, args?: {}) {
-    return this.languageHandler.getTranslation(msg, translationKey, args);
+  getTranslation(
+    msg: CustomMessage,
+    translationKey: translationKeys,
+    args?: Record<string, unknown>,
+  ) {
+    return this.handlers.language.getTranslation(msg, translationKey, args);
   }
 
-  public clearCommandHandler(chat_id: number) {
+  clearCommandHandler(chat_id: number) {
     return this.replyToMessageIDMap.delete(chat_id);
   }
 
-  public getReplyToMessageIdHandler(chat_id: number) {
+  getReplyToMessageIdHandler(chat_id: number) {
     return this.replyToMessageIDMap.get(chat_id);
+  }
+
+  private setHandlers() {
+    this.handlers.language = new BotLanguageHandler();
+    this.handlers.intentRecognition = new IntentRecognitionHandler(this);
+    this.handlers.context = new ContextHandler(this);
+  }
+
+  private setClients() {
+    this.clients.user = new UserClientGenerator(USER_SERVICE_URL).create();
+
+    this.clients.wallet = new WalletClientGenerator(WALLET_SERVICE_URL).create();
+
+    this.clients.intentRecognition = new IntentRecognitionClientGenerator(
+      INTENT_RECOGNITION_SERVICE_URL,
+    ).create();
+
+    this.clients.campaign = new CampaignClientGenerator(CAMPAIGN_SERVICE_URL).create();
+  }
+
+  private setCommands() {
+    this.commands.start = new StartCommand(this);
+    this.commands.start.onText.bind(this.commands.start);
+
+    this.commands.train = new TrainCommand(this);
+    this.commands.train.onText.bind(this.commands.train);
+
+    this.commands.createWallet = new CreateWalletCommand(this);
+    this.commands.createWallet.onText.bind(this.commands.createWallet);
+  }
+
+  private async prepareContext() {
+    // leverage stream-chat to store the context of a conversation
+    const streamChat = StreamChat.getInstance(STREAM_CHAT_API_KEY, STREAM_CHAT_API_SECRET);
+
+    const channel = streamChat.channel("messaging", "bot-context", { created_by_id: "bot" });
+    await channel.create();
+
+    // @TODO abstract to local class to control methods
+    this.context.chat = streamChat;
+    this.context.channel = channel;
+  }
+
+  private async mapIntentActionsToCommands() {
+    this.intentActionsToCommandsMap.set(IntentAction.WalletCreate, this.commands.createWallet);
   }
 }

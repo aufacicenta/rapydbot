@@ -1,11 +1,16 @@
-import grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
+
 import { IContext } from "./interface/IContext";
-import { IWalletServer, WalletService } from "./protos/schema_grpc_pb";
+import { WalletService } from "./protos/schema_grpc_pb";
 
 export default (context: IContext) => {
   const server = new grpc.Server();
 
-  server.addService<IWalletServer>(WalletService, {
+  server.addService(WalletService, {
+    getOfficialIdDocuments: (call, callback) =>
+      context.controller.getOfficialIdDocuments({ call, callback }, context),
+    getSupportedCountries: (call, callback) =>
+      context.controller.getSupportedCountries({ call, callback }, context),
     createWallet: (call, callback) =>
       context.controller.createWallet({ call, callback }, context),
     topUpWallet: (call, callback) =>

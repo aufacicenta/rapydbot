@@ -15,6 +15,16 @@ service Wallet {
   rpc GetWalletCurrencyCode (GetWalletCurrencyCodeRequest) returns (GetWalletCurrencyCodeReply) {}
   rpc GetWalletCountryCode (GetWalletCountryCodeRequest) returns (GetWalletCountryCodeReply) {}
   rpc GetUserIdFromWalletAddress (GetUserIdFromWalletAddressRequest) returns (GetUserIdFromWalletAddressReply) {}
+  rpc GetSupportedCountries (GetSupportedCountriesRequest) returns (EmptyReply) {}
+  rpc GetOfficialIdDocuments (GetOfficialIdDocumentsRequest) returns (EmptyReply) {}
+}
+
+message GetOfficialIdDocumentsRequest {
+  string country_code = 1;
+}
+
+message GetSupportedCountriesRequest {
+  string user_id = 1;
 }
 
 message CreateWalletRequest {

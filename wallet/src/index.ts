@@ -1,21 +1,36 @@
-import grpc from "grpc";
+import * as grpc from "@grpc/grpc-js";
 import database from "./database";
-import { WalletDAO } from "./database/dao/WalletDAO";
-import context from "./server/context";
-import create from "./server/create";
+import { Wallet } from "./database/wallet";
+import server from "./server";
+import { IContext } from "./server/interface/IContext";
+import { Controller } from "./service/controller";
 
 (async () => {
   const driver = await database.connect();
-  context.database = driver;
-  context.dao.WalletDAO = new WalletDAO(driver);
 
-  const gRPCServer = create(context);
+  const context: IContext = {
+    controller: new Controller(),
+    db: {
+      driver,
+      wallet: new Wallet(driver),
+    },
+  };
+
+  const gRPCServer = server.create(context);
 
   const URL = `${process.env.IP_ADDRESS}:${process.env.HTTP_PORT}`;
 
-  gRPCServer.bind(URL, grpc.ServerCredentials.createInsecure());
+  gRPCServer.bindAsync(
+    URL,
+    grpc.ServerCredentials.createInsecure(),
+    (err: Error | null, port: number) => {
+      if (err) {
+        console.error(`Server error: ${err.message}`);
+      } else {
+        console.log(`Starting gRPC server on: ${port}`);
 
-  console.log(`Starting gRPC server on: ${URL}`);
-
-  gRPCServer.start();
+        gRPCServer.start();
+      }
+    }
+  );
 })();

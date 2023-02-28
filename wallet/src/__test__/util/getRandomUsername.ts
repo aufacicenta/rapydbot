@@ -1,3 +1,4 @@
-import generateSalt from "../../lib/crypto/generateSalt";
+import generateSalt from "../../providers/crypto/generateSalt";
+import { v4 as uuidv4 } from "uuid";
 
-export default () => `tg_username_id_${generateSalt()}`;
+export default () => uuidv4();
