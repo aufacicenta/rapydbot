@@ -8,11 +8,17 @@ import {
   CreateCampaignRequest,
   CreateCampaignUserReply,
   CreateCampaignUserRequest,
+  GetCampaignActionsReply,
+  GetCampaignActionsRequest,
 } from "../server/protos/schema_pb";
 
 type GRPCUnaryCall<Request, Reply> = {
   call: grpc.ServerUnaryCall<Request, Reply>;
   callback: grpc.sendUnaryData<Reply>;
+};
+
+type gRPCServerStreamingCall<Request, Reply> = {
+  call: grpc.ServerWritableStream<Request, Reply>;
 };
 
 export class Controller {
@@ -89,5 +95,33 @@ export class Controller {
     } catch (error) {
       callback(error, null);
     }
+  }
+
+  async getCampaignActions(
+    { call }: gRPCServerStreamingCall<GetCampaignActionsRequest, GetCampaignActionsReply>,
+    { db }: IContext,
+  ) {
+    const campaignId = call.request.getCampaignId();
+
+    const result = await db.campaignActions.getByCampaignId({
+      campaignId,
+    });
+
+    for (const action of result) {
+      const reply = new GetCampaignActionsReply();
+
+      reply.setCampaignId(action.campaignId);
+      reply.setInitialInstruction(action.initialInstruction);
+      reply.setReply(action.reply);
+      reply.setIntentAction(action.intentAction);
+
+      call.write(reply, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    call.end();
   }
 }

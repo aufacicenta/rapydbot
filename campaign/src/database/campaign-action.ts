@@ -1,6 +1,7 @@
 import { Sequelize, ModelStatic } from "sequelize";
 
-import { CreateCampaignActionReply } from "../client";
+import { CreateCampaignActionReply, GetCampaignActionsReply } from "../client";
+import { CampaignServiceErrorCodes } from "../service/error";
 
 import { CampaignActionModel, CampaignActionModelArgs } from "./model";
 
@@ -21,5 +22,28 @@ export class CampaignAction {
     return {
       campaignActionId,
     };
+  }
+
+  async getByCampaignId({
+    campaignId: campaign_id,
+  }: {
+    campaignId: CampaignActionModelArgs["campaign_id"];
+  }): Promise<Array<GetCampaignActionsReply.AsObject>> {
+    const result = await this.model.findAll({
+      where: {
+        campaign_id,
+      },
+    });
+
+    if (result.length === 0) {
+      throw new Error(CampaignServiceErrorCodes.campaign_actions_get_by_campaign_id_empty);
+    }
+
+    return result.map((action) => ({
+      campaignId: action.getDataValue("campaign_id"),
+      initialInstruction: action.getDataValue("initial_instruction"),
+      intentAction: action.getDataValue("intent_action"),
+      reply: action.getDataValue("reply"),
+    }));
   }
 }
