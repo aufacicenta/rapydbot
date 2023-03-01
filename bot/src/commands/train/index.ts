@@ -1,4 +1,8 @@
-import { getCampaignActions } from "@rapydbot/campaign";
+import {
+  getCampaignActions,
+  getCampaignActionMessagesByUserId,
+  CampaignServiceErrorCodes,
+} from "@rapydbot/campaign";
 import {
   findUserByTelegramUserId,
   UserModelAttributes,
@@ -6,7 +10,6 @@ import {
 } from "@rapydbot/user";
 
 import { TGInformerBot } from "../../tg-informer";
-import { translationKeys } from "../../i18n";
 import { CustomMessage } from "../../types";
 import { IBotCommand } from "../types";
 
@@ -57,7 +60,7 @@ export class TrainCommand implements IBotCommand {
   async runTrainingQueue(msg: CustomMessage): Promise<void> {
     try {
       // @TODO get campaignId from database after a message is sent to the user by the bot and they accept the campaign
-      const campaignId = "3afd0b46-f3da-4048-aaf9-acbc7149a71d";
+      const campaignId = "ace9fc09-440d-49e7-8462-a416c232cf4b";
 
       // @TODO check if user has already started this campaign by storing user_id in campaign_action_message, then query for campaign_action_id
 
@@ -66,6 +69,15 @@ export class TrainCommand implements IBotCommand {
       const { userId } = await findUserByTelegramUserId(this.bot.clients.user, {
         telegramFromUserId: msg.from.id,
       });
+
+      const campaignActionMessagesByUserId = await getCampaignActionMessagesByUserId(
+        this.bot.clients.campaign,
+        { campaignActionId: campaignActions[0].id, userId },
+      );
+
+      if (campaignActionMessagesByUserId.length > 0) {
+        throw new Error(CampaignServiceErrorCodes.user_has_started_this_campaign);
+      }
 
       const actions: Actions = {};
 
@@ -141,11 +153,23 @@ A qué dirección de ETH enviamos tus USDT? 🤑`,
   }
 
   private handleErrorReply(error: Error, msg: CustomMessage) {
-    if (error.message === UserServiceErrorCodes.user_not_found) {
-      // @TODO reply with user not found message
-      this.bot.replyWithTranslation(msg, translationKeys.start_command_error);
-    } else {
-      this.bot.replyWithTranslation(msg, translationKeys.start_command_error);
+    switch (error.message) {
+      case UserServiceErrorCodes.user_not_found: {
+        // @TODO reply with i18n user not found message
+        this.bot.reply(msg, `Tu usuario de telegram no está registrado en el sistema.`);
+        break;
+      }
+      case CampaignServiceErrorCodes.user_has_started_this_campaign: {
+        // @TODO reply with i18n user_has_started_this_campaign meesage
+        this.bot.reply(msg, `Ya has participado esta campaña.`);
+        break;
+      }
+
+      default: {
+        // @TODO default error message
+        this.bot.reply(msg, `Error al enviar el mensaje.`);
+        break;
+      }
     }
 
     throw error;
