@@ -60,6 +60,7 @@ export class TrainCommand implements IBotCommand {
       actions[action.intentAction] = {
         isTimeoutSet: false,
         isLast,
+        id: action.id,
         initialInstruction: action.initialInstruction,
         reply: action.reply,
         intentAction: action.intentAction,
@@ -100,6 +101,8 @@ A qué dirección de ETH enviamos tus USDT? 🤑`,
               );
 
               this.actions.delete(msg.from.id);
+
+              // @TODO mark campaign_user record as completed
             }, DEFAULT_TIMEOUT);
           }
         }, DEFAULT_TIMEOUT);

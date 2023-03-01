@@ -1,5 +1,5 @@
 import { StreamChat } from "stream-chat";
-import { UserClientGenerator } from "@rapydbot/user/client";
+import { UserClientGenerator } from "@rapydbot/user";
 import { WalletClientGenerator } from "@rapydbot/wallet/client";
 import { IntentAction } from "@rapydbot/intent-recognition/providers/cohere/types";
 import moment, { Moment } from "moment";
