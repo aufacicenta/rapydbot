@@ -14,6 +14,8 @@ export default (context: IContext) => {
     createCampaignActionMessage: (call, callback) =>
       context.controller.createCampaignActionMessage({ call, callback }, context),
     getCampaignActions: (call) => context.controller.getCampaignActions({ call }, context),
+    getCampaignActionMessages: (call) =>
+      context.controller.getCampaignActionMessages({ call }, context),
   });
 
   return server;

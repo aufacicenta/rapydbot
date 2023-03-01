@@ -5,6 +5,7 @@ import { CampaignClientGenerator, CampaignClient } from "../../client";
 import { createCampaign } from "../../client/create-campaign";
 import { createCampaignAction } from "../../client/create-campaign-action";
 import { createCampaignActionMessage } from "../../client/create-campaign-action-message";
+import { getCampaignActionMessages } from "../../client/get-campaign-action-messages";
 import { getCampaignActions } from "../../client/get-campaign-actions";
 import { instructions } from "../util/instructions";
 
@@ -66,6 +67,7 @@ describe("client", () => {
       campaignId,
     });
 
+    expect(instruction1.id).toBeDefined();
     expect(instruction1.campaignId).toEqual(campaignId);
     expect(instruction1.initialInstruction).toEqual(
       instructions[IntentAction.WalletCreate].initialInstruction,
@@ -84,6 +86,8 @@ describe("client", () => {
   test("success: create campaign actions messages", async () => {
     const campaignId = await createCampaign(client, { issuerId });
 
+    let campaign_action_id: string;
+
     for (const key in instructions) {
       const initialInstruction = instructions[key].initialInstruction;
       const reply = instructions[key].reply;
@@ -94,6 +98,10 @@ describe("client", () => {
         reply,
         intentAction: key,
       });
+
+      if (!campaign_action_id) {
+        campaign_action_id = campaignActionId;
+      }
 
       const messages = [
         "message 1",
@@ -117,6 +125,14 @@ describe("client", () => {
         expect(campaignActionMessageId_1).toBeDefined();
         expect(campaignActionMessageId_2).toBeDefined();
       }
+    }
+
+    const campaignActionMessages = await getCampaignActionMessages(client, {
+      campaignActionId: campaign_action_id,
+    });
+
+    for (const message of campaignActionMessages) {
+      expect(message.campaignActionId).toEqual(campaign_action_id);
     }
   });
 });

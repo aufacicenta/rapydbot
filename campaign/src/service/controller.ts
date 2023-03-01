@@ -8,6 +8,8 @@ import {
   CreateCampaignActionRequest,
   CreateCampaignReply,
   CreateCampaignRequest,
+  GetCampaignActionMessagesReply,
+  GetCampaignActionMessagesRequest,
   GetCampaignActionsReply,
   GetCampaignActionsRequest,
 } from "../server/protos/schema_pb";
@@ -111,10 +113,43 @@ export class Controller {
     for (const action of result) {
       const reply = new GetCampaignActionsReply();
 
+      reply.setId(action.id);
       reply.setCampaignId(action.campaignId);
       reply.setInitialInstruction(action.initialInstruction);
       reply.setReply(action.reply);
       reply.setIntentAction(action.intentAction);
+
+      call.write(reply, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    call.end();
+  }
+
+  async getCampaignActionMessages(
+    {
+      call,
+    }: gRPCServerStreamingCall<GetCampaignActionMessagesRequest, GetCampaignActionMessagesReply>,
+    { db }: IContext,
+  ) {
+    const campaign_action_id = call.request.getCampaignActionId();
+
+    const result = await db.campaignActionMessage.getByCampaignActionId({
+      campaign_action_id,
+    });
+
+    for (const action of result) {
+      const reply = new GetCampaignActionMessagesReply();
+
+      reply.setId(action.id);
+      reply.setCampaignActionId(action.campaignActionId);
+      reply.setUserId(action.userId);
+      reply.setMessage(action.message);
+      // @TODO return approvedBy
+      reply.setApprovedAt(action.approvedAt);
 
       call.write(reply, (err) => {
         if (err) {

@@ -1,6 +1,6 @@
 import { Sequelize, ModelStatic } from "sequelize";
 
-import { CreateCampaignActionMessageReply } from "../client";
+import { CreateCampaignActionMessageReply, GetCampaignActionMessagesReply } from "../client";
 
 import { CampaignActionMessageModel, CampaignActionMessageModelArgs } from "./model";
 
@@ -23,5 +23,25 @@ export class CampaignActionMessage {
     return {
       id,
     };
+  }
+
+  async getByCampaignActionId({
+    campaign_action_id,
+  }: Pick<CampaignActionMessageModelArgs, "campaign_action_id">): Promise<
+    Array<GetCampaignActionMessagesReply.AsObject>
+  > {
+    const result = await this.model.findAll({
+      where: {
+        campaign_action_id,
+      },
+    });
+
+    return result.map((message) => ({
+      id: message.getDataValue("id"),
+      campaignActionId: message.getDataValue("campaign_action_id"),
+      userId: message.getDataValue("user_id"),
+      message: message.getDataValue("message"),
+      approvedAt: message.getDataValue("approved_at"),
+    }));
   }
 }

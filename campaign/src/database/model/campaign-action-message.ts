@@ -7,6 +7,7 @@ export type CampaignActionMessageModelArgs = {
   campaign_action_id: string;
   user_id: string;
   message: string;
+  // @TODO approved_by
   approved_at?: string;
   campaign_action?: CampaignActionModel;
 };
