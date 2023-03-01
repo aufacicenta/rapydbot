@@ -31,7 +31,7 @@ const {
   STREAM_CHAT_API_SECRET,
 } = process.env;
 
-export class Bot {
+export class TGInformerBot {
   public api: TelegramBotApi;
 
   public moment: Moment;
@@ -63,7 +63,7 @@ export class Bot {
     this.setCommands();
   }
 
-  async prepare(): Promise<Bot> {
+  async prepare(): Promise<TGInformerBot> {
     await this.handlers.language.init();
 
     await this.prepareContext();
@@ -87,34 +87,8 @@ export class Bot {
     });
 
     this.api.on("message", async (msg) => {
-      const isTraining = true;
-
-      if (isTraining) {
-        this.commands.train.onText(msg);
-
-        return;
-      }
-
       try {
-        // Record the message in the database
-        const message = await this.handlers.context.sendMessage(msg);
-
-        const context = { chat: { message } };
-        const customMessage = { ...msg, context };
-
-        // Identify the IntentAction from the message text
-        const command = await this.handlers.intentRecognition.classify(customMessage);
-
-        // Update the message with the IntentAction as an attachment
-        await this.handlers.context.updateMessage(customMessage, [
-          { type: "text", fields: [{ title: "intent", value: command, short: true }] },
-        ]);
-
-        // Execute the command
-        this.handlers.intentRecognition.onCommand(command, customMessage);
-
-        // @TODO extract the entities from the text message and
-        // create a data request record, if values are missing, let the bot ask for them with ChatGPT
+        this.commands.train.onText(msg);
       } catch (error) {
         // @TODO handle error reply from error reason sent by the servers, handlers or commands
         console.error(error);

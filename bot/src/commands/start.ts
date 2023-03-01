@@ -1,15 +1,15 @@
 import { CreateUserRequest } from "@rapydbot/user/client";
 
-import { Bot } from "../Bot";
+import { TGInformerBot } from "../tg-informer";
 import { translationKeys } from "../i18n";
 import { CustomMessage } from "../types";
 
 import { IBotCommand } from "./types";
 
 export class StartCommand implements IBotCommand {
-  private bot: Bot;
+  private bot: TGInformerBot;
 
-  constructor(bot: Bot) {
+  constructor(bot: TGInformerBot) {
     this.bot = bot;
   }
 

@@ -1,4 +1,5 @@
 import { ModelCtor, Sequelize } from "sequelize";
+
 import {
   CreateUserReply,
   FindUserByTelegramUserIdReply,
@@ -7,6 +8,7 @@ import {
   GetUserTelegramChatIdRequest,
 } from "../server/protos/schema_pb";
 import { UserServiceErrorCodes } from "../service/error";
+
 import { TelegramModel, TelegramModelArgs } from "./model/telegram";
 import { UserModel } from "./model/user";
 
@@ -75,23 +77,17 @@ export class User {
   }: {
     telegram_from_user_id: number;
   }): Promise<FindUserByTelegramUserIdReply.AsObject> {
-    const telegram_result = await this.telegram.findOne({
+    const result = await this.telegram.findOne({
       where: {
         from_user_id: telegram_from_user_id,
       },
     });
 
-    const telegram_id = telegram_result.getDataValue("id");
-
-    if (!Boolean(telegram_id)) {
-      throw new Error("findUserByTelegramUserIdOrCreateUser failed");
+    if (!result) {
+      throw new Error(UserServiceErrorCodes.user_not_found);
     }
 
-    const userId = telegram_result.getDataValue("user_id");
-
-    if (!Boolean(userId)) {
-      throw new Error("findUserByTelegramUserIdOrCreateUser failed");
-    }
+    const userId = result.getDataValue("user_id");
 
     return {
       userId,

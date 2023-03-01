@@ -1,16 +1,15 @@
-/* eslint-disable unused-imports/no-unused-vars */
-import { Message } from "node-telegram-bot-api";
-import { Attachment } from "stream-chat";
+import { createCampaignActionMessage } from "@rapydbot/campaign";
 
-import { Bot } from "../Bot";
+import { Action } from "../commands/train/types";
+import { TGInformerBot } from "../tg-informer";
 import { CustomMessage } from "../types";
 
 import { IBotHandler } from "./types";
 
 export class ContextHandler implements IBotHandler {
-  private bot: Bot;
+  private bot: TGInformerBot;
 
-  constructor(bot: Bot) {
+  constructor(bot: TGInformerBot) {
     this.bot = bot;
   }
 
@@ -18,47 +17,11 @@ export class ContextHandler implements IBotHandler {
     return;
   }
 
-  async sendMessage(msg: Message, attachments: Attachment[] = []) {
-    console.log("context.sendMessage", msg.text);
-
-    return { id: "123" };
-
-    const { message } = await this.bot.context.channel.sendMessage({
-      text: msg.text,
-      user_id: msg.from.id.toString(),
-      silent: true,
-      skip_push: true,
-      attachments,
+  async sendMessage(msg: CustomMessage, action: Action) {
+    createCampaignActionMessage(this.bot.clients.campaign, {
+      campaignActionId: action.id,
+      userId: msg.user.id,
+      message: msg.text,
     });
-
-    // return message;
-
-    // @TODO handle error codes
-  }
-
-  async updateMessage(
-    {
-      text,
-      from: { id: user_id },
-      context: {
-        chat: { message },
-      },
-    }: CustomMessage,
-    attachments: Attachment[] = [],
-  ) {
-    console.log("context.updateMessage", text);
-
-    // const response = await this.bot.context.chat.updateMessage({
-    //   id: message.id,
-    //   user_id: user_id.toString(),
-    //   silent: true,
-    //   text: message.text,
-    //   html: message.html,
-    //   attachments,
-    // });
-
-    // return response.message;
-
-    // @TODO handle error codes
   }
 }

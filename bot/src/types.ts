@@ -1,6 +1,6 @@
 import { CampaignClient } from "@rapydbot/campaign";
 import { IntentRecognitionClient } from "@rapydbot/intent-recognition/client";
-import { UserClient } from "@rapydbot/user/client";
+import { UserModelAttributes, UserClient } from "@rapydbot/user";
 import { WalletClient } from "@rapydbot/wallet/client";
 import { Message as TelegramMessage } from "node-telegram-bot-api";
 import { Channel, DefaultGenerics, StreamChat, MessageResponse } from "stream-chat";
@@ -13,6 +13,9 @@ import { ContextHandler } from "./handler/context";
 import { IntentRecognitionHandler } from "./handler/intent-recognition";
 
 export type CustomMessage = TelegramMessage & {
+  user?: {
+    id: UserModelAttributes["id"];
+  };
   context?: {
     chat: {
       message: MessageResponse<DefaultGenerics> | { id: string };

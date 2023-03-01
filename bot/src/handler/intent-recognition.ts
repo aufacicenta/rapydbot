@@ -1,13 +1,13 @@
 import { ClassifyRequest } from "@rapydbot/intent-recognition/client";
 import { IntentAction } from "@rapydbot/intent-recognition/providers/cohere/types";
 
-import { Bot } from "../Bot";
+import { TGInformerBot } from "../tg-informer";
 import { CustomMessage } from "../types";
 
 export class IntentRecognitionHandler {
-  private bot: Bot;
+  private bot: TGInformerBot;
 
-  constructor(bot: Bot) {
+  constructor(bot: TGInformerBot) {
     this.bot = bot;
   }
 

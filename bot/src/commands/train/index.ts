@@ -1,6 +1,11 @@
 import { getCampaignActions } from "@rapydbot/campaign";
+import {
+  findUserByTelegramUserId,
+  UserModelAttributes,
+  UserServiceErrorCodes,
+} from "@rapydbot/user";
 
-import { Bot } from "../../Bot";
+import { TGInformerBot } from "../../tg-informer";
 import { translationKeys } from "../../i18n";
 import { CustomMessage } from "../../types";
 import { IBotCommand } from "../types";
@@ -10,33 +15,39 @@ import { Action, Actions } from "./types";
 const DEFAULT_TIMEOUT = 5000;
 
 export class TrainCommand implements IBotCommand {
-  private bot: Bot;
+  private bot: TGInformerBot;
 
-  private actions = new Map<number, Actions>();
-  private currentAction = new Map<number, Action | undefined>();
+  private actions = new Map<UserModelAttributes["id"], Actions>();
+  private currentAction = new Map<UserModelAttributes["id"], Action | undefined>();
 
-  constructor(bot: Bot) {
+  constructor(bot: TGInformerBot) {
     this.bot = bot;
   }
 
   async onText(msg: CustomMessage) {
-    const currentAction = this.currentAction.get(msg.from.id);
+    try {
+      const { userId } = await findUserByTelegramUserId(this.bot.clients.user, {
+        telegramFromUserId: msg.from.id,
+      });
 
-    if (currentAction) {
-      this.callAction(msg, currentAction);
+      const currentAction = this.currentAction.get(userId);
 
-      if (!currentAction.isTimeoutSet) {
-        this.setActionTimeout(msg, currentAction);
+      if (currentAction) {
+        const customMessage = { ...msg, user: { id: userId } };
+
+        this.callAction(customMessage, currentAction);
+
+        if (!currentAction.isTimeoutSet) {
+          this.setActionTimeout(customMessage, currentAction);
+        }
+
+        return;
       }
 
-      return;
-    }
+      if (/^\/?(train|entrenar)/i.test(msg.text)) {
+        return;
+      }
 
-    if (/^\/?(train|entrenar)/i.test(msg.text)) {
-      return;
-    }
-
-    try {
       this.bot.reply(msg, `Escribe "entrenar" para comenzar.`);
     } catch (error) {
       this.handleErrorReply(error, msg);
@@ -44,37 +55,45 @@ export class TrainCommand implements IBotCommand {
   }
 
   async runTrainingQueue(msg: CustomMessage): Promise<void> {
-    // @TODO get campaignId from database after a message is sent to the user by the bot and they accept the campaign
-    const campaignId = "d8905b8f-c53a-42f5-9629-7afa5d6dae43";
+    try {
+      // @TODO get campaignId from database after a message is sent to the user by the bot and they accept the campaign
+      const campaignId = "3afd0b46-f3da-4048-aaf9-acbc7149a71d";
 
-    // @TODO check if user has already trained by storing their id in the database of by checking the stream-chat messages
+      // @TODO check if user has already started this campaign by storing user_id in campaign_action_message, then query for campaign_action_id
 
-    const campaignActions = await getCampaignActions(this.bot.clients.campaign, { campaignId });
+      const campaignActions = await getCampaignActions(this.bot.clients.campaign, { campaignId });
 
-    const actions: Actions = {};
+      const { userId } = await findUserByTelegramUserId(this.bot.clients.user, {
+        telegramFromUserId: msg.from.id,
+      });
 
-    for (const action of campaignActions) {
-      const isLast =
-        action.intentAction === campaignActions[campaignActions.length - 1].intentAction;
+      const actions: Actions = {};
 
-      actions[action.intentAction] = {
-        isTimeoutSet: false,
-        isLast,
-        id: action.id,
-        initialInstruction: action.initialInstruction,
-        reply: action.reply,
-        intentAction: action.intentAction,
-        campaignId: action.campaignId,
-      };
+      for (const action of campaignActions) {
+        const isLast =
+          action.intentAction === campaignActions[campaignActions.length - 1].intentAction;
+
+        actions[action.intentAction] = {
+          isTimeoutSet: false,
+          isLast,
+          id: action.id,
+          initialInstruction: action.initialInstruction,
+          reply: action.reply,
+          intentAction: action.intentAction,
+          campaignId: action.campaignId,
+        };
+      }
+
+      this.actions.set(userId, actions);
+      this.currentAction.set(userId, actions[campaignActions[0].intentAction]);
+      this.bot.reply(msg, actions[campaignActions[0].intentAction].initialInstruction);
+    } catch (error) {
+      this.handleErrorReply(error, msg);
     }
-
-    this.actions.set(msg.from.id, actions);
-    this.currentAction.set(msg.from.id, actions[campaignActions[0].intentAction]);
-    this.bot.reply(msg, actions[campaignActions[0].intentAction].initialInstruction);
   }
 
   private setActionTimeout(msg: CustomMessage, current: Action): void {
-    const actions = this.actions.get(msg.from.id);
+    const actions = this.actions.get(msg.user.id);
 
     for (const key in actions) {
       const next = actions[key];
@@ -82,13 +101,13 @@ export class TrainCommand implements IBotCommand {
 
       if (isNotCurrent && next.isTimeoutSet === false) {
         setTimeout(() => {
-          this.currentAction.set(msg.from.id, next);
+          this.currentAction.set(msg.user.id, next);
 
           this.bot.reply(msg, next.initialInstruction);
 
           if (next.isLast) {
             setTimeout(() => {
-              this.currentAction.set(msg.from.id, undefined);
+              this.currentAction.set(msg.user.id, undefined);
 
               // @TODO send final stream-chat message attachment to identify completion
 
@@ -100,7 +119,7 @@ export class TrainCommand implements IBotCommand {
 A qué dirección de ETH enviamos tus USDT? 🤑`,
               );
 
-              this.actions.delete(msg.from.id);
+              this.actions.delete(msg.user.id);
 
               // @TODO mark campaign_user record as completed
             }, DEFAULT_TIMEOUT);
@@ -112,16 +131,23 @@ A qué dirección de ETH enviamos tus USDT? 🤑`,
     }
 
     actions[current.intentAction].isTimeoutSet = true;
-    this.actions.set(msg.from.id, actions);
+    this.actions.set(msg.user.id, actions);
   }
 
   private async callAction(msg: CustomMessage, action: Action): Promise<void> {
-    this.bot.handlers.context.sendMessage(msg, [{ type: "text", value: action.intentAction }]);
+    this.bot.handlers.context.sendMessage(msg, action);
 
     this.bot.reply(msg, action.reply);
   }
 
   private handleErrorReply(error: Error, msg: CustomMessage) {
-    return this.bot.replyWithTranslation(msg, translationKeys.start_command_error);
+    if (error.message === UserServiceErrorCodes.user_not_found) {
+      // @TODO reply with user not found message
+      this.bot.replyWithTranslation(msg, translationKeys.start_command_error);
+    } else {
+      this.bot.replyWithTranslation(msg, translationKeys.start_command_error);
+    }
+
+    throw error;
   }
 }

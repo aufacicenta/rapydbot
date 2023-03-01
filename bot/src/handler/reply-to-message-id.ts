@@ -1,4 +1,4 @@
-import { Bot } from "../Bot";
+import { TGInformerBot } from "../tg-informer";
 import { Commands } from "../types";
 
 export type BotReplyToMessageIdHandlerStorageKeys = {
@@ -17,11 +17,11 @@ export class BotReplyToMessageIdHandler {
   reply_to_message_ids: Array<number> = [];
   command: Commands;
   timestamp: Date;
-  bot: Bot;
+  bot: TGInformerBot;
 
   storage: Map<keyof BotReplyToMessageIdHandlerStorageKeys, any> = new Map();
 
-  constructor(bot: Bot, command: Commands) {
+  constructor(bot: TGInformerBot, command: Commands) {
     this.bot = bot;
     this.command = command;
     this.timestamp = new Date();

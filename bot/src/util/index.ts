@@ -1,5 +1,7 @@
-import getUserId from "./getUserId";
+import regexp from "./regexp";
+import validation from "./validation";
 
 export default {
-  getUserId,
+  regexp,
+  validation,
 };

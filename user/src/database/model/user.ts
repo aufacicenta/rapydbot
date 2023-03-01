@@ -2,13 +2,15 @@ import { DataTypes, Model, ModelOptions } from "sequelize";
 
 import { TelegramModel } from "./telegram";
 
-export class UserModel extends Model<{
+export type UserModelAttributes = {
   id?: string;
   telegram_id: string;
   created_at: Date;
   updated_at: Date;
-  telegram: TelegramModel;
-}> {
+  telegram?: TelegramModel;
+};
+
+export class UserModel extends Model<UserModelAttributes> {
   public static tableName = "user";
 
   public static rawAttributes = {

@@ -1,16 +1,16 @@
 import { WalletServiceErrorCodes } from "@rapydbot/wallet/service/error";
+import { findUserByTelegramUserId } from "@rapydbot/user";
 import { CreateWalletRequest } from "@rapydbot/wallet/client";
 
-import { Bot } from "../../Bot";
+import { TGInformerBot } from "../../tg-informer";
 import { CustomMessage } from "../../types";
 import { IBotCommand } from "../types";
-import util from "../../util";
 import { translationKeys } from "../../i18n";
 
 export class CreateWalletCommand implements IBotCommand {
-  private bot: Bot;
+  private bot: TGInformerBot;
 
-  constructor(bot: Bot) {
+  constructor(bot: TGInformerBot) {
     this.bot = bot;
   }
 
@@ -64,9 +64,8 @@ export class CreateWalletCommand implements IBotCommand {
 
   private async createWallet(msg: CustomMessage): Promise<string> {
     return new Promise((resolve, reject) => {
-      util
-        .getUserId(msg, this.bot.clients.user)
-        .then((userId) => {
+      findUserByTelegramUserId(this.bot.clients.user, { telegramFromUserId: msg.from.id })
+        .then(({ userId }) => {
           const request = new CreateWalletRequest();
 
           request.setUserId(userId);
