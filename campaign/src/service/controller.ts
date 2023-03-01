@@ -8,6 +8,7 @@ import {
   CreateCampaignActionRequest,
   CreateCampaignReply,
   CreateCampaignRequest,
+  GetCampaignActionMessagesByUserIdRequest,
   GetCampaignActionMessagesReply,
   GetCampaignActionMessagesRequest,
   GetCampaignActionsReply,
@@ -139,6 +140,43 @@ export class Controller {
 
     const result = await db.campaignActionMessage.getByCampaignActionId({
       campaign_action_id,
+    });
+
+    for (const action of result) {
+      const reply = new GetCampaignActionMessagesReply();
+
+      reply.setId(action.id);
+      reply.setCampaignActionId(action.campaignActionId);
+      reply.setUserId(action.userId);
+      reply.setMessage(action.message);
+      // @TODO return approvedBy
+      reply.setApprovedAt(action.approvedAt);
+
+      call.write(reply, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    call.end();
+  }
+
+  async getCampaignActionMessagesByUserId(
+    {
+      call,
+    }: gRPCServerStreamingCall<
+      GetCampaignActionMessagesByUserIdRequest,
+      GetCampaignActionMessagesReply
+    >,
+    { db }: IContext,
+  ) {
+    const campaign_action_id = call.request.getCampaignActionId();
+    const user_id = call.request.getUserId();
+
+    const result = await db.campaignActionMessage.getByCampaignActionIdAndUserId({
+      campaign_action_id,
+      user_id,
     });
 
     for (const action of result) {

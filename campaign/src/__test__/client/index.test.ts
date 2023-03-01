@@ -6,6 +6,7 @@ import { createCampaign } from "../../client/create-campaign";
 import { createCampaignAction } from "../../client/create-campaign-action";
 import { createCampaignActionMessage } from "../../client/create-campaign-action-message";
 import { getCampaignActionMessages } from "../../client/get-campaign-action-messages";
+import { getCampaignActionMessagesByUserId } from "../../client/get-campaign-action-messages-by-user-id";
 import { getCampaignActions } from "../../client/get-campaign-actions";
 import { instructions } from "../util/instructions";
 
@@ -133,6 +134,16 @@ describe("client", () => {
 
     for (const message of campaignActionMessages) {
       expect(message.campaignActionId).toEqual(campaign_action_id);
+    }
+
+    const campaignActionMessagesByUserId = await getCampaignActionMessagesByUserId(client, {
+      campaignActionId: campaign_action_id,
+      userId: user1,
+    });
+
+    for (const message of campaignActionMessagesByUserId) {
+      expect(message.campaignActionId).toEqual(campaign_action_id);
+      expect(message.userId).toEqual(user1);
     }
   });
 });

@@ -44,4 +44,26 @@ export class CampaignActionMessage {
       approvedAt: message.getDataValue("approved_at"),
     }));
   }
+
+  async getByCampaignActionIdAndUserId({
+    campaign_action_id,
+    user_id,
+  }: Pick<CampaignActionMessageModelArgs, "campaign_action_id" | "user_id">): Promise<
+    Array<GetCampaignActionMessagesReply.AsObject>
+  > {
+    const result = await this.model.findAll({
+      where: {
+        campaign_action_id,
+        user_id,
+      },
+    });
+
+    return result.map((message) => ({
+      id: message.getDataValue("id"),
+      campaignActionId: message.getDataValue("campaign_action_id"),
+      userId: message.getDataValue("user_id"),
+      message: message.getDataValue("message"),
+      approvedAt: message.getDataValue("approved_at"),
+    }));
+  }
 }
