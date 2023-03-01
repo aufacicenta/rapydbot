@@ -4,6 +4,7 @@ import getRandomUsername from "@rapydbot/wallet/__test__/util/getRandomUsername"
 import { CampaignClientGenerator, CampaignClient } from "../../client";
 import { createCampaign } from "../../client/create-campaign";
 import { createCampaignAction } from "../../client/create-campaign-action";
+import { createCampaignActionMessage } from "../../client/create-campaign-action-message";
 import { createCampaignUser } from "../../client/create-campaign-user";
 import { getCampaignActions } from "../../client/get-campaign-actions";
 import { instructions } from "../util/instructions";
@@ -98,5 +99,44 @@ describe("client", () => {
     );
     expect(instruction2.reply).toEqual(instructions[IntentAction.TransactionsFrom].reply);
     expect(instruction2.intentAction).toEqual(IntentAction.TransactionsFrom);
+  });
+
+  test("success: create campaign actions messages", async () => {
+    const campaignId = await createCampaign(client, { issuerId });
+
+    for (const key in instructions) {
+      const initialInstruction = instructions[key].initialInstruction;
+      const reply = instructions[key].reply;
+
+      const campaignActionId = await createCampaignAction(client, {
+        campaignId,
+        initialInstruction,
+        reply,
+        intentAction: key,
+      });
+
+      const messages = [
+        "message 1",
+        `message with format <strong>bold</strong>`,
+        `message with whitespace\n\nline.`,
+      ];
+
+      for (const message of messages) {
+        const campaignActionMessageId_1 = await createCampaignActionMessage(client, {
+          campaignActionId,
+          userId: user1,
+          message,
+        });
+
+        const campaignActionMessageId_2 = await createCampaignActionMessage(client, {
+          campaignActionId,
+          userId: user2,
+          message,
+        });
+
+        expect(campaignActionMessageId_1).toBeDefined();
+        expect(campaignActionMessageId_2).toBeDefined();
+      }
+    }
   });
 });

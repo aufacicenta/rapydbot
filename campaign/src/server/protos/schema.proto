@@ -7,6 +7,7 @@ package campaign;
 service Campaign {
   rpc CreateCampaign (CreateCampaignRequest) returns (CreateCampaignReply) {}
   rpc CreateCampaignAction (CreateCampaignActionRequest) returns (CreateCampaignActionReply) {}
+  rpc CreateCampaignActionMessage (CreateCampaignActionMessageRequest) returns (CreateCampaignActionMessageReply) {}
   rpc CreateCampaignUser (CreateCampaignUserRequest) returns (CreateCampaignUserReply) {}
   rpc GetCampaignActions (GetCampaignActionsRequest) returns (stream GetCampaignActionsReply) {}
 }
@@ -30,6 +31,16 @@ message CreateCampaignActionReply {
   string campaign_action_id = 1;
 }
 
+message CreateCampaignActionMessageRequest {
+  string campaign_action_id = 1;
+  string user_id = 3;
+  string message = 2;
+}
+
+message CreateCampaignActionMessageReply {
+  string id = 1;
+}
+
 message CreateCampaignUserRequest {
   string campaign_id = 1;
   string user_id = 2;
@@ -47,8 +58,9 @@ message GetCampaignActionsRequest {
 }
 
 message GetCampaignActionsReply {
-  string campaign_id = 1;
-  string initial_instruction = 2;
-  string reply = 3;
-  string intent_action = 4;
+  string id = 1;
+  string campaign_id = 2;
+  string initial_instruction = 3;
+  string reply = 4;
+  string intent_action = 5;
 }

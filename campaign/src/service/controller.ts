@@ -2,6 +2,8 @@ import * as grpc from "@grpc/grpc-js";
 
 import { IContext } from "../server/interface/IContext";
 import {
+  CreateCampaignActionMessageReply,
+  CreateCampaignActionMessageRequest,
   CreateCampaignActionReply,
   CreateCampaignActionRequest,
   CreateCampaignReply,
@@ -53,7 +55,7 @@ export class Controller {
       const reply = call.request.getReply();
       const intent_action = call.request.getIntentAction();
 
-      const { campaignActionId } = await db.campaignActions.create({
+      const { campaignActionId } = await db.campaignAction.create({
         campaign_id,
         initial_instruction,
         reply,
@@ -65,6 +67,34 @@ export class Controller {
       r.setCampaignActionId(campaignActionId);
 
       callback(null, r);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async createCampaignActionMessage(
+    {
+      call,
+      callback,
+    }: GRPCUnaryCall<CreateCampaignActionMessageRequest, CreateCampaignActionMessageReply>,
+    { db }: IContext,
+  ) {
+    try {
+      const campaign_action_id = call.request.getCampaignActionId();
+      const user_id = call.request.getUserId();
+      const message = call.request.getMessage();
+
+      const { id } = await db.campaignActionMessage.create({
+        campaign_action_id,
+        user_id,
+        message,
+      });
+
+      const reply = new CreateCampaignActionMessageReply();
+
+      reply.setId(id);
+
+      callback(null, reply);
     } catch (error) {
       callback(error, null);
     }
@@ -103,7 +133,7 @@ export class Controller {
   ) {
     const campaignId = call.request.getCampaignId();
 
-    const result = await db.campaignActions.getByCampaignId({
+    const result = await db.campaignAction.getByCampaignId({
       campaignId,
     });
 
