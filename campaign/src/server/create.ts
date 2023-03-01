@@ -13,8 +13,6 @@ export default (context: IContext) => {
       context.controller.createCampaignAction({ call, callback }, context),
     createCampaignActionMessage: (call, callback) =>
       context.controller.createCampaignActionMessage({ call, callback }, context),
-    createCampaignUser: (call, callback) =>
-      context.controller.createCampaignUser({ call, callback }, context),
     getCampaignActions: (call) => context.controller.getCampaignActions({ call }, context),
   });
 

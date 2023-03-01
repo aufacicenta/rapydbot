@@ -8,7 +8,6 @@ service Campaign {
   rpc CreateCampaign (CreateCampaignRequest) returns (CreateCampaignReply) {}
   rpc CreateCampaignAction (CreateCampaignActionRequest) returns (CreateCampaignActionReply) {}
   rpc CreateCampaignActionMessage (CreateCampaignActionMessageRequest) returns (CreateCampaignActionMessageReply) {}
-  rpc CreateCampaignUser (CreateCampaignUserRequest) returns (CreateCampaignUserReply) {}
   rpc GetCampaignActions (GetCampaignActionsRequest) returns (stream GetCampaignActionsReply) {}
 }
 
@@ -39,18 +38,6 @@ message CreateCampaignActionMessageRequest {
 
 message CreateCampaignActionMessageReply {
   string id = 1;
-}
-
-message CreateCampaignUserRequest {
-  string campaign_id = 1;
-  string user_id = 2;
-  string message_id = 3;
-}
-
-message CreateCampaignUserReply {
-  string campaign_id = 1;
-  string user_id = 2;
-  string message_id = 3;
 }
 
 message GetCampaignActionsRequest {
