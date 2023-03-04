@@ -1,0 +1,25 @@
+@import "/src/theme/base";
+@import "src/theme/forms/variables";
+
+.menu-list {
+  min-width: 180px;
+  max-height: 180px;
+  margin-top: $space-xs;
+  border-radius: $border-radius-input;
+  padding: 0;
+  overflow-y: auto;
+  font-size: $input-font-size;
+  color: $input-text-color;
+  list-style: none;
+  background: $input-background;
+  box-shadow: $shadow-overlay;
+
+  &--big {
+    > li {
+      @include atDesktop {
+        @include font-properties($typography-text);
+        padding: 10px 24px;
+      }
+    }
+  }
+}

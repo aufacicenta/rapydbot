@@ -1,0 +1,8 @@
+@import "../../../theme/base";
+
+.navigation {
+  display: flex;
+  margin-top: $space-m;
+  border-bottom: 1px solid var(--color-tab-navigation-border);
+  padding: 0 $space-default;
+}

@@ -1,0 +1,89 @@
+.button-outline {
+  @include font-properties($typography-button-label);
+  min-width: 88px;
+  border: 2px solid var(--color-button-primary);
+  border-radius: $border-radius-button;
+  padding: 11px 22px;
+  color: var(--color-primary);
+  background-position: center;
+  transition: background $duration-slow, border-color $duration-medium, color $duration-medium;
+
+  &:hover,
+  &:focus {
+    border-color: var(--color-button-primary-hover);
+    color: var(--color-button-primary-hover-text);
+    background: var(--color-button-primary-hover);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:active {
+    background-color: var(--color-primary)-bright;
+  }
+
+  &:disabled,
+  &[disabled] {
+    background-color: var(--color-dark-1);
+
+    &:hover {
+      background-color: var(--color-dark-1);
+    }
+  }
+
+  &__icon {
+    vertical-align: middle;
+    margin: {
+      left: $space-s;
+    }
+  }
+
+  &_medium,
+  &_large {
+    border-radius: $border-radius-pill;
+    font-size: $font-size-5;
+  }
+
+  &_medium {
+    padding: 15px $space-l;
+    line-height: 22px;
+  }
+
+  &_large {
+    padding: 18px $space-l;
+    line-height: 1.5;
+  }
+
+  &_inverse {
+    border-color: $color-black;
+    color: $color-black;
+
+    &:hover {
+      border-color: $color-black;
+      color: var(--color-white);
+      background-color: $color-black;
+    }
+  }
+
+  &_inverse-thin {
+    border-color: var(--color-dark-2);
+    border-width: 1px;
+    color: var(--color-dark-1);
+    box-shadow: $shadow-input;
+
+    &.button-outline--medium {
+      padding: 16px $space-l;
+    }
+
+    &.button-outline--large {
+      padding: 19px $space-l;
+    }
+
+    &:hover {
+      border-color: var(--color-dark-1);
+      color: var(--color-white);
+      background-color: var(--color-dark-1);
+    }
+  }
+}

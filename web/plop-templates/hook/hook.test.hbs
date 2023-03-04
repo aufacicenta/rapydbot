@@ -1,0 +1,11 @@
+import { renderHook } from 'tests';
+
+import { {{camelCase name}} } from './{{camelCase name}}';
+
+describe('{{camelCase name}}', () => {
+  it('returns a value', async () => {
+    const { result } = renderHook(() => {{camelCase name}}());
+
+    expect(result.current).toEqual('1');
+  });
+});

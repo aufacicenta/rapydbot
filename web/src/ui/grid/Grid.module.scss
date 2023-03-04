@@ -1,0 +1,15 @@
+@import "../../theme/base";
+
+.grid {
+  color: var(--color-primary);
+}
+
+.col {
+  &__justify-content {
+    &--end {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+    }
+  }
+}

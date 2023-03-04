@@ -1,0 +1,27 @@
+@import "src/theme/base";
+
+.locale-selector {
+  @extend .z-depth-1;
+
+  @include atLargeTablet {
+    top: $navbar-height * 2;
+  }
+  position: fixed;
+  top: $navbar-height-mobile * 1.5;
+  right: 0;
+  z-index: $z-index-content;
+  display: block;
+  border-top-left-radius: $border-radius;
+  border-bottom-left-radius: $border-radius;
+  padding: $space-xs $space-s;
+  background-color: var(--color-black);
+
+  a {
+    text-decoration: none;
+    color: var(--color-white);
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

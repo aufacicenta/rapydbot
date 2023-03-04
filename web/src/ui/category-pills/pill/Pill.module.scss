@@ -1,0 +1,35 @@
+@import "src/theme/base";
+
+.pill {
+  display: block;
+  margin-right: $space-default;
+
+  &__label {
+    display: flex;
+    align-items: center;
+    min-width: 98px;
+    border: 1px solid var(--color-background);
+    border-radius: $border-radius-pill;
+    padding: $space-default $space-m;
+    color: var(--color-white);
+    background-color: var(--color-dark-10);
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &--icon {
+      margin-right: $space-s;
+    }
+  }
+
+  &__checkbox {
+    input[type="radio"] {
+      display: none;
+
+      &:checked + label {
+        background-color: var(--color-secondary);
+      }
+    }
+  }
+}

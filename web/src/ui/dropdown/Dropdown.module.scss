@@ -1,0 +1,23 @@
+@import "/src/theme/_base";
+
+.dropdown__listbox {
+  z-index: $z-index-form-dropdown;
+
+  &--enter {
+    opacity: 0;
+  }
+
+  &--enter-active {
+    opacity: 1;
+    transition: opacity $ease-in-out $duration-default;
+  }
+
+  &--exit {
+    opacity: 1;
+  }
+
+  &--exit-active {
+    opacity: 0;
+    transition: opacity $ease-in-out $duration-default;
+  }
+}

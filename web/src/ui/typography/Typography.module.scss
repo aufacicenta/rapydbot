@@ -1,0 +1,111 @@
+@import "src/theme/base";
+@import "./variables";
+@import "./mixins";
+
+.typography {
+  position: relative;
+
+  &__align {
+    &--center {
+      text-align: center;
+    }
+
+    &--right {
+      text-align: right;
+    }
+  }
+
+  &__inline {
+    display: inline-block;
+  }
+
+  &__flat {
+    margin-bottom: 0 !important;
+  }
+
+  &__truncate {
+    @extend .typography__inline;
+    width: 140px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__headline1 {
+    @include headline1();
+  }
+
+  &__headline2 {
+    @include headline2();
+  }
+
+  &__headline3 {
+    @include headline3();
+  }
+
+  &__headline4 {
+    @include headline4();
+  }
+
+  &__headline5 {
+    @include headline5();
+  }
+
+  &__headline6 {
+    @include headline6();
+  }
+
+  &__text {
+    @include text();
+  }
+
+  &__text-lead {
+    @include textLead();
+  }
+
+  &__text-bold {
+    @include textBold();
+  }
+
+  &__subtitle {
+    @include subtitle();
+  }
+
+  &__button-label {
+    @include font-properties($typography-button-label);
+    @include normalizeTypography;
+    color: var(--color-typography-button-label);
+  }
+
+  &__mini-button-label {
+    @include font-properties($typography-mini-button-label);
+    @include normalizeTypography;
+    color: var(--color-typography-mini-button-label);
+  }
+
+  &__description {
+    @include font-properties($typography-description);
+    @include normalizeTypography;
+    margin-bottom: $space-xs;
+    color: var(--color-typography-description);
+  }
+
+  &__mini-description {
+    @include miniDescription();
+  }
+
+  &__link {
+    @include font-properties($typography-link);
+    @include normalizeTypography;
+    font-size: inherit;
+    color: var(--color-typography-link);
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &--button {
+      text-decoration: none;
+    }
+  }
+}

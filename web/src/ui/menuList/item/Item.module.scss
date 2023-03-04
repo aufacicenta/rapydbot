@@ -1,0 +1,22 @@
+@import "/src/theme/base";
+@import "/src/theme/forms/variables";
+
+.menu-list__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: $space-s $space-default;
+  cursor: pointer;
+  transition: background-color $ease-linear $duration-faster;
+
+  &:hover,
+  &[data-focus="true"] {
+    background: var(--color-primary);
+  }
+
+  > svg:first-child {
+    width: $space-m;
+    height: $space-m;
+    margin-right: $space-s;
+  }
+}

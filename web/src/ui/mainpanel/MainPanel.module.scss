@@ -1,0 +1,24 @@
+@import "src/theme/base";
+
+.main-panel {
+  @include withNavbar;
+  @include atLargeTablet {
+    padding-bottom: $navbar-height;
+  }
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  padding-bottom: $navbar-height-mobile;
+  overflow-y: auto;
+  background-color: var(--color-background);
+
+  &__container {
+    @include withNavbar(5);
+    @include atLargeTablet {
+      padding-right: $space-xxl;
+      padding-left: $space-xxl;
+    }
+    padding-right: $space-default;
+    padding-left: $space-default;
+  }
+}

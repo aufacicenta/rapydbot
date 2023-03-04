@@ -1,0 +1,114 @@
+@import "src/theme/base";
+@import "src/theme/mixins/forms";
+
+.select {
+  position: relative;
+  width: 100%;
+
+  &__value {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 95%;
+
+    > strong {
+      margin-right: $space-s;
+      font-weight: $font-weight-medium;
+    }
+  }
+
+  &__placeholder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: $space-m;
+    color: var(--color-dark-4);
+  }
+
+  &--disabled {
+    color: var(--color-dark-5);
+    cursor: not-allowed;
+
+    label {
+      cursor: not-allowed;
+    }
+  }
+
+  &--not-outlined {
+    width: auto;
+  }
+
+  &__field {
+    @include input-states;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    line-height: 1.33;
+    cursor: pointer;
+
+    &--icon {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    > svg {
+      position: absolute;
+      top: calc(50% - 8px);
+      right: 16px;
+    }
+
+    button {
+      position: absolute;
+      top: calc(50% - 12px);
+      right: 40px;
+      display: flex;
+      background: transparent;
+      cursor: pointer;
+
+      svg {
+        width: 12px;
+        height: 12px;
+      }
+    }
+
+    &--error {
+      border: 1px solid var(--color-status-critical);
+
+      > svg {
+        right: 15px;
+      }
+    }
+
+    &.select__field--big {
+      @include font-properties($typography-text);
+      height: auto;
+      padding: 20px 24px;
+      line-height: 1.5rem;
+    }
+
+    &.select__field--small {
+      height: auto;
+      padding: 9px 12px;
+    }
+
+    &--disabled {
+      @include input-disabled;
+
+      &:focus {
+        @include input-disabled;
+      }
+    }
+
+    &.not-outlined {
+      border: 1px solid transparent;
+      padding-right: 0px;
+      padding-left: 0px;
+      box-shadow: none;
+
+      svg {
+        right: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,99 @@
+@import "src/theme/base";
+
+.footer {
+  display: block;
+
+  &__powered-by {
+    display: flex;
+
+    p {
+      color: var(--color-background);
+    }
+
+    > div,
+    a {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    svg {
+      width: 112px;
+      fill: var(--color-background);
+    }
+  }
+
+  &__cta-banner {
+    padding: $navbar-height 0;
+    background-color: var(--color-black);
+
+    &--icon {
+      display: block;
+      margin-bottom: $space-ml;
+
+      svg {
+        width: 40px;
+      }
+    }
+
+    &--link {
+      @include atLargeTablet {
+        text-align: right;
+      }
+      display: block;
+      margin-bottom: $space-default;
+      text-decoration: none;
+      color: var(--color-background);
+    }
+
+    &--welcome {
+      color: var(--color-white);
+    }
+
+    &--description {
+      @include atLargeTablet {
+        margin-bottom: 0;
+      }
+      margin-bottom: $space-l;
+      color: var(--color-white);
+    }
+
+    &--cta {
+      @include font-properties($typography-headline-3);
+      display: block;
+      text-align: right;
+      color: var(--color-white);
+    }
+  }
+
+  &__copyright {
+    padding: $space-ml 0;
+    background-color: var(--color-black);
+
+    &--social {
+      display: flex;
+      justify-content: flex-end;
+
+      &-text {
+        color: var(--color-background);
+      }
+
+      &-icon {
+        font-size: $font-size-headline-5;
+        color: var(--color-background);
+      }
+
+      &-aufacicenta-icon {
+        width: 24px;
+        color: var(--color-background);
+      }
+
+      &-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 43px;
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+import clsx from 'clsx';
+import {useEffect, useState} from 'react';
+import { {{pascalCase name}}Props } from './{{pascalCase name}}.types';
+import styles from './{{pascalCase name}}.module.scss';
+
+export const {{pascalCase name}}: React.FC<{{pascalCase name}}Props> = ({ children, className }) => {
+  const [a, setA] = useState();
+
+  useEffect(() => {}, []);
+
+  return (
+    <div className={clsx(styles['{{kebabCase name}}'], className)}>
+      {children}
+    </div>
+  );
+};

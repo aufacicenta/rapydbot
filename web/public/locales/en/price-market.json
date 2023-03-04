@@ -1,0 +1,16 @@
+{
+  "priceMarket.createPriceMarketModal.title": "Create Price Market",
+  "priceMarket.createPriceMarketModal.marketDetails": "Market details",
+  "priceMarket.createPriceMarketModal.input.descriptionOfTheMarket": "Description of the market",
+  "priceMarket.createPriceMarketModal.input.descriptionOfTheMarket.placeholder": "Description",
+  "priceMarket.createPriceMarketModal.input.marketEndDatetime": "When does this market end?",
+  "priceMarket.createPriceMarketModal.input.marketStartDatetime": "When does this market start?",
+  "priceMarket.createPriceMarketModal.input.marketOptions": "Market options",
+  "priceMarket.createPriceMarketModal.input.marketOptions.placeholder": "Option",
+  "priceMarket.createPriceMarketModal.form.submit": "Submit",
+  "priceMarket.createPriceMarketModal.input.marketEndDate": "Date",
+  "priceMarket.createPriceMarketModal.input.marketEndTime": "Time",
+  "priceMarket.createPriceMarketModal.input.marketEndTimezone": "Timezone",
+  "priceMarket.createPriceMarketModal.input.marketStartDate": "Date",
+  "priceMarket.createPriceMarketModal.input.marketStartTime": "Time"
+}

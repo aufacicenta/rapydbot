@@ -1,0 +1,85 @@
+@import "./utilities/functions/deep-map-check";
+@import "./utilities/functions/deep-map-get";
+@import "./utilities/functions/get";
+@import "./utilities/functions/rem";
+@import "./utilities/functions/str-explode.scss";
+@import "./utilities/font-properties";
+@import "_variables";
+
+$color-primary: #f8d663;
+$color-black: #000000;
+
+$max-container-width: 1720px;
+
+$dropzone-file-preview-sidebar-width-shrink: 77px;
+$dropzone-file-preview-sidebar-width-open: 420px;
+
+// min-width 360px
+@mixin atMobile {
+  @media (min-width: $mq-small) {
+    @content;
+  }
+}
+
+// min-width 480px
+@mixin atTablet {
+  @media (min-width: $mq-medium) {
+    @content;
+  }
+}
+
+// min-width 768px
+@mixin atLargeTablet {
+  @media (min-width: $mq-large) {
+    @content;
+  }
+}
+
+// min-width 1000px
+@mixin atDesktop {
+  @media (min-width: $mq-large-plus) {
+    @content;
+  }
+}
+
+// min-width 1280px
+@mixin atLargeDesktop {
+  @media (min-width: $mq-x-large) {
+    @content;
+  }
+}
+
+// Special breakpoint only for landing page
+@mixin atXLargeDesktop {
+  @media (min-width: 1366px) {
+    @content;
+  }
+}
+
+// Special breakpoint only for landing page
+// min-width: 1720px
+@mixin atXXLargeDesktop {
+  @media (min-width: $max-container-width) {
+    @content;
+  }
+}
+
+@mixin withSidebar {
+  display: flex;
+}
+@mixin withNavbar($divisor: 1) {
+  @include atLargeTablet {
+    padding-top: calc($navbar-height / $divisor);
+  }
+  padding-top: calc($navbar-height-mobile / $divisor);
+}
+@mixin normalizeTypography {
+  margin-top: 0;
+  padding: 0;
+}
+@mixin noSelect {
+  user-select: none;
+}
+@mixin boxShadowInset {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.39), 0 -1px 1px #fff, 0 1px 0 #fff;
+}

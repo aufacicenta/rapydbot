@@ -1,0 +1,11 @@
+@import "src/theme/base";
+
+.label {
+  @include font-properties($typography-description);
+  display: block;
+  margin-bottom: $space-s;
+  font-size: $font-size-input-label;
+  text-align: initial;
+  color: var(--color-input-label);
+  cursor: text;
+}

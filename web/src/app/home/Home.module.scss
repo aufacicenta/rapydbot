@@ -1,0 +1,44 @@
+@import "src/theme/base";
+
+.home {
+  display: block;
+
+  &__latest-price-markets-table {
+    margin-top: $space-ml;
+  }
+
+  &__title {
+    @include atLargeTablet {
+      margin-bottom: 0;
+    }
+    margin-right: $space-ml;
+    margin-bottom: $space-default;
+    color: var(--color-button-secondary-text);
+  }
+
+  &__title-row {
+    @include atLargeTablet {
+      flex-direction: row;
+    }
+    display: flex;
+    flex-direction: column;
+    margin-bottom: $space-ml;
+  }
+
+  &__actions-row {
+    @include atLargeTablet {
+      flex-direction: row;
+
+      > div {
+        align-self: center;
+      }
+    }
+    display: flex;
+
+    > div {
+      &:nth-child(n + 2) {
+        margin-left: $space-default;
+      }
+    }
+  }
+}

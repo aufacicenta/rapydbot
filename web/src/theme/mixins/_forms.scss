@@ -1,0 +1,117 @@
+@import "src/theme/forms/variables";
+
+@mixin input-default {
+  width: 100%;
+  height: $input-height;
+  margin: $input-margin;
+  border: $input-border;
+  border-radius: $border-radius-input;
+  padding: $input-padding;
+  font-size: $input-font-size;
+  color: $input-text-color;
+  background-color: $input-background;
+
+  &::placeholder {
+    color: var(--color-dark-3);
+    opacity: 0.8;
+  }
+}
+@mixin input-focus {
+  border: $input-border;
+  color: $input-text-color;
+  background-color: $input-background;
+  box-shadow: $box-shadow-focus;
+  outline: 0;
+
+  &::placeholder {
+    color: var(--color-dark-5);
+  }
+}
+@mixin input-disabled {
+  border-color: var(--color-dark-3);
+  color: var(--color-dark-1);
+  background-color: var(--color-dark-3);
+  cursor: not-allowed;
+  user-select: none;
+
+  &:focus,
+  &:active {
+    box-shadow: none;
+  }
+
+  &::placeholder {
+    color: var(--color-dark-5);
+  }
+}
+@mixin input-states {
+  @include input-default;
+  transition: border $duration-faster linear, background-color $duration-faster linear;
+
+  &:required {
+    box-shadow: none;
+  }
+
+  &:focus,
+  &:active {
+    @include input-focus;
+  }
+
+  &[disabled] {
+    @include input-disabled;
+  }
+}
+@mixin input-status($selector: null, $status-map...) {
+  @if $selector != null {
+    @each $status in $status-map {
+      #{$selector} {
+        border-color: map-get($status-colors, $status);
+        background-color: var(--color-white);
+        background-clip: padding-box;
+
+        &:focus,
+        &:active {
+          @if $status == "error" {
+            border-color: var(--color-status-critical);
+            box-shadow: $box-shadow-error;
+          }
+          @if $status == "success" {
+            border-color: var(--color-status-ok);
+            box-shadow: $box-shadow-ok;
+          }
+          @if $status == "warning" {
+            border-color: var(--color-status-warning);
+            box-shadow: $box-shadow-warning;
+          }
+          border-color: var(--color-dark-1);
+          box-shadow: $box-shadow-focus;
+        }
+      }
+    }
+  }
+}
+@mixin input-messaging($status-map...) {
+  @if $status-map != null {
+    @each $status in $status-map {
+      .has-#{$status} {
+        @include input-status(".text-input, .input", $status);
+
+        .input__icon {
+          fill: map-get($status-colors, $status);
+          color: map-get($status-colors, $status);
+        }
+      }
+    }
+  }
+}
+@mixin form-help($status-map...) {
+  @if $status-map != null {
+    @each $status in $status-map {
+      .has-#{$status} {
+        .form-element__help {
+          color: var(--color-dark-1);
+          background-color: map-get($status-colors-light, $status);
+        }
+      }
+    }
+  }
+}

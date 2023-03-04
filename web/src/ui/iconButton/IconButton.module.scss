@@ -1,0 +1,70 @@
+@import "../../theme/base";
+
+$XXS_LOADER_SIZE: 20px;
+$XXS_HALF_LOADER_SIZE: 10px;
+
+button.icon-button,
+a.icon-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: auto;
+  border-radius: $border-radius-circle;
+  padding: 0;
+  transition: background-color $duration-medium;
+
+  svg {
+    width: 100%;
+    height: auto;
+  }
+
+  &.icon-button--super-extra-small {
+    width: $space-m;
+    height: $space-m;
+    padding: 0;
+
+    svg {
+      max-width: $space-m;
+      max-height: $space-m;
+    }
+
+    &.icon-button--loading {
+      > div:first-child,
+      > div:nth-child(2) {
+        top: calc(50% - #{$XXS_HALF_LOADER_SIZE});
+        left: calc(50% - #{$XXS_HALF_LOADER_SIZE});
+        width: $XXS_LOADER_SIZE;
+        height: $XXS_LOADER_SIZE;
+      }
+    }
+  }
+
+  &.icon-button--extra-small {
+    width: $space-l;
+    height: $space-l;
+    padding: 0;
+
+    svg {
+      max-width: $space-l;
+      max-height: $space-l;
+    }
+  }
+
+  &.icon-button--small {
+    width: 40px;
+    height: 40px;
+    padding: $space-s;
+  }
+
+  &.icon-button--medium {
+    width: 48px;
+    height: 48px;
+    padding: $space-default;
+  }
+
+  &.icon-button--large {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+  }
+}

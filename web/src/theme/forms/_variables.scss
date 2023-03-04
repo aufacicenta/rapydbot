@@ -1,0 +1,50 @@
+@import "../base";
+
+// Text Inputs + Textarea
+$input-height: 38px !default;
+$input-text-color: var(--color-input-text);
+$input-border-color: color("grey", "base") !default;
+$input-border: 1px solid var(--color-input-border) !default;
+$input-background: var(--color-background-contrast) !default;
+$input-error-color: var(--color-status-critical) !default;
+$input-success-color: var(--color-status-success) !default;
+$input-focus-color: var(--color-primary) !default;
+$input-font-size: $font-size-input-text !default;
+$input-padding: 0px $space-default;
+$input-margin-bottom: $space-default;
+$input-margin: 0 0 $input-margin-bottom 0 !default;
+$label-font-size: $font-size-text !default;
+$input-disabled-color: var(--color-input-text-disabled) !default;
+$input-disabled-solid-color: #949494 !default;
+$input-disabled-border: 1px dotted $input-disabled-color !default;
+$input-invalid-border: 1px solid $input-error-color !default;
+$input-icon-size: 21px;
+$placeholder-text-color: var(--color-input-placeholder) !default;
+
+// Radio Buttons
+$radio-fill-color: var(--color-secondary) !default;
+$radio-empty-color: #5a5a5a !default;
+$radio-border: 2px solid var(--color-background-contrast) !default;
+
+// Range
+$range-height: 14px !default;
+$range-width: 14px !default;
+$track-height: 3px !default;
+
+// Select
+$select-border: 1px solid #f2f2f2 !default;
+$select-background: rgba(255, 255, 255, 0.9) !default;
+$select-focus: 1px solid var(--color-secondary) !default;
+$select-option-hover: rgba(0, 0, 0, 0.08) !default;
+$select-option-focus: rgba(0, 0, 0, 0.08) !default;
+$select-option-selected: rgba(0, 0, 0, 0.03) !default;
+$select-padding: 5px !default;
+$select-radius: 2px !default;
+$select-disabled-color: rgba(0, 0, 0, 0.3) !default;
+
+// Switches
+$switch-bg-color: var(--color-secondary) !default;
+$switch-checked-lever-bg: var(--color-secondary) !default;
+$switch-unchecked-bg: #f1f1f1 !default;
+$switch-unchecked-lever-bg: rgba(0, 0, 0, 0.38) !default;
+$switch-radius: 15px !default;

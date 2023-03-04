@@ -1,0 +1,30 @@
+@import "src/theme/base";
+@import "src/ui/fixed-top-alert/variables";
+@import "src/ui/typography/mixins";
+
+.fixed-top-alert {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: $z-index-modal;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: $fixed-top-alert-height;
+  padding: 0 $space-default;
+  text-align: center;
+  background-color: var(--color-status-warning);
+
+  p {
+    @include atLargeTablet {
+      @include text();
+      color: var(--color-background);
+    }
+    @include miniDescription();
+    line-height: $font-size-mini-description;
+    color: var(--color-background);
+  }
+}

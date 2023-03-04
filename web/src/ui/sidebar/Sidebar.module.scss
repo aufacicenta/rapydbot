@@ -1,0 +1,7 @@
+@import "../../theme/base";
+
+.sidebar {
+  width: $sidebar-width;
+  height: 100vh;
+  background-color: var(--color-background);
+}

@@ -1,0 +1,14 @@
+@import "/src/theme/_base";
+
+.select-item {
+  &__icon {
+    position: absolute;
+    top: calc(50% - #{$space-s});
+    right: 12px;
+    display: none;
+
+    &--visible {
+      display: inline-block;
+    }
+  }
+}
