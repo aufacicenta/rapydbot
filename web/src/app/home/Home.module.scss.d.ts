@@ -1,9 +1,8 @@
 export type Styles = {
   home: string;
-  "home__actions-row": string;
-  "home__latest-price-markets-table": string;
-  home__title: string;
-  "home__title-row": string;
+  "home__border-column": string;
+  "home__border-column--title": string;
+  home__intro: string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

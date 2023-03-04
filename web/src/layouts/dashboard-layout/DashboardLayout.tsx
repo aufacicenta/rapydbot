@@ -9,7 +9,7 @@ import { ToastContextController } from "context/toast/ToastContextController";
 import { DashboardLayoutProps } from "./DashboardLayout.types";
 import styles from "./DashboardLayout.module.scss";
 
-export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { locale } = useRouter();
 
   useEffect(() => {
@@ -21,18 +21,17 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
     <>
       <Head>
         <link rel="icon" href="/favicon.ico" as="image" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <meta property="og:image" content="/shared/pulse.png" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content={locale} />
       </Head>
+
       <ToastContextController>
         <div id="modal-root" />
         <div id="dropdown-portal" />
         <div
           className={clsx(styles["dashboard-layout"], {
-            [styles["dashboard-layout__with-top-alert"]]: true,
+            [styles["dashboard-layout__with-top-alert"]]: false,
           })}
         >
           <MainPanel>{children}</MainPanel>
@@ -40,4 +39,4 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
       </ToastContextController>
     </>
   );
-};
+}

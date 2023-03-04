@@ -1,44 +1,26 @@
 @import "src/theme/base";
+@import "src/ui/typography/variables";
 
 .home {
   display: block;
 
-  &__latest-price-markets-table {
-    margin-top: $space-ml;
+  &__intro {
+    margin-bottom: $space-xl;
+    font-weight: $font-weight-regular;
+
+    strong {
+      font-weight: $font-weight-bold;
+    }
   }
 
-  &__title {
-    @include atLargeTablet {
-      margin-bottom: 0;
-    }
-    margin-right: $space-ml;
-    margin-bottom: $space-default;
-    color: var(--color-button-secondary-text);
-  }
+  &__border-column {
+    height: 100%;
+    border: 2px solid var(--color-typography-text);
+    border-radius: $border-radius;
+    padding: $space-default;
 
-  &__title-row {
-    @include atLargeTablet {
-      flex-direction: row;
-    }
-    display: flex;
-    flex-direction: column;
-    margin-bottom: $space-ml;
-  }
-
-  &__actions-row {
-    @include atLargeTablet {
-      flex-direction: row;
-
-      > div {
-        align-self: center;
-      }
-    }
-    display: flex;
-
-    > div {
-      &:nth-child(n + 2) {
-        margin-left: $space-default;
-      }
+    &--title {
+      min-height: 98px;
     }
   }
 }

@@ -1,10 +1,13 @@
 @import "src/theme/base";
+@import "./forms/forms";
+@import "./icons";
+@import "src/ui/table/reboot";
 
 html {
   @media (max-width: $mq-medium) {
     font-size: 14px;
   }
-  font-size: 16px;
+  font-size: 14px;
 }
 
 html,
@@ -44,8 +47,7 @@ a {
 }
 
 body[data-theme="dark"] {
-  // Status colors
-  --color-status-info: #5356fc;
+  --color-status-info: #2c5dbf;
   --color-status-info-light: rgba(83, 86, 252, 0.7);
   --color-status-info-lighter: rgba(83, 86, 252, 0.4);
   --color-status-success: #3dd598;
@@ -59,9 +61,8 @@ body[data-theme="dark"] {
   --color-status-critical-lighter: #fff5f5;
   --color-status-unknown: #f4f6f8;
 
-  //Gray dark
-  --color-white: #ffffff;
-  --color-black: #161b1c;
+  --color-white: #f2e8d5;
+  --color-black: #222621;
   --color-dark-11: #222529;
   --color-dark-10: #2c3035;
   --color-dark-9: #2c3035;
@@ -74,22 +75,17 @@ body[data-theme="dark"] {
   --color-dark-2: #f5f5ff;
   --color-dark-1: #ffffff;
 
-  // Brand
-  --color-primary: #ff2fdd;
-  --color-secondary: #5356fc;
+  --color-primary: #2c5dbf;
+  --color-secondary: #bf533f;
 
-  // Background
   --color-background: var(--color-black);
   --color-background-contrast: var(--color-dark-11);
 
-  // Sidebar
   --color-sidebar-item: var(--color-white);
   --color-sidebar-divider: var(--color-dark-8);
 
-  // Navbar
   --color-navbar-logo: var(--color-primary);
 
-  // Button
   --color-button-primary: var(--color-primary);
   --color-button-primary-text: var(--color-white);
   --color-button-primary-hover: var(--color-primary);
@@ -99,18 +95,15 @@ body[data-theme="dark"] {
   --color-button-secondary-hover: var(--color-dark-10);
   --color-button-secondary-hover-text: var(--color-white);
 
-  // Button outlined
   --color-button-outlined-info: #ffd74b;
   --color-button-outlined-info-text: #ffd74b;
   --color-button-outlined-disabled: #5b5b65;
   --color-button-outlined-disabled-text: #8a8a98;
 
-  //Theme Selector
   --color-theme-button-light: #ffffff00;
   --color-theme-button-dark: #ffffff40;
   --color-theme-button-divider: var(--color-background-contrast);
 
-  // Typography
   --color-typography-headline-1: var(--color-white);
   --color-typography-headline-2: var(--color-white);
   --color-typography-headline-3: var(--color-white);
@@ -126,31 +119,25 @@ body[data-theme="dark"] {
   --color-typography-mini-description: var(--color-dark-4);
   --color-typography-link: var(--color-primary);
 
-  // Tab
   --color-tab-navigation-border: var(--color-dark-7);
   --color-tab-item-default: var(--color-dark-7);
   --color-tab-item-active: var(--color-white);
 
-  // Market Card
   --color-market-card-background: rgba(22, 27, 28, 0.4);
   --color-market-card-background-contrast: var(--color-background);
   --color-market-card-title: #fff;
   --color-market-card-stat: #b1b1b1;
 
-  // Market Fees Card
   --color-market-fees-card-background: #ffd74b;
   --color-market-fees-card-text: #fff;
 
-  // Horizontal Line
   --color-horizontal-line-background: #3c3c3c;
 
-  // Data Visualization colors
   --color-value-increase: #00d3a1;
   --color-value-increase-bright: #00bb8e;
   --color-value-decrease: #ff7c35;
   --color-value-decrease-bright: #e76823;
 
-  // Forms
   --color-input-text: var(--color-typography-text);
   --color-input-text-disabled: var(--color-typography-description);
   --color-input-border: var(--color-black);
@@ -159,8 +146,7 @@ body[data-theme="dark"] {
 }
 
 body[data-theme="light"] {
-  // Status colors
-  --color-status-info: #5234ff;
+  --color-status-info: #2c5dbf;
   --color-status-info-light: rgba(21, 63, 189, 0.6);
   --color-status-info-lighter: rgba(21, 63, 189, 0.3);
   --color-status-success: #aad055;
@@ -174,9 +160,8 @@ body[data-theme="light"] {
   --color-status-critical-lighter: #fff5f5;
   --color-status-unknown: #f4f6f8;
 
-  //Gray dark
-  --color-white: #ffffff;
-  --color-black: #13111a;
+  --color-white: #f2e8d5;
+  --color-black: #222621;
   --color-dark-11: #e9e9f0;
   --color-dark-10: #fffffff7;
   --color-dark-9: rgba(4, 12, 36, 0.9);
@@ -189,22 +174,17 @@ body[data-theme="light"] {
   --color-dark-2: #f5f5ff;
   --color-dark-1: #ffffff;
 
-  // Brand
-  --color-primary: #ff2fdd;
-  --color-secondary: #5356fc;
+  --color-primary: #2c5dbf;
+  --color-secondary: #bf533f;
 
-  // Background
   --color-background: var(--color-white);
   --color-background-contrast: var(--color-dark-2);
 
-  // Sidebar
   --color-sidebar-item: var(--color-white);
   --color-sidebar-divider: var(--color-dark-3);
 
-  // Navbar
   --color-navbar-logo: var(--color-primary);
 
-  // Button
   --color-button-primary: var(--color-primary);
   --color-button-primary-text: var(--color-white);
   --color-button-primary-hover: var(--color-primary);
@@ -215,18 +195,15 @@ body[data-theme="light"] {
   --color-button-secondary-hover: var(--color-white);
   --color-button-secondary-hover-text: var(--color-text);
 
-  // Button outlined
   --color-button-outlined-info: #ffd74b;
   --color-button-outlined-info-text: #ffd74b;
   --color-button-outlined-disabled: #5b5b65;
   --color-button-outlined-disabled-text: #8a8a98;
 
-  // Theme Selector
   --color-theme-button-light: #d0ddff;
   --color-theme-button-dark: var(--color-dark-1);
   --color-theme-button-divider: var(--color-dark-11);
 
-  // Typography
   --color-typography-headline-1: var(--color-black);
   --color-typography-headline-2: var(--color-black);
   --color-typography-headline-3: var(--color-black);
@@ -242,31 +219,25 @@ body[data-theme="light"] {
   --color-typography-mini-description: var(--color-dark-5);
   --color-typography-link: var(--color-primary);
 
-  // Tab
   --color-tab-navigation-border: var(--color-dark-7);
   --color-tab-item-default: var(--color-dark-7);
   --color-tab-item-active: var(--color-black);
 
-  // Market Card
   --color-market-card-background: #fff;
   --color-market-card-background-contrast: #f5f6fd;
   --color-market-card-title: #161515;
   --color-market-card-stat: #626161;
 
-  // Market Fees Card
   --color-market-fees-card-background: #ffd74b;
   --color-market-fees-card-text: #fff;
 
-  // Horizontal Line
   --color-horizontal-line-background: #e7e7e7;
 
-  // Data Visualization colors
   --color-value-increase: var(--color-status-info);
   --color-value-increase-bright: var(--color-status-info);
   --color-value-decrease: #e3935b;
   --color-value-decrease-bright: #e3935b;
 
-  // Forms
   --color-input-text: var(--color-typography-text);
   --color-input-text-disabled: var(--color-typography-description);
   --color-input-border: var(--color-black);
@@ -277,7 +248,3 @@ body[data-theme="light"] {
 code {
   background-color: var(--color-background-contrast);
 }
-
-@import "./forms/forms";
-@import "./icons";
-@import "src/ui/table/reboot";

@@ -123,6 +123,12 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     "react/destructuring-assignment": "off",
     "react/no-unescaped-entities": "off",
+    "react/function-component-definition": [
+      1,
+      {
+        namedComponents: "arrow-function",
+      },
+    ],
 
     // Typescript
     "@typescript-eslint/explicit-function-return-type": 0,
