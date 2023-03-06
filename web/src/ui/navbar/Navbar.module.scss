@@ -3,8 +3,25 @@
 
 .navbar {
   margin-bottom: $space-xl;
-  border: 1px solid var(--color-typography-text);
-  border-radius: 42px;
+
+  &__box {
+    border: 1px solid var(--color-typography-text);
+    border-radius: 42px;
+  }
+
+  &__stats {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: $space-s;
+    padding-right: $space-ml;
+    text-align: right;
+
+    > div {
+      &:nth-child(n + 2) {
+        margin-left: $space-default;
+      }
+    }
+  }
 
   &__left,
   &__right {

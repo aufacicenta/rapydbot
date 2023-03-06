@@ -1,11 +1,5 @@
 export type Styles = {
-  navbar: string;
-  navbar__box: string;
-  navbar__left: string;
-  navbar__logo: string;
-  navbar__right: string;
-  navbar__stats: string;
-  navbar__title: string;
+  "telegram-login-button": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

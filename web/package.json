@@ -87,14 +87,14 @@
     "typescript": "^4.9.5"
   },
   "lint-staged": {
-    "./app/{src,cypress,storybook,scripts}/**/*.{js,jsx,ts,tsx}": [
+    "./{src,cypress,storybook,scripts}/**/*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --list-different --write"
     ],
     "./**/*.{json,scss}": [
       "prettier --list-different --write"
     ],
-    "./app/src/**/*.module.scss": [
+    "./src/**/*.module.scss": [
       "stylelint --config ./app/.stylelintrc --fix",
       "typed-scss-modules --ignore 'src/theme/*.scss' --exportType default --nameFormat none --implementation node-sass --aliasPrefixes./src src",
       "prettier --list-different --write",

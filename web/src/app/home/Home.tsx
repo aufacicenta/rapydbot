@@ -3,16 +3,15 @@ import { useTranslation } from "next-i18next";
 
 import { MainPanel } from "ui/mainpanel/MainPanel";
 import { Typography } from "ui/typography/Typography";
-
-import { HomeProps } from "./Home.types";
-import styles from "./Home.module.scss";
 import { Grid } from "ui/grid/Grid";
-import { Button } from "ui/button/Button";
-import { Icon } from "ui/icon/Icon";
 import { Navbar } from "ui/navbar/Navbar";
 import { Card } from "ui/card/Card";
+import { TelegramLoginButton } from "ui/auth/telegram-login/telegram-login-button/TelegramLoginButton";
 
-export function Home({ className }: HomeProps) {
+import styles from "./Home.module.scss";
+import { HomeProps } from "./Home.types";
+
+export const Home = ({ className }: HomeProps) => {
   const { t } = useTranslation(["home", "common"]);
 
   return (
@@ -20,7 +19,7 @@ export function Home({ className }: HomeProps) {
       <MainPanel.Container>
         <Navbar />
         <Typography.Headline3 className={styles.home__intro}>
-          Telegram Informer, <em>aka</em> TGI — is a Telegram based conversational interface designed to provide a new
+          Telegram Informer, <em>abbr.</em> TGI, is a Telegram based conversational interface designed to provide a new
           kind of job: <strong>anonymous news reporting</strong>{" "}
           <Typography.Text inline display inherit>
             »
@@ -51,11 +50,9 @@ export function Home({ className }: HomeProps) {
           </Grid.Col>
         </Grid.Row>
         <div className={styles["home__login-box"]}>
-          <Button variant="outlined" size="l" fullWidth>
-            Log In with Telegram <Icon name="icon-paper-plane" />
-          </Button>
+          <TelegramLoginButton />
         </div>
-        <section className={styles["home__section"]}>
+        <section className={styles.home__section}>
           <Typography.Headline2 align="center" display flat>
             ⌥
           </Typography.Headline2>
@@ -99,7 +96,7 @@ export function Home({ className }: HomeProps) {
             </Typography.Text>
           </div>
         </section>
-        <section className={styles["home__section"]}>
+        <section className={styles.home__section}>
           <Typography.Headline2 align="center" display flat>
             ✿
           </Typography.Headline2>
@@ -158,4 +155,4 @@ export function Home({ className }: HomeProps) {
       </MainPanel.Container>
     </div>
   );
-}
+};
