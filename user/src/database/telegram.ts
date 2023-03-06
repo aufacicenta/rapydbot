@@ -51,14 +51,15 @@ export class Telegram {
       },
     });
 
-    if (Boolean(telegram_private_chat_id)) {
+    if (telegram_private_chat_id) {
       result.set("private_chat_id", telegram_private_chat_id);
+
       await result.save();
     }
 
     const telegram_id = result.getDataValue("id");
 
-    if (!Boolean(telegram_id)) {
+    if (!telegram_id) {
       throw new Error(UserServiceErrorCodes.telegram_record_not_created);
     }
 
@@ -101,13 +102,13 @@ export class Telegram {
       },
     });
 
-    if (!Boolean(telegram_result)) {
+    if (!telegram_result) {
       throw new Error(UserServiceErrorCodes.telegram_username_not_found);
     }
 
     const userId = telegram_result.getDataValue("user_id");
 
-    if (!Boolean(userId)) {
+    if (!userId) {
       throw new Error(UserServiceErrorCodes.telegram_username_not_found);
     }
 

@@ -1,3 +1,7 @@
 {
-    "python.pythonPath": "infra/.venv/bin/python"
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": false,
+        "source.fixAll": true,
+        "source.fixAll.stylelint": true
+     }
 }

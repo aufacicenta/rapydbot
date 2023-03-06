@@ -1,11 +1,8 @@
 import { StreamChat } from "stream-chat";
 import { UserClientGenerator } from "@rapydbot/user";
-import { WalletClientGenerator } from "@rapydbot/wallet/client";
 import { IntentAction } from "@rapydbot/intent-recognition/providers/cohere/types";
 import moment, { Moment } from "moment";
 import TelegramBotApi, { SendMessageOptions } from "node-telegram-bot-api";
-import IntentRecognitionClientGenerator from "@rapydbot/intent-recognition/client";
-import { CampaignClientGenerator } from "@rapydbot/campaign";
 
 import {
   BotLanguageHandler,
@@ -20,6 +17,7 @@ import { TrainCommand } from "./commands/train";
 import { IBotCommand } from "./commands/types";
 import { CreateWalletCommand } from "./commands/wallet/create";
 import { ContextHandler } from "./handler/context";
+import { UserLocationHandler } from "./handler/location";
 
 const {
   BOT_TOKEN,
@@ -74,7 +72,13 @@ export class TGInformerBot {
   }
 
   listen() {
-    this.api.onText(/^\/start/i, (msg) => this.commands.start.onText(msg));
+    this.api.onText(/^\/start/i, (msg) => {
+      try {
+        this.commands.start.onText(msg);
+      } catch (error) {
+        console.log(error);
+      }
+    });
 
     this.api.onText(/^\/?(train|entrenar)/i, (msg) => {
       this.commands.train.runTrainingQueue(msg);
@@ -88,7 +92,15 @@ export class TGInformerBot {
 
     this.api.on("message", async (msg) => {
       try {
-        this.commands.train.onText(msg);
+        if (/^\/start/i.test(msg.text)) {
+          return;
+        }
+
+        if (msg.location?.latitude && msg.location?.longitude) {
+          this.handlers.location.setLocation(msg);
+        } else {
+          this.commands.train.onText(msg);
+        }
       } catch (error) {
         // @TODO handle error reply from error reason sent by the servers, handlers or commands
         console.error(error);
@@ -210,18 +222,19 @@ export class TGInformerBot {
     this.handlers.language = new BotLanguageHandler();
     this.handlers.intentRecognition = new IntentRecognitionHandler(this);
     this.handlers.context = new ContextHandler(this);
+    this.handlers.location = new UserLocationHandler(this);
   }
 
   private setClients() {
     this.clients.user = new UserClientGenerator(USER_SERVICE_URL).create();
 
-    this.clients.wallet = new WalletClientGenerator(WALLET_SERVICE_URL).create();
+    // this.clients.wallet = new WalletClientGenerator(WALLET_SERVICE_URL).create();
 
-    this.clients.intentRecognition = new IntentRecognitionClientGenerator(
-      INTENT_RECOGNITION_SERVICE_URL,
-    ).create();
+    // this.clients.intentRecognition = new IntentRecognitionClientGenerator(
+    //   INTENT_RECOGNITION_SERVICE_URL,
+    // ).create();
 
-    this.clients.campaign = new CampaignClientGenerator(CAMPAIGN_SERVICE_URL).create();
+    // this.clients.campaign = new CampaignClientGenerator(CAMPAIGN_SERVICE_URL).create();
   }
 
   private setCommands() {

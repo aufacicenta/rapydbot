@@ -9,7 +9,7 @@ import { IContext } from "./server/interface/IContext";
 import { Controller } from "./service/controller";
 
 const run = async () => {
-  const driver = await database.connect({ force: true });
+  const driver = await database.connect();
 
   const context: IContext = {
     controller: new Controller(),

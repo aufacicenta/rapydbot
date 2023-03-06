@@ -11,6 +11,7 @@ import { CreateWalletCommand } from "./commands/wallet/create";
 import { BotLanguageHandler } from "./handler";
 import { ContextHandler } from "./handler/context";
 import { IntentRecognitionHandler } from "./handler/intent-recognition";
+import { UserLocationHandler } from "./handler/location";
 
 export type CustomMessage = TelegramMessage & {
   user?: {
@@ -40,6 +41,7 @@ export type Handlers = {
   language?: BotLanguageHandler;
   intentRecognition?: IntentRecognitionHandler;
   context?: ContextHandler;
+  location?: UserLocationHandler;
 };
 
 export type Context = {

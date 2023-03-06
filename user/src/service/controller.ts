@@ -85,6 +85,7 @@ export class Controller {
 
       const reply = new CreateUserLocationReply();
 
+      reply.setLocationId(result.locationId);
       reply.setUserId(result.userId);
       reply.setLatitude(result.latitude);
       reply.setLongitude(result.longitude);

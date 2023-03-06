@@ -58,11 +58,11 @@ describe("client", () => {
 
     const { longitude, latitude } = await createUserLocation(client, {
       userId,
-      longitude: "0.1234",
-      latitude: "0.1234",
+      longitude: 0.1234,
+      latitude: 0.1234,
     });
 
-    expect(longitude).toEqual("0.1234");
-    expect(latitude).toEqual("0.1234");
+    expect(longitude).toEqual(0.1234);
+    expect(latitude).toEqual(0.1234);
   });
 });

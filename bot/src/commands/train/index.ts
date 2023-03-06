@@ -160,8 +160,8 @@ A qué dirección de ETH enviamos tus USDT? 🤑`,
         break;
       }
       case CampaignServiceErrorCodes.user_has_started_this_campaign: {
-        // @TODO reply with i18n user_has_started_this_campaign meesage
-        this.bot.reply(msg, `Ya has participado esta campaña.`);
+        // @TODO reply with i18n user_has_started_this_campaign message
+        this.bot.reply(msg, `Ya has participado en esta campaña.`);
         break;
       }
 

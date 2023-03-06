@@ -30,15 +30,15 @@ message CreateUserReply {
 
 message CreateUserLocationRequest {
   string user_id = 1;
-  string latitude = 2;
-  string longitude = 3;
+  double latitude = 2;
+  double longitude = 3;
 }
 
 message CreateUserLocationReply {
   string location_id = 1;
   string user_id = 2;
-  string latitude = 3;
-  string longitude = 4;
+  double latitude = 3;
+  double longitude = 4;
 }
 
 message GetUserRequest {
