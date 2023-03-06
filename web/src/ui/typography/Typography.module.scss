@@ -24,8 +24,9 @@
   }
 
   &__display {
-    font-weight: normal;
+    font-weight: normal !important;
     font-family: $font-family-display !important;
+    color: var(--color-primary) !important;
   }
 
   &__flat {

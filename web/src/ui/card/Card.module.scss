@@ -1,14 +1,22 @@
 @import "src/theme/base";
 
 .card {
+  border: 1px solid var(--color-card-border);
   border-radius: $border-radius-card;
-  background-color: var(--color-background-contrast);
 
   &__shadow {
     @extend .z-depth-1;
   }
 
   &__content {
+    padding: 1.3rem $space-default;
+  }
+
+  &__header {
+    @include font-properties($typography-headline-2);
+    border-bottom: 1px solid var(--color-white);
+    border-top-left-radius: $border-radius-card;
+    border-top-right-radius: $border-radius-card;
     padding: 1.3rem $space-default;
   }
 

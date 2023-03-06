@@ -36,4 +36,28 @@
       }
     }
   }
+
+  &__section {
+    margin-bottom: $space-xl;
+
+    h2 {
+      margin-bottom: $space-ml;
+    }
+  }
+
+  &__use-cases {
+    &--card-box {
+      margin-bottom: $space-ml;
+    }
+
+    &--card {
+      height: 100%;
+    }
+  }
+
+  &__faqs {
+    &--box {
+      margin-bottom: $space-ml;
+    }
+  }
 }

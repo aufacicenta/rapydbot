@@ -124,13 +124,14 @@ body[data-theme="dark"] {
   --color-tab-item-default: var(--color-dark-7);
   --color-tab-item-active: var(--color-white);
 
-  --color-market-card-background: rgba(22, 27, 28, 0.4);
-  --color-market-card-background-contrast: var(--color-background);
-  --color-market-card-title: #fff;
-  --color-market-card-stat: #b1b1b1;
+  --color-card-background: rgba(22, 27, 28, 0.4);
+  --color-card-border: var(--color-white);
+  --color-card-background-contrast: var(--color-background);
+  --color-card-title: #fff;
+  --color-card-stat: #b1b1b1;
 
-  --color-market-fees-card-background: #ffd74b;
-  --color-market-fees-card-text: #fff;
+  --color-fees-card-background: #ffd74b;
+  --color-fees-card-text: #fff;
 
   --color-horizontal-line-background: #3c3c3c;
 

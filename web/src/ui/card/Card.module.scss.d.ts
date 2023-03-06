@@ -3,6 +3,7 @@ export type Styles = {
   card__actions: string;
   "card__background-image": string;
   card__content: string;
+  card__header: string;
   card__link: string;
   card__shadow: string;
   "z-depth-0": string;

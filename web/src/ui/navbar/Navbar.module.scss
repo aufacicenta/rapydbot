@@ -3,8 +3,8 @@
 
 .navbar {
   margin-bottom: $space-xl;
-  border: 2px solid var(--color-typography-text);
-  border-radius: $border-radius-pill;
+  border: 1px solid var(--color-typography-text);
+  border-radius: 42px;
 
   &__left,
   &__right {

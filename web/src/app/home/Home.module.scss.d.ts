@@ -2,8 +2,12 @@ export type Styles = {
   home: string;
   "home__border-column": string;
   "home__border-column--title": string;
+  "home__faqs--box": string;
   home__intro: string;
   "home__login-box": string;
+  home__section: string;
+  "home__use-cases--card": string;
+  "home__use-cases--card-box": string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;

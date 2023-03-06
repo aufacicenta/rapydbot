@@ -5,6 +5,7 @@ import styles from "./Card.module.scss";
 import { CardActionsProps, CardContentProps, CardProps } from "./Card.types";
 
 export const Card: React.FC<CardProps> & {
+  Header: React.FC<CardContentProps>;
   Content: React.FC<CardContentProps>;
   Actions: React.FC<CardActionsProps>;
 } = ({ children, className, backgroundImageUrl, url, shadow, ...props }) => (
@@ -30,6 +31,10 @@ export const Card: React.FC<CardProps> & {
   </div>
 );
 
+const Header: React.FC<CardContentProps> = ({ children, className }) => (
+  <div className={clsx(styles.card__header, className)}>{children}</div>
+);
+
 const Content: React.FC<CardContentProps> = ({ children, className }) => (
   <div className={clsx(styles.card__content, className)}>{children}</div>
 );
@@ -38,5 +43,6 @@ const Actions: React.FC<CardActionsProps> = ({ children, className }) => (
   <div className={clsx(styles.card__actions, className)}>{children}</div>
 );
 
+Card.Header = Header;
 Card.Content = Content;
 Card.Actions = Actions;
