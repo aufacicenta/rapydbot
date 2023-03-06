@@ -1,19 +1,15 @@
-import { Sequelize } from "sequelize";
-
 import { CreateUserReply, UserClient, UserClientGenerator } from "../../client";
-import database from "../../database";
-import { User } from "../../database/user";
-import { GetUserReply, GetUsersRequest } from "../../server/protos/schema_pb";
+import { createUserLocation } from "../../client/create-user-location";
+import { findUserByTelegramUserIdOrCreateUser } from "../../client/find-user-by-telegram-user-id-or-create-user";
+import { getUsers } from "../../client/get-users";
 
-let driver: Sequelize, dao: User, client: UserClient;
+let client: UserClient;
 
-const { IP_ADDRESS: address, HTTP_PORT: port } = process.env;
+const { IP_ADDRESS, HTTP_PORT } = process.env;
 
 describe("client", () => {
   beforeAll(async () => {
-    driver = await database.connect({ force: true });
-    dao = new User(driver);
-    client = new UserClientGenerator(`${address}:${port}`).create();
+    client = new UserClientGenerator(`${IP_ADDRESS}:${HTTP_PORT}`).create();
   });
 
   test("success: getUsers", async () => {
@@ -31,36 +27,42 @@ describe("client", () => {
     ];
 
     const result: Array<CreateUserReply.AsObject> = [];
+
     for (const user of users) {
-      const create_user_result = await dao.findUserByTelegramUserIdOrCreateUser({
-        telegram_username: user.telegram_username,
-        telegram_private_chat_id: user.telegram_private_chat_id,
-        telegram_from_user_id: user.telegram_from_user_id,
+      const reply = await findUserByTelegramUserIdOrCreateUser(client, {
+        telegramFromUserId: user.telegram_from_user_id,
+        telegramPrivateChatId: user.telegram_private_chat_id,
+        telegramUsername: user.telegram_username,
       });
 
-      result.push(create_user_result);
+      result.push(reply);
     }
 
-    const request = new GetUsersRequest();
-    request.setUserIdList(result.map((r) => r.userId));
-
-    const getUsers = (): Promise<Array<GetUserReply.AsObject>> =>
-      new Promise((resolve) => {
-        const call = client.getUsers(request);
-
-        const response: Array<GetUserReply.AsObject> = [];
-
-        call.on("data", (data: GetUserReply) => {
-          response.push(data.toObject());
-        });
-
-        call.on("end", () => {
-          resolve(response);
-        });
-      });
-
-    const response = await getUsers();
+    const response = await getUsers(client, { userIdList: result.map((u) => u.userId) });
 
     expect(response.length).toEqual(2);
+  });
+
+  test("success: create user location", async () => {
+    const user = {
+      telegram_username: "username3",
+      telegram_from_user_id: 3,
+      telegram_private_chat_id: 3,
+    };
+
+    const { userId } = await findUserByTelegramUserIdOrCreateUser(client, {
+      telegramFromUserId: user.telegram_from_user_id,
+      telegramPrivateChatId: user.telegram_private_chat_id,
+      telegramUsername: user.telegram_username,
+    });
+
+    const { longitude, latitude } = await createUserLocation(client, {
+      userId,
+      longitude: "0.1234",
+      latitude: "0.1234",
+    });
+
+    expect(longitude).toEqual("0.1234");
+    expect(latitude).toEqual("0.1234");
   });
 });

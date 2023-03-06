@@ -1,16 +1,23 @@
-import { DataTypes, Model, ModelOptions } from "sequelize";
+import { Association, DataTypes, Model, ModelOptions, NonAttribute } from "sequelize";
 
+import { UserLocationModel } from "./location";
 import { TelegramModel } from "./telegram";
 
 export type UserModelAttributes = {
   id?: string;
   telegram_id: string;
+  location_id: string;
   created_at: Date;
   updated_at: Date;
   telegram?: TelegramModel;
+  user_location?: UserLocationModel;
 };
 
 export class UserModel extends Model<UserModelAttributes> {
+  declare static associations: {
+    telegram: Association<UserModel, TelegramModel>;
+  };
+
   public static tableName = "user";
 
   public static rawAttributes = {
@@ -21,6 +28,11 @@ export class UserModel extends Model<UserModelAttributes> {
       defaultValue: DataTypes.UUIDV4,
     },
     telegram_id: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      unique: true,
+    },
+    location_id: {
       type: DataTypes.UUID,
       allowNull: true,
       unique: true,
@@ -42,4 +54,6 @@ export class UserModel extends Model<UserModelAttributes> {
     underscored: true,
     tableName: UserModel.tableName,
   };
+
+  declare telegram?: NonAttribute<TelegramModel>;
 }

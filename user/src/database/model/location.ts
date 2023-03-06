@@ -2,18 +2,19 @@ import { DataTypes, Model, ModelOptions } from "sequelize";
 
 import { UserModel } from "./user";
 
-export type TelegramModelArgs = {
+export type UserLocationModelAttributes = {
   id?: string;
   user_id: string;
-  from_user_id: number;
-  username: string;
-  private_chat_id: number;
+  latitude: string;
+  longitude: string;
+  created_at: Date;
+  updated_at: Date;
   user?: UserModel;
 };
 
-export class TelegramModel extends Model<TelegramModelArgs> {
-  public static tableName = "telegram";
-  public static alias = "telegram";
+export class UserLocationModel extends Model<UserLocationModelAttributes> {
+  public static tableName = "user_location";
+  public static alias = "location";
 
   public static rawAttributes = {
     id: {
@@ -26,19 +27,14 @@ export class TelegramModel extends Model<TelegramModelArgs> {
       type: DataTypes.UUID,
       allowNull: true,
     },
-    from_user_id: {
-      type: DataTypes.INTEGER,
+    latitude: {
+      type: DataTypes.TEXT,
       allowNull: false,
       unique: true,
     },
-    username: {
+    longitude: {
       type: DataTypes.TEXT,
       allowNull: false,
-      unique: false,
-    },
-    private_chat_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
       unique: true,
     },
     created_at: {
@@ -56,6 +52,6 @@ export class TelegramModel extends Model<TelegramModelArgs> {
   public static config: ModelOptions = {
     paranoid: true,
     underscored: true,
-    tableName: TelegramModel.tableName,
+    tableName: UserLocationModel.tableName,
   };
 }
