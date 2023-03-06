@@ -4,6 +4,7 @@ export type Styles = {
   "typography__align--right": string;
   "typography__button-label": string;
   typography__description: string;
+  typography__display: string;
   typography__flat: string;
   typography__headline1: string;
   typography__headline2: string;
@@ -11,6 +12,7 @@ export type Styles = {
   typography__headline4: string;
   typography__headline5: string;
   typography__headline6: string;
+  typography__inherit: string;
   typography__inline: string;
   typography__link: string;
   "typography__link--button": string;

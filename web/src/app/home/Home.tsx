@@ -7,6 +7,9 @@ import { Typography } from "ui/typography/Typography";
 import { HomeProps } from "./Home.types";
 import styles from "./Home.module.scss";
 import { Grid } from "ui/grid/Grid";
+import { Button } from "ui/button/Button";
+import { Icon } from "ui/icon/Icon";
+import { Navbar } from "ui/navbar/Navbar";
 
 export function Home({ className }: HomeProps) {
   const { t } = useTranslation(["home", "common"]);
@@ -14,10 +17,14 @@ export function Home({ className }: HomeProps) {
   return (
     <div className={clsx(styles.home, className)}>
       <MainPanel.Container>
-        <Typography.Headline2 className={styles.home__intro}>
+        <Navbar />
+        <Typography.Headline3 className={styles.home__intro}>
           Telegram Informer, <em>aka</em> TGI — is a Telegram based conversational interface designed to provide a new
-          kind of job: <strong>anonymous news reporting</strong>.
-        </Typography.Headline2>
+          kind of job: <strong>anonymous news reporting</strong>{" "}
+          <Typography.Text inline display inherit>
+            »
+          </Typography.Text>
+        </Typography.Headline3>
         <Grid.Row>
           <Grid.Col>
             <div className={styles["home__border-column"]}>
@@ -42,6 +49,17 @@ export function Home({ className }: HomeProps) {
             </div>
           </Grid.Col>
         </Grid.Row>
+        <div className={styles["home__login-box"]}>
+          <Button variant="outlined" size="l" fullWidth>
+            Log In with Telegram <Icon name="icon-paper-plane" />
+          </Button>
+        </div>
+        <section>
+          <Typography.Headline2 align="center">FAQs</Typography.Headline2>
+        </section>
+        <section>
+          <Typography.Headline2 align="center">Use Cases</Typography.Headline2>
+        </section>
       </MainPanel.Container>
     </div>
   );

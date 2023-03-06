@@ -1,7 +1,7 @@
 @import "src/theme/base";
 
 .main-panel {
-  @include withNavbar;
+  @include withNavbar(2);
   @include atLargeTablet {
     padding-bottom: $navbar-height;
   }
@@ -13,7 +13,6 @@
   background-color: var(--color-background);
 
   &__container {
-    @include withNavbar(5);
     @include atLargeTablet {
       max-width: 880px;
       margin: 0 auto;

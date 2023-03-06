@@ -19,6 +19,15 @@
     display: inline-block;
   }
 
+  &__inherit {
+    font-size: inherit !important;
+  }
+
+  &__display {
+    font-weight: normal;
+    font-family: $font-family-display !important;
+  }
+
   &__flat {
     margin-bottom: 0 !important;
   }

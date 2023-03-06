@@ -1,0 +1,47 @@
+@import "src/theme/base";
+@import "src/ui/typography/variables";
+
+.navbar {
+  margin-bottom: $space-xl;
+  border: 2px solid var(--color-typography-text);
+  border-radius: $border-radius-pill;
+
+  &__left,
+  &__right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    min-height: $navbar-height;
+    padding: $space-s;
+    padding-right: $space-ml;
+    padding-left: $space-ml;
+  }
+
+  &__left {
+  }
+
+  &__right {
+    position: relative;
+    text-align: right;
+  }
+
+  &__title {
+    font-size: $font-size-headline-3;
+    font-weight: normal;
+    font-family: $font-family-display;
+    color: var(--color-primary);
+  }
+
+  &__logo {
+    position: absolute;
+    right: $space-ml;
+    display: inline-block;
+    width: fit-content;
+    font-size: $font-size-headline-3;
+    font-weight: normal;
+    font-family: $font-family-display;
+    color: var(--color-primary);
+    transform: rotate(90deg);
+  }
+}

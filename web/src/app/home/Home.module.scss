@@ -8,8 +8,10 @@
     margin-bottom: $space-xl;
     font-weight: $font-weight-regular;
 
-    strong {
+    strong,
+    p {
       font-weight: $font-weight-bold;
+      color: var(--color-primary);
     }
   }
 
@@ -21,6 +23,17 @@
 
     &--title {
       min-height: 98px;
+    }
+  }
+
+  &__login-box {
+    padding: $space-xl;
+    text-align: center;
+
+    button {
+      span {
+        margin-left: $space-default;
+      }
     }
   }
 }

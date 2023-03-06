@@ -4,6 +4,8 @@ import { ButtonCommonProps } from "ui/button/Button.types";
 
 type GeneralProps = {
   inline?: boolean;
+  display?: boolean;
+  inherit?: boolean;
   flat?: boolean;
   truncate?: boolean;
   align?: "center" | "right";

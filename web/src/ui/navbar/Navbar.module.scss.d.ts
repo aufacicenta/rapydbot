@@ -1,9 +1,9 @@
 export type Styles = {
-  home: string;
-  "home__border-column": string;
-  "home__border-column--title": string;
-  home__intro: string;
-  "home__login-box": string;
+  navbar: string;
+  navbar__left: string;
+  navbar__logo: string;
+  navbar__right: string;
+  navbar__title: string;
   "z-depth-0": string;
   "z-depth-1": string;
   "z-depth-1-half": string;
