@@ -3,6 +3,7 @@ import { UserClientGenerator } from "@rapydbot/user";
 import { IntentAction } from "@rapydbot/intent-recognition/providers/cohere/types";
 import moment, { Moment } from "moment";
 import TelegramBotApi, { SendMessageOptions } from "node-telegram-bot-api";
+import { CampaignClientGenerator } from "@rapydbot/campaign";
 
 import {
   BotLanguageHandler,
@@ -18,6 +19,7 @@ import { IBotCommand } from "./commands/types";
 import { CreateWalletCommand } from "./commands/wallet/create";
 import { ContextHandler } from "./handler/context";
 import { UserLocationHandler } from "./handler/location";
+import { CreateCampaignCommand } from "./commands/campaign/create";
 
 const {
   BOT_TOKEN,
@@ -41,7 +43,11 @@ export class TGInformerBot {
   public clients: Clients = {};
 
   // Commands send replies
-  public commands: Commands = {};
+  public commands: Commands = {
+    campaign: {
+      create: undefined,
+    },
+  };
 
   public context: Context = {};
 
@@ -80,6 +86,14 @@ export class TGInformerBot {
       }
     });
 
+    this.api.onText(/^\/crearcampaña/i, (msg) => {
+      try {
+        this.commands.campaign.create.onText(msg);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
     this.api.onText(/^\/?(train|entrenar)/i, (msg) => {
       this.commands.train.runTrainingQueue(msg);
     });
@@ -92,7 +106,7 @@ export class TGInformerBot {
 
     this.api.on("message", async (msg) => {
       try {
-        if (/^\/start/i.test(msg.text)) {
+        if (/^\/(start|crearcampaña)/i.test(msg.text)) {
           return;
         }
 
@@ -234,7 +248,7 @@ export class TGInformerBot {
     //   INTENT_RECOGNITION_SERVICE_URL,
     // ).create();
 
-    // this.clients.campaign = new CampaignClientGenerator(CAMPAIGN_SERVICE_URL).create();
+    this.clients.campaign = new CampaignClientGenerator(CAMPAIGN_SERVICE_URL).create();
   }
 
   private setCommands() {
@@ -246,6 +260,9 @@ export class TGInformerBot {
 
     this.commands.createWallet = new CreateWalletCommand(this);
     this.commands.createWallet.onText.bind(this.commands.createWallet);
+
+    this.commands.campaign.create = new CreateCampaignCommand(this);
+    this.commands.campaign.create.onText.bind(this.commands.campaign.create);
   }
 
   private async prepareContext() {

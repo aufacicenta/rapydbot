@@ -6,6 +6,7 @@ import { Message as TelegramMessage } from "node-telegram-bot-api";
 import { Channel, DefaultGenerics, StreamChat, MessageResponse } from "stream-chat";
 
 import { StartCommand } from "./commands";
+import { CreateCampaignCommand } from "./commands/campaign/create";
 import { TrainCommand } from "./commands/train";
 import { CreateWalletCommand } from "./commands/wallet/create";
 import { BotLanguageHandler } from "./handler";
@@ -28,6 +29,9 @@ export type Commands = {
   start?: StartCommand;
   train?: TrainCommand;
   createWallet?: CreateWalletCommand;
+  campaign?: {
+    create?: CreateCampaignCommand;
+  };
 };
 
 export type Clients = {
