@@ -10,10 +10,16 @@ type RouteMap = {
     bets: (pageSlug: string) => string;
     profile: (pageSlug: string) => string;
   };
+  api: {
+    graphql: () => string;
+  };
 };
 
 export const routes: RouteMap = {
   home: () => `/`,
+  api: {
+    graphql: () => `/api/graphql`,
+  },
   market: {
     price: ({ marketId }) => `/market/price/${marketId}`,
   },

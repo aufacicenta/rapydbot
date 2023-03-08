@@ -1,5 +1,5 @@
-schema: [src/pages/api/business/*.graphql, src/pages/api/property/*.graphql]
-documents: "src/pages/api/**/documents/**/*.graphql"
+schema: [src/pages/api/campaign/*.graphql]
+documents: "src/pages/api/**/document/**/*.graphql"
 generates:
   ./src/pages/api/codegen/introspection.json:
     plugins:

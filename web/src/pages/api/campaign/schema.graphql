@@ -1,0 +1,29 @@
+input CreateCampaignActionInput {
+  campaignId: String!
+  initialInstruction: String!
+  reply: String!
+  intentAction: String!
+}
+
+input GetCampaignsByUserIdInput {
+  campaignId: String!
+  initialInstruction: String!
+  reply: String!
+  intentAction: String!
+}
+
+type CampaignAction {
+  campaignActionId: String!
+}
+
+type Campaign {
+  campaignId: String!
+}
+
+type Mutation {
+  createCampaignAction(input: CreateCampaignActionInput!): CampaignAction!
+}
+
+type Query {
+  getCampaignsByUserId(input: GetCampaignsByUserIdInput): [Campaign]!
+}
