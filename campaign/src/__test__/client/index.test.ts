@@ -26,19 +26,19 @@ describe("client", () => {
   });
 
   test("success: createCampaign", async () => {
-    const campaignId = await createCampaign(client, { issuerId });
+    const { campaignId } = await createCampaign(client, { issuerId });
 
     expect(campaignId).toBeDefined();
   });
 
   test("success: create campaign actions", async () => {
-    const campaignId = await createCampaign(client, { issuerId });
+    const { campaignId } = await createCampaign(client, { issuerId });
 
     for (const key in instructions) {
       const initialInstruction = instructions[key].initialInstruction;
       const reply = instructions[key].reply;
 
-      const campaignActionId = await createCampaignAction(client, {
+      const { campaignActionId } = await createCampaignAction(client, {
         campaignId,
         initialInstruction,
         reply,
@@ -50,7 +50,7 @@ describe("client", () => {
   });
 
   test("success: get campaign actions", async () => {
-    const campaignId = await createCampaign(client, { issuerId });
+    const { campaignId } = await createCampaign(client, { issuerId });
 
     for (const key in instructions) {
       const initialInstruction = instructions[key].initialInstruction;
@@ -85,7 +85,7 @@ describe("client", () => {
   });
 
   test("success: create campaign actions messages", async () => {
-    const campaignId = await createCampaign(client, { issuerId });
+    const { campaignId } = await createCampaign(client, { issuerId });
 
     let campaign_action_id: string;
 
@@ -93,7 +93,7 @@ describe("client", () => {
       const initialInstruction = instructions[key].initialInstruction;
       const reply = instructions[key].reply;
 
-      const campaignActionId = await createCampaignAction(client, {
+      const { campaignActionId } = await createCampaignAction(client, {
         campaignId,
         initialInstruction,
         reply,

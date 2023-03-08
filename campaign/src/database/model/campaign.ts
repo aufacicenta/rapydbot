@@ -8,6 +8,7 @@ export type CampaignModelArgs = {
   created_at: Date;
   updated_at: Date;
   closed_at: Date;
+  published_at: Date;
   actions: CampaignActionModel;
 };
 
@@ -24,7 +25,14 @@ export class CampaignModel extends Model<CampaignModelArgs> {
     issuer_id: {
       type: DataTypes.UUID,
       allowNull: false,
-      unique: true,
+    },
+    closed_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    published_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
     created_at: {
       type: DataTypes.DATE,
@@ -35,10 +43,6 @@ export class CampaignModel extends Model<CampaignModelArgs> {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: new Date(),
-    },
-    closed_at: {
-      type: DataTypes.DATE,
-      allowNull: true,
     },
   };
 
