@@ -40,10 +40,6 @@ export class TrainCommand implements IBotCommand {
 
         this.callAction(customMessage, currentAction);
 
-        if (!currentAction.isTimeoutSet) {
-          this.setActionTimeout(customMessage, currentAction);
-        }
-
         return;
       }
 
@@ -60,7 +56,7 @@ export class TrainCommand implements IBotCommand {
   async runTrainingQueue(msg: CustomMessage): Promise<void> {
     try {
       // @TODO get campaignId from database after a message is sent to the user by the bot and they accept the campaign
-      const campaignId = "ace9fc09-440d-49e7-8462-a416c232cf4b";
+      const campaignId = "afea59e3-0613-4d2a-9679-f4ffaa741952";
 
       // @TODO check if user has already started this campaign by storing user_id in campaign_action_message, then query for campaign_action_id
 
@@ -119,21 +115,7 @@ export class TrainCommand implements IBotCommand {
 
           if (next.isLast) {
             setTimeout(() => {
-              this.currentAction.set(msg.user.id, undefined);
-
-              // @TODO send final stream-chat message attachment to identify completion
-
-              // @TODO ETH address command
-              this.bot.reply(
-                msg,
-                `La sesión de entrenamiento ha finalizado. 🥳
-
-A qué dirección de ETH enviamos tus USDT? 🤑`,
-              );
-
-              this.actions.delete(msg.user.id);
-
-              // @TODO mark campaign_user record as completed
+              this.endSession(msg);
             }, DEFAULT_TIMEOUT);
           }
         }, DEFAULT_TIMEOUT);
@@ -146,10 +128,56 @@ A qué dirección de ETH enviamos tus USDT? 🤑`,
     this.actions.set(msg.user.id, actions);
   }
 
+  private setNextAction(msg: CustomMessage, current: Action): void {
+    if (current.isLast) {
+      this.endSession(msg);
+    }
+
+    const actions = this.actions.get(msg.user.id);
+
+    for (const key in actions) {
+      const next = actions[key];
+      const isNotCurrent = next.intentAction !== current.intentAction;
+
+      if (isNotCurrent) {
+        this.currentAction.set(msg.user.id, next);
+
+        this.bot.reply(msg, next.initialInstruction);
+
+        break;
+      }
+    }
+  }
+
+  private endSession(msg: CustomMessage): void {
+    this.currentAction.set(msg.user.id, undefined);
+
+    // @TODO send final stream-chat message attachment to identify completion
+
+    // @TODO ETH address command
+    this.bot.reply(
+      msg,
+      `La sesión de entrenamiento ha finalizado. 🥳
+
+A qué dirección de ETH enviamos tus USDT? 🤑`,
+    );
+
+    this.actions.delete(msg.user.id);
+
+    // @TODO mark campaign_user record as completed
+  }
+
   private async callAction(msg: CustomMessage, action: Action): Promise<void> {
+    // @TODO check if action has a set timeout field in the database campaign_action
+    // if (!action.isTimeoutSet) {
+    //   this.setActionTimeout(msg, action);
+    // }
+
     this.bot.handlers.context.sendMessage(msg, action);
 
-    this.bot.reply(msg, action.reply);
+    this.bot.reply(msg, action.reply).then(() => {
+      this.setNextAction(msg, action);
+    });
   }
 
   private handleErrorReply(error: Error, msg: CustomMessage) {
@@ -171,7 +199,5 @@ A qué dirección de ETH enviamos tus USDT? 🤑`,
         break;
       }
     }
-
-    throw error;
   }
 }

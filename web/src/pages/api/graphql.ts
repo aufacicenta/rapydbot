@@ -9,7 +9,7 @@ import { CampaignClient, CampaignClientGenerator } from "@rapydbot/campaign";
 
 import { routes } from "hooks/useRoutes/useRoutes";
 
-import { createCampaignActionResolver as createCampaignAction } from "./campaign/resolver/createCampaignAction";
+import { createCampaignActionResolver as createCampaignAction } from "./campaign/resolver/create-campaign-action";
 
 const { CAMPAIGN_SERVICE_URL } = process.env;
 

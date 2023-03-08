@@ -122,13 +122,19 @@ export class TGInformerBot {
     });
   }
 
-  reply(msg: CustomMessage, text: string, options?: SendMessageOptions) {
+  reply(msg: CustomMessage, text: string, options?: SendMessageOptions): Promise<void> {
     // @TODO text should be a ChatGPT response by using the reponse params
 
-    this.api.sendMessage(msg.chat.id, text, {
-      parse_mode: "HTML",
-      disable_web_page_preview: true,
-      ...options,
+    return new Promise((resolve) => {
+      this.api.sendMessage(msg.chat.id, text, {
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+        ...options,
+      });
+
+      setTimeout(() => {
+        resolve();
+      }, 300);
     });
   }
 

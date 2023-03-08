@@ -80,7 +80,7 @@ body[data-theme="dark"] {
   --color-secondary: #bf533f;
 
   --color-background: var(--color-black);
-  --color-background-contrast: var(--color-dark-11);
+  --color-background-contrast: var(--color-dark-10);
 
   --color-sidebar-item: var(--color-white);
   --color-sidebar-divider: var(--color-dark-8);
@@ -142,7 +142,7 @@ body[data-theme="dark"] {
 
   --color-input-text: var(--color-typography-text);
   --color-input-text-disabled: var(--color-typography-description);
-  --color-input-border: var(--color-black);
+  --color-input-border: var(--color-white);
   --color-input-label: rgba(255, 255, 255, 0.7);
   --color-input-placeholder: rgba(255, 255, 255, 0.22);
 }

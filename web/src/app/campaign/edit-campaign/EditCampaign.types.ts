@@ -1,3 +1,4 @@
+import { CreateCampaignActionInput } from "api/codegen";
 import { ReactNode } from "react";
 
 export type EditCampaignProps = {
@@ -11,3 +12,5 @@ export type EditCampaignContainerProps = {
   children?: ReactNode;
   className?: string;
 };
+
+export type CreateCampaignActionForm = Omit<CreateCampaignActionInput, "campaignId">;

@@ -2,4 +2,23 @@
 
 .edit-campaign {
   display: block;
+
+  &__form {
+    &--input-box {
+      margin-bottom: $space-m;
+    }
+
+    &--button-submit {
+      text-align: right;
+    }
+  }
+
+  &__title {
+    margin-bottom: $space-l;
+  }
+
+  &__breadcrumb {
+    display: inline-block;
+    margin-bottom: $space-ml;
+  }
 }
