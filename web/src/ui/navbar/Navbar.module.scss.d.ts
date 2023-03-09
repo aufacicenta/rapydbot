@@ -1,5 +1,7 @@
 export type Styles = {
   navbar: string;
+  navbar__balance: string;
+  "navbar__balance--topup": string;
   navbar__box: string;
   navbar__left: string;
   navbar__logo: string;

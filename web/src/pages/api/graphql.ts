@@ -10,6 +10,7 @@ import { CampaignClient, CampaignClientGenerator } from "@rapydbot/campaign";
 import { routes } from "hooks/useRoutes/useRoutes";
 
 import { createCampaignActionResolver as createCampaignAction } from "./campaign/resolver/create-campaign-action";
+import { getCampaignActionsResolver as getCampaignActions } from "./campaign/resolver/get-campaign-actions";
 
 const { CAMPAIGN_SERVICE_URL } = process.env;
 
@@ -20,7 +21,9 @@ const schemas = loadTypedefsSync([path.join(process.cwd(), "/src/pages/api/campa
 const typeDefs = schemas.map((schema) => schema.document) as DocumentNode[];
 
 const resolvers: Resolvers = {
-  Query: {},
+  Query: {
+    getCampaignActions,
+  },
   Mutation: {
     createCampaignAction,
   },

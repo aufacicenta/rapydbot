@@ -12,8 +12,16 @@ input GetCampaignsByUserIdInput {
   intentAction: String!
 }
 
+input GetCampaignActionsInput {
+  campaignId: String!
+}
+
 type CampaignAction {
   campaignActionId: String!
+  campaignId: String
+  initialInstruction: String
+  reply: String
+  intentAction: String
 }
 
 type Campaign {
@@ -26,4 +34,5 @@ type Mutation {
 
 type Query {
   getCampaignsByUserId(input: GetCampaignsByUserIdInput): [Campaign]!
+  getCampaignActions(input: GetCampaignActionsInput!): [CampaignAction]!
 }

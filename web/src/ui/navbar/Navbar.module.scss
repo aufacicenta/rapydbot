@@ -9,6 +9,20 @@
     border-radius: 42px;
   }
 
+  &__balance {
+    padding-right: $space-ml;
+    text-align: right;
+
+    &--topup {
+      color: var(--color-primary);
+
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
+
   &__stats {
     display: flex;
     justify-content: flex-end;
@@ -25,11 +39,14 @@
 
   &__left,
   &__right {
+    @include atLargeTablet {
+      min-height: $navbar-height;
+    }
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 100%;
-    min-height: $navbar-height;
+    min-height: $navbar-height-mobile;
     padding: $space-s;
     padding-right: $space-ml;
     padding-left: $space-ml;

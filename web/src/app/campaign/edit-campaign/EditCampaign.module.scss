@@ -1,4 +1,5 @@
 @import "src/theme/base";
+@import "src/ui/typography/mixins";
 
 .edit-campaign {
   display: block;
@@ -9,7 +10,17 @@
     }
 
     &--button-submit {
+      @include atLargeTablet {
+        margin-top: auto;
+      }
+      display: flex;
+      height: 100%;
+      margin-top: $space-s;
       text-align: right;
+
+      button {
+        align-self: center;
+      }
     }
   }
 
@@ -20,5 +31,29 @@
   &__breadcrumb {
     display: inline-block;
     margin-bottom: $space-ml;
+  }
+
+  &__campaign-actions {
+    margin-top: $space-l;
+
+    &--item {
+      p {
+        span {
+          color: var(--color-typography-description);
+        }
+      }
+
+      a {
+        @include description;
+        display: inline-block;
+        align-self: flex-end;
+        margin-bottom: $space-m;
+        color: var(--color-typography-link);
+      }
+    }
+  }
+
+  &__publish {
+    padding: $space-l;
   }
 }

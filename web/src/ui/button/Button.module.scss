@@ -339,7 +339,7 @@ $HALF_LOADER_SIZE: 15px;
       &:focus {
         border-color: var(--color-button-secondary-hover);
         color: var(--color-button-secondary-hover-text);
-        background: var(--color-button-secondary-hover);
+        background: transparent;
       }
 
       &[disabled] {

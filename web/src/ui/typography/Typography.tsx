@@ -169,24 +169,23 @@ const Link: React.FC<AnchorProps & LinkProps> = ({
   variant,
   ...props
 }) => (
-  <NextLink href={href} {...props}>
-    <a
-      className={clsx(className, {
-        [styles.typography__link]: as === undefined,
-        [styles.typography__truncate]: truncate,
-        [styles.typography__flat]: flat,
-        [styles["typography__link--button"]]: as === "button",
-        [buttonStyles.button]: as === "button",
-        [buttonStyles["button--primary"]]: as === "button" && variant === "contained",
-        [buttonStyles["button--auto-size"]]: as === "button" && !size,
-        [buttonStyles["button--extra-small"]]: as === "button" && size === "xs",
-        [buttonStyles["button-outline"]]: as === "button" && variant === "outlined",
-        [buttonStyles["button--text"]]: as === "button" && variant === "text",
-      })}
-      {...props}
-    >
-      {children}
-    </a>
+  <NextLink
+    href={href}
+    className={clsx(className, {
+      [styles.typography__link]: as === undefined,
+      [styles.typography__truncate]: truncate,
+      [styles.typography__flat]: flat,
+      [styles["typography__link--button"]]: as === "button",
+      [buttonStyles.button]: as === "button",
+      [buttonStyles["button--primary"]]: as === "button" && variant === "contained",
+      [buttonStyles["button--auto-size"]]: as === "button" && !size,
+      [buttonStyles["button--extra-small"]]: as === "button" && size === "xs",
+      [buttonStyles["button-outline"]]: as === "button" && variant === "outlined",
+      [buttonStyles["button--text"]]: as === "button" && variant === "text",
+    })}
+    {...props}
+  >
+    {children}
   </NextLink>
 );
 

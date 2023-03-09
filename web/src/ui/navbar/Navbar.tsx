@@ -7,6 +7,7 @@ import { Typography } from "ui/typography/Typography";
 import { NavbarProps } from "./Navbar.types";
 import styles from "./Navbar.module.scss";
 
+// @TODO i18n
 export const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
   const [glyph, setGlyph] = useState("_");
 
@@ -24,6 +25,12 @@ export const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
 
   return (
     <div className={clsx(styles.navbar, className)}>
+      <div>
+        <Typography.Description className={styles.navbar__balance}>
+          {/* @TODO topup USDT credit balance */}
+          Balance: USDT 0.00 [<span className={styles["navbar__balance--topup"]}>top up</span>]
+        </Typography.Description>
+      </div>
       <div className={styles.navbar__box}>
         <Grid.Row>
           <Grid.Col>

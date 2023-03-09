@@ -72,6 +72,11 @@
   margin-bottom: $space-xs;
   color: var(--color-typography-subtitle);
 }
+@mixin description {
+  @include font-properties($typography-description);
+  @include normalizeTypography;
+  color: var(--color-typography-description);
+}
 @mixin miniDescription {
   @include font-properties($typography-mini-description);
   @include normalizeTypography;

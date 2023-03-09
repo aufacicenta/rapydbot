@@ -91,10 +91,10 @@ body[data-theme="dark"] {
   --color-button-primary-text: var(--color-primary);
   --color-button-primary-hover: var(--color-white);
   --color-button-primary-hover-text: var(--color-white);
-  --color-button-secondary: var(--color-dark-8);
-  --color-button-secondary-text: var(--color-dark-4);
-  --color-button-secondary-hover: var(--color-dark-10);
-  --color-button-secondary-hover-text: var(--color-white);
+  --color-button-secondary: var(--color-white);
+  --color-button-secondary-text: var(--color-white);
+  --color-button-secondary-hover: var(--color-primary);
+  --color-button-secondary-hover-text: var(--color-primary);
 
   --color-button-outlined-info: #ffd74b;
   --color-button-outlined-info-text: #ffd74b;
