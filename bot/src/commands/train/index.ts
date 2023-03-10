@@ -2,6 +2,7 @@ import {
   getCampaignActions,
   getCampaignActionMessagesByUserId,
   CampaignServiceErrorCodes,
+  createCampaignActionMessage,
 } from "@rapydbot/campaign";
 import {
   findUserByTelegramUserId,
@@ -131,6 +132,8 @@ export class TrainCommand implements IBotCommand {
   private setNextAction(msg: CustomMessage, current: Action): void {
     if (current.isLast) {
       this.endSession(msg);
+
+      return;
     }
 
     const actions = this.actions.get(msg.user.id);
@@ -173,7 +176,11 @@ A qué dirección de ETH enviamos tus USDT? 🤑`,
     //   this.setActionTimeout(msg, action);
     // }
 
-    this.bot.handlers.context.sendMessage(msg, action);
+    createCampaignActionMessage(this.bot.clients.campaign, {
+      campaignActionId: action.id,
+      userId: msg.user.id,
+      message: msg.text,
+    });
 
     this.bot.reply(msg, action.reply).then(() => {
       this.setNextAction(msg, action);

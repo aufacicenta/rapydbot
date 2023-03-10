@@ -57,6 +57,15 @@
     },
     {
       "type": "node",
+      "request": "attach",
+      "name": "WEB: Attach by Process ID",
+      "cwd": "${workspaceRoot}/web/src",
+      "trace": true,
+      "port": 9229,
+      "skipFiles": ["${workspaceRoot}/node_modules/**/*", "<node_internals>/**/*.js"]
+    },
+    {
+      "type": "node",
       "request": "launch",
       "name": "WALLET: Jest Current File",
       "program": "${workspaceFolder}/wallet/node_modules/.bin/jest",

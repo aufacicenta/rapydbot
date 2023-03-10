@@ -8,7 +8,7 @@ export const getCampaignActions = (
 
   request.setCampaignId(campaignId);
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const call = client.getCampaignActions(request);
 
     const response: Array<GetCampaignActionsReply.AsObject> = [];
@@ -19,6 +19,10 @@ export const getCampaignActions = (
 
     call.on("end", () => {
       resolve(response);
+    });
+
+    call.on("error", (error) => {
+      reject(error);
     });
   });
 };

@@ -7,6 +7,8 @@ export const getCampaignActionsResolver: QueryResolvers["getCampaignActions"] = 
   { input },
   context: ResolversContext,
 ) => {
+  console.log(context.auth);
+
   const campaignActions = await getCampaignActions(context.clients.campaign, input);
 
   return campaignActions.map(({ id, campaignId, initialInstruction, reply, intentAction }) => ({

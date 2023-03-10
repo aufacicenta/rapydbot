@@ -10,12 +10,16 @@ import { Icon } from "ui/icon/Icon";
 import { Form } from "ui/form/Form";
 import { Grid } from "ui/grid/Grid";
 import { Card } from "ui/card/Card";
+import { useGetAuthToken } from "hooks/useGetAuthToken/useGetAuthToken";
 
 import { CreateCampaignActionForm, EditCampaignProps } from "./EditCampaign.types";
 import styles from "./EditCampaign.module.scss";
 
 // @TODO i18n
 export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, className }) => {
+  useGetAuthToken();
+
+  // @TODO handle error
   const getCampaignActionsResult = useGetCampaignActionsQuery({
     variables: { input: { campaignId } },
   });
@@ -85,7 +89,18 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
           ) : (
             <Card>
               <Card.Header>
-                <Typography.Headline2 flat>Campaign Questions</Typography.Headline2>
+                <Grid.Row>
+                  <Grid.Col>
+                    <Typography.Headline2 flat>Campaign Questions</Typography.Headline2>
+                  </Grid.Col>
+                  <Grid.Col>
+                    {/* @TODO calc price per campaign session */}
+                    <div className={styles["edit-campaign__campaign-actions--price"]}>
+                      <Typography.Description flat>* Price per informer</Typography.Description>
+                      <Typography.Text flat>USDT 1.00</Typography.Text>
+                    </div>
+                  </Grid.Col>
+                </Grid.Row>
               </Card.Header>
               <Card.Content>
                 {getCampaignActionsResult.data?.getCampaignActions.map((campaignAction) => (
@@ -105,12 +120,18 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
                     <Typography.Link href="#">Edit</Typography.Link>
                   </div>
                 ))}
+
+                <Typography.Description>
+                  * Price is an estimate, you need to approve the replies in order to release the funds to each
+                  informer. Disbursement can be partial.
+                </Typography.Description>
               </Card.Content>
             </Card>
           )}
         </div>
 
         <div className={styles["edit-campaign__publish"]}>
+          {/* @TODO display confirmation modal and check credit balance */}
           <Button variant="outlined" fullWidth>
             Publish Campaign
           </Button>

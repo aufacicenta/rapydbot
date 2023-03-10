@@ -36,6 +36,14 @@
   &__campaign-actions {
     margin-top: $space-l;
 
+    &--price {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      text-align: right;
+    }
+
     &--item {
       p {
         span {

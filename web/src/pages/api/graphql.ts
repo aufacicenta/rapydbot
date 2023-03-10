@@ -1,18 +1,19 @@
-import { ApolloServer } from "apollo-server-micro";
+import { ApolloServer } from "@apollo/server";
+import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { loadTypedefsSync } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
 import path from "node:path";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { DocumentNode } from "graphql";
 import { Resolvers } from "api/codegen/resolvers-types";
 import { CampaignClient, CampaignClientGenerator } from "@rapydbot/campaign";
-
-import { routes } from "hooks/useRoutes/useRoutes";
+import { UserClient, UserClientGenerator, getUser } from "@rapydbot/user";
 
 import { createCampaignActionResolver as createCampaignAction } from "./campaign/resolver/create-campaign-action";
 import { getCampaignActionsResolver as getCampaignActions } from "./campaign/resolver/get-campaign-actions";
 
-const { CAMPAIGN_SERVICE_URL } = process.env;
+const { CAMPAIGN_SERVICE_URL, USER_SERVICE_URL } = process.env;
 
 const schemas = loadTypedefsSync([path.join(process.cwd(), "/src/pages/api/campaign/schema.graphql")], {
   loaders: [new GraphQLFileLoader()],
@@ -33,40 +34,43 @@ export type ResolversContext = {
   req: NextApiRequest;
   clients: {
     campaign: CampaignClient;
+    user: UserClient;
+  };
+  auth?: {
+    userId?: string;
   };
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const context: ResolversContext = {
-    req,
-    clients: { campaign: new CampaignClientGenerator(CAMPAIGN_SERVICE_URL!).create() },
-  };
+const apolloServer = new ApolloServer<ResolversContext>({
+  typeDefs,
+  resolvers,
+});
 
-  const apolloServer = new ApolloServer({ typeDefs, resolvers, context });
+export default startServerAndCreateNextHandler<ResolversContext>(apolloServer, {
+  context: async (req) => {
+    const context: ResolversContext = {
+      req,
+      clients: {
+        campaign: new CampaignClientGenerator(CAMPAIGN_SERVICE_URL!).create(),
+        user: new UserClientGenerator(USER_SERVICE_URL!).create(),
+      },
+    };
 
-  const startServer = apolloServer.start();
+    if (!req.headers.authorization) {
+      throw new Error("No authorization header");
+    }
 
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", "https://studio.apollographql.com");
-  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    const token = req.headers.authorization.split(" ")[1];
+    const payload = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
-  if (req.method === "OPTIONS") {
-    res.end();
+    if (!payload.userId) {
+      throw new Error("No userId in payload");
+    }
 
-    return false;
-  }
+    const { userId } = await getUser(context.clients.user, { userId: payload.userId });
 
-  await startServer;
+    context.auth = { userId };
 
-  await apolloServer.createHandler({
-    path: routes.api.graphql(),
-  })(req, res);
-
-  return null;
-}
-
-export const config = {
-  api: {
-    bodyParser: false,
+    return context;
   },
-};
+});

@@ -1,5 +1,6 @@
 export type Styles = {
   home: string;
+  home__banner: string;
   "home__border-column": string;
   "home__border-column--title": string;
   "home__faqs--box": string;

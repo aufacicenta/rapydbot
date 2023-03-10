@@ -5,8 +5,6 @@ import "../theme/globals.scss";
 
 setConfiguration({ containerWidths: [540, 740, 960, 1280, 1540], gutterWidth: 32 });
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
-}
+const MyApp = ({ Component, pageProps }: AppProps) => <Component {...pageProps} />;
 
 export default appWithTranslation(MyApp);

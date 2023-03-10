@@ -4,6 +4,13 @@
 .home {
   display: block;
 
+  &__banner {
+    margin-right: -$space-m;
+    margin-bottom: $space-m;
+    margin-left: -$space-m;
+    border-radius: 10px;
+  }
+
   &__intro {
     margin-bottom: $space-xl;
     font-weight: $font-weight-regular;

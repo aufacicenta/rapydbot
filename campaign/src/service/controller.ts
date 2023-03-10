@@ -107,27 +107,31 @@ export class Controller {
   ) {
     const campaignId = call.request.getCampaignId();
 
-    const result = await db.campaignAction.getByCampaignId({
-      campaignId,
-    });
-
-    for (const action of result) {
-      const reply = new GetCampaignActionsReply();
-
-      reply.setId(action.id);
-      reply.setCampaignId(action.campaignId);
-      reply.setInitialInstruction(action.initialInstruction);
-      reply.setReply(action.reply);
-      reply.setIntentAction(action.intentAction);
-
-      call.write(reply, (err) => {
-        if (err) {
-          console.error(err);
-        }
+    try {
+      const result = await db.campaignAction.getByCampaignId({
+        campaignId,
       });
-    }
 
-    call.end();
+      for (const action of result) {
+        const reply = new GetCampaignActionsReply();
+
+        reply.setId(action.id);
+        reply.setCampaignId(action.campaignId);
+        reply.setInitialInstruction(action.initialInstruction);
+        reply.setReply(action.reply);
+        reply.setIntentAction(action.intentAction);
+
+        call.write(reply, (err) => {
+          if (err) {
+            console.error(err);
+          }
+        });
+      }
+
+      call.end();
+    } catch (error) {
+      call.destroy(error as Error);
+    }
   }
 
   async getCampaignActionMessages(

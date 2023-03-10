@@ -1,5 +1,6 @@
 import { findUserByTelegramUserId } from "@rapydbot/user";
 import { createCampaign } from "@rapydbot/campaign";
+import jwt from "jsonwebtoken";
 
 import { IBotCommand } from "../types";
 import { TGInformerBot } from "../../tg-informer";
@@ -27,6 +28,13 @@ export class CreateCampaignCommand implements IBotCommand {
         issuerId: userId,
       });
 
+      const token = jwt.sign(
+        {
+          userId,
+        },
+        process.env.JWT_SECRET,
+      );
+
       // @TODO i18n
       this.bot.reply(msg, `¡Campaña creada!`, {
         reply_markup: {
@@ -34,7 +42,7 @@ export class CreateCampaignCommand implements IBotCommand {
             [
               {
                 text: `Editar Campaña`,
-                url: `http://tgi.com:3004/campaign/edit/${campaignId}`,
+                url: `http://tgi.com:3004/campaign/edit/${campaignId}?token=${token}`,
               },
             ],
           ],
