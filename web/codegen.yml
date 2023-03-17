@@ -1,4 +1,4 @@
-schema: [src/pages/api/campaign/*.graphql]
+schema: [src/pages/api/campaign/*.graphql, src/pages/api/user/*.graphql]
 documents: "src/pages/api/**/document/**/*.graphql"
 generates:
   ./src/pages/api/codegen/introspection.json:

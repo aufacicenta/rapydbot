@@ -9,6 +9,7 @@ service User {
   rpc CreateUserLocation (CreateUserLocationRequest) returns (CreateUserLocationReply) {}
   rpc GetUser (GetUserRequest) returns (GetUserReply) {}
   rpc GetUsers (GetUsersRequest) returns (stream GetUserReply) {}
+  rpc GetUsersCoordinates (GetUsersCoordinatesRequest) returns (stream GetUsersCoordinatesReply) {}
   rpc FindUserByTelegramUserId (FindUserByTelegramUserIdRequest) returns (FindUserByTelegramUserIdReply) {}
   rpc GetUserIdByTelegramUsername (GetUserIdByTelegramUsernameRequest) returns (GetUserIdByTelegramUsernameReply) {}
   rpc GetUserTelegramChatId (GetUserTelegramChatIdRequest) returns (GetUserTelegramChatIdReply) {}
@@ -43,6 +44,13 @@ message CreateUserLocationReply {
 
 message GetUserRequest {
   string user_id = 1;
+}
+
+message GetUsersCoordinatesRequest {}
+
+message GetUsersCoordinatesReply {
+  double latitude = 1;
+  double longitude = 2;
 }
 
 message GetUsersRequest {

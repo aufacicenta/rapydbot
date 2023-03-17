@@ -1,0 +1,12 @@
+type UserCoordinates {
+  longitude: Float!
+  latitude: Float!
+}
+
+type Mutation {
+  placeholder: Boolean!
+}
+
+type Query {
+  getUsersCoordinates: [UserCoordinates]!
+}

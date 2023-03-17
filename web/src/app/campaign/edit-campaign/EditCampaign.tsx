@@ -1,6 +1,8 @@
 import clsx from "clsx";
-import { useCreateCampaignActionMutation, useGetCampaignActionsQuery } from "api/codegen";
+import { useCreateCampaignActionMutation, useGetCampaignActionsQuery, useGetUsersCoordinatesQuery } from "api/codegen";
 import { Form as RFForm } from "react-final-form";
+import { useEffect, useState } from "react";
+import { LngLat } from "mapbox-gl";
 
 import { Button } from "ui/button/Button";
 import { MainPanel } from "ui/mainpanel/MainPanel";
@@ -18,6 +20,8 @@ import styles from "./EditCampaign.module.scss";
 
 // @TODO i18n
 export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, className }) => {
+  const [informersCoordinates, setInformersCoordinates] = useState<LngLat[]>([]);
+
   useGetAuthToken();
 
   // @TODO handle error
@@ -25,7 +29,21 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
     variables: { input: { campaignId } },
   });
 
+  const getUsersCoordinatesResult = useGetUsersCoordinatesQuery();
+
   const [createCampaignAction, createCampaignActionResult] = useCreateCampaignActionMutation();
+
+  useEffect(() => {
+    if (!getUsersCoordinatesResult.data?.getUsersCoordinates) {
+      return;
+    }
+
+    const coordinates = getUsersCoordinatesResult.data.getUsersCoordinates.map(
+      (lnglat) => new LngLat(lnglat!.longitude, lnglat!.latitude),
+    );
+
+    setInformersCoordinates(coordinates);
+  }, [getUsersCoordinatesResult.data]);
 
   const onSubmit = async (values: CreateCampaignActionForm) => {
     await createCampaignAction({
@@ -46,7 +64,7 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
         </Typography.Anchor>
 
         <section className={styles["edit-campaign__map"]}>
-          <PolygonBounds />
+          <PolygonBounds informersCoordinates={informersCoordinates} />
         </section>
 
         <section>

@@ -16,7 +16,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 let latLngPoints: LngLat[] = [];
 
-export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className }) => {
+export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informersCoordinates }) => {
   const [, setMap] = useState<Map>();
   const [modalMap, setModalMap] = useState<Map>();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,6 +30,10 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className }) => {
     });
 
     setMap(container);
+
+    return () => {
+      container.remove();
+    };
   }, []);
 
   const onClickModalClose = () => {
@@ -71,15 +75,22 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className }) => {
         container: "modal-map",
         style: "mapbox://styles/netpoe/clfcp3c4y000801nywoluppzr",
         center: [-121.403_732, 40.492_392],
-        zoom: 10,
+        zoom: 3,
       });
 
       setModalMap(container);
 
       container.on("load", (_event) => {
-        // @TODO draw all points of informers coordinates from user_location
+        informersCoordinates.forEach((point) => {
+          new mapbox.lib.Marker({ color: "#d7f205" }).setLngLat([point.lng, point.lat]).addTo(container);
+        });
+
         container.addSource("campaign-bounds", {
           type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: [],
+          },
         });
 
         container.addLayer({
@@ -98,10 +109,10 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className }) => {
           type: "circle",
           source: "campaign-bounds",
           paint: {
-            "circle-radius": 6,
+            "circle-radius": 4,
             "circle-color": "#d7f205",
           },
-          filter: ["==", "$type", "Point"],
+          filter: ["==", "icon", "circle"],
         });
       });
 
@@ -113,7 +124,9 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className }) => {
 
         const points = latLngPoints.map((point) => ({
           type: "Feature" as "Feature",
-          properties: {},
+          properties: {
+            icon: "circle",
+          },
           geometry: {
             type: "Point" as "Point",
             coordinates: [point.lng, point.lat],

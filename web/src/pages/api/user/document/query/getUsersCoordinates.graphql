@@ -1,0 +1,6 @@
+query GetUsersCoordinates {
+  getUsersCoordinates {
+    longitude
+    latitude
+  }
+}

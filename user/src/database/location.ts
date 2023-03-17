@@ -36,4 +36,19 @@ export class Location {
       longitude: result.getDataValue("longitude"),
     };
   }
+
+  async findAndCountAll(): Promise<CreateUserLocationReply.AsObject[]> {
+    const result = await this.model.findAndCountAll();
+
+    if (!result) {
+      throw new Error(UserServiceErrorCodes.user_location_find_and_count_all_failed);
+    }
+
+    return result.rows.map((row) => ({
+      locationId: row.getDataValue("id"),
+      userId: row.getDataValue("user_id"),
+      latitude: row.getDataValue("latitude"),
+      longitude: row.getDataValue("longitude"),
+    }));
+  }
 }

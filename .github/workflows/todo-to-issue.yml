@@ -9,4 +9,5 @@ jobs:
               uses: "alstr/todo-to-issue-action@v4"
               with:
                 PROJECTS_SECRET: ${{ secrets.TODO_TO_ISSUE }}
+                INPUT_GITHUB_URL: "https://github.com/"
                 IDENTIFIERS: '[{"name": "@TODO", "labels": []}]'

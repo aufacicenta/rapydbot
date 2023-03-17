@@ -65,4 +65,6 @@ describe("client", () => {
     expect(longitude).toEqual(0.1234);
     expect(latitude).toEqual(0.1234);
   });
+
+  // @TODO Test: get users coordinates — success
 });

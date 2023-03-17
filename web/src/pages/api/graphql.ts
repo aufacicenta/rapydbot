@@ -12,18 +12,26 @@ import { UserClient, UserClientGenerator, getUser } from "@rapydbot/user";
 
 import { createCampaignActionResolver as createCampaignAction } from "./campaign/resolver/create-campaign-action";
 import { getCampaignActionsResolver as getCampaignActions } from "./campaign/resolver/get-campaign-actions";
+import { getUsersCoordinatesResolver as getUsersCoordinates } from "./user/resolver/get-users-coordinates";
 
 const { CAMPAIGN_SERVICE_URL, USER_SERVICE_URL } = process.env;
 
-const schemas = loadTypedefsSync([path.join(process.cwd(), "/src/pages/api/campaign/schema.graphql")], {
-  loaders: [new GraphQLFileLoader()],
-});
+const schemas = loadTypedefsSync(
+  [
+    path.join(process.cwd(), "/src/pages/api/campaign/schema.graphql"),
+    path.join(process.cwd(), "/src/pages/api/user/schema.graphql"),
+  ],
+  {
+    loaders: [new GraphQLFileLoader()],
+  },
+);
 
 const typeDefs = schemas.map((schema) => schema.document) as DocumentNode[];
 
 const resolvers: Resolvers = {
   Query: {
     getCampaignActions,
+    getUsersCoordinates,
   },
   Mutation: {
     createCampaignAction,
