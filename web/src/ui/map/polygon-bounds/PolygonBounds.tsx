@@ -42,6 +42,7 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className }) => {
     setIsModalOpen(false);
 
     const polygonString = mapbox.makePolygonString(latLngPoints);
+    // @TODO save polygonString to campaign.bounds
   };
 
   const onClickModalMapClear = () => {
@@ -76,6 +77,7 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className }) => {
       setModalMap(container);
 
       container.on("load", (_event) => {
+        // @TODO draw all points of informers coordinates from user_location
         container.addSource("campaign-bounds", {
           type: "geojson",
         });
