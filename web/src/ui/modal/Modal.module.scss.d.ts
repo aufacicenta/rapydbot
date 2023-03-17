@@ -4,6 +4,7 @@ export type Styles = {
   "modal__close-button": string;
   "modal__close-button--float": string;
   modal__content: string;
+  modal__flat: string;
   modal__header: string;
   "modal__header--on-close": string;
   "modal__header--on-close-icon": string;

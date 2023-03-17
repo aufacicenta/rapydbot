@@ -2,12 +2,9 @@
 
 @mixin fullscreen {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  align-self: center;
+  width: 95vw;
   max-height: 100%;
-  border-radius: 0;
   overflow-y: auto;
 }
 
@@ -17,11 +14,16 @@
   left: 0;
   z-index: $z-index-modal;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
   padding: $space-ml;
+
+  &__flat {
+    padding: 0 !important;
+  }
 
   &__overlay {
     position: fixed;
@@ -142,6 +144,12 @@
     > *:not(:first-child) {
       width: 100%;
       margin-left: $space-m;
+    }
+
+    > div {
+      *:not(:first-child) {
+        margin-left: $space-m;
+      }
     }
   }
 

@@ -5,14 +5,18 @@
   display: block;
 
   &__banner {
-    margin-right: -$space-m;
+    @include atLargeTablet {
+      margin-right: -$space-m;
+      margin-left: -$space-m;
+    }
+    margin-right: -$space-default;
     margin-bottom: $space-m;
-    margin-left: -$space-m;
+    margin-left: -$space-default;
     border-radius: 10px;
   }
 
   &__intro {
-    margin-bottom: $space-xl;
+    margin-bottom: $space-l;
     font-weight: $font-weight-regular;
 
     strong,

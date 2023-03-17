@@ -11,6 +11,7 @@ import { Form } from "ui/form/Form";
 import { Grid } from "ui/grid/Grid";
 import { Card } from "ui/card/Card";
 import { useGetAuthToken } from "hooks/useGetAuthToken/useGetAuthToken";
+import { PolygonBounds } from "ui/map/polygon-bounds/PolygonBounds";
 
 import { CreateCampaignActionForm, EditCampaignProps } from "./EditCampaign.types";
 import styles from "./EditCampaign.module.scss";
@@ -44,46 +45,52 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
           <Icon name="icon-chevron-left" /> Back to campaigns
         </Typography.Anchor>
 
-        <Typography.Headline1 className={styles["edit-campaign__title"]}>
-          Add questions to your campaign
-        </Typography.Headline1>
+        <section className={styles["edit-campaign__map"]}>
+          <PolygonBounds />
+        </section>
 
-        <RFForm
-          onSubmit={onSubmit}
-          render={({ handleSubmit, form }) => (
-            <form
-              onSubmit={(event) => {
-                handleSubmit(event)!.then(form.reset);
-              }}
-            >
-              <div className={styles["edit-campaign__form--input-box"]}>
-                <Form.Label htmlFor="initialInstruction">What would you like to know?</Form.Label>
-                <Form.TextInput id="initialInstruction" type="text" placeholder="Type a question here..." />
-              </div>
-              <div className={styles["edit-campaign__form--input-box"]}>
-                <Form.Label htmlFor="reply">What should the bot reply after this question?</Form.Label>
-                <Form.TextInput id="reply" type="text" placeholder="Type a reply..." />
-              </div>
-              <div className={styles["edit-campaign__form--input-box"]}>
-                <Grid.Row>
-                  <Grid.Col lg={6}>
-                    <Form.Label htmlFor="intentAction">Add a label to your question</Form.Label>
-                    <Form.TextInput id="intentAction" type="text" placeholder="eg. price_index" />
-                  </Grid.Col>
-                  <Grid.Col lg={6}>
-                    <div className={styles["edit-campaign__form--button-submit"]}>
-                      <Button type="submit" variant="outlined" size="auto" color="secondary">
-                        {createCampaignActionResult.loading ? "Loading..." : "Add Question"}
-                      </Button>
-                    </div>
-                  </Grid.Col>
-                </Grid.Row>
-              </div>
-            </form>
-          )}
-        />
+        <section>
+          <Typography.Headline1 className={styles["edit-campaign__title"]}>
+            Add questions to your campaign
+          </Typography.Headline1>
 
-        <div className={styles["edit-campaign__campaign-actions"]}>
+          <RFForm
+            onSubmit={onSubmit}
+            render={({ handleSubmit, form }) => (
+              <form
+                onSubmit={(event) => {
+                  handleSubmit(event)!.then(form.reset);
+                }}
+              >
+                <div className={styles["edit-campaign__form--input-box"]}>
+                  <Form.Label htmlFor="initialInstruction">What would you like to know?</Form.Label>
+                  <Form.TextInput id="initialInstruction" type="text" placeholder="Type a question here..." />
+                </div>
+                <div className={styles["edit-campaign__form--input-box"]}>
+                  <Form.Label htmlFor="reply">What should the bot reply after this question?</Form.Label>
+                  <Form.TextInput id="reply" type="text" placeholder="Type a reply..." />
+                </div>
+                <div className={styles["edit-campaign__form--input-box"]}>
+                  <Grid.Row>
+                    <Grid.Col lg={6}>
+                      <Form.Label htmlFor="intentAction">Add a label to your question</Form.Label>
+                      <Form.TextInput id="intentAction" type="text" placeholder="eg. price_index" />
+                    </Grid.Col>
+                    <Grid.Col lg={6}>
+                      <div className={styles["edit-campaign__form--button-submit"]}>
+                        <Button type="submit" variant="outlined" size="auto" color="secondary">
+                          {createCampaignActionResult.loading ? "Loading..." : "Add Question"}
+                        </Button>
+                      </div>
+                    </Grid.Col>
+                  </Grid.Row>
+                </div>
+              </form>
+            )}
+          />
+        </section>
+
+        <section className={styles["edit-campaign__campaign-actions"]}>
           {getCampaignActionsResult.loading ? (
             <Typography.Text>Loading...</Typography.Text>
           ) : (
@@ -128,14 +135,14 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
               </Card.Content>
             </Card>
           )}
-        </div>
+        </section>
 
-        <div className={styles["edit-campaign__publish"]}>
+        <section className={styles["edit-campaign__publish"]}>
           {/* @TODO display confirmation modal and check credit balance */}
           <Button variant="outlined" fullWidth>
             Publish Campaign
           </Button>
-        </div>
+        </section>
       </MainPanel.Container>
     </div>
   );

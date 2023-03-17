@@ -4,6 +4,10 @@
 .edit-campaign {
   display: block;
 
+  &__map {
+    margin-bottom: $space-l;
+  }
+
   &__form {
     &--input-box {
       margin-bottom: $space-m;

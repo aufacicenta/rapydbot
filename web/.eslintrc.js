@@ -114,6 +114,7 @@ module.exports = {
       1,
       {
         namedComponents: "arrow-function",
+        unnamedComponents: "arrow-function",
       },
     ],
 

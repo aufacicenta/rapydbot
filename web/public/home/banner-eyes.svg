@@ -1,20 +1,8 @@
-export const HomeBanner = ({ className }: { className?: string }) => (
-  <svg
-    className={className}
-    version="1.1"
-    id="Layer_1"
-    xmlns="http://www.w3.org/2000/svg"
-    x="0px"
-    y="0px"
-    viewBox="0 0 1269 365"
-    style={{ enableBackground: "new 0 0 1269 365" }}
-    xmlSpace="preserve"
-  >
-    <image
-      style={{ overflow: "visible" }}
-      width="1269"
-      height="365"
-      xlinkHref="data:image/jpeg;base64,/9j/4RG+RXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAAUAAAABAAAA
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1269 365" style="enable-background:new 0 0 1269 365;" xml:space="preserve">
+<image style="overflow:visible;" width="1269" height="365" xlink:href="data:image/jpeg;base64,/9j/4RG+RXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAAUAAAABAAAA
 agEoAAMAAAABAAIAAAExAAIAAAAhAAAAcgEyAAIAAAAUAAAAk4dpAAQAAAABAAAAqAAAANQACvyA
 AAAnEAAK/IAAACcQQWRvYmUgUGhvdG9zaG9wIDIyLjUgKE1hY2ludG9zaCkAMjAyMzowMzoxMCAw
 OTowNTowMwAAAAOgAQADAAAAAf//AACgAgAEAAAAAQAABPWgAwAEAAAAAQAAAW0AAAAAAAAABgED
@@ -1647,7 +1635,6 @@ ZyVs/af9kxs5K3esfae39Ewa8lbeqmp7P0TH/JX/APpf2TH/ACWKftL+y4ObkqvepqdP+6Y/5LFf
 1l/ZcCnJZr1/rIU/Rcf8lnwfrIf+FxvcmNm8Goin6Nj/AJMNP2iP/DY/5Man7RH/AIbH/Jr07/2g
 K/o2NvJz5/2gKfo+D/wdJXqHr60/R8GvJ8mbqAv1p8vq+BTk+Snjf19enwegwP8AhGanX/XU/wD0
 cbOUrj/fE6P8Vjd5TuCtOu7QGv8AisLl5TuK+NW8T73osLwuVrtmI3w1zGoB8FEav8XAycrXRTxi
-1zGD8QCHGlafaaPLpv2fO87ySzLJmzpkCgKq/wD4Q//Z"
-    />
-  </svg>
-);
+1zGD8QCHGlafaaPLpv2fO87ySzLJmzpkCgKq/wD4Q//Z">
+</image>
+</svg>

@@ -28,7 +28,6 @@ export const Modal = ({
   onClose,
   afterClose,
   isOpened,
-  isPortalDisabled,
   withDetachedClose,
   "aria-labelledby": ariaLabelledBy,
   "aria-describedby": ariaDescribedBy,
@@ -155,8 +154,8 @@ Modal.Header = ({ children, className, onClose, ...props }: ModalHeaderProps) =>
   );
 };
 
-Modal.Content = ({ className, ...props }: ModalItemProps) => (
-  <div className={clsx(styles.modal__content, className)} {...props} />
+Modal.Content = ({ className, flat, ...props }: ModalItemProps) => (
+  <div className={clsx(styles.modal__content, className, { [styles.modal__flat]: flat })} {...props} />
 );
 
 Modal.Actions = ({ className, ...props }: ModalItemProps) => (
