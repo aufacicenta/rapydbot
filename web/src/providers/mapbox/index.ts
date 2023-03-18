@@ -2,7 +2,15 @@ import mapboxgl from "mapbox-gl";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!;
 
-const makePolygonString = (points: mapboxgl.LngLat[]) => points.map((point) => `${point.lng} ${point.lat}`).join(",");
+const makePolygonString = (points: mapboxgl.LngLat[]) => {
+  if (!points.length) {
+    return "";
+  }
+
+  points.push(points[0]);
+
+  return points.map((point) => `${point.lng} ${point.lat}`).join(",");
+};
 
 const mapbox = { makePolygonString, lib: mapboxgl };
 
