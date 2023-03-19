@@ -13,6 +13,7 @@ service User {
   rpc FindUserByTelegramUserId (FindUserByTelegramUserIdRequest) returns (FindUserByTelegramUserIdReply) {}
   rpc GetUserIdByTelegramUsername (GetUserIdByTelegramUsernameRequest) returns (GetUserIdByTelegramUsernameReply) {}
   rpc GetUserTelegramChatId (GetUserTelegramChatIdRequest) returns (GetUserTelegramChatIdReply) {}
+  rpc GetUsersByLocationBounds (GetUsersByLocationBoundsRequest) returns (stream GetUsersByLocationBoundsReply) {}
 }
 
 message CreateUserRequest {
@@ -87,6 +88,15 @@ message GetUserTelegramChatIdRequest {
 
 message GetUserTelegramChatIdReply {
   int32 private_chat_id = 1;
+}
+
+message GetUsersByLocationBoundsRequest {
+  string bounds = 1;
+}
+
+message GetUsersByLocationBoundsReply {
+  double longitude = 1;
+  double latitude = 2;
 }
 
 message EmptyReply {}

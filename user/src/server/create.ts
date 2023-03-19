@@ -20,6 +20,8 @@ export default (context: IContext) => {
     createUserLocation: (call, callback) =>
       context.controller.createUserLocation({ call, callback }, context),
     getUsersCoordinates: (call) => context.controller.getUsersCoordinates({ call }, context),
+    getUsersByLocationBounds: (call) =>
+      context.controller.getUsersByLocationBounds({ call }, context),
   });
 
   return server;

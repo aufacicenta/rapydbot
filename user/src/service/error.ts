@@ -8,5 +8,6 @@ export const UserServiceErrorCodes = {
   user_location_not_created: "USER_LOCATION_NOT_CREATED",
   user_location_find_and_count_all_failed: "USER_LOCATION_FIND_AND_COUNT_ALL_FAILED",
   user_location_not_updated: "USER_LOCATION_NOT_UPDATED",
+  user_location_get_by_bounds_failed: "USER_LOCATION_GET_BY_BOUNDS_FAILED",
   users_not_found: "USERS_NOT_FOUND",
 };

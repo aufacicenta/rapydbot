@@ -12,6 +12,8 @@ import {
   GetUserIdByTelegramUsernameRequest,
   GetUserReply,
   GetUserRequest,
+  GetUsersByLocationBoundsReply,
+  GetUsersByLocationBoundsRequest,
   GetUsersCoordinatesReply,
   GetUsersCoordinatesRequest,
   GetUsersRequest,
@@ -77,6 +79,36 @@ export class Controller {
 
       for (const user of result) {
         const reply = new GetUsersCoordinatesReply();
+
+        reply.setLongitude(user.longitude);
+        reply.setLatitude(user.latitude);
+
+        call.write(reply, (err) => {
+          if (err) {
+            console.error(err);
+          }
+        });
+      }
+
+      call.end();
+    } catch (error) {
+      call.destroy(error as Error);
+    }
+  }
+
+  async getUsersByLocationBounds(
+    {
+      call,
+    }: gRPCServerStreamingCall<GetUsersByLocationBoundsRequest, GetUsersByLocationBoundsReply>,
+    { db }: IContext,
+  ) {
+    try {
+      const bounds = call.request.getBounds();
+
+      const result = await db.location.getByBounds({ bounds });
+
+      for (const user of result) {
+        const reply = new GetUsersByLocationBoundsReply();
 
         reply.setLongitude(user.longitude);
         reply.setLatitude(user.latitude);
