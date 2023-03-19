@@ -14,40 +14,9 @@ import styles from "./PolygonBounds.module.scss";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
-let latLngPoints: LngLat[] = [];
+const latLngPoints: LngLat[] = [];
 
-const makeCoordinates = (points: LngLat[]) => points.map((point) => [point.lng, point.lat]);
-
-const makePoints = (points: LngLat[]) =>
-  points.map((point) => ({
-    type: "Feature" as "Feature",
-    properties: {
-      icon: "circle",
-    },
-    geometry: {
-      type: "Point" as "Point",
-      coordinates: [point.lng, point.lat],
-    },
-  }));
-
-const makeFeatures = (_points: LngLat[]) => {
-  const coordinates = makeCoordinates(_points);
-  const points = makePoints(_points);
-
-  return [
-    {
-      type: "Feature" as "Feature",
-      properties: {},
-      geometry: {
-        type: "Polygon" as "Polygon",
-        coordinates: [[...coordinates]],
-      },
-    },
-    ...points,
-  ];
-};
-
-export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informersCoordinates }) => {
+export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informersCoordinates, onSaveBounds }) => {
   const [, setMap] = useState<Map>();
   const [modalMap, setModalMap] = useState<Map>();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,15 +42,21 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informe
     modalMap!.remove();
   };
 
-  const onClickSaveModalMap = () => {
+  const onClickSaveModalMap = async () => {
     setIsModalOpen(false);
 
     const polygonString = mapbox.makePolygonString(latLngPoints);
-    // @TODO save polygonString to campaign.bounds
+
+    try {
+      await onSaveBounds(polygonString);
+    } catch (error) {
+      // @TODO Handle onClickSaveModalMap error — use campaign service error codes
+      console.error(error);
+    }
   };
 
   const onClickModalMapClear = () => {
-    latLngPoints = [];
+    latLngPoints.splice(0, latLngPoints.length);
 
     (modalMap!.getSource("campaign-bounds") as GeoJSONSource)?.setData({
       type: "FeatureCollection",
@@ -116,7 +91,7 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informe
           new mapbox.lib.Marker({ color: "#d7f205" }).setLngLat([point.lng, point.lat]).addTo(container);
         });
 
-        const features = makeFeatures(latLngPoints);
+        const features = mapbox.makeFeatures(latLngPoints);
 
         container.addSource("campaign-bounds", {
           type: "geojson",
@@ -127,7 +102,7 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informe
         });
 
         container.addLayer({
-          id: "campaign-bounds",
+          id: "campaign-polygon",
           type: "fill",
           source: "campaign-bounds",
           paint: {
@@ -138,7 +113,7 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informe
         });
 
         container.addLayer({
-          id: "campaign-point",
+          id: "campaign-points",
           type: "circle",
           source: "campaign-bounds",
           paint: {
@@ -152,7 +127,7 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informe
       container.on("click", (event) => {
         latLngPoints.push(event.lngLat);
 
-        const features = makeFeatures(latLngPoints);
+        const features = mapbox.makeFeatures(latLngPoints);
 
         (container.getSource("campaign-bounds") as GeoJSONSource)?.setData({
           type: "FeatureCollection",

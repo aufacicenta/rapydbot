@@ -1,5 +1,11 @@
 import clsx from "clsx";
-import { useCreateCampaignActionMutation, useGetCampaignActionsQuery, useGetUsersCoordinatesQuery } from "api/codegen";
+import {
+  SetCampaignBoundsInput,
+  useCreateCampaignActionMutation,
+  useGetCampaignActionsQuery,
+  useGetUsersCoordinatesQuery,
+  useSetCampaignBoundsMutation,
+} from "api/codegen";
 import { Form as RFForm } from "react-final-form";
 import { useEffect, useState } from "react";
 import { LngLat } from "mapbox-gl";
@@ -32,6 +38,7 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
   const getUsersCoordinatesResult = useGetUsersCoordinatesQuery();
 
   const [createCampaignAction, createCampaignActionResult] = useCreateCampaignActionMutation();
+  const [setCampaignBounds, setCampaignBoundsResult] = useSetCampaignBoundsMutation();
 
   useEffect(() => {
     if (!getUsersCoordinatesResult.data?.getUsersCoordinates) {
@@ -53,6 +60,14 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
     });
   };
 
+  const onSetCampaignBounds = async (bounds: SetCampaignBoundsInput["bounds"]) => {
+    await setCampaignBounds({
+      variables: {
+        input: { campaignId, bounds },
+      },
+    });
+  };
+
   return (
     <div className={clsx(styles["edit-campaign"], className)}>
       <MainPanel.Container>
@@ -64,7 +79,7 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
         </Typography.Anchor>
 
         <section className={styles["edit-campaign__map"]}>
-          <PolygonBounds informersCoordinates={informersCoordinates} />
+          <PolygonBounds informersCoordinates={informersCoordinates} onSaveBounds={onSetCampaignBounds} />
         </section>
 
         <section>

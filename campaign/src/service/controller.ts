@@ -13,6 +13,8 @@ import {
   GetCampaignActionMessagesRequest,
   GetCampaignActionsReply,
   GetCampaignActionsRequest,
+  SetCampaignBoundsReply,
+  SetCampaignBoundsRequest,
 } from "../server/protos/schema_pb";
 
 type GRPCUnaryCall<Request, Reply> = {
@@ -94,6 +96,34 @@ export class Controller {
       const reply = new CreateCampaignActionMessageReply();
 
       reply.setId(id);
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async setCampaignBounds(
+    { call, callback }: GRPCUnaryCall<SetCampaignBoundsRequest, SetCampaignBoundsReply>,
+    { db }: IContext,
+  ) {
+    try {
+      const campaignId = call.request.getCampaignId();
+      const bounds = call.request.getBounds();
+      const issuerId = call.request.getIssuerId();
+
+      // @TODO Verify that the issuer is the owner of the campaign at setCampaignBounds
+
+      await db.campaign.setBounds({
+        campaignId,
+        bounds,
+        issuerId,
+      });
+
+      const reply = new SetCampaignBoundsReply();
+
+      reply.setCampaignId(campaignId);
+      reply.setBounds(bounds);
 
       callback(null, reply);
     } catch (error) {

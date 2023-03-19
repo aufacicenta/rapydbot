@@ -11,6 +11,7 @@ import { CampaignClient, CampaignClientGenerator } from "@rapydbot/campaign";
 import { UserClient, UserClientGenerator, getUser } from "@rapydbot/user";
 
 import { createCampaignActionResolver as createCampaignAction } from "./campaign/resolver/create-campaign-action";
+import { setCampaignBoundsResolver as setCampaignBounds } from "./campaign/resolver/set-campaign-bounds";
 import { getCampaignActionsResolver as getCampaignActions } from "./campaign/resolver/get-campaign-actions";
 import { getUsersCoordinatesResolver as getUsersCoordinates } from "./user/resolver/get-users-coordinates";
 
@@ -35,6 +36,7 @@ const resolvers: Resolvers = {
   },
   Mutation: {
     createCampaignAction,
+    setCampaignBounds,
   },
 };
 

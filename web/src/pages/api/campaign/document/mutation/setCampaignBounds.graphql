@@ -1,0 +1,6 @@
+mutation SetCampaignBounds($input: SetCampaignBoundsInput!) {
+  setCampaignBounds(input: $input) {
+    campaignId
+    bounds
+  }
+}

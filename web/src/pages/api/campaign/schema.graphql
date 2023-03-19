@@ -5,6 +5,11 @@ input CreateCampaignActionInput {
   intentAction: String!
 }
 
+input SetCampaignBoundsInput {
+  campaignId: String!
+  bounds: String!
+}
+
 input GetCampaignsByUserIdInput {
   campaignId: String!
   initialInstruction: String!
@@ -26,10 +31,13 @@ type CampaignAction {
 
 type Campaign {
   campaignId: String!
+  issuerId: String
+  bounds: String
 }
 
 type Mutation {
   createCampaignAction(input: CreateCampaignActionInput!): CampaignAction!
+  setCampaignBounds(input: SetCampaignBoundsInput!): Campaign!
 }
 
 type Query {

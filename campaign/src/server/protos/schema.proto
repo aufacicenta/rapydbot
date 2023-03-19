@@ -8,6 +8,7 @@ service Campaign {
   rpc CreateCampaign (CreateCampaignRequest) returns (CreateCampaignReply) {}
   rpc CreateCampaignAction (CreateCampaignActionRequest) returns (CreateCampaignActionReply) {}
   rpc CreateCampaignActionMessage (CreateCampaignActionMessageRequest) returns (CreateCampaignActionMessageReply) {}
+  rpc SetCampaignBounds (SetCampaignBoundsRequest) returns (SetCampaignBoundsReply) {}
   rpc GetCampaignActions (GetCampaignActionsRequest) returns (stream GetCampaignActionsReply) {}
   rpc GetCampaignActionMessages (GetCampaignActionMessagesRequest) returns (stream GetCampaignActionMessagesReply) {}
   rpc GetCampaignActionMessagesByUserId (GetCampaignActionMessagesByUserIdRequest) returns (stream GetCampaignActionMessagesReply) {}
@@ -40,6 +41,17 @@ message CreateCampaignActionMessageRequest {
 
 message CreateCampaignActionMessageReply {
   string id = 1;
+}
+
+message SetCampaignBoundsRequest {
+  string campaign_id = 1;
+  string issuer_id = 2;
+  string bounds = 3;
+}
+
+message SetCampaignBoundsReply {
+  string campaign_id = 1;
+  string bounds = 2;
 }
 
 message GetCampaignActionsRequest {

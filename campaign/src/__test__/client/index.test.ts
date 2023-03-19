@@ -146,4 +146,6 @@ describe("client", () => {
       expect(message.userId).toEqual(user1);
     }
   });
+
+  // @TODO Test setCampaignBounds — success
 });
