@@ -16,10 +16,17 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 const latLngPoints: LngLat[] = [];
 
-export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informersCoordinates, onSaveBounds }) => {
+export const PolygonBounds: React.FC<PolygonBoundsProps> = ({
+  className,
+  informersCoordinates,
+  onSaveBounds,
+  onSaveBoundsState,
+  getUsersByLocationBoundsState,
+}) => {
   const [, setMap] = useState<Map>();
   const [modalMap, setModalMap] = useState<Map>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [estUsersByLocationBoundsCount, setEstUsersByLocationBoundsCount] = useState(0);
 
   useEffect(() => {
     const container = new mapbox.lib.Map({
@@ -36,6 +43,14 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informe
     };
   }, []);
 
+  useEffect(() => {
+    if (!getUsersByLocationBoundsState.data?.getUsersByLocationBounds) {
+      return;
+    }
+
+    setEstUsersByLocationBoundsCount(getUsersByLocationBoundsState.data?.getUsersByLocationBounds.length);
+  }, [getUsersByLocationBoundsState.data]);
+
   const onClickModalClose = () => {
     setIsModalOpen(false);
 
@@ -43,8 +58,6 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informe
   };
 
   const onClickSaveModalMap = async () => {
-    setIsModalOpen(false);
-
     const polygonString = mapbox.makePolygonString(latLngPoints);
 
     try {
@@ -91,6 +104,7 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informe
           new mapbox.lib.Marker({ color: "#d7f205" }).setLngLat([point.lng, point.lat]).addTo(container);
         });
 
+        // @TODO Load latLngPoints from campaign.bounds to show existing bounds
         const features = mapbox.makeFeatures(latLngPoints);
 
         container.addSource("campaign-bounds", {
@@ -159,14 +173,28 @@ export const PolygonBounds: React.FC<PolygonBoundsProps> = ({ className, informe
         </Modal.Header>
         <Modal.Content flat className={styles["polygon-bounds__modal--content"]}>
           <div id="modal-map" className={styles["polygon-bounds__modal--map"]} />
+          <span />
+          <div className={styles["polygon-bounds__modal--map-stats"]}>
+            <div>
+              <Typography.Description>Est. users by region drawn</Typography.Description>
+              <Typography.Text flat>
+                {onSaveBoundsState.loading || getUsersByLocationBoundsState.loading
+                  ? "loading"
+                  : estUsersByLocationBoundsCount}
+              </Typography.Text>
+            </div>
+          </div>
         </Modal.Content>
         <Modal.Actions>
           <div>
-            <Button variant="outlined" onClick={onClickModalMapClear}>
+            <Button variant="outlined" color="secondary" onClick={onClickModalMapClear}>
               Clear
             </Button>
             <Button variant="outlined" onClick={onClickSaveModalMap}>
               Set bounds
+            </Button>
+            <Button variant="outlined" color="secondary" onClick={onClickModalClose}>
+              Done
             </Button>
           </div>
         </Modal.Actions>

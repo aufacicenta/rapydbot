@@ -3,6 +3,7 @@ export type Styles = {
   "polygon-bounds__map": string;
   "polygon-bounds__modal--content": string;
   "polygon-bounds__modal--map": string;
+  "polygon-bounds__modal--map-stats": string;
   "polygon-bounds__overlay": string;
   "z-depth-0": string;
   "z-depth-1": string;

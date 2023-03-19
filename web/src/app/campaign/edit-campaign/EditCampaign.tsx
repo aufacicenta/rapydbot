@@ -3,6 +3,7 @@ import {
   SetCampaignBoundsInput,
   useCreateCampaignActionMutation,
   useGetCampaignActionsQuery,
+  useGetUsersByLocationBoundsLazyQuery,
   useGetUsersCoordinatesQuery,
   useSetCampaignBoundsMutation,
 } from "api/codegen";
@@ -36,6 +37,7 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
   });
 
   const getUsersCoordinatesResult = useGetUsersCoordinatesQuery();
+  const [getUsersByLocationBounds, getUsersByLocationBoundsResult] = useGetUsersByLocationBoundsLazyQuery();
 
   const [createCampaignAction, createCampaignActionResult] = useCreateCampaignActionMutation();
   const [setCampaignBounds, setCampaignBoundsResult] = useSetCampaignBoundsMutation();
@@ -52,6 +54,24 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
     setInformersCoordinates(coordinates);
   }, [getUsersCoordinatesResult.data]);
 
+  useEffect(() => {
+    if (!setCampaignBoundsResult.data?.setCampaignBounds?.bounds) {
+      return;
+    }
+
+    (async () => {
+      const { bounds } = setCampaignBoundsResult.data!.setCampaignBounds;
+
+      await getUsersByLocationBounds({
+        variables: {
+          input: {
+            bounds: bounds!,
+          },
+        },
+      });
+    })();
+  }, [setCampaignBoundsResult.data]);
+
   const onSubmit = async (values: CreateCampaignActionForm) => {
     await createCampaignAction({
       variables: {
@@ -66,6 +86,8 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
         input: { campaignId, bounds },
       },
     });
+
+    // @TODO Handle setCampaignBoundsResult — display toast or update UI
   };
 
   return (
@@ -79,7 +101,12 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
         </Typography.Anchor>
 
         <section className={styles["edit-campaign__map"]}>
-          <PolygonBounds informersCoordinates={informersCoordinates} onSaveBounds={onSetCampaignBounds} />
+          <PolygonBounds
+            informersCoordinates={informersCoordinates}
+            onSaveBounds={onSetCampaignBounds}
+            onSaveBoundsState={setCampaignBoundsResult}
+            getUsersByLocationBoundsState={getUsersByLocationBoundsResult}
+          />
         </section>
 
         <section>

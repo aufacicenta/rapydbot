@@ -14,6 +14,7 @@ import { createCampaignActionResolver as createCampaignAction } from "./campaign
 import { setCampaignBoundsResolver as setCampaignBounds } from "./campaign/resolver/set-campaign-bounds";
 import { getCampaignActionsResolver as getCampaignActions } from "./campaign/resolver/get-campaign-actions";
 import { getUsersCoordinatesResolver as getUsersCoordinates } from "./user/resolver/get-users-coordinates";
+import { getUsersByLocationBoundsResolver as getUsersByLocationBounds } from "./user/resolver/get-users-by-location-bounds";
 
 const { CAMPAIGN_SERVICE_URL, USER_SERVICE_URL } = process.env;
 
@@ -33,6 +34,7 @@ const resolvers: Resolvers = {
   Query: {
     getCampaignActions,
     getUsersCoordinates,
+    getUsersByLocationBounds,
   },
   Mutation: {
     createCampaignAction,

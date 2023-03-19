@@ -1,3 +1,7 @@
+input GetUsersByLocationBoundsInput {
+  bounds: String!
+}
+
 type UserCoordinates {
   longitude: Float!
   latitude: Float!
@@ -9,4 +13,5 @@ type Mutation {
 
 type Query {
   getUsersCoordinates: [UserCoordinates]!
+  getUsersByLocationBounds(input: GetUsersByLocationBoundsInput!): [UserCoordinates]!
 }
