@@ -3,10 +3,13 @@ import { GetServerSidePropsContext, NextPage } from "next";
 import { DashboardLayout } from "layouts/dashboard-layout/DashboardLayout";
 import { EditCampaignContainer } from "app/campaign/edit-campaign/EditCampaignContainer";
 import { EditCampaignContainerProps } from "app/campaign/edit-campaign/EditCampaign.types";
+import { CheckoutContextController } from "context/checkout/CheckoutContextController";
 
 const Page: NextPage<EditCampaignContainerProps> = ({ campaignId }) => (
   <DashboardLayout>
-    <EditCampaignContainer campaignId={campaignId} />
+    <CheckoutContextController>
+      <EditCampaignContainer campaignId={campaignId} />
+    </CheckoutContextController>
   </DashboardLayout>
 );
 

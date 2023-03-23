@@ -25,13 +25,13 @@ import { PolygonBounds } from "ui/map/polygon-bounds/PolygonBounds";
 import { CreateCampaignActionForm, EditCampaignProps } from "./EditCampaign.types";
 import styles from "./EditCampaign.module.scss";
 
-// @TODO i18n
+// @TODO i18n: EditCampaign
 export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, className }) => {
   const [informersCoordinates, setInformersCoordinates] = useState<LngLat[]>([]);
 
   useGetAuthToken();
 
-  // @TODO handle error
+  // @TODO handle error getCampaignActionsResult
   const getCampaignActionsResult = useGetCampaignActionsQuery({
     variables: { input: { campaignId } },
   });
@@ -95,7 +95,7 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
       <MainPanel.Container>
         <Navbar />
 
-        {/* @TODO back to campaigns */}
+        {/* @TODO back to campaigns breadcrumbs component */}
         <Typography.Anchor href="#" className={styles["edit-campaign__breadcrumb"]}>
           <Icon name="icon-chevron-left" /> Back to campaigns
         </Typography.Anchor>
@@ -161,7 +161,7 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
                     <Typography.Headline2 flat>Campaign Questions</Typography.Headline2>
                   </Grid.Col>
                   <Grid.Col>
-                    {/* @TODO calc price per campaign session */}
+                    {/* @TODO calc price per campaign total actions. Should campaign issuer set a price to attract more users? */}
                     <div className={styles["edit-campaign__campaign-actions--price"]}>
                       <Typography.Description flat>* Price per informer</Typography.Description>
                       <Typography.Text flat>USDT 1.00</Typography.Text>
@@ -198,7 +198,7 @@ export const EditCampaign: React.FC<EditCampaignProps> = ({ campaignId, classNam
         </section>
 
         <section className={styles["edit-campaign__publish"]}>
-          {/* @TODO display confirmation modal and check credit balance */}
+          {/* @TODO Display publish campaign confirmation modal and check credit balance */}
           <Button variant="outlined" fullWidth>
             Publish Campaign
           </Button>

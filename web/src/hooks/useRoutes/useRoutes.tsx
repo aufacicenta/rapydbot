@@ -12,6 +12,7 @@ type RouteMap = {
   };
   api: {
     graphql: () => string;
+    getCheckoutURL: () => string;
   };
 };
 
@@ -19,6 +20,7 @@ export const routes: RouteMap = {
   home: () => `/`,
   api: {
     graphql: () => `/api/graphql`,
+    getCheckoutURL: () => `/api/btcpayserver/get-checkout-url`,
   },
   market: {
     price: ({ marketId }) => `/market/price/${marketId}`,

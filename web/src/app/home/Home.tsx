@@ -11,7 +11,7 @@ import { HomeBanner } from "ui/icons/HomeBanner";
 import styles from "./Home.module.scss";
 import { HomeProps } from "./Home.types";
 
-// @TODO i18n
+// @TODO i18n: Home
 export const Home = ({ className }: HomeProps) => (
   <div className={clsx(styles.home, className)}>
     <MainPanel.Container>
@@ -109,6 +109,18 @@ export const Home = ({ className }: HomeProps) => (
               <Card.Content>
                 <Typography.Text flat>
                   Request an opinion over a certain idea or product to complement your marketing strategy.
+                </Typography.Text>
+              </Card.Content>
+            </Card>
+          </Grid.Col>
+          <Grid.Col lg={6} className={styles["home__use-cases--card-box"]}>
+            <Card className={styles["home__use-cases--card"]}>
+              <Card.Header>
+                <Typography.Headline4 flat>Event Outcome Verification</Typography.Headline4>
+              </Card.Header>
+              <Card.Content>
+                <Typography.Text flat>
+                  Ensure that your event is going as planned by requesting a real-time report from the attendees.
                 </Typography.Text>
               </Card.Content>
             </Card>
