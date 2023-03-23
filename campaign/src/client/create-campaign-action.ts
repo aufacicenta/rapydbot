@@ -3,7 +3,7 @@ import { CampaignClient, CreateCampaignActionReply, CreateCampaignActionRequest 
 export const createCampaignAction = (
   client: CampaignClient,
   { campaignId, initialInstruction, intentAction, reply }: CreateCampaignActionRequest.AsObject,
-): Promise<CreateCampaignActionReply.AsObject["campaignActionId"]> => {
+): Promise<CreateCampaignActionReply.AsObject> => {
   const request = new CreateCampaignActionRequest();
 
   request.setCampaignId(campaignId);
@@ -17,7 +17,9 @@ export const createCampaignAction = (
         throw error;
       }
 
-      resolve(reply.getCampaignActionId());
+      resolve({
+        campaignActionId: reply.getCampaignActionId(),
+      });
     });
   });
 };

@@ -1,0 +1,46 @@
+input CreateCampaignActionInput {
+  campaignId: String!
+  initialInstruction: String!
+  reply: String!
+  intentAction: String!
+}
+
+input SetCampaignBoundsInput {
+  campaignId: String!
+  bounds: String!
+}
+
+input GetCampaignsByUserIdInput {
+  campaignId: String!
+  initialInstruction: String!
+  reply: String!
+  intentAction: String!
+}
+
+input GetCampaignActionsInput {
+  campaignId: String!
+}
+
+type CampaignAction {
+  campaignActionId: String!
+  campaignId: String
+  initialInstruction: String
+  reply: String
+  intentAction: String
+}
+
+type Campaign {
+  campaignId: String!
+  issuerId: String
+  bounds: String
+}
+
+type Mutation {
+  createCampaignAction(input: CreateCampaignActionInput!): CampaignAction!
+  setCampaignBounds(input: SetCampaignBoundsInput!): Campaign!
+}
+
+type Query {
+  getCampaignsByUserId(input: GetCampaignsByUserIdInput): [Campaign]!
+  getCampaignActions(input: GetCampaignActionsInput!): [CampaignAction]!
+}

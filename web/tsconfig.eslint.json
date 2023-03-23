@@ -1,0 +1,19 @@
+{
+  "extraFileExtensions": [".json"],
+  "include": [
+    "*.js",
+    "*.ts",
+    "scripts/**/*.js",
+    "scripts/**/*.ts",
+    ".eslintrc.js",
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.tsx",
+    "src/**/*.jsx",
+    "storybook/**/*.js",
+    "storybook/**/*.ts",
+    "storybook/**/*.jsx",
+    "storybook/**/*.tsx"
+  ],
+  "exclude": ["src/pages/api/codegen/*"]
+}

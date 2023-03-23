@@ -1,0 +1,39 @@
+@mixin font-properties($fs-map) {
+  @if deep-map-check($fs-map, "font", "lineHeight") {
+    line-height: get("font.lineHeight", $fs-map);
+  }
+  @if deep-map-check($fs-map, "font", "weight") {
+    font-weight: get("font.weight", $fs-map);
+  }
+  @if deep-map-check($fs-map, "font", "color") {
+    color: get("font.color", $fs-map);
+  }
+  @if deep-map-check($fs-map, "font", "transform") {
+    text-transform: get("font.transform", $fs-map);
+  }
+  @if deep-map-check($fs-map, "font", "style") {
+    font-style: get("font.style", $fs-map);
+  }
+  @if deep-map-check($fs-map, "font", "stretch") {
+    font-stretch: get("font.stretch", $fs-map);
+  }
+  @if deep-map-check($fs-map, "font", "fontFamily") {
+    font-family: get("font.fontFamily", $fs-map);
+  }
+  @if deep-map-check($fs-map, "font", "letterSpacing") {
+    letter-spacing: get("font.letterSpacing", $fs-map);
+  }
+  @if map-get($map: $fs-map, $key: sizes) {
+    @each $break-point in get("sizes", $fs-map) {
+      $bp: nth($break-point, 1);
+
+      @media screen and (min-width: map-get($map: $breakpoints, $key: $bp)) {
+        @if not deep-map-check($fs-map, "sizes.#{$bp}.font.lineHeight") {
+          line-height: get("sizes.#{$bp}.font.lineHeight", $fs-map);
+        }
+        font-size: get("sizes.#{$bp}.font.size", $fs-map);
+      }
+    }
+  }
+  font-size: get("font.size", $fs-map);
+}

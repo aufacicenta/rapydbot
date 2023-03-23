@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 
 import { Campaign } from "../../database/campaign";
 import { CampaignAction } from "../../database/campaign-action";
-import { CampaignUser } from "../../database/campaign-user";
+import { CampaignActionMessage } from "../../database/campaign-action-message";
 import { Controller } from "../../service/controller";
 
 export type IContext = {
@@ -10,7 +10,7 @@ export type IContext = {
   db: {
     driver: Sequelize;
     campaign: Campaign;
-    campaignActions: CampaignAction;
-    campaignUser: CampaignUser;
+    campaignAction: CampaignAction;
+    campaignActionMessage: CampaignActionMessage;
   };
 };

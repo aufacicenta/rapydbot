@@ -1,0 +1,51 @@
+@import "src/theme/base";
+
+.theme-selector {
+  position: relative;
+  border-radius: $border-radius-pill;
+  padding: 1px;
+  background: linear-gradient(var(--color-theme-button-dark), var(--color-theme-button-light));
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 45px;
+    height: 100px;
+    border: none;
+    border-radius: inherit;
+    padding: $space-xs;
+    background-color: var(--color-dark-10);
+  }
+
+  &__moon {
+    color: var(--color-dark-3);
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &--active {
+      color: var(--color-typography-text);
+    }
+  }
+
+  &__sun {
+    color: var(--color-dark-7);
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &--active {
+      color: var(--color-typography-text);
+    }
+  }
+
+  &__divider {
+    width: 80%;
+    height: 1px;
+    background-color: var(--color-theme-button-divider);
+  }
+}

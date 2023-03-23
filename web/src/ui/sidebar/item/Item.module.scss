@@ -1,0 +1,35 @@
+@import "../../../theme/base";
+
+.item {
+  margin-bottom: $space-default;
+  color: var(--color-sidebar-item);
+
+  &__icon {
+    &--wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 32px;
+
+      svg {
+        width: 18px;
+        fill: var(--color-sidebar-item);
+      }
+    }
+  }
+
+  &__text {
+    &--wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 32px;
+
+      @include font-properties($typography-text);
+    }
+  }
+
+  &__url {
+    text-decoration: none;
+  }
+}

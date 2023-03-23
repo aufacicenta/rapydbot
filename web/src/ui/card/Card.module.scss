@@ -1,0 +1,51 @@
+@import "src/theme/base";
+
+.card {
+  border: 1px solid var(--color-card-border);
+  border-radius: $border-radius-card;
+
+  &__shadow {
+    @extend .z-depth-1;
+  }
+
+  &__content {
+    padding: 1.3rem $space-default;
+  }
+
+  &__header {
+    @include font-properties($typography-headline-2);
+    border-bottom: 1px solid var(--color-white);
+    border-top-left-radius: $border-radius-card;
+    border-top-right-radius: $border-radius-card;
+    padding: 1.3rem $space-default;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid var(--color-background-contrast);
+    padding: $space-default;
+
+    > button,
+    > p {
+      align-self: center;
+
+      &:nth-child(n + 2) {
+        margin-left: $space-default;
+      }
+    }
+  }
+
+  &__background-image {
+    height: 150px;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+  }
+
+  &__link {
+    cursor: pointer;
+  }
+}

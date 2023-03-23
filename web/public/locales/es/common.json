@@ -1,0 +1,9 @@
+{
+  "pulseSidebar.item.dashboard": "Dashboard",
+  "pulseSidebar.item.sportAndBetting": "Sport & Betting",
+  "pulseSidebar.item.bets": "Bets",
+  "pulseSidebar.item.profile": "Profile",
+  "pulseSidebar.item.close": "Close",
+  "button.createMarket": "Create Market",
+  "toast.cta.dismiss": "Dismiss"
+}

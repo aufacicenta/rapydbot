@@ -1,11 +1,14 @@
 import { DataTypes, Model, ModelOptions } from "sequelize";
 
+import { CampaignModel } from "./campaign";
+
 export type CampaignActionModelArgs = {
   id?: string;
   campaign_id: string;
   initial_instruction: string;
   reply: string;
   intent_action: string;
+  campaign?: CampaignModel;
 };
 
 export class CampaignActionModel extends Model<CampaignActionModelArgs> {

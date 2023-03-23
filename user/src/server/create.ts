@@ -17,6 +17,11 @@ export default (context: IContext) => {
       context.controller.getUserIdByTelegramUsername({ call, callback }, context),
     getUserTelegramChatId: (call, callback) =>
       context.controller.getUserTelegramChatId({ call, callback }, context),
+    createUserLocation: (call, callback) =>
+      context.controller.createUserLocation({ call, callback }, context),
+    getUsersCoordinates: (call) => context.controller.getUsersCoordinates({ call }, context),
+    getUsersByLocationBounds: (call) =>
+      context.controller.getUsersByLocationBounds({ call }, context),
   });
 
   return server;

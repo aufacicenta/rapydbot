@@ -1,0 +1,19 @@
+@import "src/theme/base";
+@import "src/ui/fixed-top-alert/variables";
+
+.dashboard-layout {
+  position: relative;
+  display: flex;
+
+  &__sidebar {
+    &--trigger {
+      padding-top: $space-default;
+      font-size: $font-size-headline-2;
+      color: var(--color-typography-text);
+    }
+  }
+
+  &__with-top-alert {
+    margin-top: $fixed-top-alert-height;
+  }
+}

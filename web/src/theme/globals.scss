@@ -1,0 +1,252 @@
+@import "src/theme/base";
+@import "./forms/forms";
+@import "./icons";
+@import "./fonts";
+@import "src/ui/table/reboot";
+
+html {
+  @media (max-width: $mq-medium) {
+    font-size: 14px;
+  }
+  font-size: 14px;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $font-family-display;
+}
+
+body {
+  position: relative;
+}
+
+#__next {
+  position: relative;
+}
+
+a {
+  text-decoration: underline;
+  color: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.dropzone {
+  .dz-preview {
+    display: none;
+  }
+
+  &.dz-started {
+    .dz-message {
+      display: flex;
+    }
+  }
+}
+
+body[data-theme="dark"] {
+  --color-status-info: #548dff;
+  --color-status-info-light: rgba(83, 86, 252, 0.7);
+  --color-status-info-lighter: rgba(83, 86, 252, 0.4);
+  --color-status-success: #3dd598;
+  --color-status-success-light: #d6fff5;
+  --color-status-success-lighter: #e6fff9;
+  --color-status-warning: #ffd74b;
+  --color-status-warning-light: #fffdb8;
+  --color-status-warning-lighter: #fffeeb;
+  --color-status-critical: #bd2d00;
+  --color-status-critical-light: #ffe2e0;
+  --color-status-critical-lighter: #fff5f5;
+  --color-status-unknown: #f4f6f8;
+
+  --color-white: #f2e8d5;
+  --color-black: #222621;
+  --color-dark-11: #222529;
+  --color-dark-10: #2c3035;
+  --color-dark-9: #2c3035;
+  --color-dark-8: #40404a;
+  --color-dark-7: #5b5b65;
+  --color-dark-6: #70707c;
+  --color-dark-5: #8a8a98;
+  --color-dark-4: #a9a9b7;
+  --color-dark-3: #d0d0da;
+  --color-dark-2: #f5f5ff;
+  --color-dark-1: #ffffff;
+
+  --color-primary: rgba(215, 242, 5, 1);
+  --color-secondary: #bf533f;
+
+  --color-background: var(--color-black);
+  --color-background-contrast: var(--color-dark-10);
+
+  --color-sidebar-item: var(--color-white);
+  --color-sidebar-divider: var(--color-dark-8);
+
+  --color-navbar-logo: var(--color-primary);
+
+  --color-button-primary: var(--color-primary);
+  --color-button-primary-text: var(--color-primary);
+  --color-button-primary-hover: var(--color-white);
+  --color-button-primary-hover-text: var(--color-white);
+  --color-button-secondary: var(--color-white);
+  --color-button-secondary-text: var(--color-white);
+  --color-button-secondary-hover: var(--color-primary);
+  --color-button-secondary-hover-text: var(--color-primary);
+
+  --color-button-outlined-info: #ffd74b;
+  --color-button-outlined-info-text: #ffd74b;
+  --color-button-outlined-disabled: #5b5b65;
+  --color-button-outlined-disabled-text: #8a8a98;
+
+  --color-theme-button-light: #ffffff00;
+  --color-theme-button-dark: #ffffff40;
+  --color-theme-button-divider: var(--color-background-contrast);
+
+  --color-typography-headline-1: var(--color-white);
+  --color-typography-headline-2: var(--color-white);
+  --color-typography-headline-3: var(--color-white);
+  --color-typography-headline-4: var(--color-white);
+  --color-typography-headline-5: var(--color-white);
+  --color-typography-headline-6: var(--color-white);
+  --color-typography-text: var(--color-white);
+  --color-typography-text-bold: var(--color-white);
+  --color-typography-subtitle: var(--color-dark-5);
+  --color-typography-button-label: var(--color-white);
+  --color-typography-mini-button-label: var(--color-white);
+  --color-typography-description: #8a8a98;
+  --color-typography-mini-description: var(--color-dark-4);
+  --color-typography-link: var(--color-primary);
+
+  --color-tab-navigation-border: var(--color-dark-7);
+  --color-tab-item-default: var(--color-dark-7);
+  --color-tab-item-active: var(--color-white);
+
+  --color-card-background: rgba(22, 27, 28, 0.4);
+  --color-card-border: var(--color-white);
+  --color-card-background-contrast: var(--color-background);
+  --color-card-title: #fff;
+  --color-card-stat: #b1b1b1;
+
+  --color-fees-card-background: #ffd74b;
+  --color-fees-card-text: #fff;
+
+  --color-horizontal-line-background: #3c3c3c;
+
+  --color-value-increase: #00d3a1;
+  --color-value-increase-bright: #00bb8e;
+  --color-value-decrease: #ff7c35;
+  --color-value-decrease-bright: #e76823;
+
+  --color-input-text: var(--color-typography-text);
+  --color-input-text-disabled: var(--color-typography-description);
+  --color-input-border: var(--color-white);
+  --color-input-label: rgba(255, 255, 255, 0.7);
+  --color-input-placeholder: rgba(255, 255, 255, 0.22);
+}
+
+body[data-theme="light"] {
+  --color-status-info: #2c5dbf;
+  --color-status-info-light: rgba(21, 63, 189, 0.6);
+  --color-status-info-lighter: rgba(21, 63, 189, 0.3);
+  --color-status-success: #aad055;
+  --color-status-success-light: #d6fff5;
+  --color-status-success-lighter: #e6fff9;
+  --color-status-warning: #ffc860;
+  --color-status-warning-light: #fffdb8;
+  --color-status-warning-lighter: #fffeeb;
+  --color-status-critical: #db5555;
+  --color-status-critical-light: #ffe2e0;
+  --color-status-critical-lighter: #fff5f5;
+  --color-status-unknown: #f4f6f8;
+
+  --color-white: #f2e8d5;
+  --color-black: #222621;
+  --color-dark-11: #e9e9f0;
+  --color-dark-10: #fffffff7;
+  --color-dark-9: rgba(4, 12, 36, 0.9);
+  --color-dark-8: #40404a;
+  --color-dark-7: #5b5b65;
+  --color-dark-6: #70707c;
+  --color-dark-5: #8a8a98;
+  --color-dark-4: #a9a9b7;
+  --color-dark-3: #d0d0da;
+  --color-dark-2: #f5f5ff;
+  --color-dark-1: #ffffff;
+
+  --color-primary: #2c5dbf;
+  --color-secondary: #bf533f;
+
+  --color-background: var(--color-white);
+  --color-background-contrast: var(--color-dark-2);
+
+  --color-sidebar-item: var(--color-white);
+  --color-sidebar-divider: var(--color-dark-3);
+
+  --color-navbar-logo: var(--color-primary);
+
+  --color-button-primary: var(--color-primary);
+  --color-button-primary-text: var(--color-white);
+  --color-button-primary-hover: var(--color-primary);
+  --color-button-primary-hover-text: var(--color-white);
+  --color-button-primary-disabled: var(--color-dark-5);
+  --color-button-secondary: var(--color-dark-3);
+  --color-button-secondary-text: var(--color-dark-8);
+  --color-button-secondary-hover: var(--color-white);
+  --color-button-secondary-hover-text: var(--color-text);
+
+  --color-button-outlined-info: #ffd74b;
+  --color-button-outlined-info-text: #ffd74b;
+  --color-button-outlined-disabled: #5b5b65;
+  --color-button-outlined-disabled-text: #8a8a98;
+
+  --color-theme-button-light: #d0ddff;
+  --color-theme-button-dark: var(--color-dark-1);
+  --color-theme-button-divider: var(--color-dark-11);
+
+  --color-typography-headline-1: var(--color-black);
+  --color-typography-headline-2: var(--color-black);
+  --color-typography-headline-3: var(--color-black);
+  --color-typography-headline-4: var(--color-black);
+  --color-typography-headline-5: var(--color-black);
+  --color-typography-headline-6: var(--color-dark-6);
+  --color-typography-text: var(--color-black);
+  --color-typography-text-bold: var(--color-black);
+  --color-typography-subtitle: var(--color-dark-7);
+  --color-typography-button-label: var(--color-black);
+  --color-typography-mini-button-label: var(--color-black);
+  --color-typography-description: #8a8a8a;
+  --color-typography-mini-description: var(--color-dark-5);
+  --color-typography-link: var(--color-primary);
+
+  --color-tab-navigation-border: var(--color-dark-7);
+  --color-tab-item-default: var(--color-dark-7);
+  --color-tab-item-active: var(--color-black);
+
+  --color-market-card-background: #fff;
+  --color-market-card-background-contrast: #f5f6fd;
+  --color-market-card-title: #161515;
+  --color-market-card-stat: #626161;
+
+  --color-market-fees-card-background: #ffd74b;
+  --color-market-fees-card-text: #fff;
+
+  --color-horizontal-line-background: #e7e7e7;
+
+  --color-value-increase: var(--color-status-info);
+  --color-value-increase-bright: var(--color-status-info);
+  --color-value-decrease: #e3935b;
+  --color-value-decrease-bright: #e3935b;
+
+  --color-input-text: var(--color-typography-text);
+  --color-input-text-disabled: var(--color-typography-description);
+  --color-input-border: var(--color-black);
+  --color-input-label: rgba(255, 255, 255, 0.7);
+  --color-input-placeholder: rgba(255, 255, 255, 0.22);
+}
+
+code {
+  background-color: var(--color-background-contrast);
+}

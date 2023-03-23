@@ -1,0 +1,22 @@
+{
+  "latestTrends.title": "Latest Trends",
+  "latestTrends.createMarketModal.title": "Create Market",
+  "latestTrends.createMarketModal.selectCategories": "Select a market category",
+  "latestTrends.createMarketModal.marketDetails": "Market details",
+  "latestTrends.createMarketModal.input.descriptionOfTheMarket": "Description of the market",
+  "latestTrends.createMarketModal.input.descriptionOfTheMarket.placeholder": "Description",
+  "latestTrends.createMarketModal.input.resolutionInfo": "Info to resolute the market",
+  "latestTrends.createMarketModal.input.resolutionInfo.placeholder": "Info",
+  "latestTrends.createMarketModal.input.marketEndDatetime": "When does this market end?",
+  "latestTrends.createMarketModal.input.marketStartDatetime": "When does this market start?",
+  "latestTrends.createMarketModal.input.collateralToken": "Collateral token",
+  "latestTrends.createMarketModal.input.collateralToken.placeholder": "dd.mm.year | UTC time",
+  "latestTrends.createMarketModal.input.marketOptions": "Market options",
+  "latestTrends.createMarketModal.input.marketOptions.placeholder": "Option",
+  "latestTrends.createMarketModal.form.submit": "Submit",
+  "latestTrends.createMarketModal.input.marketEndDate": "Date",
+  "latestTrends.createMarketModal.input.marketEndTime": "Time",
+  "latestTrends.createMarketModal.input.marketEndTimezone": "Timezone",
+  "latestTrends.createMarketModal.input.marketStartDate": "Date",
+  "latestTrends.createMarketModal.input.marketStartTime": "Time"
+}

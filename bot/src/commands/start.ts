@@ -1,48 +1,41 @@
-import { CreateUserRequest } from "@rapydbot/user/client";
+import { findUserByTelegramUserIdOrCreateUser } from "@rapydbot/user";
 
-import { Bot } from "../Bot";
+import { TGInformerBot } from "../tg-informer";
 import { translationKeys } from "../i18n";
 import { CustomMessage } from "../types";
 
 import { IBotCommand } from "./types";
 
 export class StartCommand implements IBotCommand {
-  private bot: Bot;
+  private bot: TGInformerBot;
 
-  constructor(bot: Bot) {
+  constructor(bot: TGInformerBot) {
     this.bot = bot;
   }
 
   async onText(msg: CustomMessage) {
     try {
-      await this.findUserByTelegramUserIdOrCreateUser(msg);
+      await this.createUser(msg);
     } catch (error) {
       this.handleErrorReply(error, msg);
     }
   }
 
-  private async findUserByTelegramUserIdOrCreateUser(msg: CustomMessage): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const createUserRequest = new CreateUserRequest();
-
-      createUserRequest.setTelegramFromUserId(msg.from.id);
-      createUserRequest.setTelegramUsername(msg.from.username);
-
-      if (msg.chat.type === "private") {
-        createUserRequest.setTelegramPrivateChatId(msg.chat.id);
-      }
-
-      this.bot.clients.user.findUserByTelegramUserIdOrCreateUser(
-        createUserRequest,
-        (err, _reply) => {
-          if (Boolean(err)) {
-            return reject(err);
-          }
-
-          resolve();
-        },
-      );
+  private async createUser(msg: CustomMessage): Promise<void> {
+    await findUserByTelegramUserIdOrCreateUser(this.bot.clients.user, {
+      telegramFromUserId: msg.from.id,
+      telegramUsername: msg.from.username,
+      telegramPrivateChatId: msg.chat.type === "private" ? msg.chat.id : undefined,
     });
+
+    // @TODO i18n
+    this.bot.reply(
+      msg,
+      `Guardamos tus coordenadas periódicamente para asignarte campañas de manera eficiente.`,
+      {
+        reply_markup: { keyboard: [[{ text: `Compartir Coordenadas`, request_location: true }]] },
+      },
+    );
   }
 
   private handleErrorReply(error: Error, msg: CustomMessage) {

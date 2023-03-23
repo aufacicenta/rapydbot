@@ -1,0 +1,19 @@
+@import "../../../theme/base";
+
+.item {
+  padding: $space-default;
+  color: var(--color-tab-item-default);
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &__active {
+    border-bottom: 2px solid var(--color-tab-item-active);
+    color: var(--color-tab-item-active);
+
+    @include font-properties($typography-text-bold);
+  }
+
+  @include font-properties($typography-text);
+}

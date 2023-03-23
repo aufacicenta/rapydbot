@@ -1,0 +1,71 @@
+@import "src/theme/base";
+@import "src/ui/typography/mixins";
+
+.edit-campaign {
+  display: block;
+
+  &__map {
+    margin-bottom: $space-l;
+  }
+
+  &__form {
+    &--input-box {
+      margin-bottom: $space-m;
+    }
+
+    &--button-submit {
+      @include atLargeTablet {
+        margin-top: auto;
+      }
+      display: flex;
+      height: 100%;
+      margin-top: $space-s;
+      text-align: right;
+
+      button {
+        align-self: center;
+      }
+    }
+  }
+
+  &__title {
+    margin-bottom: $space-l;
+  }
+
+  &__breadcrumb {
+    display: inline-block;
+    margin-bottom: $space-ml;
+  }
+
+  &__campaign-actions {
+    margin-top: $space-l;
+
+    &--price {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      text-align: right;
+    }
+
+    &--item {
+      p {
+        span {
+          color: var(--color-typography-description);
+        }
+      }
+
+      a {
+        @include description;
+        display: inline-block;
+        align-self: flex-end;
+        margin-bottom: $space-m;
+        color: var(--color-typography-link);
+      }
+    }
+  }
+
+  &__publish {
+    padding: $space-l;
+  }
+}

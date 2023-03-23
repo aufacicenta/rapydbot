@@ -1,15 +1,19 @@
 import { DataTypes, Model, ModelOptions } from "sequelize";
 
+import { UserModel } from "./user";
+
 export type TelegramModelArgs = {
   id?: string;
   user_id: string;
   from_user_id: number;
   username: string;
   private_chat_id: number;
+  user?: UserModel;
 };
 
 export class TelegramModel extends Model<TelegramModelArgs> {
   public static tableName = "telegram";
+  public static alias = "telegram";
 
   public static rawAttributes = {
     id: {

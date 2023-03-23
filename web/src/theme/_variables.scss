@@ -1,0 +1,280 @@
+// Variables
+//
+// Variables should follow the `$component-state-property-size` formula for
+// consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+$navbar-height: 70px;
+$navbar-height-mobile: 56px;
+$navbar-logo-width: 124px;
+$navbar-logo-width-mobile: 50px;
+
+$sidebar-width: 82px;
+$sidebar-width-open: 210px;
+$sidebar-width-mobile-open: 255px;
+
+// Z-index
+$z-index-content: 2;
+$z-index-navigation: 3;
+$z-index-modal: 4;
+$z-index-form-dropdown: 5;
+$z-index-tooltip: 6;
+$z-index-toasts: 7;
+
+$mq-x-small: 0px !default;
+$mq-small: 540px !default;
+$mq-medium: 740px !default;
+$mq-large: 960px !default;
+$mq-large-plus: 1360px !default;
+$mq-x-large: 1540px !default;
+
+$breakpoints: () !default;
+$breakpoints: map-merge(
+  (
+    xs: $mq-x-small,
+    sm: $mq-small,
+    md: $mq-medium,
+    lg: $mq-large,
+    lgP: $mq-large-plus,
+    xl: $mq-x-large,
+  ),
+  $breakpoints
+);
+
+$grid-gutters: () !default;
+$grid-gutters: map-merge(
+  (
+    xs: (
+      inside: 8px,
+      outside: 16px,
+    ),
+    sm: (
+      inside: 8px,
+      outside: 16px,
+    ),
+    md: (
+      inside: 16px,
+      outside: 32px,
+    ),
+    lg: (
+      inside: 16px,
+      outside: 64px,
+    ),
+    lgP: (
+      inside: 16px,
+      outside: 64px,
+    ),
+    xl: (
+      inside: 16px,
+      outside: 64px,
+    ),
+  ),
+  $grid-gutters
+);
+
+// Grid Columns
+$grid-columns: (1, 2, 3, 4, 5, 6, 7, 8, 12) !default;
+$container-mw: 1440px !default;
+$container-mw-xl: 1600px !default;
+
+// Border radius sizes
+$border-radius: 5px !default;
+$border-radius-medium: 5px !default;
+$border-radius-large: 8px !default;
+$border-radius-circle: 50% !default;
+$border-radius-pill: 32px !default;
+$border-radius-card: 23px !default;
+$border-radius-button: 42px !default;
+$border-radius-input: 7px !default;
+$border-radius-modal: 8px !default;
+
+// Spacing
+$space-default: rem(16) !default;
+$gutter-width: $space-default * 2;
+$space-xxs: calc($space-default / 8) !default;
+$space-xs: calc($space-default / 4) !default;
+$space-s: calc($space-default / 2) !default;
+$space-m: $space-default * 1.2 !default;
+$space-ml: $space-default * 2 !default;
+$space-l: $space-default * 3 !default;
+$space-xl: $space-default * 4 !default;
+$space-xxl: $space-default * 5 !default;
+$space-xxxl: $space-default * 6 !default;
+
+$space-inset-default: $space-m $space-m $space-m $space-m !default;
+$space-inset-xs: $space-xs $space-xs $space-xs $space-xs !default;
+$space-inset-s: $space-s $space-s $space-s $space-s !default;
+$space-inset-m: $space-m $space-m $space-m $space-m !default;
+$space-inset-ml: $space-ml $space-ml $space-ml $space-ml !default;
+$space-inset-l: $space-l $space-l $space-l $space-l !default;
+$space-inset-xl: $space-xl $space-xl $space-xl $space-xl !default;
+
+$space-stack-default: 0 0 $space-m 0 !default;
+$space-stack-xxs: 0 0 $space-xxs 0 !default;
+$space-stack-xs: 0 0 $space-xs 0 !default;
+$space-stack-s: 0 0 $space-s 0 !default;
+$space-stack-m: 0 0 $space-m 0 !default;
+$space-stack-ml: 0 0 $space-ml 0 !default;
+$space-stack-l: 0 0 $space-l 0 !default;
+$space-stack-xl: 0 0 $space-xl 0 !default;
+
+// Shadows
+$shadow-radius: $border-radius-medium !default;
+$shadow-dropdown: 0 5px 10px 0 var(--color-dark-5) !default;
+$shadow-overlay: 0 5px 15px 0 var(--color-black) !default;
+$shadow-fluffy: 0 17px 22px 0 var(--color-black) !default;
+$shadow-input: 0 1px 1px var(--color-dark-5) !default;
+$shadow-select: 0 2px 2px var(--color-dark-5) !default;
+
+$shadow-sm: 0 1px 1px 0 rgba(var(--color-dark-1), 0.05) !default;
+$shadow-md: 0 2px 2px 0 rgba(var(--color-dark-1), 0.05) !default;
+
+// Borders
+$border: 1px solid var(--color-dark-5) !default;
+$border-disabled: 1px solid var(--color-dark-1) !default;
+$border-brand: 1px solid var(--color-primary) !default;
+$border-error: 1px solid var(--color-status-critical) !default;
+$border-dark: 1px solid var(--color-dark-1) !default;
+$border-divider: 1px solid var(--color-dark-3) !default;
+$border-divider-inverse: 1px solid #3b3e42 !default;
+
+// legacy
+$border-light: 1px solid var(--color-dark-3) !default;
+
+// Box Shadows
+$box-shadow-default-width: 2px !default;
+$box-shadow-border: 0 1px 1px rgba(9, 10, 11, 0.05) !default;
+$box-shadow-border-large: 0 0 0 $box-shadow-default-width var(--color-primary)-bright !default;
+$box-shadow-focus: 0 0 0 3px rgba(var(--color-dark-3), 0.3) !default;
+$box-shadow-focus-large: 0 0 0 6px var(--color-primary)-light !default;
+$box-shadow-error: 0 0 0 3px var(--color-status-critical)-lighter !default;
+$box-shadow-ok: 0 0 0 3px var(--color-status-ok-lighter) !default;
+$box-shadow-warning: 0 0 0 3px var(--color-status-warning-lighter) !default;
+
+// Animations
+$animation-rotate: rotate;
+$animation-moveDownIn: moveDownIn;
+$animation-moveDownOut: moveDownOut;
+$animation-moveLeftIn: moveLeftIn;
+$animation-moveLeftOut: moveLeftOut;
+$animation-moveRightIn: moveRightIn;
+$animation-moveRightOut: moveRightOut;
+$animation-moveUpIn: moveUpIn;
+$animation-moveUpOut: moveUpOut;
+$animation-slideDownIn: slideDownIn;
+$animation-slideDownOut: slideDownOut;
+$animation-slideLeftIn: slideLeftIn;
+$animation-slideLeftOut: slideLeftOut;
+$animation-slideRightIn: slideRightIn;
+$animation-slideRightOut: slideRightOut;
+$animation-slideUpIn: slideUpIn;
+$animation-slideUpOut: slideUpOut;
+$animation-fadeIn: fadeIn;
+$animation-fadeOut: fadeOut;
+$animation-zoomIn: zoomIn;
+$animation-zoomOut: zoomOut;
+$animation-zoomBigIn: zoomBigIn;
+$animation-zoomBigOut: zoomBigOut;
+$animation-zoomUpIn: zoomUpIn;
+$animation-zoomUpOut: zoomUpOut;
+$animation-zoomLeftIn: zoomLeftIn;
+$animation-zoomLeftOut: zoomLeftOut;
+$animation-zoomRightIn: zoomRightIn;
+$animation-zoomRightOut: zoomRightOut;
+$animation-zoomDownIn: zoomDownIn;
+$animation-zoomDownOut: zoomDownOut;
+
+// Animation Easing
+$ease-linear: linear;
+$ease-out: cubic-bezier(0.215, 0.61, 0.355, 1) !default;
+$ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19) !default;
+$ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1) !default;
+$ease-out-back: cubic-bezier(0.12, 0.4, 0.29, 1.46) !default;
+$ease-out-back: cubic-bezier(0.12, 0.4, 0.29, 1.46) !default;
+$ease-in-back: cubic-bezier(0.71, -0.46, 0.88, 0.6) !default;
+$ease-out-circle: cubic-bezier(0.08, 0.82, 0.17, 1) !default;
+$ease-in-circle: cubic-bezier(0.6, 0.04, 0.98, 0.34) !default;
+$ease-in-out-circle: cubic-bezier(0.78, 0.14, 0.15, 0.86) !default;
+$ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1) !default;
+$ease-in-quint: cubic-bezier(0.755, 0.05, 0.855, 0.06) !default;
+$ease-in-out-quint: cubic-bezier(0.86, 0, 0.07, 1) !default;
+$ease-in-expo: cubic-bezier(0.7, 0, 0.84, 0) !default;
+$ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1) !default;
+$ease-in-fast: cubic-bezier(0.25, 0.1, 0.24, 1) !default;
+
+// Animation Duration
+$duration-none: 0ms !default;
+$duration-default: 300ms !default;
+$duration-slower: 1000ms !default;
+$duration-slow: 500ms !default;
+$duration-medium: 400ms !default;
+$duration-fast: 200ms !default;
+$duration-faster: 100ms !default;
+$duration-paused: 3200ms !default;
+
+// Navigation
+$mobile-menu-width: 360px !default;
+
+// Forms
+// Radio Buttons
+$form-radio: rem(20) !default;
+
+// Checkbox
+$checkbox-size: $form-radio !default;
+
+// Switch
+$switch-height: 32px !default;
+$switch-min-width: 60px !default;
+
+// Opacity
+$opacity-high: 0.9;
+$opacity-mid: 0.5;
+$opacity-low: 0.3;
+
+// FORMS
+$dropdown-item-height: 50px !default;
+
+// Z-levels box-shadow
+
+.z-depth-0 {
+  box-shadow: none !important;
+}
+
+/* 2dp elevation modified*/
+
+.z-depth-1 {
+  box-shadow: 0 2px 2px 0 rgba(91, 91, 101, 0.14), 0 3px 1px -2px rgba(91, 91, 101, 0.12),
+    0 1px 5px 0 rgba(91, 91, 101, 0.2);
+}
+
+.z-depth-1-half {
+  box-shadow: 0 3px 3px 0 rgba(91, 91, 101, 0.14), 0 1px 7px 0 rgba(91, 91, 101, 0.12),
+    0 3px 1px -1px rgba(91, 91, 101, 0.2);
+}
+
+/* 6dp elevation modified*/
+
+.z-depth-2 {
+  box-shadow: 0 4px 5px 0 rgba(91, 91, 101, 0.14), 0 1px 10px 0 rgba(91, 91, 101, 0.12),
+    0 2px 4px -1px rgba(91, 91, 101, 0.3);
+}
+
+/* 12dp elevation modified*/
+
+.z-depth-3 {
+  box-shadow: 0 8px 17px 2px rgba(91, 91, 101, 0.14), 0 3px 14px 2px rgba(91, 91, 101, 0.12),
+    0 5px 5px -3px rgba(91, 91, 101, 0.2);
+}
+
+/* 16dp elevation */
+
+.z-depth-4 {
+  box-shadow: 0 16px 24px 2px rgba(91, 91, 101, 0.14), 0 6px 30px 5px rgba(91, 91, 101, 0.12),
+    0 8px 10px -7px rgba(91, 91, 101, 0.2);
+}
+
+/* 24dp elevation */
+
+.z-depth-5 {
+  box-shadow: 0 24px 38px 3px rgba(91, 91, 101, 0.14), 0 9px 46px 8px rgba(91, 91, 101, 0.12),
+    0 11px 15px -7px rgba(91, 91, 101, 0.2);
+}

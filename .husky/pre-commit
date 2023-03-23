@@ -1,0 +1,7 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+localPath=$(echo $PATH)
+export PATH=$localPath
+
+yarn lint-staged

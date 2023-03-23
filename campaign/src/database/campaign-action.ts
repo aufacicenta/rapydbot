@@ -41,6 +41,7 @@ export class CampaignAction {
     }
 
     return result.map((action) => ({
+      id: action.getDataValue("id"),
       campaignId: action.getDataValue("campaign_id"),
       initialInstruction: action.getDataValue("initial_instruction"),
       intentAction: action.getDataValue("intent_action"),

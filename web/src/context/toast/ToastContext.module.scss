@@ -1,0 +1,59 @@
+@import "src/theme/_base";
+
+.toast-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  z-index: $z-index-toasts;
+  max-width: 100vw;
+  max-height: 100%;
+  margin-bottom: $space-default;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transform: translateX(-50%);
+
+  &--top {
+    top: 0;
+    bottom: unset;
+    margin-top: 88px;
+  }
+
+  & > div {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 100vw;
+    max-width: 512px;
+    padding-right: $space-m;
+    padding-left: $space-m;
+
+    @include atMobile {
+      padding-right: $space-ml;
+      padding-left: $space-ml;
+    }
+  }
+
+  & > div > div {
+    margin-bottom: $space-m;
+  }
+}
+
+.toast {
+  &--enter {
+    opacity: 0;
+  }
+
+  &--enter-active {
+    opacity: 1;
+    transition: opacity $ease-in-out $duration-default;
+  }
+
+  &--exit {
+    opacity: 1;
+  }
+
+  &--exit-active {
+    opacity: 0;
+    transition: opacity $ease-in-out $duration-default;
+  }
+}

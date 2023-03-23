@@ -2,14 +2,19 @@ import * as grpc from "@grpc/grpc-js";
 
 import { IContext } from "../server/interface/IContext";
 import {
+  CreateCampaignActionMessageReply,
+  CreateCampaignActionMessageRequest,
   CreateCampaignActionReply,
   CreateCampaignActionRequest,
   CreateCampaignReply,
   CreateCampaignRequest,
-  CreateCampaignUserReply,
-  CreateCampaignUserRequest,
+  GetCampaignActionMessagesByUserIdRequest,
+  GetCampaignActionMessagesReply,
+  GetCampaignActionMessagesRequest,
   GetCampaignActionsReply,
   GetCampaignActionsRequest,
+  SetCampaignBoundsReply,
+  SetCampaignBoundsRequest,
 } from "../server/protos/schema_pb";
 
 type GRPCUnaryCall<Request, Reply> = {
@@ -53,7 +58,7 @@ export class Controller {
       const reply = call.request.getReply();
       const intent_action = call.request.getIntentAction();
 
-      const { campaignActionId } = await db.campaignActions.create({
+      const { campaignActionId } = await db.campaignAction.create({
         campaign_id,
         initial_instruction,
         reply,
@@ -70,26 +75,55 @@ export class Controller {
     }
   }
 
-  async createCampaignUser(
-    { call, callback }: GRPCUnaryCall<CreateCampaignUserRequest, CreateCampaignUserReply>,
+  async createCampaignActionMessage(
+    {
+      call,
+      callback,
+    }: GRPCUnaryCall<CreateCampaignActionMessageRequest, CreateCampaignActionMessageReply>,
+    { db }: IContext,
+  ) {
+    try {
+      const campaign_action_id = call.request.getCampaignActionId();
+      const user_id = call.request.getUserId();
+      const message = call.request.getMessage();
+
+      const { id } = await db.campaignActionMessage.create({
+        campaign_action_id,
+        user_id,
+        message,
+      });
+
+      const reply = new CreateCampaignActionMessageReply();
+
+      reply.setId(id);
+
+      callback(null, reply);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  async setCampaignBounds(
+    { call, callback }: GRPCUnaryCall<SetCampaignBoundsRequest, SetCampaignBoundsReply>,
     { db }: IContext,
   ) {
     try {
       const campaignId = call.request.getCampaignId();
-      const userId = call.request.getUserId();
-      const messageId = call.request.getMessageId();
+      const bounds = call.request.getBounds();
+      const issuerId = call.request.getIssuerId();
 
-      await db.campaignUser.create({
+      // @TODO Verify that the issuer is the owner of the campaign at setCampaignBounds
+
+      await db.campaign.setBounds({
         campaignId,
-        userId,
-        messageId,
+        bounds,
+        issuerId,
       });
 
-      const reply = new CreateCampaignUserReply();
+      const reply = new SetCampaignBoundsReply();
 
       reply.setCampaignId(campaignId);
-      reply.setUserId(userId);
-      reply.setMessageId(messageId);
+      reply.setBounds(bounds);
 
       callback(null, reply);
     } catch (error) {
@@ -103,17 +137,91 @@ export class Controller {
   ) {
     const campaignId = call.request.getCampaignId();
 
-    const result = await db.campaignActions.getByCampaignId({
-      campaignId,
+    try {
+      const result = await db.campaignAction.getByCampaignId({
+        campaignId,
+      });
+
+      for (const action of result) {
+        const reply = new GetCampaignActionsReply();
+
+        reply.setId(action.id);
+        reply.setCampaignId(action.campaignId);
+        reply.setInitialInstruction(action.initialInstruction);
+        reply.setReply(action.reply);
+        reply.setIntentAction(action.intentAction);
+
+        call.write(reply, (err) => {
+          if (err) {
+            console.error(err);
+          }
+        });
+      }
+
+      call.end();
+    } catch (error) {
+      call.destroy(error as Error);
+    }
+  }
+
+  async getCampaignActionMessages(
+    {
+      call,
+    }: gRPCServerStreamingCall<GetCampaignActionMessagesRequest, GetCampaignActionMessagesReply>,
+    { db }: IContext,
+  ) {
+    const campaign_action_id = call.request.getCampaignActionId();
+
+    const result = await db.campaignActionMessage.getByCampaignActionId({
+      campaign_action_id,
     });
 
     for (const action of result) {
-      const reply = new GetCampaignActionsReply();
+      const reply = new GetCampaignActionMessagesReply();
 
-      reply.setCampaignId(action.campaignId);
-      reply.setInitialInstruction(action.initialInstruction);
-      reply.setReply(action.reply);
-      reply.setIntentAction(action.intentAction);
+      reply.setId(action.id);
+      reply.setCampaignActionId(action.campaignActionId);
+      reply.setUserId(action.userId);
+      reply.setMessage(action.message);
+      // @TODO return approvedBy
+      reply.setApprovedAt(action.approvedAt);
+
+      call.write(reply, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    call.end();
+  }
+
+  async getCampaignActionMessagesByUserId(
+    {
+      call,
+    }: gRPCServerStreamingCall<
+      GetCampaignActionMessagesByUserIdRequest,
+      GetCampaignActionMessagesReply
+    >,
+    { db }: IContext,
+  ) {
+    const campaign_action_id = call.request.getCampaignActionId();
+    const user_id = call.request.getUserId();
+
+    const result = await db.campaignActionMessage.getByCampaignActionIdAndUserId({
+      campaign_action_id,
+      user_id,
+    });
+
+    for (const action of result) {
+      const reply = new GetCampaignActionMessagesReply();
+
+      reply.setId(action.id);
+      reply.setCampaignActionId(action.campaignActionId);
+      reply.setUserId(action.userId);
+      reply.setMessage(action.message);
+      // @TODO return approvedBy
+      reply.setApprovedAt(action.approvedAt);
 
       call.write(reply, (err) => {
         if (err) {

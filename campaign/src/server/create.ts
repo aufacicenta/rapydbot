@@ -11,9 +11,15 @@ export default (context: IContext) => {
       context.controller.createCampaign({ call, callback }, context),
     createCampaignAction: (call, callback) =>
       context.controller.createCampaignAction({ call, callback }, context),
-    createCampaignUser: (call, callback) =>
-      context.controller.createCampaignUser({ call, callback }, context),
+    createCampaignActionMessage: (call, callback) =>
+      context.controller.createCampaignActionMessage({ call, callback }, context),
+    setCampaignBounds: (call, callback) =>
+      context.controller.setCampaignBounds({ call, callback }, context),
     getCampaignActions: (call) => context.controller.getCampaignActions({ call }, context),
+    getCampaignActionMessages: (call) =>
+      context.controller.getCampaignActionMessages({ call }, context),
+    getCampaignActionMessagesByUserId: (call) =>
+      context.controller.getCampaignActionMessagesByUserId({ call }, context),
   });
 
   return server;

@@ -1,7 +1,6 @@
 import { Sequelize, SyncOptions } from "sequelize";
 
-import { CampaignActionModel, CampaignModel } from "./model";
-import { CampaignUserModel } from "./model/campaign-user";
+import { CampaignActionMessageModel, CampaignActionModel, CampaignModel } from "./model";
 
 export default {
   async connect(options?: SyncOptions) {
@@ -16,27 +15,27 @@ export default {
         CampaignModel.config,
       );
 
-      const CampaignActions = sequelize.define(
+      const CampaignAction = sequelize.define(
         CampaignActionModel.tableName,
         CampaignActionModel.rawAttributes,
         CampaignActionModel.config,
       );
 
-      const CampaignUser = sequelize.define(
-        CampaignUserModel.tableName,
-        CampaignUserModel.rawAttributes,
-        CampaignUserModel.config,
+      const CampaignActionMessage = sequelize.define(
+        CampaignActionMessageModel.tableName,
+        CampaignActionMessageModel.rawAttributes,
+        CampaignActionMessageModel.config,
       );
 
-      Campaign.hasMany(CampaignActions, {
+      Campaign.hasMany(CampaignAction, {
         foreignKey: { allowNull: true },
       });
 
-      CampaignActions.belongsTo(Campaign, {
+      CampaignAction.belongsTo(Campaign, {
         foreignKey: { allowNull: true },
       });
 
-      CampaignUser.belongsTo(Campaign, {
+      CampaignActionMessage.belongsTo(CampaignAction, {
         foreignKey: { allowNull: true },
       });
 

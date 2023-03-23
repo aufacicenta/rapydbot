@@ -1,0 +1,9 @@
+query GetCampaignActions($input: GetCampaignActionsInput!) {
+  getCampaignActions(input: $input) {
+    campaignActionId
+    campaignId
+    initialInstruction
+    reply
+    intentAction
+  }
+}

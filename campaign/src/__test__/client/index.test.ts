@@ -4,7 +4,9 @@ import getRandomUsername from "@rapydbot/wallet/__test__/util/getRandomUsername"
 import { CampaignClientGenerator, CampaignClient } from "../../client";
 import { createCampaign } from "../../client/create-campaign";
 import { createCampaignAction } from "../../client/create-campaign-action";
-import { createCampaignUser } from "../../client/create-campaign-user";
+import { createCampaignActionMessage } from "../../client/create-campaign-action-message";
+import { getCampaignActionMessages } from "../../client/get-campaign-action-messages";
+import { getCampaignActionMessagesByUserId } from "../../client/get-campaign-action-messages-by-user-id";
 import { getCampaignActions } from "../../client/get-campaign-actions";
 import { instructions } from "../util/instructions";
 
@@ -24,19 +26,19 @@ describe("client", () => {
   });
 
   test("success: createCampaign", async () => {
-    const campaignId = await createCampaign(client, { issuerId });
+    const { campaignId } = await createCampaign(client, { issuerId });
 
     expect(campaignId).toBeDefined();
   });
 
   test("success: create campaign actions", async () => {
-    const campaignId = await createCampaign(client, { issuerId });
+    const { campaignId } = await createCampaign(client, { issuerId });
 
     for (const key in instructions) {
       const initialInstruction = instructions[key].initialInstruction;
       const reply = instructions[key].reply;
 
-      const campaignActionId = await createCampaignAction(client, {
+      const { campaignActionId } = await createCampaignAction(client, {
         campaignId,
         initialInstruction,
         reply,
@@ -47,27 +49,8 @@ describe("client", () => {
     }
   });
 
-  test("success: create campaign user", async () => {
-    const campaignId = await createCampaign(client, { issuerId });
-    const messageId = getRandomUsername();
-
-    const {
-      campaignId: linkedCampaignId,
-      userId,
-      messageId: linkedMessageId,
-    } = await createCampaignUser(client, {
-      campaignId,
-      userId: user1,
-      messageId,
-    });
-
-    expect(campaignId).toEqual(linkedCampaignId);
-    expect(userId).toEqual(user1);
-    expect(messageId).toEqual(linkedMessageId);
-  });
-
   test("success: get campaign actions", async () => {
-    const campaignId = await createCampaign(client, { issuerId });
+    const { campaignId } = await createCampaign(client, { issuerId });
 
     for (const key in instructions) {
       const initialInstruction = instructions[key].initialInstruction;
@@ -85,6 +68,7 @@ describe("client", () => {
       campaignId,
     });
 
+    expect(instruction1.id).toBeDefined();
     expect(instruction1.campaignId).toEqual(campaignId);
     expect(instruction1.initialInstruction).toEqual(
       instructions[IntentAction.WalletCreate].initialInstruction,
@@ -99,4 +83,69 @@ describe("client", () => {
     expect(instruction2.reply).toEqual(instructions[IntentAction.TransactionsFrom].reply);
     expect(instruction2.intentAction).toEqual(IntentAction.TransactionsFrom);
   });
+
+  test("success: create campaign actions messages", async () => {
+    const { campaignId } = await createCampaign(client, { issuerId });
+
+    let campaign_action_id: string;
+
+    for (const key in instructions) {
+      const initialInstruction = instructions[key].initialInstruction;
+      const reply = instructions[key].reply;
+
+      const { campaignActionId } = await createCampaignAction(client, {
+        campaignId,
+        initialInstruction,
+        reply,
+        intentAction: key,
+      });
+
+      if (!campaign_action_id) {
+        campaign_action_id = campaignActionId;
+      }
+
+      const messages = [
+        "message 1",
+        `message with format <strong>bold</strong>`,
+        `message with whitespace\n\nline.`,
+      ];
+
+      for (const message of messages) {
+        const campaignActionMessageId_1 = await createCampaignActionMessage(client, {
+          campaignActionId,
+          userId: user1,
+          message,
+        });
+
+        const campaignActionMessageId_2 = await createCampaignActionMessage(client, {
+          campaignActionId,
+          userId: user2,
+          message,
+        });
+
+        expect(campaignActionMessageId_1).toBeDefined();
+        expect(campaignActionMessageId_2).toBeDefined();
+      }
+    }
+
+    const campaignActionMessages = await getCampaignActionMessages(client, {
+      campaignActionId: campaign_action_id,
+    });
+
+    for (const message of campaignActionMessages) {
+      expect(message.campaignActionId).toEqual(campaign_action_id);
+    }
+
+    const campaignActionMessagesByUserId = await getCampaignActionMessagesByUserId(client, {
+      campaignActionId: campaign_action_id,
+      userId: user1,
+    });
+
+    for (const message of campaignActionMessagesByUserId) {
+      expect(message.campaignActionId).toEqual(campaign_action_id);
+      expect(message.userId).toEqual(user1);
+    }
+  });
+
+  // @TODO Test setCampaignBounds — success
 });

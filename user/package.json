@@ -5,10 +5,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "ts-node ./src",
-    "start:debug": "ts-node-dev --inspect=9226 --no-notify --respawn ./src",
+    "start": "ts-node ./src/init.ts",
+    "start:debug": "ts-node-dev --inspect=9226 --no-notify --respawn ./src/init.ts",
     "clean": "rimraf build",
-    "compile": "npm run clean && tsc",
+    "compile": "npm run clean && tsc --project tsconfig-build.json",
     "publish:prepare": "npm run clean && npm run compile",
     "test": "jest"
   },
@@ -18,7 +18,7 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.8.9",
     "pg": "^8.9.0",
-    "sequelize": "^6.28.0"
+    "sequelize": "^6.29.0"
   },
   "devDependencies": {
     "@grpc/proto-loader": "^0.7.5",

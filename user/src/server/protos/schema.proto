@@ -6,11 +6,14 @@ package user;
 
 service User {
   rpc FindUserByTelegramUserIdOrCreateUser (CreateUserRequest) returns (CreateUserReply) {}
+  rpc CreateUserLocation (CreateUserLocationRequest) returns (CreateUserLocationReply) {}
   rpc GetUser (GetUserRequest) returns (GetUserReply) {}
   rpc GetUsers (GetUsersRequest) returns (stream GetUserReply) {}
+  rpc GetUsersCoordinates (GetUsersCoordinatesRequest) returns (stream GetUsersCoordinatesReply) {}
   rpc FindUserByTelegramUserId (FindUserByTelegramUserIdRequest) returns (FindUserByTelegramUserIdReply) {}
   rpc GetUserIdByTelegramUsername (GetUserIdByTelegramUsernameRequest) returns (GetUserIdByTelegramUsernameReply) {}
   rpc GetUserTelegramChatId (GetUserTelegramChatIdRequest) returns (GetUserTelegramChatIdReply) {}
+  rpc GetUsersByLocationBounds (GetUsersByLocationBoundsRequest) returns (stream GetUsersByLocationBoundsReply) {}
 }
 
 message CreateUserRequest {
@@ -27,8 +30,28 @@ message CreateUserReply {
   string telegram_user_id = 5;
 }
 
+message CreateUserLocationRequest {
+  string user_id = 1;
+  double latitude = 2;
+  double longitude = 3;
+}
+
+message CreateUserLocationReply {
+  string location_id = 1;
+  string user_id = 2;
+  double latitude = 3;
+  double longitude = 4;
+}
+
 message GetUserRequest {
   string user_id = 1;
+}
+
+message GetUsersCoordinatesRequest {}
+
+message GetUsersCoordinatesReply {
+  double latitude = 1;
+  double longitude = 2;
 }
 
 message GetUsersRequest {
@@ -65,6 +88,15 @@ message GetUserTelegramChatIdRequest {
 
 message GetUserTelegramChatIdReply {
   int32 private_chat_id = 1;
+}
+
+message GetUsersByLocationBoundsRequest {
+  string bounds = 1;
+}
+
+message GetUsersByLocationBoundsReply {
+  double longitude = 1;
+  double latitude = 2;
 }
 
 message EmptyReply {}

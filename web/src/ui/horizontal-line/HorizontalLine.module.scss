@@ -1,0 +1,14 @@
+@import "src/theme/base";
+
+.horizontal-line {
+  display: block;
+  height: 1px;
+  margin-bottom: $space-default;
+  border: none;
+  background-color: var(--color-horizontal-line-background);
+
+  &__flat {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}

@@ -1,0 +1,62 @@
+@import "src/theme/base";
+@import "src/ui/typography/mixins";
+
+.toast {
+  @extend .z-depth-1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 512px;
+  border: 1px solid var(--color-background-contrast);
+  border-radius: $border-radius-card;
+  padding: $space-default;
+  background-color: var(--color-background);
+
+  &__icon {
+    display: flex;
+    padding: 0 $space-s;
+    font-size: $font-size-headline-3;
+    color: var(--color-status-info);
+  }
+
+  &__content {
+    width: 100%;
+    padding: 0 $space-default;
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+
+  &--error {
+    .toast__icon {
+      color: var(--color-status-critical);
+    }
+  }
+
+  &--confirmation {
+    .toast__icon {
+      margin-right: 10px;
+      color: var(--color-status-success);
+
+      svg {
+        width: $space-ml;
+        height: $space-ml;
+      }
+    }
+  }
+
+  &__title {
+    word-break: break-word;
+  }
+
+  &__close-button {
+    border: 0;
+    padding: 0;
+    font-weight: $font-weight-medium;
+    color: var(--color-primary);
+    background: transparent;
+    cursor: pointer;
+  }
+}

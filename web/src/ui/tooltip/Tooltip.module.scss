@@ -1,0 +1,67 @@
+@import "src/theme/base";
+
+.tooltip {
+  display: block;
+  color: var(--color-primary);
+  position: absolute;
+  right: -16px;
+  top: -2px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &__wrapper {
+    position: relative;
+    width: fit-content;
+  }
+
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: $z-index-navigation - 1;
+    background-color: transparent;
+    display: none;
+
+    &--visible {
+      display: block;
+    }
+  }
+
+  &__box {
+    display: none;
+    position: absolute;
+    padding: $space-xs;
+    background-color: var(--color-background);
+    border-radius: $border-radius;
+    z-index: $z-index-navigation;
+    width: 210px;
+    right: 0;
+    top: 100%;
+
+    > div {
+      background-color: var(--color-background-contrast);
+      padding: $space-s;
+      @include boxShadowInset;
+
+      p:not([class*="title"]) {
+        margin-bottom: 0;
+      }
+    }
+
+    &--visible {
+      display: block;
+    }
+  }
+
+  &__title {
+    margin-bottom: $space-xs;
+  }
+
+  &__icon {
+    font-size: $font-size-description;
+  }
+}

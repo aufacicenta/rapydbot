@@ -1,0 +1,74 @@
+@import "src/theme/base";
+@import "src/ui/typography/variables";
+
+.home {
+  display: block;
+
+  &__banner {
+    @include atLargeTablet {
+      margin-right: -$space-m;
+      margin-left: -$space-m;
+    }
+    margin-right: -$space-default;
+    margin-bottom: $space-m;
+    margin-left: -$space-default;
+    border-radius: 10px;
+  }
+
+  &__intro {
+    margin-bottom: $space-l;
+    font-weight: $font-weight-regular;
+
+    strong,
+    p {
+      font-weight: $font-weight-bold;
+      color: var(--color-primary);
+    }
+  }
+
+  &__border-column {
+    height: 100%;
+    border: 2px solid var(--color-typography-text);
+    border-radius: $border-radius;
+    padding: $space-default;
+
+    &--title {
+      min-height: 98px;
+    }
+  }
+
+  &__login-box {
+    padding: $space-xl;
+    text-align: center;
+
+    button {
+      span {
+        margin-left: $space-default;
+      }
+    }
+  }
+
+  &__section {
+    margin-bottom: $space-xl;
+
+    h2 {
+      margin-bottom: $space-ml;
+    }
+  }
+
+  &__use-cases {
+    &--card-box {
+      margin-bottom: $space-ml;
+    }
+
+    &--card {
+      height: 100%;
+    }
+  }
+
+  &__faqs {
+    &--box {
+      margin-bottom: $space-ml;
+    }
+  }
+}

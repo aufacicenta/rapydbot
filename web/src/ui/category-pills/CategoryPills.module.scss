@@ -1,0 +1,24 @@
+@import "src/theme/base";
+
+.category-pills {
+  position: relative;
+  display: flex;
+  overflow-x: scroll;
+
+  &__scroll-icon {
+    @include atLargeTablet {
+      display: none;
+    }
+    position: sticky;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2px;
+    color: var(--color-white);
+    background-color: var(--color-background);
+  }
+}

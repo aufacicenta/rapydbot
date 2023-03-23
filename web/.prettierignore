@@ -1,0 +1,10 @@
+.next
+node_modules
+*.yml
+.serverless_nextjs
+out-storybook
+out
+.happo-dist
+src/api/codegen
+plop-templates
+tsconfig.json

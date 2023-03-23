@@ -7,8 +7,11 @@ package campaign;
 service Campaign {
   rpc CreateCampaign (CreateCampaignRequest) returns (CreateCampaignReply) {}
   rpc CreateCampaignAction (CreateCampaignActionRequest) returns (CreateCampaignActionReply) {}
-  rpc CreateCampaignUser (CreateCampaignUserRequest) returns (CreateCampaignUserReply) {}
+  rpc CreateCampaignActionMessage (CreateCampaignActionMessageRequest) returns (CreateCampaignActionMessageReply) {}
+  rpc SetCampaignBounds (SetCampaignBoundsRequest) returns (SetCampaignBoundsReply) {}
   rpc GetCampaignActions (GetCampaignActionsRequest) returns (stream GetCampaignActionsReply) {}
+  rpc GetCampaignActionMessages (GetCampaignActionMessagesRequest) returns (stream GetCampaignActionMessagesReply) {}
+  rpc GetCampaignActionMessagesByUserId (GetCampaignActionMessagesByUserIdRequest) returns (stream GetCampaignActionMessagesReply) {}
 }
 
 message CreateCampaignRequest {
@@ -30,16 +33,25 @@ message CreateCampaignActionReply {
   string campaign_action_id = 1;
 }
 
-message CreateCampaignUserRequest {
-  string campaign_id = 1;
-  string user_id = 2;
-  string message_id = 3;
+message CreateCampaignActionMessageRequest {
+  string campaign_action_id = 1;
+  string user_id = 3;
+  string message = 2;
 }
 
-message CreateCampaignUserReply {
+message CreateCampaignActionMessageReply {
+  string id = 1;
+}
+
+message SetCampaignBoundsRequest {
   string campaign_id = 1;
-  string user_id = 2;
-  string message_id = 3;
+  string issuer_id = 2;
+  string bounds = 3;
+}
+
+message SetCampaignBoundsReply {
+  string campaign_id = 1;
+  string bounds = 2;
 }
 
 message GetCampaignActionsRequest {
@@ -47,8 +59,26 @@ message GetCampaignActionsRequest {
 }
 
 message GetCampaignActionsReply {
-  string campaign_id = 1;
-  string initial_instruction = 2;
-  string reply = 3;
-  string intent_action = 4;
+  string id = 1;
+  string campaign_id = 2;
+  string initial_instruction = 3;
+  string reply = 4;
+  string intent_action = 5;
+}
+
+message GetCampaignActionMessagesRequest {
+  string campaign_action_id = 1;
+}
+
+message GetCampaignActionMessagesReply {
+  string id = 1;
+  string campaign_action_id = 2;
+  string user_id = 3;
+  string message = 4;
+  string approved_at = 5;
+}
+
+message GetCampaignActionMessagesByUserIdRequest {
+  string campaign_action_id = 1;
+  string user_id = 2;
 }

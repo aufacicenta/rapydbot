@@ -1,0 +1,6 @@
+query GetUsersByLocationBounds($input: GetUsersByLocationBoundsInput!) {
+  getUsersByLocationBounds(input: $input) {
+    longitude
+    latitude
+  }
+}

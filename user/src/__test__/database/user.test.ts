@@ -16,7 +16,7 @@ describe("database:dao:user", () => {
     const telegram_username = "username";
     const telegram_from_user_id = 123;
 
-    const create_result = await dao.findUserByTelegramUserIdOrCreateUser({
+    const create_result = await dao.findOrCreate({
       telegram_from_user_id,
       telegram_username,
     });
@@ -29,7 +29,7 @@ describe("database:dao:user", () => {
 
     const telegram_private_chat_id = 234;
 
-    const update_result = await dao.findUserByTelegramUserIdOrCreateUser({
+    const update_result = await dao.findOrCreate({
       telegram_from_user_id,
       telegram_username,
       telegram_private_chat_id,
@@ -53,7 +53,7 @@ describe("database:dao:user", () => {
     const telegram_from_user_id = 123;
     const telegram_private_chat_id = 234;
 
-    const create_result = await dao.findUserByTelegramUserIdOrCreateUser({
+    const create_result = await dao.findOrCreate({
       telegram_from_user_id,
       telegram_username,
       telegram_private_chat_id,
@@ -85,7 +85,7 @@ describe("database:dao:user", () => {
 
     const result = [];
     for (const user of users) {
-      const create_user_result = await dao.findUserByTelegramUserIdOrCreateUser({
+      const create_user_result = await dao.findOrCreate({
         telegram_username: user.telegram_username,
         telegram_private_chat_id: user.telegram_private_chat_id,
         telegram_from_user_id: user.telegram_from_user_id,
@@ -105,7 +105,7 @@ describe("database:dao:user", () => {
     const telegram_username = "samsepiol";
     const telegram_from_user_id = 18904064;
 
-    const user_result = await dao.findUserByTelegramUserIdOrCreateUser({
+    const user_result = await dao.findOrCreate({
       telegram_from_user_id,
       telegram_username,
     });

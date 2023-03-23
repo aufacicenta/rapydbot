@@ -1,0 +1,17 @@
+input GetUsersByLocationBoundsInput {
+  bounds: String!
+}
+
+type UserCoordinates {
+  longitude: Float!
+  latitude: Float!
+}
+
+type Mutation {
+  placeholder: Boolean!
+}
+
+type Query {
+  getUsersCoordinates: [UserCoordinates]!
+  getUsersByLocationBounds(input: GetUsersByLocationBoundsInput!): [UserCoordinates]!
+}

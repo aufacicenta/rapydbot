@@ -1,0 +1,89 @@
+.button-primary {
+  @include font-properties($typography-button-label);
+  min-width: 88px;
+  border: none;
+  border-radius: $border-radius-button;
+  padding: 13px 24px;
+  text-transform: capitalize;
+  color: var(--color-button-primary-text);
+  background: linear-gradient(94.59deg, var(--color-primary) -14.97%, var(--color-secondary) 100%);
+  background-position: center;
+  transition: background-color $duration-medium, color $duration-medium;
+
+  &:hover,
+  &:focus {
+    color: var(--color-button-primary-hover-text);
+    background: linear-gradient(94.59deg, var(--color-secondary) -14.97%, var(--color-primary) 100%);
+  }
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:active {
+    background-color: var(--color-primary);
+    background-size: 100%;
+    transition: background 0s;
+  }
+
+  &:disabled,
+  &[disabled] {
+    background: var(--color-button-primary-disabled);
+
+    * {
+      pointer-events: none;
+    }
+  }
+
+  &__icon {
+    vertical-align: middle;
+    margin: {
+      left: $space-s;
+    }
+  }
+
+  &__icon_right {
+    vertical-align: middle;
+    margin: {
+      left: $space-s;
+    }
+  }
+
+  &__icon_left {
+    vertical-align: middle;
+    margin: {
+      right: $space-s;
+    }
+  }
+
+  &_medium,
+  &_large {
+    font-size: $font-size-text;
+  }
+
+  &_medium {
+    padding: 17px $space-l;
+    line-height: 22px;
+  }
+
+  &_large {
+    padding: 20px $space-l;
+    line-height: 1.5;
+  }
+
+  &_invert {
+    color: var(--color-primary);
+    background-color: var(--color-white);
+
+    &:hover {
+      color: var(--color-primary);
+      background: var(--color-primary)-light radial-gradient(circle, transparent 1%, var(--color-primary)-light 1%)
+        center/15000%;
+    }
+
+    &:active {
+      background-color: var(--color-primary)-brighter;
+      background-size: 100%;
+    }
+  }
+}

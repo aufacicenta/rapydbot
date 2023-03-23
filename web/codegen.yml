@@ -1,0 +1,23 @@
+schema: [src/pages/api/campaign/*.graphql, src/pages/api/user/*.graphql]
+documents: "src/pages/api/**/document/**/*.graphql"
+generates:
+  ./src/pages/api/codegen/introspection.json:
+    plugins:
+      - introspection
+    config:
+      minify: true
+      descriptions: false
+  ./src/pages/api/codegen/index.tsx:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withComponent: true
+  ./src/pages/api/codegen/resolvers-types.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
+    config:
+      scalars:
+        Date: Date

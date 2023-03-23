@@ -1,0 +1,35 @@
+@mixin table {
+  width: 100%;
+  white-space: nowrap;
+  vertical-align: top;
+
+  > tbody {
+    vertical-align: inherit;
+  }
+
+  > thead {
+    vertical-align: bottom;
+  }
+}
+@mixin tableStripped {
+  tbody {
+    tr {
+      &:nth-of-type(even) {
+        background-color: var(--color-background);
+      }
+
+      &:hover {
+        background-color: var(--color-market-card-background);
+      }
+    }
+  }
+}
+@mixin tableSm {
+  > :not(caption) > * > * {
+    padding: $table-cell-padding-y-sm $table-cell-padding-x-sm;
+  }
+}
+@mixin tableResponsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}

@@ -1,0 +1,84 @@
+@import "src/theme/base";
+@import "./variables";
+
+@mixin headline1 {
+  @include font-properties($typography-headline-1);
+  @include normalizeTypography;
+  margin-bottom: $space-s;
+  color: var(--color-typography-headline-1);
+}
+@mixin headline2 {
+  @include font-properties($typography-headline-2);
+  @include normalizeTypography;
+  margin-bottom: $space-default;
+  color: var(--color-typography-headline-2);
+}
+@mixin headline3 {
+  @include font-properties($typography-headline-3);
+  @include normalizeTypography;
+  margin-bottom: $space-s;
+  color: var(--color-typography-headline-3);
+}
+@mixin headline4 {
+  @include font-properties($typography-headline-4);
+  @include normalizeTypography;
+  margin-bottom: $space-s;
+  color: var(--color-typography-headline-4);
+
+  [class^="icon-"],
+  [class*=" icon-"] {
+    font-size: $font-size-headline-4 * 0.75;
+  }
+}
+@mixin headline5 {
+  @include font-properties($typography-headline-5);
+  @include normalizeTypography;
+  margin-top: $space-default;
+  margin-bottom: $space-xs;
+  color: var(--color-typography-headline-5);
+}
+@mixin headline6 {
+  @include font-properties($typography-headline-6);
+  @include normalizeTypography;
+  margin-top: $space-default;
+  margin-bottom: $space-xs;
+  color: var(--color-typography-headline-6);
+}
+@mixin text {
+  @include font-properties($typography-text);
+  @include normalizeTypography;
+  margin-bottom: $space-m;
+  color: var(--color-typography-text);
+
+  [class^="icon-"],
+  [class*=" icon-"] {
+    font-size: $font-size-text * 0.75;
+  }
+}
+@mixin textLead {
+  @include font-properties($typography-text-lead);
+  @include normalizeTypography;
+  margin-bottom: $space-m;
+  color: var(--color-typography-text);
+}
+@mixin textBold {
+  @include font-properties($typography-text-bold);
+  @include normalizeTypography;
+  color: var(--color-typography-text-bold);
+}
+@mixin subtitle {
+  @include font-properties($typography-subtitle);
+  @include normalizeTypography;
+  margin-bottom: $space-xs;
+  color: var(--color-typography-subtitle);
+}
+@mixin description {
+  @include font-properties($typography-description);
+  @include normalizeTypography;
+  color: var(--color-typography-description);
+}
+@mixin miniDescription {
+  @include font-properties($typography-mini-description);
+  @include normalizeTypography;
+  color: var(--color-typography-mini-description);
+}

@@ -1,0 +1,165 @@
+$font-family-display: "WoqnaDuo", "korolev", "quiche-sans", "desire-pro", "Helvetica Neue", "Helvetica", Arial,
+  sans-serif;
+$font-family-text: "Source Code Pro", monospace, "aglet-sans", "brother-1816", "houschka-pro", "input-mono-narrow",
+  "Helvetica Neue", "Helvetica", Arial, sans-serif;
+$font-family-monospace: "GT America Mono";
+$font-family-base: $font-family-text;
+$font-size-base: 14;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+$font-size-headline-1: rem(28);
+$font-size-headline-2: rem(23);
+$font-size-headline-3: rem(20);
+$font-size-headline-4: rem(18);
+$font-size-headline-5: rem(16);
+$font-size-headline-6: rem(14);
+$font-size-headline-7: rem(12);
+$font-size-text: rem(14);
+$font-size-input-label: rem(13);
+$font-size-input-text: rem(12);
+$font-size-text-lead: 1.25rem;
+$font-size-text-bold: $font-size-text;
+$font-size-subtitle: rem(14);
+$font-size-subtitle-semi-bold: $font-size-subtitle;
+$font-size-button-label: $font-size-text;
+$font-size-mini-button-label: rem(12);
+$font-size-description: rem(12);
+$font-size-mini-description: rem(9);
+
+$typography-headline-1: (
+  font: (
+    size: $font-size-headline-1,
+    weight: $font-weight-bold,
+    fontFamily: $font-family-text,
+    lineHeight: 1.3,
+  ),
+);
+
+$typography-headline-2: (
+  font: (
+    size: $font-size-headline-2,
+    fontFamily: $font-family-text,
+    weight: $font-weight-bold,
+    lineHeight: 1.4,
+  ),
+);
+
+$typography-headline-3: (
+  font: (
+    size: $font-size-headline-3,
+    fontFamily: $font-family-text,
+    weight: $font-weight-bold,
+    lineHeight: 1.4,
+  ),
+);
+
+$typography-headline-4: (
+  font: (
+    size: $font-size-headline-4,
+    fontFamily: $font-family-text,
+    weight: $font-weight-bold,
+    lineHeight: 1.4,
+  ),
+);
+
+$typography-headline-5: (
+  font: (
+    size: $font-size-headline-5,
+    fontFamily: $font-family-text,
+    weight: $font-weight-bold,
+    lineHeight: 1.4,
+  ),
+);
+
+$typography-headline-6: (
+  font: (
+    size: $font-size-headline-6,
+    fontFamily: $font-family-text,
+    weight: $font-weight-bold,
+    lineHeight: 1.4,
+    color: var(--color-typography-headline-6),
+  ),
+);
+
+$typography-text: (
+  font: (
+    size: $font-size-text,
+    weight: $font-weight-regular,
+    fontFamily: $font-family-text,
+    lineHeight: 1.6,
+  ),
+);
+
+$typography-text-lead: (
+  font: (
+    size: $font-size-text-lead,
+    weight: $font-weight-regular,
+    fontFamily: $font-family-text,
+    lineHeight: 1.6,
+  ),
+);
+
+$typography-text-bold: (
+  font: (
+    size: $font-size-text,
+    weight: $font-weight-bold,
+    fontFamily: $font-family-text,
+    lineHeight: 1.6,
+  ),
+);
+
+$typography-subtitle: (
+  font: (
+    size: $font-size-subtitle,
+    weight: $font-weight-regular,
+    fontFamily: $font-family-text,
+    lineHeight: 1.6,
+  ),
+);
+
+$typography-button-label: (
+  font: (
+    size: $font-size-button-label,
+    weight: $font-weight-bold,
+    fontFamily: $font-family-text,
+  ),
+);
+
+$typography-mini-button-label: (
+  font: (
+    size: $font-size-mini-button-label,
+    weight: $font-weight-regular,
+    fontFamily: $font-family-text,
+  ),
+);
+
+$typography-description: (
+  font: (
+    size: $font-size-description,
+    weight: $font-weight-regular,
+    fontFamily: $font-family-text,
+    lineHeight: 1.6,
+  ),
+);
+
+$typography-mini-description: (
+  font: (
+    size: $font-size-mini-description,
+    weight: $font-weight-regular,
+    fontFamily: $font-family-text,
+    lineHeight: 1.6,
+  ),
+);
+
+$typography-link: (
+  font: (
+    size: $font-size-text,
+    weight: $font-weight-regular,
+    fontFamily: $font-family-text,
+    lineHeight: 1.6,
+  ),
+);
+
+$line-height-baseline: 1.6;

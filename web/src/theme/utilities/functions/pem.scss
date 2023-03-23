@@ -1,0 +1,6 @@
+// Calculate PX into EM
+// Use - width: pem(600px);
+// Output - width: 37.5em;
+@function pem($pixels) {
+  @return (calc($pixels / 16px * 1em));
+}
